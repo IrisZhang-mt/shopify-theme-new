@@ -1,0 +1,138 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-faq",
+      "blocks": {
+        "g1": { "type": "group", "settings": { "title": "Shipping" } },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>We offer 35 different payment methods including major providers like Mastercard, Visa, PayPal, American Express and Diners as well as many different local payment methods including Klarna, iDEAL, AliPay, Sofort, giropay, and many more.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Can I make changes to my order after it’s been placed?",
+            "answer": "<p>We start processing orders right away, so changes are only possible within a short window. Contact our Customer Care team as soon as possible and we will do our best to help.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer e-gift cards for international customers?",
+            "answer": "<p>Yes — e-gift cards are delivered by email and can be used on any order in our online store, wherever we ship.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "How To Return My Items?",
+            "answer": "<p>Start a return from your account within 30 days of delivery. Once approved, pack the items with their tags attached and use the prepaid label we send you.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "Will you ship to a P.O box address?",
+            "answer": "<p>Our carriers require a physical delivery address, so we are unable to deliver to P.O. boxes.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Can all items be shipped in one package?",
+            "answer": "<p>We combine items into as few packages as possible. Occasionally items ship from different warehouses and arrive separately — you will get a tracking number for each parcel.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "Package not received",
+            "answer": "<p>Check your tracking link first — carriers sometimes mark parcels delivered a little early. If it does not arrive within 48 hours, contact us and we will investigate with the carrier.</p>"
+          }
+        },
+        "g2": { "type": "group", "settings": { "title": "Orders" } },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "Can I cancel or change my order?",
+            "answer": "<p>Orders can be cancelled while they are still being processed. Reach out to Customer Care with your order number and we will confirm what is possible.</p>"
+          }
+        },
+        "q9": {
+          "type": "question",
+          "settings": {
+            "question": "Is it safe to purchase from moodytiger.com?",
+            "answer": "<p>Yes. Payments are processed over an encrypted connection by certified payment providers, and we never store your card details.</p>"
+          }
+        },
+        "q10": {
+          "type": "question",
+          "settings": {
+            "question": "How can I know when an item is back in stock?",
+            "answer": "<p>Open the product page and select your size — you can sign up for a back-in-stock notification and we will email you as soon as it is available again.</p>"
+          }
+        },
+        "g3": { "type": "group", "settings": { "title": "Size Guide" } },
+        "q11": {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose the correct size?",
+            "answer": "<p>Every product page links to our size chart with detailed measurements. If your child is between sizes, we recommend sizing up for longer wear.</p>"
+          }
+        },
+        "g4": { "type": "group", "settings": { "title": "Returns & Exchanges" } },
+        "q12": {
+          "type": "question",
+          "settings": {
+            "question": "How do I return an item?",
+            "answer": "<p>Items can be returned within 30 days of delivery as long as they are unworn and have their tags attached. Start the return from your account and follow the steps.</p>"
+          }
+        },
+        "q13": {
+          "type": "question",
+          "settings": {
+            "question": "How long does it take to receive a refund?",
+            "answer": "<p>Once your return is received and inspected, refunds are issued to the original payment method within 5–10 business days.</p>"
+          }
+        },
+        "q14": {
+          "type": "question",
+          "settings": {
+            "question": "Do you offer exchanges?",
+            "answer": "<p>Yes — you can exchange for a different size or color of the same item. Start an exchange from your account and we will reserve the new item for you.</p>"
+          }
+        },
+        "g5": { "type": "group", "settings": { "title": "Account" } },
+        "q15": {
+          "type": "question",
+          "settings": {
+            "question": "What are the benefits of creating a MoodyTiger account?",
+            "answer": "<p>Faster checkout, order tracking, easy returns and early access to new drops and member offers.</p>"
+          }
+        },
+        "q16": {
+          "type": "question",
+          "settings": {
+            "question": "How do I register for an account?",
+            "answer": "<p>Click the account icon in the header and choose Create account — all you need is your name and email address.</p>"
+          }
+        },
+        "q17": {
+          "type": "question",
+          "settings": {
+            "question": "I forgot my password. What should I do?",
+            "answer": "<p>On the login page choose Forgot password and we will email you a reset link right away.</p>"
+          }
+        }
+      },
+      "block_order": ["g1", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "g2", "q8", "q9", "q10", "g3", "q11", "g4", "q12", "q13", "q14", "g5", "q15", "q16", "q17"],
+      "settings": {
+        "heading": "FAQ"
+      }
+    }
+  },
+  "order": ["main"]
+}

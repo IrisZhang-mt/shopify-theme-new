@@ -1,0 +1,9 @@
+{%- if collection.products.size > 0 -%}
+  {%- for product in collection.products -%}
+    {% render 'product-card', product: product, index: forloop.index0 %}
+  {%- endfor -%}
+{%- else -%}
+  {%- for i in (0..3) -%}
+    {% render 'product-card', product: blank, index: i %}
+  {%- endfor -%}
+{%- endif -%}

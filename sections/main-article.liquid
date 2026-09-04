@@ -1,0 +1,133 @@
+{{ 'blog.css' | asset_url | stylesheet_tag }}
+{{ 'article.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'article.js' | asset_url }}" type="module"></script>
+
+{%- assign words = article.content | strip_html | split: ' ' | size -%}
+{%- assign mins = words | divided_by: 200 | at_least: 1 -%}
+
+<article class="mt-art" data-art>
+  <header class="mt-art__hero">
+    <div class="mt-art__hero-media" data-mt-parallax>
+      {%- assign hero_video = article.metafields.custom.hero_video.value | default: section.settings.video -%}
+      {%- if hero_video != blank -%}
+        {{ hero_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+      {%- elsif article.image -%}
+        {%- assign image_alt = article.image.alt | default: article.title | escape -%}
+        {{ article.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+      {%- elsif section.settings.image != blank -%}
+        {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+        {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <div class="mt-art__hero-body">
+      <h1 class="mt-art__title mt-rise" data-reveal>{{ article.title }}</h1>
+      <div class="mt-art__hero-bar" data-reveal style="--mt-reveal-i: 2">
+        <span>{{ article.published_at | date: '%B %-d, %Y.' }}</span>
+        <button class="mt-art__share" type="button" data-art-share>{{ 'article.share' | t }}</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mt-art__layout">
+    <aside class="mt-art__aside">
+      <dl class="mt-art__facts">
+        <div><dt>{{ 'article.written_by' | t }}</dt> <dd>{{ article.author }}</dd></div>
+        <div><dt>{{ 'article.read_time_label' | t }}</dt> <dd>{{ 'article.minutes' | t: count: mins }}</dd></div>
+        <div><dt class="visually-hidden">{{ 'article.published' | t }}</dt> <dd>{{ article.published_at | date: '%d/%m/%Y' }}</dd></div>
+      </dl>
+      <button class="mt-art__share mt-art__share--aside" type="button" data-art-share>{{ 'article.share' | t }}</button>
+    </aside>
+
+    <div
+      class="mt-art__rte"
+      data-art-rte
+      data-art-arrow="{{ 'arrow.svg' | asset_url }}"
+      data-art-prev="{{ 'general.previous' | t }}"
+      data-art-next="{{ 'general.next' | t }}"
+      {% if article.metafields.custom.quote != blank %}data-art-quote="{{ article.metafields.custom.quote | escape }}"{% endif %}
+      {% if article.metafields.custom.quote_author != blank %}data-art-quote-author="{{ article.metafields.custom.quote_author | escape }}"{% endif %}
+    >
+      {{ article.content }}
+    </div>
+
+    <div class="mt-art__tags">
+      <button class="mt-art__tag" type="button" data-art-share data-reveal>{%- assign share_fallback = 'article.share_post' | t -%}{{ section.settings.share_label | default: share_fallback }}</button>
+      {%- if section.settings.shop_label != blank -%}
+        <a class="mt-art__tag" href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" data-reveal style="--mt-reveal-i: 1">{{ section.settings.shop_label }}</a>
+      {%- endif -%}
+      {%- if section.settings.story_label != blank -%}
+        <a class="mt-art__tag" href="{{ section.settings.story_url | default: '/pages/about-us' }}" data-reveal style="--mt-reveal-i: 2">{{ section.settings.story_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if blog.articles_count > 1 -%}
+    <section class="mt-art__more">
+      <h2 class="mt-art__more-title" data-reveal>{%- assign more_fallback = 'article.featured' | t -%}{{ section.settings.more_heading | default: more_fallback }}</h2>
+      <div class="mt-art__more-row">
+        {%- assign shown = 0 -%}
+        {%- for item in blog.articles limit: 4 -%}
+          {%- if item.id == article.id or shown >= 3 -%}{%- continue -%}{%- endif -%}
+          {%- render 'article-card', article: item, column: shown -%}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Hero video",
+      "info": "Plays instead of the featured image. A per-article video via the custom.hero_video metafield takes priority."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image fallback",
+      "info": "Used when the article has no featured image"
+    },
+    {
+      "type": "text",
+      "id": "share_label",
+      "label": "Share tag label",
+      "default": "Share post"
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop tag label",
+      "default": "shop products"
+    },
+    {
+      "type": "url",
+      "id": "shop_url",
+      "label": "Shop tag link"
+    },
+    {
+      "type": "text",
+      "id": "story_label",
+      "label": "Story tag label",
+      "default": "Learn about our story"
+    },
+    {
+      "type": "url",
+      "id": "story_url",
+      "label": "Story tag link"
+    },
+    {
+      "type": "text",
+      "id": "more_heading",
+      "label": "Related articles heading",
+      "default": "Featured Articles"
+    }
+  ]
+}
+{% endschema %}

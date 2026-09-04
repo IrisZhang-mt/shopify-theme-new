@@ -1,0 +1,62 @@
+{%- if product != blank -%}
+  <div class="mt-card" data-reveal style="--mt-reveal-i: {{ index | default: 0 }}"{% if quick %} data-quick-url="{{ product.url }}"{% endif %}>
+    <a class="mt-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
+    <div class="mt-card__media">
+      {%- if product.featured_image -%}
+        {%- assign image_alt = product.featured_image.alt | default: product.title | escape -%}
+        {%- if eager -%}
+          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: sizes | default: '(min-width: 750px) 335px, 258px', alt: image_alt }}
+        {%- else -%}
+          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'lazy', sizes: sizes | default: '(min-width: 750px) 335px, 258px', alt: image_alt }}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if quick -%}
+        <button class="mt-card__qs" type="button" data-qs-open>{{ 'products.quick_shop' | t }}</button>
+      {%- endif -%}
+    </div>
+    <div class="mt-card__text">
+      <p class="mt-card__title">{{ product.title }}</p>
+      <p class="mt-card__price">
+        {%- if product.price_varies %}{{ 'products.from' | t }} {% endif -%}
+        {{ product.price_min | money_without_trailing_zeros }}
+        {%- if product.compare_at_price_min > product.price_min %} <s class="mt-card__compare">{{ product.compare_at_price_min | money_without_trailing_zeros }}</s>{% endif -%}
+      </p>
+      {%- assign color_option = product.options_with_values | where: 'name', 'Color' | first -%}
+      {%- unless color_option -%}
+        {%- assign color_option = product.options_with_values | where: 'name', 'Colour' | first -%}
+      {%- endunless -%}
+      {%- if color_option -%}
+        {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
+        {%- capture swatches -%}
+          {%- for value in color_option.values limit: 4 -%}
+            {%- assign swatch_handle = value | handleize -%}
+            {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
+            {%- if value.swatch.color -%}
+              <span style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
+            {%- elsif value.swatch.image -%}
+              <span style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 30 }}')"></span>
+            {%- elsif swatch_entry.color -%}
+              <span style="--mt-swatch: {{ swatch_entry.color }}"></span>
+            {%- elsif swatch_colors[forloop.index0] -%}
+              <span style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"></span>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if swatches contains 'span' -%}
+          <div class="mt-card__swatches">{{ swatches }}</div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+    {%- if quick -%}
+      <button class="mt-card__quick" type="button" data-qs-open>{{ 'products.quick_shop' | t }}</button>
+    {%- endif -%}
+  </div>
+{%- else -%}
+  <div class="mt-card mt-card--ghost" data-reveal style="--mt-reveal-i: {{ index | default: 0 }}">
+    <div class="mt-card__media"></div>
+    <div class="mt-card__text">
+      <p class="mt-card__title">{{ 'onboarding.product_title' | t }}</p>
+      <p class="mt-card__price">{{ 'onboarding.product_price' | t }}</p>
+    </div>
+  </div>
+{%- endif -%}

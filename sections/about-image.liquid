@@ -1,0 +1,49 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+<section class="mt-abt-image" data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+  <div class="mt-abt-image__media" data-mt-parallax>
+    {%- if section.settings.video != blank -%}
+      {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+    {%- elsif section.settings.image != blank -%}
+      {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+      {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "story"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Overrides the image when set"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About image"
+    }
+  ]
+}
+{% endschema %}

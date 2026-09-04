@@ -1,0 +1,13 @@
+{%- assign pick = item.selected_or_first_available_variant -%}
+<div class="mt-cart__tile" data-reveal style="--mt-reveal-i: {{ index | default: 0 }}">
+  <a class="mt-cart__tile-link" href="{{ item.url }}" aria-label="{{ item.title | escape }}">
+    {%- if item.featured_image -%}
+      {{ item.featured_image | image_url: width: 400 | image_tag: decoding: 'async', loading: 'lazy', sizes: '140px', alt: item.title | escape }}
+    {%- endif -%}
+  </a>
+  {%- if pick.available -%}
+    <button class="mt-cart__tile-add" type="button" data-cart-add="{{ pick.id }}" aria-label="{{ 'cart.add_product' | t: title: item.title | escape }}">
+      <img src="{{ 'plus.svg' | asset_url }}" width="10" height="10" alt="">
+    </button>
+  {%- endif -%}
+</div>

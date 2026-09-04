@@ -1,0 +1,115 @@
+.mt-act {
+  --mt-act-media-w: 6.0625rem;
+  --mt-act-media-h: 2.4375rem;
+  --mt-act-gap: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.875rem;
+  padding-block: 6.25rem;
+  padding-inline: 0.9375rem;
+  overflow: hidden;
+  background: var(--mt-paper);
+}
+
+.mt-act__tag {
+  margin: 0;
+  font-size: var(--mt-p-s-size);
+  line-height: var(--mt-p-leading);
+  text-align: center;
+}
+
+.mt-act__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+}
+
+.mt-act__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mt-act-gap);
+  max-width: 100%;
+  text-decoration: none;
+  color: rgba(var(--mt-moss-rgb), 0.25);
+  transition: color 400ms var(--mt-ease);
+}
+.mt-act__row--active {
+  color: var(--mt-ink);
+}
+.mt-act__row:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+.mt-act__label {
+  flex-shrink: 0;
+  font-family: var(--mt-font-display);
+  font-size: var(--mt-h-l-size);
+  line-height: 1.36;
+  letter-spacing: var(--mt-tracking-heading);
+  white-space: nowrap;
+}
+
+.mt-act__media {
+  position: relative;
+  display: block;
+  width: var(--mt-act-media-w);
+  max-width: 0;
+  height: var(--mt-act-media-h);
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-width 320ms var(--mt-ease),
+    opacity 220ms var(--mt-ease);
+}
+.mt-act__row--active .mt-act__media {
+  max-width: var(--mt-act-media-w);
+  opacity: 1;
+}
+.mt-act__row--tight .mt-act__media {
+  display: none;
+}
+.mt-act__slide {
+  position: absolute;
+  inset: 0;
+  width: var(--mt-act-media-w);
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  opacity: 0;
+}
+.mt-act__slide:first-child,
+.mt-act__slide--on {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-act *,
+  .mt-act *::before,
+  .mt-act *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-act {
+    --mt-act-media-w: 13.5625rem;
+    --mt-act-media-h: 5.5rem;
+    --mt-act-gap: 0.5625rem;
+    gap: 0.625rem;
+    padding-block: 9.375rem;
+  }
+
+  .mt-act__tag {
+    font-size: var(--mt-p-m-size);
+  }
+
+  .mt-act__label {
+    font-size: var(--mt-h-xl-size);
+    line-height: 1.3;
+  }
+}

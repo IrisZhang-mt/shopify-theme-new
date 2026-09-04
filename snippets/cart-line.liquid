@@ -1,0 +1,26 @@
+<div class="mt-cart__line">
+  <a class="mt-cart__media" href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
+    {%- if item.image -%}
+      {{ item.image | image_url: width: 400 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 140px, 100px', alt: item.product.title | escape }}
+    {%- endif -%}
+  </a>
+  <div class="mt-cart__text">
+    <div class="mt-cart__info">
+      <a class="mt-cart__name" href="{{ item.url }}">{{ item.product.title }}</a>
+      {%- unless item.product.has_only_default_variant -%}
+        {%- for option in item.options_with_values -%}
+          <p class="mt-cart__opt">{{ option.name }}: {{ option.value }}</p>
+        {%- endfor -%}
+      {%- endunless -%}
+    </div>
+    <div class="mt-cart__qty">
+      <button class="mt-cart__qty-btn" type="button" data-cart-minus data-line="{{ line }}" aria-label="{{ 'products.decrease_quantity' | t }}"{% if item.quantity == 1 %} disabled{% endif %}>&minus;</button>
+      <span data-cart-qty aria-live="polite">{{ item.quantity }}</span>
+      <button class="mt-cart__qty-btn" type="button" data-cart-plus data-line="{{ line }}" aria-label="{{ 'products.increase_quantity' | t }}">+</button>
+    </div>
+  </div>
+  <div class="mt-cart__side">
+    <p class="mt-cart__price">{{ item.final_line_price | money_without_trailing_zeros }}</p>
+    <button class="mt-cart__remove" type="button" data-cart-remove data-line="{{ line }}">{{ 'cart.remove' | t }}</button>
+  </div>
+</div>

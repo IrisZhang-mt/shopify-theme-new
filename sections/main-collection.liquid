@@ -1,0 +1,170 @@
+{{ 'plp.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'plp.js' | asset_url }}" type="module"></script>
+
+{%- paginate collection.products by 24 -%}
+  <div class="mt-plp" data-plp data-url="{{ collection.url }}">
+    <div class="mt-plp__title">
+      <h1>{{ collection.title }}</h1>
+    </div>
+
+    {%- assign linked = collection.metafields.custom.category_tiles.value -%}
+    {%- if linked != blank and linked.size > 0 -%}
+      <div class="mt-plp__tiles">
+        {%- for entry in linked -%}
+          {%- assign tile_image = entry.image | default: entry.featured_image -%}
+          <a class="mt-plp__tile" href="{{ entry.url }}" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}">
+            {%- if tile_image != blank -%}
+              {{ tile_image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: entry.title | escape }}
+            {%- endif -%}
+            <span class="mt-plp__tile-label">{{ entry.title }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- elsif section.blocks.size > 0 -%}
+      <div class="mt-plp__tiles">
+        {%- for block in section.blocks -%}
+          <a class="mt-plp__tile"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: block.settings.label | escape }}
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="mt-plp__tile-label">{{ block.settings.label }}</span>
+            {%- endif -%}
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mt-plp__bar">
+      <button class="mt-plp__toggle" type="button" aria-expanded="true" data-plp-toggle>{{ 'collection.hide_filters' | t }}</button>
+      <p class="mt-plp__count" role="status">{{ 'collection.products_count' | t: count: collection.products_count }}</p>
+    </div>
+
+    <div class="mt-plp__content">
+      <aside class="mt-plp__aside" data-plp-aside>
+        <form class="mt-plp__filters" data-plp-filters>
+          <div class="mt-plp__filters-bar">
+            <button class="mt-plp__filters-close" type="button" data-plp-close>{{ 'collection.hide_filters' | t }}</button>
+            <p>{{ 'collection.products_count' | t: count: collection.products_count }}</p>
+          </div>
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'list' or filter.type == 'boolean' -%}
+              <details class="mt-plp__group" data-plp-group="{{ filter.param_name }}">
+                <summary class="mt-plp__group-head">
+                  <span>{{ filter.label }}</span>
+                  <span class="mt-plp__group-icon" aria-hidden="true"></span>
+                </summary>
+                {%- assign is_color = false -%}
+                {%- assign param_down = filter.param_name | downcase -%}
+                {%- if param_down contains 'color' or param_down contains 'colour' -%}
+                  {%- assign is_color = true -%}
+                {%- endif -%}
+                <div class="mt-plp__options{% if is_color %} mt-plp__options--swatches{% endif %}">
+                  {%- for value in filter.values -%}
+                    <label class="mt-plp__option{% if value.count == 0 and value.active == false %} mt-plp__option--off{% endif %}"{% if is_color %} title="{{ value.label | escape }}"{% endif %}>
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                      {%- if value.swatch.color -%}
+                        <span class="mt-plp__swatch" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
+                      {%- elsif value.swatch.image -%}
+                        <span class="mt-plp__swatch" style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 40 }}')"></span>
+                      {%- elsif is_color -%}
+                        <span class="mt-plp__swatch" data-swatch="{{ value.label | handleize }}"></span>
+                      {%- else -%}
+                        <span class="mt-check"></span>
+                      {%- endif -%}
+                      <span class="mt-plp__option-label{% if is_color %} visually-hidden{% endif %}">{{ value.label }}</span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+          <div class="mt-plp__actions">
+            <button class="mt-plp__clear" type="button" data-plp-clear>{{ 'collection.clear_all' | t }}</button>
+            <button class="mt-plp__apply" type="submit">{{ 'collection.apply_filters' | t }}</button>
+          </div>
+        </form>
+      </aside>
+
+      <div class="mt-plp__main">
+        {%- if collection.products.size > 0 -%}
+          <div class="mt-plp__grid{% if section.settings.single_line_titles %} mt-plp__grid--one-line{% endif %}" data-plp-grid>
+            {%- for product in collection.products -%}
+              {%- assign card_index = forloop.index0 | modulo: 4 -%}
+              {%- assign card_eager = false -%}
+              {%- if forloop.index0 < 4 -%}
+                {%- assign card_eager = true -%}
+              {%- endif -%}
+              {% render 'product-card', product: product, quick: true, index: card_index, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw' %}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.next -%}
+            <div class="mt-plp__more" data-plp-more data-next-url="{{ paginate.next.url }}"></div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="mt-plp__empty">
+            <p>{{ 'collection.empty' | t }}</p>
+            <button class="mt-plp__clear-link" type="button" data-plp-clear>{{ 'collection.clear_all_link' | t }}</button>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{%- assign has_color_filter = false -%}
+{%- for filter in collection.filters -%}
+  {%- assign param_check = filter.param_name | downcase -%}
+  {%- if param_check contains 'color' or param_check contains 'colour' -%}
+    {%- assign has_color_filter = true -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if has_color_filter -%}
+  {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
+    <script type="application/json" data-plp-swatch-map>
+      {
+        {%- for entry in shop.metaobjects.color_swatch.values -%}
+          {{ entry.system.handle | json }}: {{ entry.color.value | default: entry.color | json }}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+    </script>
+  {%- endpaginate -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "single_line_titles",
+      "label": "Single-line product titles",
+      "info": "Truncates long titles with an ellipsis so every card keeps one title line.",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Category tile",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

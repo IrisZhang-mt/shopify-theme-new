@@ -1,0 +1,82 @@
+{{ 'home-carousel.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-ig">
+  {%- if section.blocks.size > 0 -%}
+    <div class="mt-ig__stage" data-row-stage>
+    <div class="mt-ig__row" data-autoplay="25" data-wheel-lock>
+      {%- for block in section.blocks -%}
+        {%- assign card_tag = 'div' -%}
+        {%- if block.settings.url != blank -%}
+          {%- assign card_tag = 'a' -%}
+        {%- endif -%}
+        <{{ card_tag }}
+          class="mt-ig__card"
+          {% if card_tag == 'a' %}href="{{ block.settings.url }}" target="_blank" rel="noopener"{% endif %}
+          data-reveal
+          style="--mt-reveal-i: {{ forloop.index0 }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="mt-ig__media">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
+            {%- endif -%}
+          </div>
+          {%- if block.settings.handle != blank -%}
+            <p class="mt-ig__handle">{{ block.settings.handle }}</p>
+          {%- endif -%}
+        </{{ card_tag }}>
+      {%- endfor -%}
+    </div>
+    <button class="mt-row-nav mt-row-nav--prev" type="button" data-row-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+      <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+    </button>
+    <button class="mt-row-nav mt-row-nav--next" type="button" data-row-arrow="next" aria-label="{{ 'general.next' | t }}">
+      <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+    </button>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Social carousel",
+  "class": "section-social-carousel",
+  "blocks": [
+    {
+      "type": "post",
+      "name": "Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "handle",
+          "label": "Handle",
+          "default": "@Instagramaccount"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social carousel",
+      "blocks": [
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" }
+      ]
+    }
+  ]
+}
+{% endschema %}

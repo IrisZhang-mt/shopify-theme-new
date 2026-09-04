@@ -1,0 +1,157 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "load_more": "Load more",
+    "continue_to": "Continue to {{ shop }}",
+    "previous": "Previous",
+    "next": "Next",
+    "slides": "Slides",
+    "slide_n": "Slide {{ number }}"
+  },
+  "header": {
+    "menu": "Menu",
+    "search": "Search",
+    "shop_all": "Shop all {{ label }}"
+  },
+  "footer": {
+    "email_label": "Email address",
+    "email_placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "success": "Thanks for subscribing",
+    "language": "Language",
+    "country": "Country"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "taxes_note": "Taxes and shipping calculated at checkout",
+    "view": "View Cart",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "add_product": "Add {{ title }} to cart"
+  },
+  "products": {
+    "add_to_cart": "Add to Cart",
+    "adding": "Adding...",
+    "added": "Added",
+    "sold_out": "Sold Out",
+    "unavailable": "Unavailable",
+    "quick_shop": "Quick Shop",
+    "quick_shop_label": "Quick shop",
+    "see_details": "See Details",
+    "size_chart": "Size Chart",
+    "from": "From",
+    "decrease_quantity": "Decrease quantity",
+    "increase_quantity": "Increase quantity",
+    "previous_image": "Previous image",
+    "next_image": "Next image",
+    "shop_collection": "Shop {{ label }}",
+    "more_about": "More about {{ title }}",
+    "sku": "SKU",
+    "show_all_colors": "Show all colors",
+    "show_fewer_colors": "Show fewer colors"
+  },
+  "collection": {
+    "products_count": {
+      "one": "{{ count }} Product",
+      "other": "{{ count }} Products"
+    },
+    "hide_filters": "Hide Filters",
+    "show_filters": "Show Filters",
+    "clear_all": "Clear All",
+    "apply_filters": "Apply Filters",
+    "empty": "No products match your filters.",
+    "clear_all_link": "Clear all filters"
+  },
+  "blog": {
+    "empty": "No articles yet.",
+    "read_time": {
+      "one": "{{ count }} min read",
+      "other": "{{ count }} mins read"
+    }
+  },
+  "article": {
+    "share": "Share Article",
+    "written_by": "Written by:",
+    "read_time_label": "Read Time:",
+    "minutes": "{{ count }} Min",
+    "link_copied": "Link copied",
+    "published": "Published:",
+    "share_post": "Share post",
+    "featured": "Featured Articles"
+  },
+  "contact": {
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "reason": "Reason of Contacting",
+    "order_number": "Order No.",
+    "message": "Message",
+    "success": "Thanks for reaching out. We will get back to you as soon as we can.",
+    "send": "Send Message"
+  },
+  "faq": {
+    "nav_label": "FAQ sections"
+  },
+  "reviews": {
+    "filter_label": "Filter reviews",
+    "all_reviews": "All Reviews",
+    "product_reviews": "Product Reviews ({{ count }})",
+    "shop_reviews": "Shop Reviews ({{ count }})",
+    "picture_first": "Picture First",
+    "empty": "No reviews yet.",
+    "out_of_five": "{{ rating }} out of 5",
+    "based_on": {
+      "one": "Based on {{ count }} review",
+      "other": "Based on {{ count }} reviews"
+    },
+    "stars_note": "reviews with {{ count }} stars",
+    "sort_all": "All reviews",
+    "sort_images": "Images first",
+    "sort_high": "Highest Ranking",
+    "sort_low": "Lowest Ranking",
+    "write": "Write a review",
+    "form_title": "Write a review",
+    "form_rating": "Rating",
+    "form_rating_value": "{{ count }} out of 5",
+    "form_name": "Name",
+    "form_email": "Email",
+    "form_headline": "Headline",
+    "form_body": "Your review",
+    "form_photo": "Photo",
+    "form_photo_choose": "Choose a file",
+    "form_submit": "Submit review",
+    "form_sending": "Sending",
+    "form_thanks": "Thank you. Your review has been sent and will appear on the site shortly.",
+    "form_error": "Your review could not be sent. Please try again.",
+    "form_invalid": "Please add a rating, your name, your email and a review.",
+    "form_photo_large": "That photo is too large. Please choose one under 10 MB."
+  },
+  "about": {
+    "views_label": "About views"
+  },
+  "gift_card": {
+    "title": "Here's your gift card",
+    "expired": "This gift card has expired.",
+    "expires": "Expires {{ date }}",
+    "redeem_note": "Use this code at checkout to redeem your gift card.",
+    "start_shopping": "Start Shopping",
+    "print": "Print",
+    "apple_wallet": "Add to Apple Wallet"
+  },
+  "search": {
+    "placeholder": "Type to search",
+    "popular": "Popular searches",
+    "suggestions": "Suggestions",
+    "all_results": "All Results",
+    "results_for": "Results for {{ terms }}",
+    "no_results": "Nothing found for that yet",
+    "no_results_page": "No results. Try a different search.",
+    "start": "Type in the search bar to explore the store."
+  },
+  "onboarding": {
+    "product_title": "Product title",
+    "product_price": "From $60"
+  }
+}

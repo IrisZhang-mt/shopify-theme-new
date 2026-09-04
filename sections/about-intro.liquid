@@ -1,0 +1,45 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+{%- if section.settings.text != blank -%}
+  <section class="mt-abt-intro" data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+    <div class="mt-abt-intro__text" data-abt-scrub>
+      {%- assign paragraphs = section.settings.text | strip | newline_to_br | split: '<br />' -%}
+      {%- for paragraph in paragraphs -%}
+        {%- assign line = paragraph | strip -%}
+        {%- if line != blank -%}
+          <p>{{ line }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About intro",
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "story"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Everything we make is designed to support the moments that matter most. Because childhood isn't something to rush through—it's something to experience fully.\nFamily founded in 2018, we create thoughtfully-designed activewear and footwear designed to move with the best parts of the day, so we can give more time back to play."
+    }
+  ],
+  "presets": [
+    {
+      "name": "About intro"
+    }
+  ]
+}
+{% endschema %}

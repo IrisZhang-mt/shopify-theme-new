@@ -1,0 +1,77 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+{%- if section.blocks.size > 0 -%}
+  <section class="mt-abt-vals" data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+    {%- for block in section.blocks -%}
+      <div class="mt-abt-vals__row" data-reveal {{ block.shopify_attributes }}>
+        <div class="mt-abt-vals__grid">
+          <div class="mt-abt-vals__media">
+            {%- if block.settings.image != blank -%}
+              {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 31vw, 92vw', alt: image_alt }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+          <div class="mt-abt-vals__text">
+            {%- if block.settings.heading != blank -%}
+              <h3 class="mt-abt-vals__heading">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="mt-abt-vals__copy">{{ block.settings.text }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About values",
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "story"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Designed for Active Childhoods"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Every product starts with the way kids move, play, explore, and grow."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About values"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,75 @@
+{{ 'blog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'blog.js' | asset_url }}" type="module"></script>
+
+{%- assign source = blog -%}
+{%- if section.settings.blog != blank -%}
+  {%- assign source = section.settings.blog -%}
+{%- endif -%}
+
+<section class="mt-blog" data-blog>
+  <div class="mt-blog__hero" data-mt-parallax>
+    <div class="mt-blog__hero-in">
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+      {%- elsif section.settings.image != blank -%}
+        {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+        {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <h1 class="mt-blog__title mt-rise" data-reveal>{{ section.settings.heading | default: source.title }}</h1>
+
+  {%- if source == blank -%}
+    <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
+  {%- else -%}
+  {%- paginate source.articles by 12 -%}
+    {%- if source.articles.size > 0 -%}
+      <div class="mt-blog__grid" data-blog-grid>
+        {%- for article in source.articles -%}
+          {%- assign column = forloop.index0 | modulo: 3 -%}
+          {%- render 'article-card', article: article, column: column -%}
+        {%- endfor -%}
+      </div>
+      {%- if paginate.next -%}
+        <div class="mt-blog__sentinel" data-blog-more data-next-url="{{ paginate.next.url }}&section_id={{ section.id }}"></div>
+      {%- endif -%}
+    {%- else -%}
+      <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Required when the section is used on a page template"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Articles"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Hero video",
+      "info": "Overrides the image when set"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image"
+    }
+  ]
+}
+{% endschema %}

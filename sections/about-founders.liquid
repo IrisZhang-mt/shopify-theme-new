@@ -1,0 +1,79 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+<section class="mt-abt-found" data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+    <h2 class="mt-abt-found__title" data-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <span>{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {{ section.settings.heading }}
+    </h2>
+  {%- endif -%}
+  <div class="mt-abt-found__col">
+    {%- if section.settings.mission != blank -%}
+      <p class="mt-abt-found__mission" data-reveal>{{ section.settings.mission }}</p>
+    {%- endif -%}
+    {%- if section.settings.text_1 != blank or section.settings.text_2 != blank -%}
+      <div class="mt-abt-found__body">
+        {%- if section.settings.text_1 != blank -%}
+          <div data-reveal style="--mt-reveal-i: 1">{{ section.settings.text_1 }}</div>
+        {%- endif -%}
+        {%- if section.settings.text_2 != blank -%}
+          <div data-reveal style="--mt-reveal-i: 2">{{ section.settings.text_2 }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About founders",
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "story"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Muted heading line",
+      "default": "Meet Founders"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Zoe and Donald"
+    },
+    {
+      "type": "textarea",
+      "id": "mission",
+      "label": "Mission",
+      "default": "Our mission is to develop functional and stylish activewear tailored to the needs of children, empowering them to live an active lifestyle and explore a world of unlimited possibilities."
+    },
+    {
+      "type": "richtext",
+      "id": "text_1",
+      "label": "Text 1"
+    },
+    {
+      "type": "richtext",
+      "id": "text_2",
+      "label": "Text 2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About founders"
+    }
+  ]
+}
+{% endschema %}

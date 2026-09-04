@@ -1,0 +1,202 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+{%- if section.blocks.size > 0 -%}
+  <section class="mt-fab" data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+    <div class="mt-fab__stack">
+      {%- for block in section.blocks -%}
+        <article class="mt-fab__card" {{ block.shopify_attributes }}>
+          <div class="mt-fab__visual">
+            {%- if block.settings.image != blank -%}
+              {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', alt: image_alt }}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag }}
+            {%- endif -%}
+            <div class="mt-fab__visual-top" data-reveal>
+              <h2 class="mt-fab__name">{{ block.settings.name }}</h2>
+            </div>
+            <div class="mt-fab__visual-bottom" data-reveal style="--mt-reveal-i: 1">
+              {%- if block.settings.tagline != blank -%}
+                <p class="mt-fab__tagline">{{ block.settings.tagline }}</p>
+              {%- endif -%}
+              {%- if block.settings.cta_label != blank -%}
+                <span class="mt-fab__rule" aria-hidden="true"></span>
+                <a class="mt-fab__cta" href="{{ block.settings.cta_url | default: '#' }}">{{ block.settings.cta_label }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="mt-fab__content">
+            {%- assign tags = block.settings.tags | split: ',' -%}
+            {%- if tags.size > 0 -%}
+              <div class="mt-fab__tags" data-reveal>
+                {%- for tag in tags -%}
+                  {%- assign label = tag | strip -%}
+                  {%- if label != blank -%}
+                    <span class="mt-fab__tag">{{ label }}</span>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.lead != blank -%}
+              <p class="mt-fab__lead" data-reveal style="--mt-reveal-i: 1">{{ block.settings.lead }}</p>
+            {%- endif -%}
+            {%- if block.settings.feels != blank or block.settings.features != blank -%}
+              <div class="mt-fab__spec" data-reveal style="--mt-reveal-i: 2">
+                {%- if block.settings.feels != blank -%}
+                  <h3 class="mt-fab__feels">{{ block.settings.feels }}</h3>
+                {%- endif -%}
+                {%- if block.settings.features != blank -%}
+                  <ul class="mt-fab__list">
+                    {%- assign features = block.settings.features | strip | newline_to_br | split: '<br />' -%}
+                    {%- for feature in features -%}
+                      {%- assign line = feature | strip -%}
+                      {%- if line != blank -%}
+                        <li>{{ line }}</li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <div class="mt-fab__minis">
+              {%- for i in (1..3) -%}
+                {%- assign label_key = 'mini_label_' | append: i -%}
+                {%- assign image_key = 'mini_image_' | append: i -%}
+                {%- if block.settings[label_key] != blank or block.settings[image_key] != blank -%}
+                  <div class="mt-fab__mini" data-reveal style="--mt-reveal-i: {{ i | plus: 2 }}">
+                    {%- if block.settings[label_key] != blank -%}
+                      <p class="mt-fab__mini-label">{{ block.settings[label_key] }}</p>
+                    {%- endif -%}
+                    <div class="mt-fab__mini-media">
+                      {%- if block.settings[image_key] != blank -%}
+                        {{ block.settings[image_key] | image_url: width: 500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '217px', alt: block.settings[label_key] | escape }}
+                      {%- else -%}
+                        {{ 'image' | placeholder_svg_tag }}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "About fabrics",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "materials"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "fabric",
+      "name": "Fabric",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Brizi®"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Image tagline",
+          "default": "Beat the summer heat with Brizi®"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Button link"
+        },
+        {
+          "type": "text",
+          "id": "tags",
+          "label": "Tags (comma separated)",
+          "default": "School, Practice, Play, All Sport"
+        },
+        {
+          "type": "textarea",
+          "id": "lead",
+          "label": "Lead",
+          "default": "Cool when it's hot. Comfortable when it counts. Ready for all-day play."
+        },
+        {
+          "type": "text",
+          "id": "feels",
+          "label": "Feels line",
+          "default": "Feels: Cooling & Slick"
+        },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Features (one per line)",
+          "default": "Cooling & Ultra-Breathable\nUPF50+, Ultimate Sun Protector\nThin, Light, and Airy"
+        },
+        {
+          "type": "text",
+          "id": "mini_label_1",
+          "label": "Detail 1 label",
+          "default": "Cool-Feeling & Breathable"
+        },
+        {
+          "type": "image_picker",
+          "id": "mini_image_1",
+          "label": "Detail 1 image"
+        },
+        {
+          "type": "text",
+          "id": "mini_label_2",
+          "label": "Detail 2 label"
+        },
+        {
+          "type": "image_picker",
+          "id": "mini_image_2",
+          "label": "Detail 2 image"
+        },
+        {
+          "type": "text",
+          "id": "mini_label_3",
+          "label": "Detail 3 label"
+        },
+        {
+          "type": "image_picker",
+          "id": "mini_image_3",
+          "label": "Detail 3 image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About fabrics"
+    }
+  ]
+}
+{% endschema %}

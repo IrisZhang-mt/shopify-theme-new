@@ -1,0 +1,106 @@
+{{ 'about.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'about.js' | asset_url }}" type="module"></script>
+
+<section class="mt-abt-hero" data-abt-hero data-abt-view="{{ section.settings.view }}"{% if section.settings.view == 'materials' %} hidden{% endif %}>
+  <div class="mt-abt-hero__media" data-mt-parallax>
+    {%- if section.settings.video != blank -%}
+      {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+    {%- elsif section.settings.image != blank -%}
+      {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+      {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
+    {%- endif -%}
+  </div>
+  <div class="mt-abt-hero__shade" aria-hidden="true"></div>
+
+  {%- if section.settings.view == 'story' and page.title != blank -%}
+    <h1 class="visually-hidden">{{ page.title }}</h1>
+  {%- endif -%}
+
+  {%- if section.settings.line_1 != blank or section.settings.line_2 != blank -%}
+    <div class="mt-abt-hero__marquee" aria-hidden="true">
+      <div class="mt-abt-hero__track">
+        {%- for i in (1..6) -%}
+          <span class="mt-abt-hero__word">{{ section.settings.line_1 }}</span>
+          <img class="mt-abt-hero__mark" src="{{ 'logo-mark.svg' | asset_url }}" width="88" height="88" alt="">
+          <span class="mt-abt-hero__word">{{ section.settings.line_2 }}</span>
+          <img class="mt-abt-hero__mark" src="{{ 'logo-mark.svg' | asset_url }}" width="88" height="88" alt="">
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <nav class="mt-abt-toggle" data-abt-toggle aria-label="{{ 'about.views_label' | t }}">
+    <button
+      class="mt-abt-toggle__tab{% if section.settings.view == 'story' %} mt-abt-toggle__tab--on{% endif %}"
+      type="button"
+      data-abt-switch="story"
+      aria-pressed="{% if section.settings.view == 'story' %}true{% else %}false{% endif %}"
+    >{{ section.settings.story_label }}</button>
+    <button
+      class="mt-abt-toggle__tab{% if section.settings.view == 'materials' %} mt-abt-toggle__tab--on{% endif %}"
+      type="button"
+      data-abt-switch="materials"
+      aria-pressed="{% if section.settings.view == 'materials' %}true{% else %}false{% endif %}"
+    >{{ section.settings.materials_label }}</button>
+  </nav>
+</section>
+
+{% schema %}
+{
+  "name": "About hero",
+  "settings": [
+    {
+      "type": "select",
+      "id": "view",
+      "label": "View",
+      "options": [
+        { "value": "story", "label": "Our Story" },
+        { "value": "materials", "label": "Our Materials" }
+      ],
+      "default": "story"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Overrides the image when set"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "line_1",
+      "label": "Marquee text 1",
+      "default": "Move Freely"
+    },
+    {
+      "type": "text",
+      "id": "line_2",
+      "label": "Marquee text 2",
+      "default": "Play Fully"
+    },
+    {
+      "type": "text",
+      "id": "story_label",
+      "label": "Story tab label",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "materials_label",
+      "label": "Materials tab label",
+      "default": "Our Materials"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About hero"
+    }
+  ]
+}
+{% endschema %}

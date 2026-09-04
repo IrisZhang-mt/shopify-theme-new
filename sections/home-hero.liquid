@@ -1,0 +1,223 @@
+{{ 'home-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'home-hero.js' | asset_url }}" type="module"></script>
+
+{%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
+
+<section class="mt-hero" data-hero>
+  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'panel' -%}
+        <div class="mt-hero__panel" {{ block.shopify_attributes }}>
+          <div class="mt-hero__media">
+            {%- if block.settings.video != blank -%}
+              {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {%- elsif block.settings.image != blank -%}
+              {%- if forloop.first -%}
+                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+              {%- else -%}
+                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
+          {%- if forloop.first -%}
+            <div class="mt-hero__content">
+              {%- if section.settings.heading != blank -%}
+                <h1 class="mt-hero__heading">
+                  {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
+                  {%- for line in lines -%}
+                    <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
+                  {%- endfor -%}
+                </h1>
+              {%- endif -%}
+              {%- if section.settings.subtext != blank -%}
+                <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
+              {%- endif -%}
+              {%- if section.settings.cta_label != blank -%}
+                <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}"><span>{{ section.settings.cta_label }}</span></a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if block.settings.info_heading != blank -%}
+            <div class="mt-hero__info">
+              <p class="mt-hero__info-title">{{ block.settings.info_heading }}</p>
+              {%- if block.settings.info_text != blank -%}
+                <p class="mt-hero__info-text">{{ block.settings.info_text }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- for block in extra_slides -%}
+    <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide {{ block.shopify_attributes }}>
+      <div class="mt-hero__panel mt-hero__panel--full">
+        <div class="mt-hero__media">
+          {%- if block.settings.video != blank -%}
+            {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: '' }}
+          {%- endif -%}
+        </div>
+        <div class="mt-hero__content">
+          {%- if block.settings.heading != blank -%}
+            <h2 class="mt-hero__heading">
+              {%- assign lines = block.settings.heading | newline_to_br | split: '<br />' -%}
+              {%- for line in lines -%}
+                <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
+              {%- endfor -%}
+            </h2>
+          {%- endif -%}
+          {%- if block.settings.subtext != blank -%}
+            <p class="mt-hero__sub">{{ block.settings.subtext }}</p>
+          {%- endif -%}
+          {%- if block.settings.cta_label != blank -%}
+            <a class="mt-hero__cta" href="{{ block.settings.cta_url | default: '#' }}"><span>{{ block.settings.cta_label }}</span></a>
+          {%- endif -%}
+        </div>
+        {%- if block.settings.link != blank -%}
+          <a class="mt-hero__slide-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: section.settings.heading | strip_newlines | escape }}"></a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  {%- if extra_slides.size > 0 -%}
+    <div class="mt-hero__dots" aria-label="{{ 'general.slides' | t }}">
+      {%- assign slide_total = extra_slides.size | plus: 1 -%}
+      {%- for i in (1..slide_total) -%}
+        <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in\nthe play."
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Comfort that keeps up, so nothing gets in the way of play."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Overrides the image"
+        },
+        {
+          "type": "text",
+          "id": "info_heading",
+          "label": "Info heading"
+        },
+        {
+          "type": "text",
+          "id": "info_text",
+          "label": "Info text"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "Extra slide",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Overrides the image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link",
+          "info": "Makes the whole slide clickable"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        {
+          "type": "panel",
+          "settings": {
+            "info_heading": "Made To Move",
+            "info_text": "Breathable, durable, quick-drying fabrics"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

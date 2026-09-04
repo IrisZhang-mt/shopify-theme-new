@@ -1,0 +1,74 @@
+{{ 'rte.css' | asset_url | stylesheet_tag }}
+{{ 'image-with-text.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-imgtext{% if section.settings.layout == 'right' %} mt-imgtext--reverse{% endif %}">
+  <div class="mt-imgtext__grid">
+    <div class="mt-imgtext__media" data-reveal>
+      {%- if section.settings.image != blank -%}
+        {%- assign image_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
+        {{ section.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', alt: image_alt }}
+      {%- else -%}
+        {{ 'image' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <div class="mt-imgtext__body">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mt-imgtext__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="mt-rte" data-reveal style="--mt-reveal-i: 1">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+        <a class="mt-imgtext__cta" href="{{ section.settings.cta_url }}" data-reveal style="--mt-reveal-i: 2">{{ section.settings.cta_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text"
+    }
+  ]
+}
+{% endschema %}

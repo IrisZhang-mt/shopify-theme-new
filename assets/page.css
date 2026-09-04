@@ -1,0 +1,24 @@
+.mt-page {
+  max-width: var(--mt-container);
+  margin-inline: auto;
+  padding: 2.5rem 0.9375rem 9.375rem;
+  background: var(--mt-paper);
+}
+.mt-page__inner {
+  max-width: 43.125rem;
+  margin-inline: auto;
+}
+.mt-page__title {
+  margin: 0 0 2.5rem;
+  font-size: var(--mt-h-xl-size);
+  line-height: var(--mt-h-xl-leading);
+}
+
+@media (min-width: 750px) {
+  .mt-page {
+    padding-top: 5rem;
+  }
+  .mt-page__title {
+    margin-bottom: 3.125rem;
+  }
+}

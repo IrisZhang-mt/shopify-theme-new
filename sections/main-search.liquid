@@ -1,0 +1,47 @@
+{{ 'search.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-srp">
+  {%- if search.performed -%}
+    {%- assign terms = search.terms | escape -%}
+    <h1 class="mt-srp__title" data-reveal>
+      {{ 'search.results_for' | t: terms: terms }}
+      <span class="mt-srp__count">({{ search.results_count }})</span>
+    </h1>
+    {%- if search.results_count > 0 -%}
+      {%- paginate search.results by 24 -%}
+        <div class="mt-srp__grid">
+          {%- for item in search.results -%}
+            {%- if item.object_type == 'product' -%}
+              {% render 'product-card', product: item, index: forloop.index0, quick: true %}
+            {%- else -%}
+              <a class="mt-srp__row" href="{{ item.url }}" data-reveal>{{ item.title }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="mt-srp__pager">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}">{{ 'general.previous' | t }}</a>
+            {%- endif -%}
+            <span>{{ paginate.current_page }} / {{ paginate.pages }}</span>
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}">{{ 'general.next' | t }}</a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <p class="mt-srp__empty" data-reveal>{{ 'search.no_results_page' | t }}</p>
+    {%- endif -%}
+  {%- else -%}
+    <h1 class="mt-srp__title" data-reveal>{{ 'header.search' | t }}</h1>
+    <p class="mt-srp__empty" data-reveal>{{ 'search.start' | t }}</p>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "class": "section-main-search"
+}
+{% endschema %}

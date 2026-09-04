@@ -1,0 +1,37 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Moodytiger",
+    "theme_version": "0.1.0",
+    "theme_author": "Moodytiger",
+    "theme_documentation_url": "https://git.w3r.dev/dev/moodytiger",
+    "theme_support_email": "dev@moodytiger.com"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Square, 96 x 96px recommended"
+      }
+    ]
+  },
+  {
+    "name": "Product",
+    "settings": [
+      {
+        "type": "url",
+        "id": "size_chart_url",
+        "label": "Size chart link",
+        "info": "Default for all products. A product can override it with a custom.size_chart metafield (page reference or URL)."
+      }
+    ]
+  }
+]

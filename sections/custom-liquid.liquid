@@ -1,0 +1,37 @@
+{%- if section.settings.custom_liquid != blank -%}
+  <div class="mt-custom{% if section.settings.contain %} mt-custom--contain{% endif %}">
+    {{ section.settings.custom_liquid }}
+  </div>
+  {%- style -%}
+    .mt-custom--contain {
+      max-width: var(--mt-container);
+      margin-inline: auto;
+      padding-inline: 0.9375rem;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Custom Liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Liquid code",
+      "info": "Add app snippets or other Liquid/HTML markup."
+    },
+    {
+      "type": "checkbox",
+      "id": "contain",
+      "label": "Constrain to page width",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Liquid"
+    }
+  ]
+}
+{% endschema %}

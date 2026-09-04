@@ -1,0 +1,14 @@
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div data-pdp-pairs-items>
+    {%- for item in recommendations.products limit: 2 -%}
+      {% render 'pdp-pair', item: item %}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product pairs",
+  "settings": []
+}
+{% endschema %}

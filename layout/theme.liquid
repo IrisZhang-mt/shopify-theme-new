@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" translate="no">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <meta name="theme-color" content="#fafbf9">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.shopify.com">
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {%- liquid
+      assign og_title = page_title | default: shop.name
+      assign og_type = 'website'
+      if request.page_type == 'product'
+        assign og_type = 'product'
+      elsif request.page_type == 'article'
+        assign og_type = 'article'
+      endif
+    -%}
+    <meta property="og:site_name" content="{{ shop.name | escape }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ og_title | escape }}">
+    <meta property="og:type" content="{{ og_type }}">
+    {%- if page_description -%}
+      <meta property="og:description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {%- if page_image -%}
+      <meta property="og:image" content="http:{{ page_image | image_url: width: 1200 }}">
+      <meta property="og:image:secure_url" content="https:{{ page_image | image_url: width: 1200 }}">
+    {%- endif -%}
+    {%- if request.page_type == 'product' -%}
+      <meta property="og:price:amount" content="{{ product.price | divided_by: 100.0 }}">
+      <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+    {%- endif -%}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ og_title | escape }}">
+    {%- if page_description -%}
+      <meta name="twitter:description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'structured-data' %}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96 }}">
+    {%- else -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'logo-mark.svg' | asset_url }}">
+    {%- endif -%}
+
+    {{ 'fk-grotesk-regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+    {{ 'fk-display-regular.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+
+    <style>
+      @font-face {
+        font-family: 'FK Display';
+        src: url('{{ 'fk-display-regular.woff2' | asset_url }}') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'FK Grotesk';
+        src: url('{{ 'fk-grotesk-regular.woff2' | asset_url }}') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Geist Mono';
+        src: url('{{ 'geist-mono-regular.woff2' | asset_url }}') format('woff2');
+        font-weight: 400 500;
+        font-style: normal;
+        font-display: swap;
+      }
+    </style>
+
+    <script>
+      window.mtStrings = {
+        addToCart: {{ 'products.add_to_cart' | t | json }},
+        adding: {{ 'products.adding' | t | json }},
+        added: {{ 'products.added' | t | json }},
+        soldOut: {{ 'products.sold_out' | t | json }},
+        unavailable: {{ 'products.unavailable' | t | json }},
+        linkCopied: {{ 'article.link_copied' | t | json }},
+        showFilters: {{ 'collection.show_filters' | t | json }},
+        hideFilters: {{ 'collection.hide_filters' | t | json }},
+        shopCollection: {{ 'products.shop_collection' | t: label: '[label]' | json }}
+      };
+    </script>
+
+    {{ 'index.css' | asset_url | stylesheet_tag }}
+    {{ 'product-card.css' | asset_url | stylesheet_tag }}
+    {{ 'quick-shop.css' | asset_url | stylesheet_tag }}
+    {{ 'size-chart.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'motion.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'quick-shop.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'size-chart.js' | asset_url }}" type="module"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <a class="mt-skip" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
+    <div class="mt-scroll">
+      <div class="mt-scroll__inner">
+        {% sections 'header-group' %}
+
+        <main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
+          {{ content_for_layout }}
+        </main>
+
+        {% sections 'footer-group' %}
+      </div>
+    </div>
+    {% render 'quick-shop-modal' %}
+  </body>
+</html>

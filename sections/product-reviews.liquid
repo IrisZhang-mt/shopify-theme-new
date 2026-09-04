@@ -1,0 +1,102 @@
+{{ 'product-reviews.css' | asset_url | stylesheet_tag }}
+{{ 'review-form.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-reviews.js' | asset_url }}" type="module"></script>
+<script src="{{ 'review-form.js' | asset_url }}" type="module"></script>
+
+{%- assign jm = product.metafields.judgeme.review_widget_data.value -%}
+{%- assign jm_total = jm.number_of_reviews | default: 0 -%}
+{%- assign jm_per_page = jm.pagination.per_page | default: 5 -%}
+
+<section
+  class="mt-rev"
+  data-rev
+  data-rev-shop="{{ shop.permanent_domain }}"
+  data-rev-product="{{ product.id }}"
+  data-rev-per-page="{{ jm_per_page }}"
+  data-rev-rating-label="{{ 'reviews.out_of_five' | t: rating: '[rating]' | escape }}"
+>
+  <div class="mt-rev__intro">
+    <h2 class="mt-rev__title" data-reveal>{{ section.settings.heading }}</h2>
+    <div class="mt-rev__tags" data-rev-tags data-reveal style="--mt-reveal-i: 1"{% if jm_total == 0 %} hidden{% endif %}>
+      <button class="mt-rev__tag" type="button" data-rev-sort="all" aria-pressed="true">{{ 'reviews.sort_all' | t }}</button>
+      <button class="mt-rev__tag" type="button" data-rev-sort="images" aria-pressed="false">{{ 'reviews.sort_images' | t }}</button>
+      <button class="mt-rev__tag" type="button" data-rev-sort="high" aria-pressed="false">{{ 'reviews.sort_high' | t }}</button>
+      <button class="mt-rev__tag" type="button" data-rev-sort="low" aria-pressed="false">{{ 'reviews.sort_low' | t }}</button>
+    </div>
+  </div>
+
+  <div class="mt-rev__list" data-rev-list>
+    {%- for review in jm.reviews -%}
+      {%- assign picture = review.pictures_urls[0] -%}
+      <article
+        class="mt-rev__item"
+        data-rev-item
+        data-reveal
+        data-rating="{{ review.rating }}"
+        {% if picture %}data-has-image{% endif %}
+      >
+        <div class="mt-rev__who">
+          <p class="mt-rev__name">{{ review.reviewer_name }}</p>
+          <span class="mt-rev__stars" role="img" aria-label="{{ 'reviews.out_of_five' | t: rating: review.rating }}">
+            {%- for s in (1..5) -%}
+              <svg class="{% if s <= review.rating %}mt-rev__star--on{% endif %}" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
+            {%- endfor -%}
+          </span>
+        </div>
+        <div class="mt-rev__comment">
+          {%- if review.title != blank -%}
+            <p class="mt-rev__heading">{{ review.title }}</p>
+          {%- endif -%}
+          {%- assign body = review.body_html | strip_html | strip -%}
+          {%- if body != blank -%}
+            <p class="mt-rev__text">{{ body }}</p>
+          {%- endif -%}
+        </div>
+        {%- if picture -%}
+          <div class="mt-rev__media">
+            <img
+              src="{{ picture.compact }}"
+              alt="{{ review.reviewer_name | escape }}"
+              width="99"
+              height="130"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
+
+  <p class="mt-rev__empty" data-rev-empty{% if jm_total > 0 %} hidden{% endif %}>{{ 'reviews.empty' | t }}</p>
+
+  <div class="mt-rev__ctas" data-reveal>
+    <button class="mt-rev__write" type="button" data-rf-open="product">{{ 'reviews.write' | t }}</button>
+    <button class="mt-rev__more" type="button" data-rev-more{% if jm_total <= jm_per_page %} hidden{% endif %}>{{ 'general.load_more' | t }}</button>
+  </div>
+</section>
+
+{% render 'review-form', scope: 'product', product: product %}
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "paragraph",
+      "content": "Reviews come from Judge.me. Manage them in the Judge.me app."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product reviews"
+    }
+  ]
+}
+{% endschema %}

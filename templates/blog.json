@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "heading": "Featured Articles",
+        "image": "shopify://shop_images/mt-blog-hero.png"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

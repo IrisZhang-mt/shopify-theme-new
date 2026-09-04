@@ -1,0 +1,187 @@
+{{ 'header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'header.js' | asset_url }}" type="module"></script>
+
+{%- assign menu = section.settings.menu -%}
+
+<header class="mt-header">
+  <div class="mt-header__bar">
+    <nav class="mt-header__nav">
+      {%- for link in menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <details class="mt-header__mega">
+            <summary class="mt-header__link" {% if link.url != blank and link.url != '#' %}data-url="{{ link.url }}"{% endif %}>{{ link.title }}</summary>
+            <div class="mt-header__panel">
+              <div class="mt-header__featured">
+                {%- for child in link.links -%}
+                  {%- if child.links.size == 0 -%}
+                    <a href="{{ child.url }}">{{ child.title }}</a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="mt-header__groups">
+                {%- for child in link.links -%}
+                  {%- if child.links.size > 0 -%}
+                    <div class="mt-header__group">
+                      <a class="mt-header__group-title" href="{{ child.url }}">{{ child.title }}</a>
+                      <div class="mt-header__group-links">
+                        {%- for grandchild in child.links -%}
+                          <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </details>
+        {%- else -%}
+          <a class="mt-header__link" href="{{ link.url }}">{{ link.title }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+
+    <a class="mt-header__logo" href="{{ routes.root_url }}">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 596 | image_tag: decoding: 'async', widths: '149, 298, 447, 596', sizes: '149px', width: 149, height: 26, alt: shop.name }}
+      {%- endif -%}
+    </a>
+
+    <div class="mt-header__utils">
+      {%- if section.settings.signup_text != blank -%}
+        {%- if section.settings.signup_url != blank -%}
+          <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}">{{ section.settings.signup_text }}</a>
+        {%- else -%}
+          <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}">{{ section.settings.signup_text }}</button>
+        {%- endif -%}
+      {%- endif -%}
+      <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
+        <span class="mt-header__search-text">{{ 'header.search' | t }}</span>
+        <svg class="mt-header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="m11.2 11.2 3.8 3.8" stroke="currentColor"/></svg>
+      </a>
+      <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open>({{ cart.item_count }})</a>
+
+      <details class="mt-header__drawer">
+        <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}"><span class="mt-burger"><span></span></span></summary>
+        <div class="mt-drawer">
+          <div class="mt-drawer__links">
+            {%- for link in menu.links -%}
+              {%- if link.links.size > 0 -%}
+                <details class="mt-drawer__item">
+                  <summary>
+                    <span>{{ link.title }}</span>
+                    <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
+                  </summary>
+                  <div class="mt-drawer__sub">
+                    <div class="mt-drawer__featured">
+                      {%- if link.url != blank and link.url != '#' -%}
+                        <a href="{{ link.url }}">{{ 'header.shop_all' | t: label: link.title }}</a>
+                      {%- endif -%}
+                      {%- for child in link.links -%}
+                        {%- if child.links.size == 0 -%}
+                          <a href="{{ child.url }}">{{ child.title }}</a>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                    <div class="mt-drawer__accordions">
+                      {%- for child in link.links -%}
+                        {%- if child.links.size > 0 -%}
+                          <details class="mt-drawer__acc">
+                            <summary>
+                              <span>{{ child.title }}</span>
+                              <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
+                            </summary>
+                            <div class="mt-drawer__acc-links">
+                              {%- for grandchild in child.links -%}
+                                <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                              {%- endfor -%}
+                            </div>
+                          </details>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </details>
+              {%- else -%}
+                <a class="mt-drawer__link" href="{{ link.url }}">{{ link.title }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="mt-header__srch" id="HeaderSearch" data-search data-search-url="{{ routes.search_url }}" data-search-from="{{ 'products.from' | t }}" hidden>
+    <form class="mt-header__srch-form" action="{{ routes.search_url }}" method="get" role="search">
+      <input
+        class="mt-header__srch-input"
+        type="search"
+        name="q"
+        placeholder="{{ 'search.placeholder' | t }}"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-label="{{ 'header.search' | t }}"
+        data-search-input
+      >
+      <input type="hidden" name="type" value="product">
+      <span class="mt-header__srch-mirror" data-search-mirror aria-hidden="true"></span>
+      <button class="mt-header__srch-all" type="submit" data-search-all hidden>{{ 'search.all_results' | t }}</button>
+    </form>
+    {%- assign popular = section.settings.popular_searches | split: ',' -%}
+    {%- if popular.size > 0 -%}
+      <div class="mt-header__srch-block" data-search-popular>
+        <p class="mt-header__srch-label">{{ 'search.popular' | t }}</p>
+        <div class="mt-header__srch-tags">
+          {%- for term in popular -%}
+            {%- assign term_clean = term | strip -%}
+            {%- if term_clean != blank -%}
+              <button class="mt-header__srch-tag" type="button" data-search-chip="{{ term_clean | escape }}">{{ term_clean }}</button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    <div class="mt-header__srch-block" data-search-suggest hidden>
+      <p class="mt-header__srch-label">{{ 'search.suggestions' | t }}</p>
+      <div class="mt-header__srch-tags" data-search-suggest-items></div>
+    </div>
+    <div class="mt-header__srch-results" data-search-results hidden></div>
+    <p class="mt-header__srch-empty" data-search-empty hidden>{{ 'search.no_results' | t }}</p>
+  </div>
+
+  <div class="mt-header__scrim"></div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "signup_text",
+      "label": "Signup text",
+      "default": "Sign up for 10% Off"
+    },
+    {
+      "type": "url",
+      "id": "signup_url",
+      "label": "Signup link"
+    },
+    {
+      "type": "text",
+      "id": "popular_searches",
+      "label": "Popular searches",
+      "info": "Comma-separated",
+      "default": "Leggings, T-shirts, Outerwear, Dresses"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,115 @@
+{{ 'multicolumn.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 or section.settings.heading != blank -%}
+<section class="mt-cols{% if section.settings.align == 'center' %} mt-cols--center{% endif %}" style="--mt-cols-count: {{ section.settings.columns }}">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="mt-cols__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
+  {%- endif -%}
+  <div class="mt-cols__grid" data-reveal-stagger>
+    {%- for block in section.blocks -%}
+      <div class="mt-cols__item" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <div class="{% if block.settings.image_style == 'icon' %}mt-cols__icon{% else %}mt-cols__media{% endif %}">
+            {%- assign image_alt = block.settings.image.alt | default: block.settings.title | escape -%}
+            {{ block.settings.image | image_url: width: 800 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 25vw, 100vw', alt: image_alt }}
+          </div>
+        {%- endif -%}
+        {%- if block.settings.title != blank -%}
+          <h3 class="mt-cols__title">{{ block.settings.title }}</h3>
+        {%- endif -%}
+        {%- if block.settings.text != blank -%}
+          <div class="mt-cols__text">{{ block.settings.text }}</div>
+        {%- endif -%}
+        {%- if block.settings.link_label != blank and block.settings.link_url != blank -%}
+          <a class="mt-cols__link" href="{{ block.settings.link_url }}">{{ block.settings.link_label }}</a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Multicolumn",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "image_style",
+          "label": "Image style",
+          "options": [
+            { "value": "full", "label": "Full width" },
+            { "value": "icon", "label": "Icon" }
+          ],
+          "default": "full"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multicolumn",
+      "blocks": [
+        { "type": "column" },
+        { "type": "column" },
+        { "type": "column" }
+      ]
+    }
+  ]
+}
+{% endschema %}

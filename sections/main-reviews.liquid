@@ -1,0 +1,173 @@
+{{ 'reviews.css' | asset_url | stylesheet_tag }}
+{{ 'review-form.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'reviews.js' | asset_url }}" type="module"></script>
+<script src="{{ 'review-form.js' | asset_url }}" type="module"></script>
+
+{%- assign jm_total = shop.metafields.judgeme.all_reviews_count.value | plus: 0 -%}
+{%- assign jm_shop = shop.metafields.judgeme.shop_reviews_count.value | plus: 0 -%}
+{%- assign jm_product = jm_total | minus: jm_shop -%}
+{%- assign jm_average = shop.metafields.judgeme.all_reviews_rating.value | default: 0 -%}
+{%- assign jm_header = shop.metafields.judgeme.all_reviews_header.value | default: '' -%}
+{%- assign jm_counts = '' -%}
+{%- assign jm_counted = 0 -%}
+{%- for i in (1..5) -%}
+  {%- assign star = 6 | minus: i -%}
+  {%- assign star_key = "data-rating='" | append: star | append: "'" -%}
+  {%- assign frequency = 0 -%}
+  {%- assign star_parts = jm_header | split: star_key -%}
+  {%- if star_parts.size > 1 -%}
+    {%- assign row_parts = star_parts[1] | split: "data-frequency='" -%}
+    {%- if row_parts.size > 1 -%}
+      {%- assign frequency = row_parts[1] | split: "'" | first | plus: 0 -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- assign jm_counts = jm_counts | append: frequency | append: ',' -%}
+  {%- assign jm_counted = jm_counted | plus: frequency -%}
+{%- endfor -%}
+{%- assign jm_counts = jm_counts | split: ',' -%}
+
+<section
+  class="mt-revs"
+  data-revs
+  data-revs-shop="{{ shop.permanent_domain }}"
+  data-revs-total="{{ jm_total }}"
+  data-revs-average="{{ jm_average }}"
+>
+  <h1 class="mt-revs__title mt-rise" data-reveal>{{ section.settings.heading | default: page.title }}</h1>
+
+  <div class="mt-revs__summary">
+    <ul class="mt-revs__dist" data-revs-hist data-reveal{% if jm_counted == 0 %} hidden{% endif %}>
+      {%- for i in (1..5) -%}
+        {%- assign star = 6 | minus: i -%}
+        {%- assign index = i | minus: 1 -%}
+        <li class="mt-revs__dist-row">
+          <span class="mt-revs__stars" aria-hidden="true">
+            {%- for s in (1..5) -%}
+              <svg class="{% if s <= star %}mt-revs__star--on{% endif %}" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
+            {%- endfor -%}
+          </span>
+          <span class="mt-revs__dist-count"><span data-revs-dist="{{ star }}">{{ jm_counts[index] }}</span><span class="visually-hidden"> {{ 'reviews.stars_note' | t: count: star }}</span></span>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- assign has_badges = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'badge' and block.settings.image != blank -%}
+        {%- assign has_badges = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if has_badges -%}
+      <div class="mt-revs__badges">
+        {%- assign badge_i = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' and block.settings.image != blank -%}
+            {%- assign badge_w = block.settings.image.aspect_ratio | times: 90 | round -%}
+            {%- assign badge_w2 = badge_w | times: 2 -%}
+            {%- assign badge_w3 = badge_w | times: 3 -%}
+            {%- capture badge_widths %}{{ badge_w }}, {{ badge_w2 }}, {{ badge_w3 }}{% endcapture -%}
+            {%- capture badge_sizes %}{{ badge_w }}px{% endcapture -%}
+            <div class="mt-revs__badge" data-reveal style="--mt-reveal-i: {{ badge_i }}" {{ block.shopify_attributes }}>
+              {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {{ block.settings.image | image_url: width: badge_w3 | image_tag: decoding: 'async', loading: 'lazy', widths: badge_widths, sizes: badge_sizes, alt: image_alt }}
+            </div>
+            {%- assign badge_i = badge_i | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mt-revs__score" data-reveal>
+      {%- assign filled = jm_average | round -%}
+      <span class="mt-revs__stars mt-revs__stars--score" aria-hidden="true" data-revs-stars>
+        {%- for s in (1..5) -%}
+          <svg class="{% if s <= filled %}mt-revs__star--on{% endif %}" width="16" height="16" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
+        {%- endfor -%}
+      </span>
+      <p class="mt-revs__avg" data-revs-average-text data-template="{{ 'reviews.out_of_five' | t: rating: '[rating]' | escape }}">{{ 'reviews.out_of_five' | t: rating: jm_average }}</p>
+      <p
+        class="mt-revs__based"
+        data-revs-based
+        data-one="{{ 'reviews.based_on' | t: count: 1 | escape }}"
+        data-many="{{ 'reviews.based_on' | t: count: '[count]' | escape }}"
+      >{{ 'reviews.based_on' | t: count: jm_total }}</p>
+    </div>
+  </div>
+
+  {%- if section.settings.write_label != blank -%}
+    <div class="mt-revs__cta" data-reveal>
+      <button class="mt-revs__write" type="button" data-rf-open="shop">{{ section.settings.write_label }}</button>
+    </div>
+  {%- endif -%}
+
+  <div class="mt-revs__bar" data-reveal>
+    <div class="mt-revs__tabs" role="group" aria-label="{{ 'reviews.filter_label' | t }}">
+      <button class="mt-revs__tab mt-on" type="button" data-revs-tab="all" aria-pressed="true">{{ 'reviews.all_reviews' | t }}</button>
+      <button
+        class="mt-revs__tab"
+        type="button"
+        data-revs-tab="product"
+        data-template="{{ 'reviews.product_reviews' | t: count: '[count]' | escape }}"
+        aria-pressed="false"
+      >{{ 'reviews.product_reviews' | t: count: jm_product }}</button>
+      <button
+        class="mt-revs__tab"
+        type="button"
+        data-revs-tab="shop"
+        data-template="{{ 'reviews.shop_reviews' | t: count: '[count]' | escape }}"
+        aria-pressed="false"
+      >{{ 'reviews.shop_reviews' | t: count: jm_shop }}</button>
+    </div>
+    <button class="mt-revs__tab mt-revs__tab--sort" type="button" data-revs-pictures aria-pressed="false">{{ 'reviews.picture_first' | t }}</button>
+  </div>
+
+  <div class="mt-revs__list" data-revs-list></div>
+  <p class="mt-revs__empty" data-revs-empty hidden>{{ 'reviews.empty' | t }}</p>
+
+  <div class="mt-revs__actions">
+    {%- if section.settings.write_label != blank -%}
+      <button class="mt-revs__write mt-revs__write--bottom" type="button" data-rf-open="shop">{{ section.settings.write_label }}</button>
+    {%- endif -%}
+    <button class="mt-revs__more" type="button" data-revs-more hidden>{{ 'general.load_more' | t }}</button>
+  </div>
+</section>
+
+{% render 'review-form', scope: 'shop' %}
+
+{% schema %}
+{
+  "name": "Reviews page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "text",
+      "id": "write_label",
+      "label": "Write review button label",
+      "default": "Write a store review"
+    },
+    {
+      "type": "paragraph",
+      "content": "Ratings, counts and reviews come from Judge.me. Manage them in the Judge.me app."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Award badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

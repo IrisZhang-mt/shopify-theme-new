@@ -1,0 +1,10 @@
+<div class="mt-chart" data-chart="{{ chart_id }}" hidden>
+  <div class="mt-chart__backdrop" data-chart-close></div>
+  <div class="mt-chart__panel" role="dialog" aria-modal="true" aria-label="{{ chart_name | default: chart_page.title | escape }}">
+    <div class="mt-chart__head">
+      <p class="mt-chart__name">{{ chart_name | default: chart_page.title }}</p>
+      <button class="mt-chart__close" type="button" data-chart-close>{{ 'general.close' | t }}</button>
+    </div>
+    <div class="mt-chart__body">{{ chart_page.content }}</div>
+  </div>
+</div>

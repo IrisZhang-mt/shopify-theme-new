@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-reviews",
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "image": "shopify://shop_images/mt-award-1.png"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1"
+      ],
+      "settings": {
+        "heading": "Customer Reviews",
+        "write_label": "Write a store review"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

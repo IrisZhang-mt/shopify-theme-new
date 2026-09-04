@@ -1,0 +1,15 @@
+{% layout none %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0;url={{ routes.root_url }}">
+    <title>{{ shop.name }}</title>
+    <script>
+      window.location.replace('{{ routes.root_url }}');
+    </script>
+  </head>
+  <body>
+    <a href="{{ routes.root_url }}">{{ 'general.continue_to' | t: shop: shop.name }}</a>
+  </body>
+</html>

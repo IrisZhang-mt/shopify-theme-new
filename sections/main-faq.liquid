@@ -1,0 +1,78 @@
+{{ 'faq.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'faq.js' | asset_url }}" type="module"></script>
+
+<section class="mt-faqs" data-faqs>
+  <aside class="mt-faqs__side">
+    <h1 class="mt-faqs__title mt-rise" data-reveal>{{ section.settings.heading | default: page.title }}</h1>
+    <nav class="mt-faqs__nav" aria-label="{{ 'faq.nav_label' | t }}">
+      {%- assign chip = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'group' and block.settings.title != blank -%}
+          <a class="mt-faqs__chip" href="#faq-{{ block.settings.title | handleize }}" data-faqs-chip data-reveal style="--mt-reveal-i: {{ chip }}">{{ block.settings.title }}</a>
+          {%- assign chip = chip | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+  </aside>
+
+  <div class="mt-faqs__main">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'group' and block.settings.title != blank -%}
+        <h2 class="mt-faqs__label" id="faq-{{ block.settings.title | handleize }}" data-faqs-group data-reveal {{ block.shopify_attributes }}>{{ block.settings.title }}</h2>
+      {%- elsif block.type == 'question' and block.settings.question != blank -%}
+        <div class="mt-faqs__item" data-faqs-item data-reveal {{ block.shopify_attributes }}>
+          <button class="mt-faqs__q" type="button" id="FaqsQ-{{ block.id }}" data-faqs-toggle aria-expanded="false" aria-controls="Faqs-{{ block.id }}">
+            <span>{{ block.settings.question }}</span>
+            <img src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt="" aria-hidden="true">
+          </button>
+          <div class="mt-faqs__panel" id="Faqs-{{ block.id }}" role="region" aria-labelledby="FaqsQ-{{ block.id }}">
+            <div class="mt-faqs__a">{{ block.settings.answer }}</div>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FAQ"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "Group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,93 @@
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cart.js' | asset_url }}" type="module"></script>
+
+<div class="mt-cart" data-cart data-cart-root data-url="{{ routes.root_url }}?section_id=cart-drawer" hidden>
+  <div class="mt-cart__backdrop" data-cart-close></div>
+  <aside class="mt-cart__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
+    <div class="mt-cart__inner" data-cart-content>
+      <div class="mt-cart__head">
+        <h2 class="mt-cart__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h2>
+        <button class="mt-cart__close" type="button" data-cart-close>{{ 'general.close' | t }}</button>
+      </div>
+      <div class="mt-cart__body">
+        {%- if cart.item_count == 0 -%}
+          <div class="mt-cart__empty">
+            <p>{{ 'cart.empty' | t }}</p>
+          </div>
+        {%- else -%}
+          <div class="mt-cart__lines">
+            {%- for item in cart.items -%}
+              {% render 'cart-line', item: item, line: forloop.index %}
+            {%- endfor -%}
+          </div>
+          {%- if section.settings.miles_text != blank -%}
+            <div class="mt-cart__miles">
+              <span class="mt-cart__miles-mark" aria-hidden="true"></span>
+              <p>{{ section.settings.miles_text }}</p>
+            </div>
+          {%- endif -%}
+          <div class="mt-cart__recs-wrap">
+            {%- if section.settings.recs_heading != blank -%}
+              <h2 class="mt-cart__recs-title" data-cart-recs-title hidden>{{ section.settings.recs_heading }}</h2>
+            {%- endif -%}
+            <div data-cart-recs data-url="{{ routes.product_recommendations_url }}?section_id=cart-recs&product_id={{ cart.items.first.product_id }}&limit=8&intent=related">
+              {%- assign recs_source = cart.items.first.product.collections.first -%}
+              {%- if recs_source -%}
+                {%- assign cart_handles = cart.items | map: 'product' | map: 'handle' | join: ',' | prepend: ',' | append: ',' -%}
+                <div data-cart-recs-fallback hidden>
+                  <div data-fallback-tiles>
+                    {%- assign tile_i = 0 -%}
+                    {%- for item in recs_source.products limit: 13 -%}
+                      {%- assign needle = item.handle | prepend: ',' | append: ',' -%}
+                      {%- if cart_handles contains needle -%}{%- continue -%}{%- endif -%}
+                      {% render 'cart-tile', item: item, index: tile_i %}
+                      {%- assign tile_i = tile_i | plus: 1 -%}
+                    {%- endfor -%}
+                  </div>
+                  <div data-fallback-cards>
+                    {%- assign card_i = 0 -%}
+                    {%- for item in recs_source.products limit: 13 -%}
+                      {%- assign needle = item.handle | prepend: ',' | append: ',' -%}
+                      {%- if cart_handles contains needle -%}{%- continue -%}{%- endif -%}
+                      {% render 'product-card', product: item, quick: true, index: card_i, sizes: '170px' %}
+                      {%- assign card_i = card_i | plus: 1 -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if cart.item_count > 0 -%}
+        <div class="mt-cart__bar">
+          <div class="mt-cart__sub">
+            <p>{{ 'cart.taxes_note' | t }}</p>
+            <a class="mt-cart__view" href="{{ routes.cart_url }}">{{ 'cart.view' | t }}</a>
+          </div>
+          <a class="mt-cart__checkout" href="/checkout">{{ 'cart.checkout' | t }} &ndash; {{ cart.total_price | money_without_trailing_zeros }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </aside>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "miles_text",
+      "label": "Loyalty note",
+      "default": "Earn moody miles points on this order. Gift cards and promotional codes applied at checkout."
+    },
+    {
+      "type": "text",
+      "id": "recs_heading",
+      "label": "Recommendations heading",
+      "default": "We think you'll love"
+    }
+  ]
+}
+{% endschema %}

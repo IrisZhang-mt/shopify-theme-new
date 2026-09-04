@@ -1,0 +1,107 @@
+.mt-srp {
+  --mt-srp-pad: 0.9375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem;
+  padding: 3.125rem var(--mt-srp-pad) 6.25rem;
+  background: var(--mt-paper);
+}
+
+.mt-srp__title {
+  font-size: 2.1875rem;
+  line-height: 1.1;
+}
+
+.mt-srp__count {
+  color: var(--mt-moss);
+}
+
+.mt-srp__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5625rem 0.3125rem;
+}
+.mt-srp__grid .mt-card {
+  width: 100%;
+  flex: initial;
+  min-width: 0;
+}
+
+.mt-srp__row {
+  align-self: center;
+  padding: 1.25rem 0;
+  text-decoration: none;
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+  color: var(--mt-ink);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-srp__row:hover {
+    opacity: 0.55;
+  }
+}
+.mt-srp__row:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+.mt-srp__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  font-size: var(--mt-cta-m-size);
+  line-height: 1.5;
+  color: var(--mt-ink);
+}
+.mt-srp__pager a {
+  text-decoration: none;
+  color: var(--mt-ink);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-srp__pager a:hover {
+    opacity: 0.55;
+  }
+}
+.mt-srp__pager a:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+.mt-srp__pager span {
+  color: var(--mt-moss);
+}
+
+.mt-srp__empty {
+  margin: 0;
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+  color: var(--mt-moss);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-srp *,
+  .mt-srp *::before,
+  .mt-srp *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-srp {
+    --mt-srp-pad: 1.25rem;
+    padding-block: 6.25rem;
+  }
+
+  .mt-srp__title {
+    font-size: var(--mt-h-l-size);
+    line-height: var(--mt-h-l-leading);
+  }
+
+  .mt-srp__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3.125rem 0.3125rem;
+  }
+}

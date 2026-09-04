@@ -1,0 +1,81 @@
+{{ 'home-activities.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'home-activities.js' | asset_url }}" type="module"></script>
+
+<section class="mt-act">
+  {%- if section.settings.tag != blank -%}
+    <p class="mt-act__tag" data-reveal>{{ section.settings.tag }}</p>
+  {%- endif -%}
+  {%- if section.blocks.size > 0 -%}
+    <div class="mt-act__list" data-reveal style="--mt-reveal-i: 1">
+      {%- for block in section.blocks -%}
+        {%- assign collection = block.settings.collection -%}
+        {%- assign label = block.settings.label | default: collection.title -%}
+        {%- assign image = block.settings.image | default: collection.featured_image -%}
+        <a
+          class="mt-act__row"
+          href="{{ collection.url | default: '#' }}"
+          {{ block.shopify_attributes }}
+        >
+          <span class="mt-act__label">{{ label }}</span>
+          {%- capture slides -%}
+            {%- if image -%}
+              {{ image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+            {%- endif -%}
+            {%- for product in collection.products -%}
+              {%- if product.featured_image -%}
+                {{ product.featured_image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endcapture -%}
+          {%- if slides contains '<img' -%}
+            <span class="mt-act__media">{{ slides }}</span>
+          {%- endif -%}
+          <span class="mt-act__label">({{ collection.products_count | default: 0 }})</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Activities",
+  "class": "section-activities",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Tagline",
+      "default": "Shop by Activities"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "activity",
+      "name": "Activity",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Preview image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Activities"
+    }
+  ]
+}
+{% endschema %}

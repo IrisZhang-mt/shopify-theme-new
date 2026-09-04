@@ -1,0 +1,21 @@
+<div class="mt-pdp__perk">
+  <div class="mt-pdp__perk-main">
+    <p class="mt-pdp__perk-title">
+      <img src="{{ icon | asset_url }}" width="20" height="20" alt="">
+      {{ title }}
+    </p>
+    {%- if copy != blank -%}
+      <p class="mt-pdp__perk-copy">{{ copy }}</p>
+    {%- endif -%}
+    {%- if more != blank -%}
+      <div class="mt-pdp__perk-panel" id="PdpPerk-{{ panel_id }}-{{ key }}">
+        <div class="mt-pdp__perk-more">{{ more }}</div>
+      </div>
+    {%- endif -%}
+  </div>
+  {%- if more != blank -%}
+    <button class="mt-pdp__toggle" type="button" data-pdp-toggle aria-expanded="false" aria-controls="PdpPerk-{{ panel_id }}-{{ key }}" aria-label="{{ 'products.more_about' | t: title: title | escape }}">
+      <img src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt="">
+    </button>
+  {%- endif -%}
+</div>

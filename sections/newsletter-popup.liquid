@@ -1,0 +1,124 @@
+{{ 'newsletter-popup.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'newsletter-popup.js' | asset_url }}" type="module"></script>
+
+<div class="mt-pop" hidden data-pop data-delay="{{ section.settings.delay }}" data-days="{{ section.settings.frequency }}">
+  <div class="mt-pop__backdrop" data-pop-close></div>
+  <div class="mt-pop__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.heading | escape }}">
+    <div class="mt-pop__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 500px, 92vw', alt: ''}}
+      {%- endif -%}
+      <button class="mt-pop__close mt-pop__close--media" type="button" data-pop-close>{{ 'general.close' | t }}</button>
+    </div>
+    <div class="mt-pop__content">
+      <div class="mt-pop__upper">
+        <div class="mt-pop__head">
+          <h2 class="mt-pop__heading">{{ section.settings.heading }}</h2>
+          <button class="mt-pop__close" type="button" data-pop-close>{{ 'general.close' | t }}</button>
+        </div>
+        {%- if section.settings.subheading != blank -%}
+          <p class="mt-pop__sub">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+      <div class="mt-pop__lower">
+        <p class="mt-pop__success" hidden data-pop-success>{{ section.settings.success_text }}</p>
+        {%- form 'customer', id: 'MtPopSignup', class: 'mt-pop__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="hidden" name="return_to" value="{{ request.path | escape }}?mt-pop=success">
+          {%- if form.errors -%}
+            <p class="mt-pop__msg" data-pop-error>{{ form.errors.messages.email }}</p>
+          {%- endif -%}
+          <label class="visually-hidden" for="MtPopEmail">{{ 'footer.email_label' | t }}</label>
+          <input
+            id="MtPopEmail"
+            class="mt-pop__input"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email }}"
+            placeholder="{{ section.settings.placeholder | escape }}"
+            required
+            autocomplete="email"
+          >
+          <button class="mt-pop__btn" type="submit">{{ section.settings.button_label }}</button>
+        {%- endform -%}
+        {%- if section.settings.note != blank -%}
+          <div class="mt-pop__note">{{ section.settings.note }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter popup",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Unlock 10% Off Your First Order"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Sign up to unlock member rewards, earn points, and get 10% instantly."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Get Discount"
+    },
+    {
+      "type": "richtext",
+      "id": "note",
+      "label": "Privacy note",
+      "default": "<p>For more information on how we process your data for marketing communication. Check our Privacy policy.</p>"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success message",
+      "default": "Thanks for signing up! Your discount code is on its way to your inbox."
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Show after",
+      "unit": "s",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "label": "Days between shows",
+      "unit": "d",
+      "min": 1,
+      "max": 90,
+      "step": 1,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter popup"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,122 @@
+{{ 'contact.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign success_fallback = 'contact.success' | t
+  assign send_fallback = 'contact.send' | t
+-%}
+
+<section class="mt-con">
+  <div class="mt-con__media" data-mt-parallax>
+    <div class="mt-con__media-in">
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+      {%- elsif section.settings.image != blank -%}
+        {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+        {{ section.settings.image | image_url: width: 1600 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 48vw, 100vw', alt: image_alt }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+    <h1 class="mt-con__title mt-rise" data-reveal>{{ section.settings.heading | default: page.title }}</h1>
+  </div>
+
+  <div class="mt-con__body">
+    {%- if section.settings.text != blank -%}
+      <div class="mt-con__intro" data-reveal>{{ section.settings.text }}</div>
+    {%- endif -%}
+
+    {%- form 'contact', class: 'mt-con__form', id: 'ContactForm' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="mt-con__success" tabindex="-1" autofocus>{{ section.settings.success | default: success_fallback }}</p>
+      {%- elsif form.errors -%}
+        <p class="mt-con__error" tabindex="-1" autofocus>
+          {%- for field in form.errors -%}
+            {%- if field == 'form' -%}
+              {{ form.errors.messages[field] }}
+            {%- else -%}
+              {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+            {%- endif -%}
+            {%- unless forloop.last %} {% endunless -%}
+          {%- endfor -%}
+        </p>
+      {%- endif -%}
+
+      <div class="mt-con__row" data-reveal>
+        <label class="visually-hidden" for="ConFirst">{{ 'contact.first_name' | t }}</label>
+        <input class="mt-con__field" type="text" id="ConFirst" name="contact[First name]" placeholder="{{ 'contact.first_name' | t }}*" required autocomplete="given-name">
+        <label class="visually-hidden" for="ConLast">{{ 'contact.last_name' | t }}</label>
+        <input class="mt-con__field" type="text" id="ConLast" name="contact[Last name]" placeholder="{{ 'contact.last_name' | t }}*" required autocomplete="family-name">
+      </div>
+      <div class="mt-con__row" data-reveal style="--mt-reveal-i: 1">
+        <label class="visually-hidden" for="ConEmail">{{ 'contact.email' | t }}</label>
+        <input class="mt-con__field mt-con__field--wide" type="email" id="ConEmail" name="contact[email]" placeholder="{{ 'contact.email' | t }}*" required autocomplete="email" autocapitalize="off" autocorrect="off">
+      </div>
+      <div class="mt-con__row" data-reveal style="--mt-reveal-i: 2">
+        <label class="visually-hidden" for="ConReason">{{ 'contact.reason' | t }}</label>
+        <input class="mt-con__field" type="text" id="ConReason" name="contact[Reason of contacting]" placeholder="{{ 'contact.reason' | t }}">
+        <label class="visually-hidden" for="ConOrder">{{ 'contact.order_number' | t }}</label>
+        <input class="mt-con__field" type="text" id="ConOrder" name="contact[Order number]" placeholder="{{ 'contact.order_number' | t }}">
+      </div>
+      <div class="mt-con__row" data-reveal style="--mt-reveal-i: 3">
+        <label class="visually-hidden" for="ConMessage">{{ 'contact.message' | t }}</label>
+        <textarea class="mt-con__field mt-con__area" id="ConMessage" name="contact[body]" placeholder="{{ 'contact.message' | t }}*" required></textarea>
+      </div>
+
+      <div class="mt-con__end" data-reveal style="--mt-reveal-i: 4">
+        <button class="mt-con__send" type="submit">{{ section.settings.button | default: send_fallback }}</button>
+        {%- if section.settings.hours != blank -%}
+          <div class="mt-con__hours">{{ section.settings.hours }}</div>
+        {%- endif -%}
+      </div>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We’re Here for Every Adventure."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Overrides the image when set"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text",
+      "default": "<p>Have a question or need assistance? Fill out the form below or email us at <a href=\"mailto:order@moodytiger.com\">order@moodytiger.com</a>, our Customer Care team will be happy to help.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "Button label",
+      "default": "Send Message"
+    },
+    {
+      "type": "richtext",
+      "id": "hours",
+      "label": "Working hours",
+      "default": "<p><strong>Working Hours:</strong><br>Monday – Friday 9:00 to 18:00 (GMT +8)<br>Closed on weekends &amp; Public Holidays</p>"
+    },
+    {
+      "type": "text",
+      "id": "success",
+      "label": "Success message",
+      "default": "Thanks for reaching out. We will get back to you as soon as we can."
+    }
+  ]
+}
+{% endschema %}

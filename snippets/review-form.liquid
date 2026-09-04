@@ -1,0 +1,79 @@
+{%- liquid
+  assign rf_scope = scope | default: 'product'
+  assign rf_id = '-1'
+  if rf_scope == 'product'
+    assign rf_id = product.id
+  endif
+-%}
+<div
+  class="mt-rf"
+  hidden
+  data-rf
+  data-rf-scope="{{ rf_scope }}"
+  data-rf-product="{{ rf_id }}"
+  data-rf-shop="{{ shop.permanent_domain }}"
+  data-rf-customer="{{ customer.id }}"
+  data-rf-sending="{{ 'reviews.form_sending' | t | escape }}"
+  data-rf-thanks="{{ 'reviews.form_thanks' | t | escape }}"
+  data-rf-error="{{ 'reviews.form_error' | t | escape }}"
+  data-rf-invalid="{{ 'reviews.form_invalid' | t | escape }}"
+  data-rf-photo-large="{{ 'reviews.form_photo_large' | t | escape }}"
+  data-rf-close-label="{{ 'general.close' | t | escape }}"
+>
+  <div class="mt-rf__backdrop" data-rf-close></div>
+  <div class="mt-rf__box" role="dialog" aria-modal="true" aria-labelledby="mt-rf-title-{{ rf_scope }}" tabindex="-1" data-rf-box>
+    <div class="mt-rf__head">
+      <h2 class="mt-rf__title" id="mt-rf-title-{{ rf_scope }}">{{ 'reviews.form_title' | t }}</h2>
+      <button class="mt-rf__close" type="button" data-rf-close>{{ 'general.close' | t }}</button>
+    </div>
+
+    <form class="mt-rf__form" data-rf-form novalidate>
+      <fieldset class="mt-rf__rating">
+        <legend class="mt-rf__label">{{ 'reviews.form_rating' | t }}</legend>
+        <div class="mt-rf__stars" data-rf-stars>
+          {%- for i in (1..5) -%}
+            {%- assign value = 6 | minus: i -%}
+            <label class="mt-rf__star">
+              <input class="visually-hidden" type="radio" name="rating" value="{{ value }}" required>
+              <span class="visually-hidden">{{ 'reviews.form_rating_value' | t: count: value }}</span>
+              <svg width="24" height="24" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      <label class="mt-rf__field">
+        <span class="mt-rf__label">{{ 'reviews.form_name' | t }}</span>
+        <input class="mt-rf__input" type="text" name="name" autocomplete="name" required value="{{ customer.name | escape }}">
+      </label>
+
+      <label class="mt-rf__field">
+        <span class="mt-rf__label">{{ 'reviews.form_email' | t }}</span>
+        <input class="mt-rf__input" type="email" name="email" autocomplete="email" inputmode="email" required value="{{ customer.email | escape }}">
+      </label>
+
+      <label class="mt-rf__field">
+        <span class="mt-rf__label">{{ 'reviews.form_headline' | t }}</span>
+        <input class="mt-rf__input" type="text" name="title" maxlength="120">
+      </label>
+
+      <label class="mt-rf__field">
+        <span class="mt-rf__label">{{ 'reviews.form_body' | t }}</span>
+        <textarea class="mt-rf__input mt-rf__textarea" name="body" rows="4" maxlength="2000" required></textarea>
+      </label>
+
+      <div class="mt-rf__field">
+        <span class="mt-rf__label">{{ 'reviews.form_photo' | t }}</span>
+        <label class="mt-rf__file">
+          <input class="visually-hidden" type="file" name="picture" accept="image/jpeg, image/png, image/webp" data-rf-file>
+          <span class="mt-rf__file-button">{{ 'reviews.form_photo_choose' | t }}</span>
+          <span class="mt-rf__file-name" data-rf-file-name></span>
+        </label>
+      </div>
+
+      <p class="mt-rf__note" data-rf-note role="status" hidden></p>
+
+      <button class="mt-rf__submit" type="submit" data-rf-submit data-rf-label="{{ 'reviews.form_submit' | t | escape }}">{{ 'reviews.form_submit' | t }}</button>
+    </form>
+  </div>
+</div>

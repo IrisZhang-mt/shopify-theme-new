@@ -1,0 +1,268 @@
+{{ 'footer.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'footer.js' | asset_url }}" type="module"></script>
+
+<footer class="mt-footer">
+  {%- if section.settings.image != blank -%}
+    <div class="mt-footer__bg">
+      {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: ''}}
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.heading != blank -%}
+    {%- assign club_tag = 'div' -%}
+    {%- if section.settings.club_url != blank -%}
+      {%- assign club_tag = 'a' -%}
+    {%- endif -%}
+    <{{ club_tag }} class="mt-footer__club" {% if club_tag == 'a' %}href="{{ section.settings.club_url }}"{% endif %}>
+      <h2 class="mt-footer__heading">{{ section.settings.heading }}</h2>
+      <img class="mt-footer__mark" src="{{ 'logo-mark.svg' | asset_url }}" width="87" height="87" alt="">
+    </{{ club_tag }}>
+  {%- endif -%}
+
+  <div class="mt-footer__card">
+    <div class="mt-footer__upper">
+      <div class="mt-footer__signup">
+        {%- if section.settings.signup_heading != blank -%}
+          <h3 class="mt-footer__signup-heading">{{ section.settings.signup_heading }}</h3>
+        {%- endif -%}
+        {%- form 'customer', id: 'MtFooterSignup', class: 'mt-footer__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="mt-footer__field">
+            <label class="visually-hidden" for="MtFooterEmail">{{ 'footer.email_label' | t }}</label>
+            <input
+              id="MtFooterEmail"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="{{ 'footer.email_placeholder' | t }}"
+              required
+              autocomplete="email"
+            >
+            <button class="mt-footer__submit" type="submit" aria-label="{{ 'footer.subscribe' | t }}">
+              <img src="{{ 'arrow.svg' | asset_url }}" width="17" height="11" alt="">
+            </button>
+          </div>
+          {%- if section.settings.terms_text != blank -%}
+            <label class="mt-footer__terms">
+              <input type="checkbox" required>
+              <span class="mt-check"></span>
+              <span>{{ section.settings.terms_text }}</span>
+            </label>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <p class="mt-footer__form-msg" role="status">{{ form.errors.messages.email }}</p>
+          {%- elsif form.posted_successfully? -%}
+            <p class="mt-footer__form-msg" role="status">{{ 'footer.success' | t }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="mt-footer__cols">
+          {%- for block in section.blocks -%}
+            {%- assign menu = block.settings.menu -%}
+            {%- assign nested = false -%}
+            {%- for link in menu.links -%}
+              {%- if link.links.size > 0 -%}
+                {%- assign nested = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if nested -%}
+              <div class="mt-footer__group" {{ block.shopify_attributes }}>
+                {%- for group in menu.links -%}
+                  <div class="mt-footer__col">
+                    <p class="mt-footer__col-title">{{ group.title }}</p>
+                    <div class="mt-footer__col-links">
+                      {%- if group.links.size > 0 -%}
+                        {%- for link in group.links -%}
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <a href="{{ group.url }}">{{ group.title }}</a>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- elsif menu.links.size > 0 -%}
+              <div class="mt-footer__col" {{ block.shopify_attributes }}>
+                <p class="mt-footer__col-title">{{ menu.title }}</p>
+                <div class="mt-footer__col-links">
+                  {%- for link in menu.links -%}
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="mt-footer__accs">
+          {%- for block in section.blocks -%}
+            {%- assign menu = block.settings.menu -%}
+            {%- assign nested = false -%}
+            {%- for link in menu.links -%}
+              {%- if link.links.size > 0 -%}
+                {%- assign nested = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if nested -%}
+              <div class="mt-footer__group">
+                {%- for group in menu.links -%}
+                  <details class="mt-footer__acc">
+                    <summary>
+                      <span>{{ group.title }}</span>
+                      <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
+                    </summary>
+                    <div class="mt-footer__acc-links">
+                      {%- if group.links.size > 0 -%}
+                        {%- for link in group.links -%}
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <a href="{{ group.url }}">{{ group.title }}</a>
+                      {%- endif -%}
+                    </div>
+                  </details>
+                {%- endfor -%}
+              </div>
+            {%- elsif menu.links.size > 0 -%}
+              <details class="mt-footer__acc">
+                <summary>
+                  <span>{{ menu.title }}</span>
+                  <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
+                </summary>
+                <div class="mt-footer__acc-links">
+                  {%- for link in menu.links -%}
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="mt-footer__lower">
+      {%- if section.settings.show_payment_icons -%}
+        {%- assign payment_types = shop.enabled_payment_types -%}
+        {%- if payment_types.size == 0 -%}
+          {%- assign payment_types = section.settings.payment_types | split: ',' -%}
+        {%- endif -%}
+        {%- if payment_types.size > 0 -%}
+          <div class="mt-footer__payments">
+            {%- for type in payment_types -%}
+              {{ type | strip | payment_type_svg_tag }}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+      <div class="mt-footer__meta">
+        <a class="mt-footer__logo" href="{{ routes.root_url }}">
+          {%- if settings.logo != blank -%}
+            {{ settings.logo | image_url: width: 500 | image_tag: decoding: 'async', widths: '125, 250, 375, 500', sizes: '125px', width: 125, height: 22, alt: shop.name }}
+          {%- endif -%}
+        </a>
+        <div class="mt-footer__ctas">
+          {%- if localization.available_languages.size > 1 -%}
+            {%- form 'localization', class: 'mt-footer__pill' -%}
+              <span>{{ localization.language.endonym_name | capitalize }}</span>
+              <select name="locale_code" aria-label="{{ 'footer.language' | t }}">
+                {%- for language in localization.available_languages -%}
+                  <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
+                    {{ language.endonym_name | capitalize }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endform -%}
+          {%- else -%}
+            <div class="mt-footer__pill"><span>{{ localization.language.endonym_name | capitalize }}</span></div>
+          {%- endif -%}
+          {%- assign currency_label = localization.country.currency.iso_code | downcase | capitalize -%}
+          {%- if localization.available_countries.size > 1 -%}
+            {%- form 'localization', class: 'mt-footer__pill' -%}
+              <span>{{ currency_label }}</span>
+              <select name="country_code" aria-label="{{ 'footer.country' | t }}">
+                {%- for country in localization.available_countries -%}
+                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                    {{ country.name }} ({{ country.currency.iso_code }})
+                  </option>
+                {%- endfor -%}
+              </select>
+            {%- endform -%}
+          {%- else -%}
+            <div class="mt-footer__pill"><span>{{ currency_label }}</span></div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the Moody Miles Club"
+    },
+    {
+      "type": "url",
+      "id": "club_url",
+      "label": "Heading link"
+    },
+    {
+      "type": "text",
+      "id": "signup_heading",
+      "label": "Signup heading",
+      "default": "Sign up for 10% OFF your first order"
+    },
+    {
+      "type": "text",
+      "id": "terms_text",
+      "label": "Terms text",
+      "default": "I agree to receiving marketing emails and special deals"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_types",
+      "label": "Payment icons fallback",
+      "info": "Shown until payment providers are activated. Comma separated Shopify payment type names.",
+      "default": "american_express,apple_pay,bancontact,diners_club,discover,google_pay,ideal,master,paypal,shopify_pay,venmo,visa"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4
+}
+{% endschema %}

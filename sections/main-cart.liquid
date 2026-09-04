@@ -1,0 +1,30 @@
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cart.js' | asset_url }}" type="module"></script>
+
+<section class="mt-cart-page" data-cart-root data-url="{{ routes.cart_url }}?section_id={{ section.id }}">
+  <div data-cart-content>
+    <h1 class="mt-cart-page__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h1>
+    {%- if cart.item_count == 0 -%}
+      <div class="mt-cart__empty">
+        <p>{{ 'cart.empty' | t }}</p>
+      </div>
+    {%- else -%}
+      <div class="mt-cart__lines">
+        {%- for item in cart.items -%}
+          {% render 'cart-line', item: item, line: forloop.index %}
+        {%- endfor -%}
+      </div>
+      <div class="mt-cart-page__bar">
+        <p>{{ 'cart.taxes_note' | t }}</p>
+        <a class="mt-cart__checkout" href="/checkout">{{ 'cart.checkout' | t }} &ndash; {{ cart.total_price | money_without_trailing_zeros }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}

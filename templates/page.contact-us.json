@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-contact",
+      "settings": {
+        "image": "shopify://shop_images/mt-contact-hero.jpg"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
