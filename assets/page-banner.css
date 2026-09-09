@@ -66,7 +66,7 @@ html.mt-motion .mt-banner__media img {
 }
 .mt-banner__text {
   max-width: 26rem;
-  margin: 0 0 1.5625rem;
+  margin: 0.875rem 0 3.6875rem;
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-ink);
