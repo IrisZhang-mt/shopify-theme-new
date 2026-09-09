@@ -154,10 +154,10 @@ html.mt-motion .mt-banner__media img {
   .mt-banner__content {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     grid-column: 1;
     grid-row: 1;
-    align-self: start;
-    margin: 11.25rem 0 0 6.25rem;
   }
 
   .mt-banner__heading {
