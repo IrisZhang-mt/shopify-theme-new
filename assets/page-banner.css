@@ -40,7 +40,11 @@ html.mt-motion .mt-banner__media img {
   grid-row: 1;
   align-self: end;
   height: 9.375rem;
-  background: linear-gradient(to top, rgba(var(--mt-ink-rgb), 0.7), rgba(var(--mt-ink-rgb), 0));
+  background: linear-gradient(
+    to top,
+    rgba(var(--mt-ink-rgb), 0.7),
+    rgba(var(--mt-ink-rgb), 0)
+  );
   pointer-events: none;
 }
 
@@ -50,7 +54,6 @@ html.mt-motion .mt-banner__media img {
   align-self: end;
   z-index: 2;
   margin: 0;
-  padding: 0 0.9375rem 3.75rem;
   font-family: var(--mt-font-display);
   font-size: var(--mt-h-xl-size);
   line-height: var(--mt-h-xl-leading);
@@ -85,7 +88,7 @@ html.mt-motion .mt-banner__media img {
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
 .mt-banner__cta::after {
-  content: '\2192';
+  content: "\2192";
   transition: transform var(--mt-dur) var(--mt-ease);
 }
 @media (hover: hover) {
@@ -159,7 +162,6 @@ html.mt-motion .mt-banner__media img {
 
   .mt-banner__heading {
     align-self: auto;
-    padding: 3.75rem 1.25rem 0 0;
     font-size: var(--mt-h-xxl-size);
     line-height: var(--mt-h-xxl-leading);
     color: var(--mt-ink);
@@ -184,24 +186,28 @@ html.mt-motion .mt-banner__media img {
   .mt-banner__stat-label {
     display: block;
   }
-  .mt-banner__stat[data-placement='panel'] {
+  .mt-banner__stat[data-placement="panel"] {
     grid-column: 1;
     background: var(--mt-cloud);
   }
-  .mt-banner__stat[data-placement='panel'] .mt-banner__stat-label {
+  .mt-banner__stat[data-placement="panel"] .mt-banner__stat-label {
     color: var(--mt-moss);
   }
-  .mt-banner__stat[data-placement='panel'] .mt-banner__stat-value {
+  .mt-banner__stat[data-placement="panel"] .mt-banner__stat-value {
     color: var(--mt-ink);
   }
-  .mt-banner__stat[data-placement='media'] {
+  .mt-banner__stat[data-placement="media"] {
     grid-column: 2;
-    background: linear-gradient(to top, rgba(var(--mt-ink-rgb), 0.35), rgba(var(--mt-ink-rgb), 0) 70%);
+    background: linear-gradient(
+      to top,
+      rgba(var(--mt-ink-rgb), 0.35),
+      rgba(var(--mt-ink-rgb), 0) 70%
+    );
   }
   .mt-banner__stat:last-child {
     text-align: left;
   }
-  .mt-banner__stat[data-placement='media']:last-child {
+  .mt-banner__stat[data-placement="media"]:last-child {
     text-align: right;
   }
 }
