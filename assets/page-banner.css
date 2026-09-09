@@ -178,6 +178,7 @@ html.mt-motion .mt-banner__media img {
     padding: 0;
   }
   .mt-banner__stat {
+    border-top: 1px solid #1d1d1d;
     padding: 1.125rem 0 0.812rem 6.25rem;
   }
   .mt-banner__stat-label {
