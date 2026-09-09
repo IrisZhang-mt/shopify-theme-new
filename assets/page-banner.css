@@ -87,7 +87,7 @@ html.mt-motion .mt-banner__media img {
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
 .mt-banner__cta::after {
-  bgcolor: var(--mt-cloud);
+  background: #eee;
   content: "\2192";
   transition: transform var(--mt-dur) var(--mt-ease);
 }
