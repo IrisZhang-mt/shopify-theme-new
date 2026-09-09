@@ -115,6 +115,7 @@ html.mt-motion .mt-banner__media img {
   padding: 0 0.9375rem 1.25rem;
 }
 .mt-banner__stat-label {
+  display: none;
   margin: 0 0 0.25rem;
   font-size: var(--mt-tag-xs-size);
   letter-spacing: var(--mt-tracking-tag);
@@ -178,6 +179,9 @@ html.mt-motion .mt-banner__media img {
   }
   .mt-banner__stat {
     padding: 1.5625rem 1.25rem;
+  }
+  .mt-banner__stat-label {
+    display: block;
   }
   .mt-banner__stat[data-placement='panel'] {
     grid-column: 1;
