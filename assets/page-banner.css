@@ -147,10 +147,15 @@ html.mt-motion .mt-banner__media img {
     display: none;
   }
 
-  .mt-banner__heading {
+  .mt-banner__content {
+    display: flex;
+    flex-direction: column;
     grid-column: 1;
     grid-row: 1;
     align-self: start;
+  }
+
+  .mt-banner__heading {
     padding: 3.75rem 1.25rem 0;
     font-size: var(--mt-h-xxl-size);
     line-height: var(--mt-h-xxl-leading);
@@ -158,10 +163,6 @@ html.mt-motion .mt-banner__media img {
   }
 
   .mt-banner__body {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: start;
-    margin-top: calc(var(--mt-h-xxl-size) * var(--mt-h-xxl-leading) * 2);
     padding: 1.875rem 1.25rem 0;
   }
 
