@@ -154,18 +154,19 @@ html.mt-motion .mt-banner__media img {
     grid-column: 1;
     grid-row: 1;
     align-self: start;
+    margin: 11.25rem 0 0 6.25rem;
   }
 
   .mt-banner__heading {
     align-self: auto;
-    padding: 3.75rem 1.25rem 0;
+    padding: 3.75rem 1.25rem 0 0;
     font-size: var(--mt-h-xxl-size);
     line-height: var(--mt-h-xxl-leading);
     color: var(--mt-ink);
   }
 
   .mt-banner__body {
-    padding: 1.875rem 1.25rem 0;
+    padding: 1.875rem 1.25rem 0 0;
   }
 
   .mt-banner__stats {
