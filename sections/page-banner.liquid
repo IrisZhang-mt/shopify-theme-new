@@ -11,19 +11,21 @@
   </div>
   <div class="mt-banner__scrim" aria-hidden="true"></div>
 
-  {%- if section.settings.heading != blank -%}
-    <h1 class="mt-banner__heading" data-reveal>{{ section.settings.heading }}</h1>
-  {%- endif -%}
+  <div class="mt-banner__content">
+    {%- if section.settings.heading != blank -%}
+      <h1 class="mt-banner__heading" data-reveal>{{ section.settings.heading }}</h1>
+    {%- endif -%}
 
-  <div class="mt-banner__body">
-    {%- if section.settings.text != blank -%}
-      <p class="mt-banner__text">{{ section.settings.text }}</p>
-    {%- endif -%}
-    {%- if section.settings.cta_label != blank -%}
-      <a class="mt-banner__cta" href="{{ section.settings.cta_url | default: '#' }}">
-        <span>{{ section.settings.cta_label }}</span>
-      </a>
-    {%- endif -%}
+    <div class="mt-banner__body">
+      {%- if section.settings.text != blank -%}
+        <p class="mt-banner__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_label != blank -%}
+        <a class="mt-banner__cta" href="{{ section.settings.cta_url | default: '#' }}">
+          <span>{{ section.settings.cta_label }}</span>
+        </a>
+      {%- endif -%}
+    </div>
   </div>
 
   {%- if section.blocks.size > 0 -%}
