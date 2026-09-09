@@ -158,6 +158,7 @@ html.mt-motion .mt-banner__media img {
     justify-content: center;
     grid-column: 1;
     grid-row: 1;
+    width: 66%;
   }
 
   .mt-banner__heading {
