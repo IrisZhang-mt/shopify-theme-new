@@ -9,13 +9,46 @@
  */
 {
   "sections": {
+    "page_banner_gmJ877": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_dXPGN4": {
+          "type": "stat",
+          "settings": {
+            "label": "Open roles",
+            "value": "7 positions",
+            "placement": "panel"
+          }
+        },
+        "stat_3MhDTa": {
+          "type": "stat",
+          "settings": {
+            "label": "Locations",
+            "value": "United States · Malaysia",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_dXPGN4",
+        "stat_3MhDTa"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
+        "image_mobile": "shopify://shop_images/hero-m.png",
+        "heading": "Join our team.",
+        "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
+        "cta_label": "See open roles",
+        "cta_url": ""
+      }
+    },
     "hero": {
       "type": "home-hero",
       "blocks": {
         "panel-1": {
           "type": "panel",
           "settings": {
-            "image": "shopify://shop_images/3604df6949905d095e0433bc5fa8839e3808da39.jpg",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -23,7 +56,6 @@
         "panel-2": {
           "type": "panel",
           "settings": {
-            "image": "shopify://shop_images/8e9d47fd7349c1e2389206b2df9db484d182b66f.jpg",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -34,6 +66,9 @@
         "panel-2"
       ],
       "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop New Arrivals",
         "cta_url": "shopify://collections/best-sellers"
       }
     },
@@ -59,7 +94,9 @@
         "girls",
         "boys"
       ],
-      "settings": {}
+      "settings": {
+        "heading": "Best Sellers"
+      }
     },
     "split": {
       "type": "home-split",
@@ -67,7 +104,6 @@
         "girls": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/d3b7b2abc1cbe5986eab7d3221246ce865f9c2bf.jpg",
             "heading": "For Girls",
             "url": "shopify://collections/girls"
           }
@@ -75,7 +111,6 @@
         "boys": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/35152bfa3f17ba62fff88aabfd9bdb37d939acfe.jpg",
             "heading": "For Boys",
             "url": "shopify://collections/boys"
           }
@@ -93,25 +128,29 @@
         "ice-skating": {
           "type": "activity",
           "settings": {
-            "collection": "ice-skating"
+            "collection": "ice-skating",
+            "label": ""
           }
         },
         "skiing": {
           "type": "activity",
           "settings": {
-            "collection": "skiing"
+            "collection": "skiing",
+            "label": ""
           }
         },
         "golf": {
           "type": "activity",
           "settings": {
-            "collection": "golf"
+            "collection": "golf",
+            "label": ""
           }
         },
         "tennis": {
           "type": "activity",
           "settings": {
-            "collection": "tennis"
+            "collection": "tennis",
+            "label": ""
           }
         },
         "swimming": {
@@ -145,7 +184,9 @@
         "everyday",
         "activities"
       ],
-      "settings": {}
+      "settings": {
+        "tag": "Shop by Activities"
+      }
     },
     "carousel": {
       "type": "home-carousel",
@@ -153,43 +194,43 @@
         "post-1": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-1.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         },
         "post-2": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-2.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         },
         "post-3": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-3.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         },
         "post-4": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-4.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         },
         "post-5": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-5.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         },
         "post-6": {
           "type": "post",
           "settings": {
-            "image": "shopify://shop_images/mt-post-6.png",
-            "handle": "@moodytiger"
+            "handle": "@moodytiger",
+            "url": ""
           }
         }
       },
@@ -205,6 +246,7 @@
     }
   },
   "order": [
+    "page_banner_gmJ877",
     "hero",
     "best-sellers",
     "split",
