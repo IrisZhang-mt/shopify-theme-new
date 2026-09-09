@@ -1,1 +1,78 @@
-{"type":"header","name":"Header","sections":{"announcement-bar":{"type":"announcement-bar","settings":{}},"header":{"type":"header","settings":{}},"cart-drawer":{"type":"cart-drawer","settings":{}}},"order":["announcement-bar","header","cart-drawer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "settings": {
+        "scheme": "accent",
+        "rotate": 5
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "signup_text": "Sign up for 10% Off",
+        "signup_url": "",
+        "popular_searches": "Leggings, T-shirts, Outerwear, Dresses"
+      }
+    },
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "miles_text": "Earn moody miles points on this order. Gift cards and promotional codes applied at checkout.",
+        "recs_heading": "We think you'll love"
+      }
+    },
+    "page_banner_rexyQJ": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_kgM7hE": {
+          "type": "stat",
+          "settings": {
+            "label": "Open roles",
+            "value": "7 positions",
+            "placement": "panel"
+          }
+        },
+        "stat_ewTGgT": {
+          "type": "stat",
+          "settings": {
+            "label": "Locations",
+            "value": "United States · Malaysia",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_kgM7hE",
+        "stat_ewTGgT"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
+        "image_mobile": "shopify://shop_images/hero-m.png",
+        "heading": "Join our team1111.",
+        "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
+        "cta_label": "See open roles",
+        "cta_url": ""
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "cart-drawer",
+    "page_banner_rexyQJ"
+  ]
+}
