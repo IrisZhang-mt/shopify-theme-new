@@ -122,7 +122,7 @@ html.mt-motion .mt-banner__media img {
   font-size: var(--mt-tag-xs-size);
   letter-spacing: var(--mt-tracking-tag);
   text-transform: uppercase;
-  color: var(--mt-off-white);
+  color: var(--mt-white);
 }
 .mt-banner__stat-value {
   margin: 0;
