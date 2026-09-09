@@ -186,7 +186,7 @@ html.mt-motion .mt-banner__media img {
   }
   .mt-banner__stat[data-placement="panel"] {
     grid-column: 1;
-    background: var(--mt-cloud);
+    background: #eee;
   }
   .mt-banner__stat[data-placement="panel"] .mt-banner__stat-label {
     color: var(--mt-moss);
