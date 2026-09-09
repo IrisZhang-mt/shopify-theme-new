@@ -49,11 +49,23 @@ if (!window.mtPdpInit) {
   const initProduct = (root) => {
     const variants = readVariants(root, '[data-pdp-variants]');
     const track = root.querySelector('[data-pdp-track]');
+    const colorOpt = root.dataset.pdpColorOpt == null ? -1 : Number(root.dataset.pdpColorOpt);
     const state = {
       variants,
       selected: readSelected(root, '[data-pdp-value]', 'pdpOpt', 'pdpValue'),
       qty: 1,
       interacted: false,
+    };
+
+    const syncGallery = () => {
+      if (!track || colorOpt < 0) return false;
+      const color = state.selected[colorOpt];
+      const slides = [...track.querySelectorAll('[data-pdp-color]')];
+      const matched = slides.some((slide) => slide.dataset.pdpColor === color);
+      slides.forEach((slide) => {
+        slide.hidden = matched && slide.dataset.pdpColor !== '' && slide.dataset.pdpColor !== color;
+      });
+      return matched;
     };
 
     const sync = () => {
@@ -75,10 +87,10 @@ if (!window.mtPdpInit) {
         add.disabled = !variant.available;
         add.textContent = variant.available ? strings.addToCart : strings.soldOut;
         const price = root.querySelector('[data-pdp-price]');
-        if (price) price.innerHTML = variant.price;
+        if (price) price.textContent = variant.price;
         const compare = root.querySelector('[data-pdp-compare]');
         if (compare) {
-          compare.innerHTML = variant.compare || '';
+          compare.textContent = variant.compare || '';
           compare.hidden = !variant.compare;
         }
         const sku = root.querySelector('[data-pdp-sku]');
@@ -92,12 +104,16 @@ if (!window.mtPdpInit) {
           try {
             history.replaceState(history.state, '', url);
           } catch {}
-          if (variant.media > 0 && track && !deskMq.matches) {
+          const grouped = syncGallery();
+          if (grouped && track && !deskMq.matches) {
+            track.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
+          } else if (!grouped && variant.media > 0 && track && !deskMq.matches) {
             const slide = track.querySelector(`[data-pdp-media="${variant.media}"]`);
             if (slide) {
               track.scrollTo({ left: slide.offsetLeft, behavior: reducedMq.matches ? 'auto' : 'smooth' });
             }
           }
+          runUpdaters();
         }
       } else {
         add.disabled = true;
@@ -201,6 +217,7 @@ if (!window.mtPdpInit) {
       update();
     }
 
+    syncGallery();
     if (variants.length) sync();
     arrows();
   };

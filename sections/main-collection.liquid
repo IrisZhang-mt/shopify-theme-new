@@ -95,7 +95,7 @@
               {%- if forloop.index0 < 4 -%}
                 {%- assign card_eager = true -%}
               {%- endif -%}
-              {% render 'product-card', product: product, quick: true, index: card_index, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw' %}
+              {% render 'product-card', product: product, quick: true, align: true, index: card_index, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw' %}
             {%- endfor -%}
           </div>
           {%- if paginate.next -%}

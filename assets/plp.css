@@ -1,5 +1,6 @@
 .mt-plp {
   --mt-plp-pad: 0.9375rem;
+  --mt-plp-swatch: 0.625rem;
   --mt-plp-shift: cubic-bezier(0.65, 0, 0.35, 1);
   background: var(--mt-paper);
 }
@@ -27,7 +28,7 @@
   aspect-ratio: 112 / 120;
   display: flex;
   align-items: flex-end;
-  padding: 0 0 0.625rem 0.625rem;
+  padding: 0 0 0.3125rem 0.3125rem;
   overflow: hidden;
   background: var(--mt-off-white);
   text-decoration: none;
@@ -49,10 +50,10 @@
 .mt-plp__tile-label {
   position: relative;
   z-index: 1;
-  font-family: var(--mt-font-display);
-  font-size: var(--mt-tag-xs-size);
-  line-height: 1.2;
-  letter-spacing: var(--mt-tracking-heading);
+  font-family: var(--mt-font-body);
+  font-size: var(--mt-p-s-size);
+  line-height: var(--mt-p-leading);
+  letter-spacing: var(--mt-tracking-body);
   color: var(--mt-cloud);
   white-space: nowrap;
   overflow: hidden;
@@ -365,6 +366,7 @@ a.mt-plp__tile:focus-visible {
 
 .mt-plp .mt-card {
   width: auto;
+  min-width: 0;
   flex: none;
   gap: 0.9375rem;
 }
@@ -373,7 +375,7 @@ a.mt-plp__tile:focus-visible {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  min-height: calc(2em * var(--mt-p-leading));
+  min-height: var(--mt-plp-title-h, 0);
 }
 .mt-plp__grid--one-line .mt-card__title {
   display: block;
@@ -381,15 +383,8 @@ a.mt-plp__tile:focus-visible {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.mt-plp .mt-card__media {
-  aspect-ratio: 170 / 220;
-}
-.mt-plp .mt-card__swatches {
-  gap: 0.3125rem;
-}
-.mt-plp .mt-card__swatches span {
-  width: 0.625rem;
-  height: 0.625rem;
+.mt-plp .mt-card__swatches:empty {
+  min-height: var(--mt-plp-swatch);
 }
 
 .mt-plp__empty {
@@ -460,9 +455,12 @@ a.mt-plp__tile:focus-visible {
   }
   .mt-plp__tile {
     aspect-ratio: 463 / 360;
+    padding: 0 0 0.625rem 0.625rem;
   }
   .mt-plp__tile-label {
+    font-family: var(--mt-font-display);
     font-size: var(--mt-p-l-size);
+    letter-spacing: var(--mt-tracking-heading);
   }
 
   .mt-plp__bar {
@@ -553,9 +551,12 @@ a.mt-plp__tile:focus-visible {
   .mt-plp .mt-card__swatches {
     gap: 0.9375rem;
   }
+  .mt-plp {
+    --mt-plp-swatch: 1.125rem;
+  }
   .mt-plp .mt-card__swatches span {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: var(--mt-plp-swatch);
+    height: var(--mt-plp-swatch);
   }
 }
 

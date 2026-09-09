@@ -25,9 +25,9 @@
       {%- unless color_option -%}
         {%- assign color_option = product.options_with_values | where: 'name', 'Colour' | first -%}
       {%- endunless -%}
-      {%- if color_option -%}
-        {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
-        {%- capture swatches -%}
+      {%- capture swatches -%}
+        {%- if color_option -%}
+          {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
           {%- for value in color_option.values limit: 4 -%}
             {%- assign swatch_handle = value | handleize -%}
             {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
@@ -41,10 +41,12 @@
               <span style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"></span>
             {%- endif -%}
           {%- endfor -%}
-        {%- endcapture -%}
-        {%- if swatches contains 'span' -%}
-          <div class="mt-card__swatches">{{ swatches }}</div>
         {%- endif -%}
+      {%- endcapture -%}
+      {%- if swatches contains 'span' -%}
+        <div class="mt-card__swatches">{{ swatches }}</div>
+      {%- elsif align -%}
+        <div class="mt-card__swatches"></div>
       {%- endif -%}
     </div>
     {%- if quick -%}

@@ -32,6 +32,9 @@
   overflow: hidden;
   background: var(--mt-off-white);
 }
+.mt-pdp__slide--shared {
+  order: 1;
+}
 .mt-pdp__slide img {
   width: 100%;
   height: 100%;
@@ -392,9 +395,17 @@
   margin-bottom: 0;
 }
 
+.mt-pdp__apps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.875rem;
+  padding: 0 var(--mt-pdp-pad);
+}
 .mt-pdp__ctas {
   display: flex;
   margin-top: 1.875rem;
+  padding: 0 var(--mt-pdp-pad);
 }
 .mt-pdp__qty {
   display: flex;
@@ -518,7 +529,7 @@
 .mt-pdp__pairs {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1.25rem;
   padding-bottom: 3.125rem;
 }
 .mt-pdp__pairs-title {
@@ -528,7 +539,7 @@
 .mt-pdp__pairs [data-pdp-pairs-items] {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1.25rem;
 }
 
 .mt-pair {
@@ -542,19 +553,19 @@
   gap: 1.25rem;
 }
 .mt-pair__media {
-  aspect-ratio: 345 / 350;
+  aspect-ratio: 2 / 3;
   overflow: hidden;
   background: var(--mt-off-white);
 }
 .mt-pair__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .mt-pair__info {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1.25rem;
   min-width: 0;
 }
 .mt-pair__title {
@@ -564,7 +575,7 @@
 }
 .mt-pair__title p {
   margin: 0;
-  font-size: var(--mt-p-s-size);
+  font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
 }
 .mt-pair__price {
@@ -577,9 +588,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.9375rem;
-}
-.mt-pair__option + .mt-pair__option {
-  margin-top: 1.25rem;
 }
 .mt-pair__label {
   margin: 0;
@@ -625,7 +633,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.3125rem;
-  margin-top: 0.3125rem;
 }
 .mt-pair__pill {
   flex: 0 0 calc((100% - 1.25rem) / 5);
@@ -777,6 +784,7 @@
 
   .mt-pdp__label,
   .mt-pair__label,
+  .mt-pair__title p,
   .mt-pdp__perk-title {
     font-size: var(--mt-p-s-size);
   }
@@ -792,8 +800,13 @@
     padding-bottom: 1.875rem;
   }
 
+  .mt-pdp__apps {
+    margin-top: 1.25rem;
+    padding: 0;
+  }
   .mt-pdp__ctas {
     margin-top: 1.25rem;
+    padding: 0;
   }
   .mt-pdp__qty {
     flex-basis: 8.6875rem;
@@ -814,7 +827,11 @@
   }
 
   .mt-pdp__pairs {
+    gap: 2.5rem;
     padding-bottom: 0;
+  }
+  .mt-pdp__pairs [data-pdp-pairs-items] {
+    gap: 2.5rem;
   }
   .mt-pdp__pairs-title {
     font-size: 1.5625rem;
@@ -830,10 +847,11 @@
   }
   .mt-pair__media {
     flex: 0 0 13.5625rem;
-    aspect-ratio: 217 / 291;
+    aspect-ratio: 2 / 3;
   }
   .mt-pair__info {
     flex: 1;
+    gap: 2.5rem;
   }
   .mt-pair__pill {
     height: 2.5rem;

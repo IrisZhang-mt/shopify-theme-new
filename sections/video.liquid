@@ -1,0 +1,109 @@
+{{ 'rte.css' | asset_url | stylesheet_tag }}
+{{ 'video.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-video{% if section.settings.contain %} mt-video--contain{% endif %}">
+  {%- if section.settings.heading != blank or section.settings.text != blank -%}
+    <div class="mt-video__intro">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="mt-video__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="mt-rte" data-reveal style="--mt-reveal-i: 1">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mt-video__frame" style="--mt-video-ratio: {{ section.settings.ratio | escape }}" data-reveal>
+    {%- if section.settings.video != blank -%}
+      {%- if section.settings.autoplay -%}
+        {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+      {%- else -%}
+        {{ section.settings.video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1500x' }}
+      {%- endif -%}
+    {%- elsif section.settings.video_url.id != blank -%}
+      {%- assign video_title = section.settings.heading | default: shop.name | escape -%}
+      {%- if section.settings.video_url.type == 'youtube' -%}
+        <iframe
+          src="https://www.youtube.com/embed/{{ section.settings.video_url.id | escape }}?rel=0&amp;playsinline=1"
+          title="{{ video_title }}"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      {%- elsif section.settings.video_url.type == 'vimeo' -%}
+        <iframe
+          src="https://player.vimeo.com/video/{{ section.settings.video_url.id | escape }}"
+          title="{{ video_title }}"
+          loading="lazy"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video",
+  "class": "section-video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Uploaded to Shopify. Takes priority over the video link."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video link",
+      "accept": ["youtube", "vimeo"]
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Play automatically without sound",
+      "default": false,
+      "info": "Applies to an uploaded video. Hides the player controls."
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Shape",
+      "options": [
+        { "value": "16 / 9", "label": "Landscape" },
+        { "value": "4 / 3", "label": "Classic" },
+        { "value": "1 / 1", "label": "Square" },
+        { "value": "9 / 16", "label": "Portrait" }
+      ],
+      "default": "16 / 9"
+    },
+    {
+      "type": "checkbox",
+      "id": "contain",
+      "label": "Constrain to page width",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

@@ -3,20 +3,68 @@
 
 {%- assign current = product.selected_or_first_available_variant -%}
 
-<section class="mt-pdp" data-pdp{% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}>
+{%- assign color_index = -1 -%}
+{%- assign color_names = '' -%}
+{%- for option in product.options_with_values -%}
+  {%- if option.name == 'Color' or option.name == 'Colour' -%}
+    {%- assign color_index = forloop.index0 -%}
+    {%- assign color_names = option.values | join: '~~' -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign color_list = color_names | split: '~~' -%}
+{%- assign current_color = '' -%}
+{%- if color_index >= 0 -%}
+  {%- assign current_color = current.options[color_index] -%}
+  {%- assign media_owners = '|' -%}
+  {%- for variant in product.variants -%}
+    {%- if variant.featured_media -%}
+      {%- assign media_owners = media_owners | append: variant.featured_media.position | append: ':' | append: variant.options[color_index] | append: '|' -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+<section class="mt-pdp" data-pdp{% if color_index >= 0 %} data-pdp-color-opt="{{ color_index }}"{% endif %}{% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}>
   <div class="mt-pdp__hero">
     <div class="mt-pdp__gallery" data-pdp-col>
       <div class="mt-pdp__track" data-pdp-track>
         {%- assign image_count = 0 -%}
-        {%- for media in product.media limit: 12 -%}
+        {%- assign shown_count = 0 -%}
+        {%- for media in product.media limit: 50 -%}
           {%- if media.media_type == 'image' -%}
             {%- assign image_count = image_count | plus: 1 -%}
-            <div class="mt-pdp__slide" data-pdp-media="{{ media.position }}">
-              {%- if forloop.index <= 2 -%}
-                {%- assign image_alt = media.alt | default: product.title | escape -%}
+            {%- assign media_color = '' -%}
+            {%- if color_index >= 0 -%}
+              {%- assign alt_text = media.alt | default: '' | downcase -%}
+              {%- assign match_len = 0 -%}
+              {%- for value in color_list -%}
+                {%- assign needle = value | downcase -%}
+                {%- if alt_text contains needle -%}
+                  {%- assign needle_len = needle | size -%}
+                  {%- if needle_len > match_len -%}
+                    {%- assign match_len = needle_len -%}
+                    {%- assign media_color = value -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if media_color == blank -%}
+                {%- assign owner_key = '|' | append: media.position | append: ':' -%}
+                {%- if media_owners contains owner_key -%}
+                  {%- assign media_color = media_owners | split: owner_key | last | split: '|' | first -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endif -%}
+            {%- assign hide_slide = false -%}
+            {%- if media_color != blank and current_color != blank and media_color != current_color -%}
+              {%- assign hide_slide = true -%}
+            {%- endif -%}
+            {%- unless hide_slide -%}
+              {%- assign shown_count = shown_count | plus: 1 -%}
+            {%- endunless -%}
+            <div class="mt-pdp__slide{% if media_color == blank %} mt-pdp__slide--shared{% endif %}" data-pdp-media="{{ media.position }}" data-pdp-color="{{ media_color | escape }}"{% if hide_slide %} hidden{% endif %}>
+              {%- assign image_alt = media.alt | default: product.title | escape -%}
+              {%- if hide_slide == false and shown_count <= 2 -%}
                 {{ media | image_url: width: 1100 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 28vw, 74vw', alt: image_alt }}
               {%- else -%}
-                {%- assign image_alt = media.alt | default: product.title | escape -%}
                 {{ media | image_url: width: 1100 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 28vw, 74vw', alt: image_alt }}
               {%- endif -%}
             </div>
@@ -148,6 +196,17 @@
           </div>
         </div>
 
+        {%- capture app_slot -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              <div class="mt-pdp__app" {{ block.shopify_attributes }}>{% render block %}</div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+        {%- if app_slot contains 'mt-pdp__app' -%}
+          <div class="mt-pdp__apps">{{ app_slot }}</div>
+        {%- endif -%}
+
         <div class="mt-pdp__ctas">
           <div class="mt-pdp__qty">
             <button class="mt-pdp__qty-btn" type="button" data-pdp-minus aria-label="{{ 'products.decrease_quantity' | t }}">&minus;</button>
@@ -169,9 +228,10 @@
           <p class="mt-pdp__statement" data-reveal>{{ statement }}</p>
         {%- endif -%}
 
-        {%- if section.blocks.size > 0 -%}
+        {%- assign acc_blocks = section.blocks | where: 'type', 'item' -%}
+        {%- if acc_blocks.size > 0 -%}
           <div class="mt-pdp__acc" data-reveal>
-            {%- for block in section.blocks -%}
+            {%- for block in acc_blocks -%}
               {%- assign body = block.settings.content -%}
               {%- if block.settings.use_description -%}
                 {%- assign body = product.description -%}
@@ -191,19 +251,25 @@
           </div>
         {%- endif -%}
 
-        <div class="mt-pdp__pairs" data-pdp-pairs data-url="{{ routes.product_recommendations_url }}?section_id=product-pairs&product_id={{ product.id }}&limit=2&intent=complementary" hidden>
-          <h2 class="mt-pdp__pairs-title">{{ section.settings.pairs_heading }}</h2>
-          <div data-pdp-pairs-items></div>
-          {%- assign pairs_source = product.collections.first -%}
-          {%- if pairs_source -%}
-            <div data-pdp-pairs-fallback hidden>
-              {%- for item in pairs_source.products limit: 5 -%}
-                {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
-                {% render 'pdp-pair', item: item %}
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-        </div>
+        {%- assign show_pairs = section.settings.show_pairs -%}
+        {%- if product.metafields.custom.hide_pairs.value == true -%}
+          {%- assign show_pairs = false -%}
+        {%- endif -%}
+        {%- if show_pairs -%}
+          <div class="mt-pdp__pairs" data-pdp-pairs data-url="{{ routes.product_recommendations_url }}?section_id=product-pairs&product_id={{ product.id }}&limit=2&intent=complementary" hidden>
+            <h2 class="mt-pdp__pairs-title">{{ section.settings.pairs_heading }}</h2>
+            <div data-pdp-pairs-items></div>
+            {%- assign pairs_source = product.collections.first -%}
+            {%- if pairs_source -%}
+              <div data-pdp-pairs-fallback hidden>
+                {%- for item in pairs_source.products limit: 5 -%}
+                  {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+                  {% render 'pdp-pair', item: item %}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -258,9 +324,19 @@
       "id": "pairs_heading",
       "label": "Pairs heading",
       "default": "Pairs well with"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pairs",
+      "label": "Show Pairs well with",
+      "info": "Turn off per product with a custom.hide_pairs product metafield set to true.",
+      "default": true
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "item",
       "name": "Accordion item",

@@ -1,0 +1,122 @@
+.mt-fc {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 3.125rem 0;
+  background: var(--mt-paper);
+}
+
+.mt-fc__intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.625rem 1.25rem;
+  padding-inline: 0.9375rem;
+}
+.mt-fc__title {
+  margin: 0;
+  font-size: var(--mt-h-m-size);
+  line-height: var(--mt-h-m-leading);
+}
+.mt-fc__cta {
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+  font-size: var(--mt-cta-s-size);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-fc__cta:hover {
+    opacity: 0.55;
+  }
+}
+.mt-fc__cta:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+.mt-fc__stage {
+  position: relative;
+  width: 100%;
+}
+.mt-fc__stage .mt-row-nav {
+  top: calc(var(--mt-card-w) * 440 / 335 / 2);
+}
+.mt-fc__row {
+  display: flex;
+  max-width: 100%;
+  gap: 0.3125rem;
+  padding-inline: 0.9375rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.mt-fc__row::-webkit-scrollbar {
+  display: none;
+}
+
+.mt-fc__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5625rem 0.3125rem;
+  padding-inline: 0.9375rem;
+}
+.mt-fc__grid .mt-card {
+  width: auto;
+  min-width: 0;
+  flex: none;
+  gap: 0.9375rem;
+}
+.mt-fc__grid .mt-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: var(--mt-fc-title-h, 0);
+}
+.mt-fc__grid .mt-card__swatches:empty {
+  min-height: 0.9375rem;
+}
+
+@media (hover: hover) {
+  .mt-fc__row:has(.mt-card:hover) .mt-card__media::after,
+  .mt-fc__grid:has(.mt-card:hover) .mt-card__media::after {
+    opacity: 0.55;
+  }
+  .mt-fc__row:has(.mt-card:hover) .mt-card__text,
+  .mt-fc__grid:has(.mt-card:hover) .mt-card__text {
+    opacity: 0.45;
+  }
+  .mt-fc__row .mt-card:hover .mt-card__media::after,
+  .mt-fc__grid .mt-card:hover .mt-card__media::after {
+    opacity: 0;
+  }
+  .mt-fc__row .mt-card:hover .mt-card__text,
+  .mt-fc__grid .mt-card:hover .mt-card__text {
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-fc {
+    gap: 1.875rem;
+    padding: 5rem 0;
+  }
+  .mt-fc__intro,
+  .mt-fc__row,
+  .mt-fc__grid {
+    padding-inline: 1.25rem;
+  }
+  .mt-fc__title {
+    font-size: var(--mt-h-s-size);
+    line-height: var(--mt-h-s-leading);
+  }
+  .mt-fc__row {
+    gap: 1.25rem;
+  }
+  .mt-fc__grid {
+    grid-template-columns: repeat(var(--mt-fc-cols, 4), minmax(0, 1fr));
+    gap: 3.125rem 1.25rem;
+  }
+}

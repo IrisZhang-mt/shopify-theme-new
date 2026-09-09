@@ -3,13 +3,14 @@
   --mt-header-pad: 0.9375rem;
   --mt-header-gap: 1.875rem;
   --mt-logo-h: 1.125rem;
+  --mt-signup-base: rgba(var(--mt-accent-rgb), 0.55);
   --mt-signup-gradient: linear-gradient(
-    90deg,
-    rgba(var(--mt-accent-rgb), 0.45) 0%,
-    rgba(var(--mt-accent-rgb), 0.6) 25%,
+    100deg,
+    var(--mt-signup-base) 0%,
+    var(--mt-signup-base) 38%,
     var(--mt-tangerine) 50%,
-    rgba(var(--mt-accent-rgb), 0.6) 75%,
-    rgba(var(--mt-accent-rgb), 0.45) 100%
+    var(--mt-signup-base) 62%,
+    var(--mt-signup-base) 100%
   );
   background: var(--mt-paper);
 }
@@ -145,18 +146,19 @@
   cursor: pointer;
   background-color: transparent;
   background-image: var(--mt-signup-gradient);
-  background-size: 200% 100%;
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: mt-signup-sweep 3000ms linear infinite;
+  animation: mt-signup-sweep 3200ms linear infinite;
 }
 @keyframes mt-signup-sweep {
   from {
     background-position: 100% 0;
   }
   to {
-    background-position: -100% 0;
+    background-position: 0% 0;
   }
 }
 .mt-header__signup::after {
@@ -316,15 +318,20 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     transition: none !important;
     animation: none !important;
   }
+
+  .mt-header__signup {
+    background-image: none;
+    color: var(--mt-accent);
+  }
 }
 
 .mt-drawer {
   position: fixed;
-  top: var(--mt-header-h);
+  top: calc(var(--mt-header-h) + var(--mt-announce-offset, 0px));
   left: 0;
   right: 0;
-  max-height: calc(100vh - var(--mt-header-h));
-  max-height: calc(100dvh - var(--mt-header-h));
+  max-height: calc(100vh - var(--mt-header-h) - var(--mt-announce-offset, 0px));
+  max-height: calc(100dvh - var(--mt-header-h) - var(--mt-announce-offset, 0px));
   overflow-y: auto;
   overscroll-behavior: contain;
   display: flex;
@@ -538,8 +545,8 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   gap: 1.875rem;
   padding: 1.875rem var(--mt-header-pad) 2.5rem;
   background: var(--mt-paper);
-  max-height: calc(100vh - var(--mt-header-h));
-  max-height: calc(100dvh - var(--mt-header-h));
+  max-height: calc(100vh - var(--mt-header-h) - var(--mt-announce-offset, 0px));
+  max-height: calc(100dvh - var(--mt-header-h) - var(--mt-announce-offset, 0px));
   overflow-y: auto;
   overscroll-behavior: contain;
 }

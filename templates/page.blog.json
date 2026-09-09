@@ -1,1 +1,15 @@
-{"sections":{"main":{"type":"main-blog","settings":{"blog":"journal","heading":"Featured Articles"}}},"order":["main"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "blog": "news",
+        "heading": "Featured Articles",
+        "image": "shopify://shop_images/mt-blog-hero.png"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

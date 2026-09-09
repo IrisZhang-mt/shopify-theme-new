@@ -1,0 +1,96 @@
+.mt-announce {
+  --mt-announce-bg: var(--mt-accent);
+  --mt-announce-fg: var(--mt-ink);
+  background: var(--mt-announce-bg);
+  color: var(--mt-announce-fg);
+}
+.mt-announce--ink {
+  --mt-announce-bg: var(--mt-ink);
+  --mt-announce-fg: var(--mt-cloud);
+}
+.mt-announce--lime {
+  --mt-announce-bg: var(--mt-lime);
+  --mt-announce-fg: var(--mt-ink);
+}
+.mt-announce--sand {
+  --mt-announce-bg: var(--mt-surface);
+  --mt-announce-fg: var(--mt-ink);
+}
+.mt-announce--paper {
+  --mt-announce-bg: var(--mt-paper);
+  --mt-announce-fg: var(--mt-ink);
+  border-bottom: 1px solid var(--mt-off-white);
+}
+
+.mt-announce__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9375rem;
+  min-height: 2.125rem;
+  padding: 0.375rem 0.9375rem;
+  text-align: center;
+}
+
+.mt-announce__stack {
+  display: grid;
+  grid-template-areas: 'mt-announce-slot';
+  align-items: center;
+  min-width: 0;
+}
+.mt-announce__slide {
+  grid-area: mt-announce-slot;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 400ms var(--mt-ease),
+    visibility 400ms var(--mt-ease);
+}
+.mt-announce__slide.mt-on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mt-announce__text {
+  margin: 0;
+  font-size: var(--mt-menu-size);
+  line-height: 1.3;
+  letter-spacing: var(--mt-tracking-body);
+  color: inherit;
+}
+.mt-announce__text--link {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 0.1875rem;
+  text-decoration-thickness: 1px;
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-announce__text--link:hover {
+    opacity: 0.7;
+  }
+}
+.mt-announce__text--link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.mt-announce__app {
+  min-width: 0;
+}
+
+@media (min-width: 750px) {
+  .mt-announce__inner {
+    min-height: 2.375rem;
+    padding-inline: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-announce__slide {
+    transition: none;
+  }
+}
