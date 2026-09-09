@@ -202,27 +202,6 @@
         "post-6"
       ],
       "settings": {}
-    },
-    "page-banner-preview": {
-      "type": "page-banner",
-      "blocks": {
-        "join": {
-          "type": "stat",
-          "settings": { "label": "Free to join", "value": "Free to join", "placement": "panel" }
-        },
-        "rate": {
-          "type": "stat",
-          "settings": { "label": "Earn rate", "value": "1 point per $1", "placement": "media" }
-        }
-      },
-      "block_order": ["join", "rate"],
-      "settings": {
-        "image": "shopify://shop_images/3604df6949905d095e0433bc5fa8839e3808da39.jpg",
-        "image_mobile": "shopify://shop_images/8e9d47fd7349c1e2389206b2df9db484d182b66f.jpg",
-        "heading": "Earn points.\nPlay forward.",
-        "text": "Our free rewards club. Earn reward points on every purchase, then redeem them for discounts on what's next.",
-        "cta_label": "Join now"
-      }
     }
   },
   "order": [
@@ -230,7 +209,6 @@
     "best-sellers",
     "split",
     "activities",
-    "carousel",
-    "page-banner-preview"
+    "carousel"
   ]
 }
