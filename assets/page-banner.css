@@ -114,7 +114,7 @@ html.mt-motion .mt-banner__media img {
   display: flex;
   justify-content: space-between;
   gap: 0.9375rem;
-  padding: 0 0.9375rem 1.25rem;
+  width: 66%;
 }
 .mt-banner__stat-label {
   display: none;
