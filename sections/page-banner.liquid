@@ -6,7 +6,7 @@
       {%- assign image_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
       {{ section.settings.image | image_url: width: 2000 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 50vw, 100vw', alt: image_alt }}
     {%- else -%}
-      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
     {%- endif -%}
   </div>
   <div class="mt-banner__scrim" aria-hidden="true"></div>
