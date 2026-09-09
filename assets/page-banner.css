@@ -1,4 +1,5 @@
 .mt-banner {
+  background: #eee;
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -87,7 +88,6 @@ html.mt-motion .mt-banner__media img {
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
 .mt-banner__cta::after {
-  background: #eee;
   content: "\2192";
   transition: transform var(--mt-dur) var(--mt-ease);
 }
