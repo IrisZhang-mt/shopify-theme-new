@@ -156,6 +156,7 @@ html.mt-motion .mt-banner__media img {
   }
 
   .mt-banner__heading {
+    align-self: auto;
     padding: 3.75rem 1.25rem 0;
     font-size: var(--mt-h-xxl-size);
     line-height: var(--mt-h-xxl-leading);
