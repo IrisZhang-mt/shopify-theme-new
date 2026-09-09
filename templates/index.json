@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -193,6 +202,21 @@
         "post-6"
       ],
       "settings": {}
+    },
+    "page-banner-preview": {
+      "type": "page-banner",
+      "blocks": {
+        "roles": {
+          "type": "stat",
+          "settings": { "label": "Open roles", "value": "7 positions", "placement": "panel" }
+        },
+        "locations": {
+          "type": "stat",
+          "settings": { "label": "Locations", "value": "United States · Malaysia", "placement": "media" }
+        }
+      },
+      "block_order": ["roles", "locations"],
+      "settings": {}
     }
   },
   "order": [
@@ -200,6 +224,7 @@
     "best-sellers",
     "split",
     "activities",
-    "carousel"
+    "carousel",
+    "page-banner-preview"
   ]
 }
