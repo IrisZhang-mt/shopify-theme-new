@@ -63,7 +63,6 @@ html.mt-motion .mt-banner__media img {
 
 .mt-banner__body {
   grid-row: 2;
-  padding: 1.875rem 0.9375rem 3.125rem;
 }
 .mt-banner__text {
   max-width: 26rem;
