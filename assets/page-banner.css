@@ -189,10 +189,10 @@ html.mt-motion .mt-banner__media img {
     background: #eee;
   }
   .mt-banner__stat[data-placement="panel"] .mt-banner__stat-label {
-    color: var(--mt-moss);
+    color: #7c7a73;
   }
   .mt-banner__stat[data-placement="panel"] .mt-banner__stat-value {
-    color: var(--mt-ink);
+    color: #1d1d1d;
   }
   .mt-banner__stat[data-placement="media"] {
     grid-column: 2;
