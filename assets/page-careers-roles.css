@@ -100,7 +100,11 @@
     display: grid;
     grid-column: 1 / -1;
     grid-row: 2;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 2.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .mt-careers-roles__group-state {
+    font-size: 1.625rem;
+    font-weight: 700;
   }
 }
