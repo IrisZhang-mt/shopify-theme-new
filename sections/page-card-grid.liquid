@@ -6,11 +6,11 @@
       <h2 class="mt-card-grid__heading">{{ section.settings.heading }}</h2>
     {%- endif -%}
 
-    {%- if section.settings.display_mode == 'image' -%}
-      {%- assign items = section.blocks | where: 'type', 'image_item' -%}
-      {%- if items.size > 0 -%}
+    {%- assign item_count = section.blocks.size -%}
+    {%- if item_count > 0 -%}
+      {%- if section.settings.display_mode == 'image' -%}
         <div class="mt-card-grid__images">
-          {%- for block in items -%}
+          {%- for block in section.blocks -%}
             <div class="mt-card-grid__image-item" {{ block.shopify_attributes }}>
               {%- if block.settings.image != blank -%}
                 {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
@@ -21,18 +21,14 @@
             </div>
           {%- endfor -%}
         </div>
-      {%- endif -%}
-    {%- else -%}
-      {%- assign items = section.blocks | where: 'type', 'card_item' -%}
-      {%- assign item_count = items.size -%}
-      {%- if item_count > 0 -%}
+      {%- else -%}
         {%- if item_count >= 8 -%}
           {%- assign desktop_cols = item_count | divided_by: 2.0 | ceil -%}
         {%- else -%}
           {%- assign desktop_cols = item_count -%}
         {%- endif -%}
         <div class="mt-card-grid__cards" style="--mt-card-grid-cols: {{ desktop_cols }}">
-          {%- for block in items -%}
+          {%- for block in section.blocks -%}
             <div class="mt-card-grid__card" {{ block.shopify_attributes }}>
               {%- if block.settings.icon != blank -%}
                 <div class="mt-card-grid__card-icon">
@@ -67,6 +63,7 @@
       "type": "select",
       "id": "display_mode",
       "label": "Display as",
+      "info": "Controls which fields below apply to every item in this section.",
       "options": [
         { "value": "image", "label": "Image" },
         { "value": "card", "label": "Card" }
@@ -76,43 +73,42 @@
   ],
   "blocks": [
     {
-      "type": "image_item",
-      "name": "Image",
+      "type": "item",
+      "name": "Item",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
-        }
-      ]
-    },
-    {
-      "type": "card_item",
-      "name": "Card",
-      "settings": [
+          "label": "Image",
+          "visible_if": "{{ section.settings.display_mode == 'image' }}"
+        },
         {
           "type": "image_picker",
           "id": "icon",
           "label": "Icon",
-          "info": "Displays at 29 x 29px."
+          "info": "Displays at 29 x 29px.",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
         },
         {
           "type": "text",
           "id": "title",
           "label": "Title",
-          "default": "200 Points"
+          "default": "200 Points",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
         },
         {
           "type": "text",
           "id": "subtitle",
           "label": "Subtitle",
-          "default": "Signup"
+          "default": "Signup",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
         },
         {
           "type": "color",
           "id": "subtitle_color",
           "label": "Subtitle color",
-          "default": "#7C7A73"
+          "default": "#7C7A73",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
         }
       ]
     }
