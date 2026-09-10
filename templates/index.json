@@ -255,6 +255,143 @@
         "show_icon": true
       }
     },
+    "page_card_grid_ygFVW9": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_qn4UC6": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/pandectes-banner-logo.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_GbrEyc": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_VtCi9W": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_dFwHH8": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_mCV6mb": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_JUGDYp": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_xF3tc9": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_Ge43fy": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        }
+      },
+      "block_order": [
+        "item_qn4UC6",
+        "item_GbrEyc",
+        "item_VtCi9W",
+        "item_dFwHH8",
+        "item_mCV6mb",
+        "item_JUGDYp",
+        "item_xF3tc9",
+        "item_Ge43fy"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "card"
+      }
+    },
+    "page_card_grid_KiA8Qy": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_dXj64x": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_YxkTmp": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_pKpiPE": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_F6JJM8": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        }
+      },
+      "block_order": [
+        "item_dXj64x",
+        "item_YxkTmp",
+        "item_pKpiPE",
+        "item_F6JJM8"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "image"
+      }
+    },
     "product_faq_8L8K4g": {
       "type": "product-faq",
       "blocks": {
@@ -283,6 +420,8 @@
     "activities",
     "carousel",
     "page_referral_banner_BjA9gQ",
+    "page_card_grid_ygFVW9",
+    "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g"
   ]
 }
