@@ -346,34 +346,34 @@
         "item_dXj64x": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
             "subtitle_color": "#7C7A73"
           }
         },
-        "item_xdUfJN": {
+        "item_YxkTmp": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
             "subtitle_color": "#7C7A73"
           }
         },
-        "item_RQqaef": {
+        "item_pKpiPE": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
             "subtitle_color": "#7C7A73"
           }
         },
-        "item_GYjV63": {
+        "item_F6JJM8": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
             "subtitle_color": "#7C7A73"
@@ -382,9 +382,9 @@
       },
       "block_order": [
         "item_dXj64x",
-        "item_xdUfJN",
-        "item_RQqaef",
-        "item_GYjV63"
+        "item_YxkTmp",
+        "item_pKpiPE",
+        "item_F6JJM8"
       ],
       "name": "Card grid",
       "settings": {
