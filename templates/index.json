@@ -280,7 +280,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_dFwHH8": {
@@ -288,7 +288,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_mCV6mb": {
@@ -296,7 +296,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_JUGDYp": {
@@ -304,7 +304,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_xF3tc9": {
@@ -312,7 +312,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_Ge43fy": {
@@ -320,7 +320,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         }
       },
@@ -349,7 +349,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_YxkTmp": {
@@ -358,7 +358,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_pKpiPE": {
@@ -367,7 +367,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_F6JJM8": {
@@ -376,7 +376,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         }
       },
@@ -409,7 +409,9 @@
       "name": "FAQ",
       "settings": {
         "heading": "FAQ",
-        "open_first": false
+        "open_first": false,
+        "title_align": "left",
+        "big_title": true
       }
     }
   },
