@@ -15,7 +15,7 @@
 
 .mt-referral__heading {
   margin: 0;
-  font-size: 1.6875rem;
+  font-size: clamp(1.6875rem, calc(-2.426rem + 8.7755vw), 4.375rem);
   line-height: var(--mt-h-xl-leading);
   letter-spacing: var(--mt-tracking-heading);
   color: var(--mt-ink);
@@ -23,7 +23,7 @@
 
 .mt-referral__sub {
   margin: 0;
-  font-size: var(--mt-p-m-size);
+  font-size: clamp(0.875rem, calc(0.588rem + 0.6122vw), 1.0625rem);
   line-height: var(--mt-p-leading);
   color: var(--mt-ink);
 }
@@ -73,14 +73,12 @@
   .mt-referral__heading {
     grid-column: 1;
     grid-row: 1;
-    font-size: var(--mt-h-xl-size);
   }
 
   .mt-referral__sub {
     grid-column: 2;
     grid-row: 1;
     align-self: center;
-    font-size: 1.0625rem;
   }
 
   .mt-referral__cta {
