@@ -15,24 +15,24 @@
         <span>{{ section.settings.cta_label }}</span>
       </a>
     {%- endif -%}
-  </div>
 
-  {%- if section.blocks.size > 0 -%}
-    <div class="mt-referral__list">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'item' -%}
-          <div class="mt-referral__list-item" {{ block.shopify_attributes }}>
-            {%- if block.settings.title != blank -%}
-              <h3 class="mt-referral__list-title">{{ block.settings.title }}</h3>
-            {%- endif -%}
-            {%- if block.settings.subtitle != blank -%}
-              <p class="mt-referral__list-subtitle">{{ block.settings.subtitle }}</p>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  {%- endif -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="mt-referral__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'item' -%}
+            <div class="mt-referral__list-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}
+                <h3 class="mt-referral__list-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.subtitle != blank -%}
+                <p class="mt-referral__list-subtitle">{{ block.settings.subtitle }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
 </section>
 
 {% schema %}

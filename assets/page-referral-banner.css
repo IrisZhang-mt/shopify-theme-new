@@ -65,8 +65,6 @@
 .mt-referral__list {
   display: flex;
   flex-direction: column;
-  width: min(100% - 1.875rem, 77.5rem);
-  margin: 1.875rem auto 0;
 }
 
 .mt-referral__list-item {
