@@ -15,14 +15,19 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'item' -%}
             <div class="mt-careers-roles__list-item" {{ block.shopify_attributes }}>
-              {%- if block.settings.title != blank -%}
+              {%- if block.settings.job_title != blank -%}
                 <h3 class="mt-careers-roles__list-title">
-                  <span>{{ block.settings.title }}</span>
+                  <span>{{ block.settings.job_title }}</span>
                 </h3>
               {%- endif -%}
-              {%- if block.settings.subtitle != blank -%}
-                <p class="mt-careers-roles__list-subtitle">{{ block.settings.subtitle }}</p>
-              {%- endif -%}
+              <div class="mt-careers-roles__list-meta">
+                {%- if block.settings.employment_type != blank -%}
+                  <span class="mt-careers-roles__list-badge">{{ block.settings.employment_type }}</span>
+                {%- endif -%}
+                {%- if block.settings.location != blank -%}
+                  <span class="mt-careers-roles__list-location">{{ block.settings.location }}</span>
+                {%- endif -%}
+              </div>
             </div>
           {%- elsif block.type == 'title' -%}
             <div class="mt-careers-roles__group" {{ block.shopify_attributes }}>
@@ -65,15 +70,25 @@
       "settings": [
         {
           "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "We take responsibility for our impact."
+          "id": "job_title",
+          "label": "Job title",
+          "default": "Store Manager"
         },
         {
-          "type": "textarea",
-          "id": "subtitle",
-          "label": "Subtitle",
-          "default": "A responsibly acting party of the textile supply chain."
+          "type": "select",
+          "id": "employment_type",
+          "label": "Employment type",
+          "options": [
+            { "value": "Full-time", "label": "Full-time" },
+            { "value": "Part-time", "label": "Part-time" }
+          ],
+          "default": "Full-time"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "San Jose, CA"
         }
       ]
     },
