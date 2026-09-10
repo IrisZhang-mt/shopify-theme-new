@@ -251,7 +251,8 @@
         "subtext": "",
         "show_cta": false,
         "cta_label": "ddd",
-        "cta_url": ""
+        "cta_url": "",
+        "show_icon": true
       }
     }
   },
