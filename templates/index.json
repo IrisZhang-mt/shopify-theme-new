@@ -334,6 +334,7 @@
         "item_xF3tc9",
         "item_Ge43fy"
       ],
+      "disabled": true,
       "name": "Card grid",
       "settings": {
         "heading": "Rack up points.",
@@ -386,6 +387,7 @@
         "item_pKpiPE",
         "item_F6JJM8"
       ],
+      "disabled": true,
       "name": "Card grid",
       "settings": {
         "heading": "Rack up points.",
@@ -430,12 +432,25 @@
         "question_wqrkc7",
         "question_qWDxyE"
       ],
+      "disabled": true,
       "name": "FAQ",
       "settings": {
         "heading": "Frequently Asked Questions",
         "open_first": false,
         "title_align": "left",
         "big_title": true
+      }
+    },
+    "page_careers_roles_Wkqjnc": {
+      "type": "page-careers-roles",
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Find your place.",
+        "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com",
+        "show_cta": false,
+        "cta_label": "Refer now",
+        "cta_url": "",
+        "show_icon": false
       }
     }
   },
@@ -448,6 +463,7 @@
     "page_referral_banner_BjA9gQ",
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
-    "product_faq_8L8K4g"
+    "product_faq_8L8K4g",
+    "page_careers_roles_Wkqjnc"
   ]
 }
