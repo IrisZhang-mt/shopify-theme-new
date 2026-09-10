@@ -13,6 +13,13 @@
   line-height: var(--mt-h-l-leading);
   text-align: center;
 }
+.mt-faq__title--left {
+  text-align: left;
+}
+.mt-faq__title--big {
+  font-size: 1.6875rem;
+  line-height: var(--mt-h-xl-leading);
+}
 
 .mt-faq__list {
   width: 100%;
@@ -110,5 +117,8 @@
   }
   .mt-faq__q {
     font-size: 1.125rem;
+  }
+  .mt-faq__title--big {
+    font-size: var(--mt-h-xl-size);
   }
 }
