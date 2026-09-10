@@ -444,29 +444,48 @@
     "page_careers_roles_Wkqjnc": {
       "type": "page-careers-roles",
       "blocks": {
+        "title_rYVd6e": {
+          "type": "title",
+          "settings": {
+            "country": "The United States",
+            "count": "6 roles"
+          }
+        },
+        "item_DwLCMY": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA"
+          }
+        },
         "title_j6MBCU": {
           "type": "title",
           "settings": {
-            "state": "The United States",
+            "country": "The United States",
             "count": "6 roles"
           }
         },
         "item_ccqnJg": {
           "type": "item",
           "settings": {
-            "title": "We take responsibility for our impact.",
-            "subtitle": "A responsibly acting party of the textile supply chain."
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA"
           }
         },
         "item_Lt3cmz": {
           "type": "item",
           "settings": {
-            "title": "We take responsibility for our impact.",
-            "subtitle": "A responsibly acting party of the textile supply chain."
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA"
           }
         }
       },
       "block_order": [
+        "title_rYVd6e",
+        "item_DwLCMY",
         "title_j6MBCU",
         "item_ccqnJg",
         "item_Lt3cmz"
