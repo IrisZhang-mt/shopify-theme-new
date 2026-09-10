@@ -89,4 +89,8 @@
     padding: 1.03125rem 1.625rem;
     font-size: 0.9375rem;
   }
+
+  .mt-referral__inner--no-sub .mt-referral__heading {
+    grid-column: 1 / -1;
+  }
 }

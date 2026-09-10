@@ -1,7 +1,7 @@
 {{ 'page-referral-banner.css' | asset_url | stylesheet_tag }}
 
 <section class="mt-referral">
-  <div class="mt-referral__inner">
+  <div class="mt-referral__inner{% if section.settings.subtext == blank %} mt-referral__inner--no-sub{% endif %}">
     {%- if section.settings.heading != blank -%}
       <h2 class="mt-referral__heading">{{ section.settings.heading }}</h2>
     {%- endif -%}
