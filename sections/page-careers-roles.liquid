@@ -24,6 +24,15 @@
                 <p class="mt-careers-roles__list-subtitle">{{ block.settings.subtitle }}</p>
               {%- endif -%}
             </div>
+          {%- elsif block.type == 'title' -%}
+            <div class="mt-careers-roles__group" {{ block.shopify_attributes }}>
+              {%- if block.settings.state != blank -%}
+                <span class="mt-careers-roles__group-state">{{ block.settings.state }}</span>
+              {%- endif -%}
+              {%- if block.settings.count != blank -%}
+                <span class="mt-careers-roles__group-count">{{ block.settings.count }}</span>
+              {%- endif -%}
+            </div>
           {%- endif -%}
         {%- endfor -%}
       </div>
@@ -65,6 +74,24 @@
           "id": "subtitle",
           "label": "Subtitle",
           "default": "A responsibly acting party of the textile supply chain."
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Group title",
+      "settings": [
+        {
+          "type": "text",
+          "id": "state",
+          "label": "State",
+          "default": "The United States"
+        },
+        {
+          "type": "text",
+          "id": "count",
+          "label": "Count",
+          "default": "6 roles"
         }
       ]
     }
