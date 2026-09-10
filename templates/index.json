@@ -61,6 +61,7 @@
         "girls",
         "boys"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -152,6 +153,7 @@
         "everyday",
         "activities"
       ],
+      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
       }
@@ -217,9 +219,19 @@
       "type": "page-referral-banner",
       "name": "Referral banner",
       "settings": {
-        "heading": "Give 15%, Get 15%.",
+        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
         "subtext": "",
-        "cta_label": "Refer now",
+        "cta_label": "ddd",
+        "cta_url": ""
+      }
+    },
+    "page_referral_banner_RXjP9K": {
+      "type": "page-referral-banner",
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
+        "subtext": "",
+        "cta_label": "ddd",
         "cta_url": ""
       }
     }
@@ -230,6 +242,7 @@
     "split",
     "activities",
     "carousel",
-    "page_referral_banner_BjA9gQ"
+    "page_referral_banner_BjA9gQ",
+    "page_referral_banner_RXjP9K"
   ]
 }
