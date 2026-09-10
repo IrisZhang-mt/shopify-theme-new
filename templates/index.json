@@ -255,6 +255,58 @@
         "show_icon": true
       }
     },
+    "page_card_grid_KiA8Qy": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_dXj64x": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_xdUfJN": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_RQqaef": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        },
+        "item_GYjV63": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/63514004-_63210109-_63511306-_68543306-__14.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7C7A73"
+          }
+        }
+      },
+      "block_order": [
+        "item_dXj64x",
+        "item_xdUfJN",
+        "item_RQqaef",
+        "item_GYjV63"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "image"
+      }
+    },
     "product_faq_8L8K4g": {
       "type": "product-faq",
       "blocks": {
@@ -283,6 +335,7 @@
     "activities",
     "carousel",
     "page_referral_banner_BjA9gQ",
+    "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g"
   ]
 }
