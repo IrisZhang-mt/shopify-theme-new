@@ -9,6 +9,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     min-height: clamp(31.25rem, 52vw, 47.5rem);
+    z-index: 10;
   }
 
   .mt-banner__media {
