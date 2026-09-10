@@ -12,8 +12,13 @@
         <div class="mt-card-grid__images">
           {%- for block in section.blocks -%}
             <div class="mt-card-grid__image-item" {{ block.shopify_attributes }}>
-              {%- if block.settings.image != blank -%}
-                {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {%- if block.settings.image != blank and block.settings.image_mobile != blank -%}
+                <picture>
+                  <source media="(min-width: 750px)" srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 1000 }} 1000w, {{ block.settings.image | image_url: width: 1500 }} 1500w">
+                  {{ block.settings.image_mobile | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+                </picture>
+              {%- elsif block.settings.image != blank -%}
                 {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 25vw, 100vw', alt: image_alt }}
               {%- else -%}
                 {{ 'image' | placeholder_svg_tag }}
@@ -79,7 +84,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image",
+          "label": "Image (desktop)",
+          "visible_if": "{{ section.settings.display_mode == 'image' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image (mobile)",
+          "info": "Optional — falls back to the image above when empty.",
           "visible_if": "{{ section.settings.display_mode == 'image' }}"
         },
         {
