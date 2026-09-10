@@ -401,10 +401,34 @@
             "question": "How do I join?",
             "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
           }
+        },
+        "question_8wXHDL": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_wqrkc7": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_qWDxyE": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
         }
       },
       "block_order": [
-        "question_TgVAh6"
+        "question_TgVAh6",
+        "question_8wXHDL",
+        "question_wqrkc7",
+        "question_qWDxyE"
       ],
       "name": "FAQ",
       "settings": {
