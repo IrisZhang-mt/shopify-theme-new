@@ -6,16 +6,17 @@
 .mt-referral__inner {
   display: flex;
   flex-direction: column;
-  gap: 1.625rem;
+  gap: 1.40625rem;
   max-width: 77.5rem;
   margin-inline: auto;
-  padding: 0 0.9375rem 1.875rem;
+  padding-inline: 0.9375rem;
+  padding-block-end: 1.875rem;
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
 .mt-referral__heading {
   margin: 0;
-  font-size: var(--mt-h-xl-size);
+  font-size: 1.6875rem;
   line-height: var(--mt-h-xl-leading);
   letter-spacing: var(--mt-tracking-heading);
   color: var(--mt-ink);
@@ -37,7 +38,7 @@
   padding: 0.75rem 1.25rem;
   border-radius: 1px;
   background: var(--mt-ink);
-  font-size: var(--mt-cta-s-size);
+  font-size: 0.875rem;
   text-decoration: none;
   color: var(--mt-cloud);
   transition: opacity var(--mt-dur) var(--mt-ease);
@@ -73,6 +74,7 @@
   .mt-referral__heading {
     grid-column: 1;
     grid-row: 1;
+    font-size: var(--mt-h-xl-size);
   }
 
   .mt-referral__sub {
