@@ -261,6 +261,7 @@
         "item_qn4UC6": {
           "type": "item",
           "settings": {
+            "icon": "shopify://shop_images/pandectes-banner-logo.png",
             "title": "200 Points",
             "subtitle": "Signup",
             "subtitle_color": "#7c7a73"
