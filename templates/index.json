@@ -258,6 +258,22 @@
     "page_card_grid_ygFVW9": {
       "type": "page-card-grid",
       "blocks": {
+        "item_qn4UC6": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_GbrEyc": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
         "item_VtCi9W": {
           "type": "item",
           "settings": {
@@ -308,6 +324,8 @@
         }
       },
       "block_order": [
+        "item_qn4UC6",
+        "item_GbrEyc",
         "item_VtCi9W",
         "item_dFwHH8",
         "item_mCV6mb",
