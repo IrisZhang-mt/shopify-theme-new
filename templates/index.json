@@ -218,7 +218,7 @@
       "name": "Referral banner",
       "settings": {
         "heading": "Give 15%, Get 15%.",
-        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral.",
+        "subtext": "Give friends 15% off their first order, and  get a 15% off coupon for every referral.Give friends 15% off their first order, and  get a 15% off coupon for every referral.",
         "cta_label": "Refer now",
         "cta_url": ""
       }
