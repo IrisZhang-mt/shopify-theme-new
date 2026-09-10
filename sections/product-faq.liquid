@@ -2,7 +2,7 @@
 <script src="{{ 'product-faq.js' | asset_url }}" type="module"></script>
 
 {%- if section.blocks.size > 0 -%}
-  <section class="mt-faq" data-faq>
+  <section class="mt-faq{% if section.settings.big_title %} mt-faq--big{% endif %}" data-faq>
     <h2 class="mt-faq__title{% if section.settings.title_align == 'left' %} mt-faq__title--left{% endif %}{% if section.settings.big_title %} mt-faq__title--big{% endif %}" data-reveal>{{ section.settings.heading }}</h2>
     <div class="mt-faq__list" data-reveal>
       {%- for block in section.blocks -%}

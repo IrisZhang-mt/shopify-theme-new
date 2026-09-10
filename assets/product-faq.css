@@ -7,6 +7,9 @@
   padding: 6.25rem 0.9375rem;
   background: var(--mt-paper);
 }
+.mt-faq--big {
+  max-width: 77.5rem;
+}
 
 .mt-faq__title {
   font-size: var(--mt-h-l-size);
@@ -25,6 +28,9 @@
   width: 100%;
   max-width: 57.75rem;
   margin-inline: auto;
+}
+.mt-faq--big .mt-faq__list {
+  max-width: 77.5rem;
 }
 
 .mt-faq__item {
