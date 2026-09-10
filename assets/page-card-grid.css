@@ -72,7 +72,7 @@
 
   .mt-card-grid__images {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2.5rem;
+    gap: 0.875rem;
   }
   .mt-card-grid__image-item {
     aspect-ratio: 292 / 340;
