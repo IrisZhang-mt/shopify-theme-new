@@ -77,6 +77,9 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 2.5rem;
   }
+  .mt-card-grid__image-item {
+    aspect-ratio: 292 / 340;
+  }
 
   .mt-card-grid__cards {
     grid-template-columns: repeat(var(--mt-card-grid-cols), 1fr);
