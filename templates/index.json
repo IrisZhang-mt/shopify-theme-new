@@ -217,10 +217,39 @@
     },
     "page_referral_banner_BjA9gQ": {
       "type": "page-referral-banner",
+      "blocks": {
+        "item_ECCAUC": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain."
+          }
+        },
+        "item_DVWh4t": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain."
+          }
+        },
+        "item_RaNkxe": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain."
+          }
+        }
+      },
+      "block_order": [
+        "item_ECCAUC",
+        "item_DVWh4t",
+        "item_RaNkxe"
+      ],
       "name": "Referral banner",
       "settings": {
         "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
         "subtext": "",
+        "show_cta": true,
         "cta_label": "ddd",
         "cta_url": ""
       }
@@ -231,6 +260,7 @@
       "settings": {
         "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
         "subtext": "",
+        "show_cta": false,
         "cta_label": "ddd",
         "cta_url": ""
       }
