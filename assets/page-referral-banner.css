@@ -84,7 +84,6 @@
   .mt-referral__cta {
     grid-column: 1;
     grid-row: 2;
-    margin-top: 1.625rem;
     padding: 1.03125rem 1.625rem;
     font-size: 0.9375rem;
   }
