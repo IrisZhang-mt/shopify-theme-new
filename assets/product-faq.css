@@ -7,17 +7,30 @@
   padding: 6.25rem 0.9375rem;
   background: var(--mt-paper);
 }
+.mt-faq--big {
+  max-width: 77.5rem;
+}
 
 .mt-faq__title {
   font-size: var(--mt-h-l-size);
   line-height: var(--mt-h-l-leading);
   text-align: center;
 }
+.mt-faq__title--left {
+  text-align: left;
+}
+.mt-faq__title--big {
+  font-size: 1.6875rem;
+  line-height: var(--mt-h-xl-leading);
+}
 
 .mt-faq__list {
   width: 100%;
   max-width: 57.75rem;
   margin-inline: auto;
+}
+.mt-faq--big .mt-faq__list {
+  max-width: 77.5rem;
 }
 
 .mt-faq__item {
@@ -110,5 +123,8 @@
   }
   .mt-faq__q {
     font-size: 1.125rem;
+  }
+  .mt-faq__title--big {
+    font-size: var(--mt-h-xl-size);
   }
 }

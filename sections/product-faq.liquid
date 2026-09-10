@@ -2,8 +2,8 @@
 <script src="{{ 'product-faq.js' | asset_url }}" type="module"></script>
 
 {%- if section.blocks.size > 0 -%}
-  <section class="mt-faq" data-faq>
-    <h2 class="mt-faq__title" data-reveal>{{ section.settings.heading }}</h2>
+  <section class="mt-faq{% if section.settings.big_title %} mt-faq--big{% endif %}" data-faq>
+    <h2 class="mt-faq__title{% if section.settings.title_align == 'left' %} mt-faq__title--left{% endif %}{% if section.settings.big_title %} mt-faq__title--big{% endif %}" data-reveal>{{ section.settings.heading }}</h2>
     <div class="mt-faq__list" data-reveal>
       {%- for block in section.blocks -%}
         {%- if block.settings.question != blank and block.settings.answer != blank -%}
@@ -40,6 +40,22 @@
       "type": "checkbox",
       "id": "open_first",
       "label": "Open first question",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "title_align",
+      "label": "Title alignment",
+      "options": [
+        { "value": "middle", "label": "Middle" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "checkbox",
+      "id": "big_title",
+      "label": "Large title",
       "default": false
     }
   ],
