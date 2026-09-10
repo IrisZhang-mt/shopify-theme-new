@@ -22,14 +22,10 @@
   gap: 0.9375rem;
   margin-top: 1.875rem;
 }
-.mt-card-grid__image-item {
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-}
 .mt-card-grid__image-item img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 }
 
 .mt-card-grid__cards {
@@ -79,6 +75,11 @@
   }
   .mt-card-grid__image-item {
     aspect-ratio: 292 / 340;
+    overflow: hidden;
+  }
+  .mt-card-grid__image-item img {
+    height: 100%;
+    object-fit: cover;
   }
 
   .mt-card-grid__cards {
