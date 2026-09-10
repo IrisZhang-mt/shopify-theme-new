@@ -280,7 +280,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_dFwHH8": {
@@ -288,7 +288,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_mCV6mb": {
@@ -296,7 +296,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_JUGDYp": {
@@ -304,7 +304,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_xF3tc9": {
@@ -312,7 +312,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_Ge43fy": {
@@ -320,7 +320,7 @@
           "settings": {
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         }
       },
@@ -349,7 +349,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_YxkTmp": {
@@ -358,7 +358,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_pKpiPE": {
@@ -367,7 +367,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         },
         "item_F6JJM8": {
@@ -376,7 +376,7 @@
             "image": "shopify://shop_images/Group_1168.png",
             "title": "200 Points",
             "subtitle": "Signup",
-            "subtitle_color": "#7C7A73"
+            "subtitle_color": "#7c7a73"
           }
         }
       },
@@ -401,15 +401,41 @@
             "question": "How do I join?",
             "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
           }
+        },
+        "question_8wXHDL": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_wqrkc7": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_qWDxyE": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
         }
       },
       "block_order": [
-        "question_TgVAh6"
+        "question_TgVAh6",
+        "question_8wXHDL",
+        "question_wqrkc7",
+        "question_qWDxyE"
       ],
       "name": "FAQ",
       "settings": {
-        "heading": "FAQ",
-        "open_first": false
+        "heading": "Frequently Asked Questions",
+        "open_first": false,
+        "title_align": "left",
+        "big_title": true
       }
     }
   },
