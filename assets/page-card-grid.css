@@ -77,6 +77,8 @@
   .mt-card-grid__image-item {
     aspect-ratio: 292 / 340;
     overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid #e7e3da;
   }
   .mt-card-grid__image-item img {
     height: 100%;
