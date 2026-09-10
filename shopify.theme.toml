@@ -1,10 +1,15 @@
-# Default store for this project. Applied automatically by the Shopify CLI
-# when no -e/--environment flag is passed, so `shopify theme dev` /
-# `shopify theme push` no longer need --store typed out each time.
+# Default store/theme for this project. Applied automatically by the Shopify
+# CLI when no -e/--environment flag is passed, so `shopify theme dev` /
+# `shopify theme push` no longer need --store/--theme typed out each time.
 #
-# Deliberately no `theme = "..."` here: leaving it unset keeps
-# `shopify theme dev` creating an isolated temporary development theme by
-# default. Pass --theme 161185300726 explicitly when you want to preview
-# on the shared draft theme instead.
+# `theme` is pinned to "新主题-开发环境-Iris" (#161580155126), a dedicated
+# unpublished theme for the shopify-theme-new rebuild. This is deliberate:
+# leaving `theme` unset makes `shopify theme dev` create a fresh temporary
+# theme by duplicating whatever theme is currently LIVE on the store (the
+# old shopify-theme-old codebase) as its base, then overlaying local files
+# on top — silently pulling in the old theme's leftover templates and
+# settings_data.json. Pinning to this theme keeps local dev fully isolated
+# from the live/old theme.
 [environments.default]
 store = "moody-tiger-athletics.myshopify.com"
+theme = "161580155126"
