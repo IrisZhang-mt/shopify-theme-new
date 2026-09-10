@@ -254,6 +254,26 @@
         "cta_url": "",
         "show_icon": true
       }
+    },
+    "product_faq_8L8K4g": {
+      "type": "product-faq",
+      "blocks": {
+        "question_TgVAh6": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_TgVAh6"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "FAQ",
+        "open_first": false
+      }
     }
   },
   "order": [
@@ -262,6 +282,7 @@
     "split",
     "activities",
     "carousel",
-    "page_referral_banner_BjA9gQ"
+    "page_referral_banner_BjA9gQ",
+    "product_faq_8L8K4g"
   ]
 }
