@@ -7,9 +7,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.40625rem;
-  max-width: 77.5rem;
+  width: min(100% - 1.875rem, 77.5rem);
   margin-inline: auto;
-  padding-inline: 0.9375rem;
   padding-block-end: 1.875rem;
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
