@@ -73,10 +73,17 @@
 }
 
 .mt-referral__list-title {
+  display: flex;
+  align-items: center;
   margin: 0 0 0.375rem;
   font-size: var(--mt-h-xs-size);
   font-weight: 400;
   color: var(--mt-ink);
+}
+
+.mt-referral__list-icon {
+  flex-shrink: 0;
+  margin-right: 0.71875rem;
 }
 
 .mt-referral__list-subtitle {
