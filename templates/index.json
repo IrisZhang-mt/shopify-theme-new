@@ -443,14 +443,30 @@
     },
     "page_careers_roles_Wkqjnc": {
       "type": "page-careers-roles",
+      "blocks": {
+        "item_ccqnJg": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain."
+          }
+        },
+        "item_Lt3cmz": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain."
+          }
+        }
+      },
+      "block_order": [
+        "item_ccqnJg",
+        "item_Lt3cmz"
+      ],
       "name": "Careers roles",
       "settings": {
         "heading": "Find your place.",
-        "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com",
-        "show_cta": false,
-        "cta_label": "Refer now",
-        "cta_url": "",
-        "show_icon": false
+        "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
       }
     }
   },
