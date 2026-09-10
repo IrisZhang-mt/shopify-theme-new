@@ -444,6 +444,13 @@
     "page_careers_roles_Wkqjnc": {
       "type": "page-careers-roles",
       "blocks": {
+        "title_j6MBCU": {
+          "type": "title",
+          "settings": {
+            "state": "The United States",
+            "count": "6 roles"
+          }
+        },
         "item_ccqnJg": {
           "type": "item",
           "settings": {
@@ -460,6 +467,7 @@
         }
       },
       "block_order": [
+        "title_j6MBCU",
         "item_ccqnJg",
         "item_Lt3cmz"
       ],
