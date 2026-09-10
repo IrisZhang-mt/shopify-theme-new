@@ -14,9 +14,11 @@
   --mt-surface: var(--mt-sand);
   --mt-accent: var(--mt-tangerine);
 
-  --mt-font-display: 'FK Display', 'FK Grotesk', sans-serif;
-  --mt-font-body: 'FK Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --mt-font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --mt-font-display: "FK Display", "FK Grotesk", sans-serif;
+  --mt-font-body:
+    "FK Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --mt-font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --mt-h-xxl-size: 3.125rem;
   --mt-h-xxl-leading: 0.9;
@@ -69,7 +71,7 @@
     --mt-h-xxl-size: 5.625rem;
     --mt-h-xxl-leading: 0.9;
     --mt-h-xl-size: 4.375rem;
-    --mt-h-xl-leading: 0.9;
+    --mt-h-xl-leading: 1;
     --mt-h-l-size: 2.8125rem;
     --mt-h-l-leading: 1;
     --mt-h-m-size: 2.1875rem;
@@ -293,7 +295,10 @@ h6 {
   line-height: 1.2;
   color: var(--mt-cloud);
   background-color: var(--mt-accent);
-  background-image: linear-gradient(rgba(var(--mt-ink-rgb), 0.18), rgba(var(--mt-ink-rgb), 0.18));
+  background-image: linear-gradient(
+    rgba(var(--mt-ink-rgb), 0.18),
+    rgba(var(--mt-ink-rgb), 0.18)
+  );
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;
