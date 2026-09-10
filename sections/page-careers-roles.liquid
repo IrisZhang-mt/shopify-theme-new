@@ -31,8 +31,8 @@
             </div>
           {%- elsif block.type == 'title' -%}
             <div class="mt-careers-roles__group" {{ block.shopify_attributes }}>
-              {%- if block.settings.state != blank -%}
-                <span class="mt-careers-roles__group-state">{{ block.settings.state }}</span>
+              {%- if block.settings.country != blank -%}
+                <span class="mt-careers-roles__group-state">{{ block.settings.country }}</span>
               {%- endif -%}
               {%- if block.settings.count != blank -%}
                 <span class="mt-careers-roles__group-count">{{ block.settings.count }}</span>
@@ -98,8 +98,8 @@
       "settings": [
         {
           "type": "text",
-          "id": "state",
-          "label": "State",
+          "id": "country",
+          "label": "Country",
           "default": "The United States"
         },
         {
