@@ -1,0 +1,134 @@
+{{ 'page-card-grid.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-card-grid">
+  <div class="mt-card-grid__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mt-card-grid__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- assign item_count = section.blocks.size -%}
+    {%- if item_count > 0 -%}
+      {%- if section.settings.display_mode == 'image' -%}
+        <div class="mt-card-grid__images">
+          {%- for block in section.blocks -%}
+            <div class="mt-card-grid__image-item" {{ block.shopify_attributes }}>
+              {%- assign image_alt = block.settings.image.alt | default: '' | escape -%}
+              {%- if block.settings.image != blank and block.settings.image_mobile != blank -%}
+                <picture>
+                  <source media="(min-width: 750px)" srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 1000 }} 1000w, {{ block.settings.image | image_url: width: 1500 }} 1500w">
+                  {{ block.settings.image_mobile | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+                </picture>
+              {%- elsif block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 25vw, 100vw', alt: image_alt }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        {%- if item_count >= 8 -%}
+          {%- assign desktop_cols = item_count | divided_by: 2.0 | ceil -%}
+        {%- else -%}
+          {%- assign desktop_cols = item_count -%}
+        {%- endif -%}
+        <div class="mt-card-grid__cards" style="--mt-card-grid-cols: {{ desktop_cols }}">
+          {%- for block in section.blocks -%}
+            <div class="mt-card-grid__card" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != blank -%}
+                <div class="mt-card-grid__card-icon">
+                  {{ block.settings.icon | image_url: width: 58 | image_tag: decoding: 'async', loading: 'lazy', width: 29, height: 29, alt: '' }}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <p class="mt-card-grid__card-title">{{ block.settings.title }}</p>
+              {%- endif -%}
+              {%- if block.settings.subtitle != blank -%}
+                <p class="mt-card-grid__card-subtitle" style="color: {{ block.settings.subtitle_color | default: '#7C7A73' }}">{{ block.settings.subtitle }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Card grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Rack up points."
+    },
+    {
+      "type": "select",
+      "id": "display_mode",
+      "label": "Display as",
+      "info": "Controls which fields below apply to every item in this section.",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "card", "label": "Card" }
+      ],
+      "default": "card"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (desktop)",
+          "visible_if": "{{ section.settings.display_mode == 'image' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image (mobile)",
+          "info": "Optional — falls back to the image above when empty.",
+          "visible_if": "{{ section.settings.display_mode == 'image' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "Displays at 29 x 29px.",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "200 Points",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Signup",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
+        },
+        {
+          "type": "color",
+          "id": "subtitle_color",
+          "label": "Subtitle color",
+          "default": "#7C7A73",
+          "visible_if": "{{ section.settings.display_mode == 'card' }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Card grid"
+    }
+  ]
+}
+{% endschema %}

@@ -32,6 +32,7 @@
   --mt-h-s-leading: 1.1;
   --mt-h-xs-size: 1.125rem;
   --mt-h-xs-leading: 1.1;
+  --mt-h-xxs-size: 1.125rem;
 
   --mt-p-xl-size: 1rem;
   --mt-p-l-size: 0.875rem;
@@ -76,6 +77,7 @@
     --mt-h-m-size: 1.875rem;
     --mt-h-s-size: 1.5625rem;
     --mt-h-xs-size: 1.34375rem;
+    --mt-h-xxs-size: 1.25rem;
 
     --mt-p-xl-size: 1.125rem;
     --mt-p-l-size: 1rem;
@@ -100,6 +102,7 @@
     --mt-h-m-size: 2.1875rem;
     --mt-h-s-size: 1.875rem;
     --mt-h-xs-size: 1.5625rem;
+    --mt-h-xxs-size: 1.375rem;
 
     --mt-p-xl-size: 1.25rem;
     --mt-p-l-size: 1.125rem;
