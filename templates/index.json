@@ -249,17 +249,6 @@
       "settings": {
         "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
         "subtext": "",
-        "show_cta": true,
-        "cta_label": "ddd",
-        "cta_url": ""
-      }
-    },
-    "page_referral_banner_RXjP9K": {
-      "type": "page-referral-banner",
-      "name": "Referral banner",
-      "settings": {
-        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
-        "subtext": "",
         "show_cta": false,
         "cta_label": "ddd",
         "cta_url": ""
@@ -272,7 +261,6 @@
     "split",
     "activities",
     "carousel",
-    "page_referral_banner_BjA9gQ",
-    "page_referral_banner_RXjP9K"
+    "page_referral_banner_BjA9gQ"
   ]
 }
