@@ -1,0 +1,120 @@
+{{ 'page-careers-roles.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-careers-roles">
+  <div class="mt-careers-roles__inner{% if section.settings.subtext == blank %} mt-careers-roles__inner--no-sub{% endif %}">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mt-careers-roles__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtext != blank -%}
+      <p class="mt-careers-roles__sub">{{ section.settings.subtext | newline_to_br }}</p>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="mt-careers-roles__list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'item' -%}
+            <div class="mt-careers-roles__list-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.job_title != blank -%}
+                <h3 class="mt-careers-roles__list-title">
+                  <span>{{ block.settings.job_title }}</span>
+                </h3>
+              {%- endif -%}
+              <div class="mt-careers-roles__list-meta">
+                {%- if block.settings.employment_type != blank -%}
+                  <span class="mt-careers-roles__list-badge">{{ block.settings.employment_type }}</span>
+                {%- endif -%}
+                {%- if block.settings.location != blank -%}
+                  <span class="mt-careers-roles__list-location">{{ block.settings.location }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- elsif block.type == 'title' -%}
+            <div class="mt-careers-roles__group" {{ block.shopify_attributes }}>
+              {%- if block.settings.country != blank -%}
+                <span class="mt-careers-roles__group-state">{{ block.settings.country }}</span>
+              {%- endif -%}
+              {%- if block.settings.count != blank -%}
+                <span class="mt-careers-roles__group-count">{{ block.settings.count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Careers roles",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Give 15%, Get 15%."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "info": "Use a line break to control where the text wraps.",
+      "default": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "List item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "job_title",
+          "label": "Job title",
+          "default": "Store Manager"
+        },
+        {
+          "type": "select",
+          "id": "employment_type",
+          "label": "Employment type",
+          "options": [
+            { "value": "Full-time", "label": "Full-time" },
+            { "value": "Part-time", "label": "Part-time" }
+          ],
+          "default": "Full-time"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "San Jose, CA"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Group title",
+      "settings": [
+        {
+          "type": "text",
+          "id": "country",
+          "label": "Country",
+          "default": "The United States"
+        },
+        {
+          "type": "text",
+          "id": "count",
+          "label": "Count",
+          "default": "6 roles"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Careers roles"
+    }
+  ]
+}
+{% endschema %}

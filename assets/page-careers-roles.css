@@ -1,0 +1,141 @@
+.mt-careers-roles {
+  margin-block: 3rem;
+  background: var(--mt-paper);
+}
+
+.mt-careers-roles__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.40625rem;
+  width: min(100% - 1.875rem, 77.5rem);
+  margin-inline: auto;
+  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
+}
+
+.mt-careers-roles__heading {
+  margin: 0;
+  font-size: 1.6875rem;
+  line-height: var(--mt-h-xl-leading);
+  letter-spacing: var(--mt-tracking-heading);
+  color: var(--mt-ink);
+}
+
+.mt-careers-roles__sub {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: var(--mt-p-leading);
+  color: var(--mt-ink);
+}
+
+.mt-careers-roles__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mt-careers-roles__list-item {
+  padding-block: 1.25rem;
+  border-top: 1px solid #e7e3da;
+}
+
+.mt-careers-roles__list-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.1875rem;
+  font-weight: 400;
+  color: var(--mt-ink);
+}
+
+.mt-careers-roles__list-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 0.375rem;
+}
+
+.mt-careers-roles__list-badge {
+  margin-right: 0.875rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #e7e3da;
+  border-radius: 1px;
+  font-size: 0.625rem;
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+  color: #7c7a73;
+}
+
+.mt-careers-roles__list-location {
+  font-size: 0.75rem;
+  color: #4a4844;
+}
+
+.mt-careers-roles__group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.75rem;
+}
+
+.mt-careers-roles__group-state {
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--mt-ink);
+}
+
+.mt-careers-roles__group-count {
+  font-size: var(--mt-p-xs-size);
+  color: #7c7a73;
+}
+
+@media screen and (min-width: 750px) {
+  .mt-careers-roles__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2.5rem;
+    padding: 2.5rem 1.25rem;
+  }
+
+  .mt-careers-roles__heading {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: var(--mt-h-xl-size);
+  }
+
+  .mt-careers-roles__sub {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    font-size: 1.0625rem;
+  }
+
+  .mt-careers-roles__inner--no-sub .mt-careers-roles__heading {
+    grid-column: 1 / -1;
+  }
+
+  .mt-careers-roles__list {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+  }
+
+  .mt-careers-roles__group-state {
+    font-size: 1.625rem;
+    font-weight: 700;
+  }
+
+  .mt-careers-roles__group {
+    padding-block: 1.25rem;
+  }
+
+  .mt-careers-roles__list-title {
+    font-size: 1.625rem;
+  }
+
+  .mt-careers-roles__list-badge {
+    margin-right: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .mt-careers-roles__list-location {
+    font-size: 0.875rem;
+  }
+}
