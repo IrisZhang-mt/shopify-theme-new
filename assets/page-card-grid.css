@@ -19,7 +19,7 @@
 .mt-card-grid__images {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.9375rem;
+  gap: 1rem;
   margin-top: 1.875rem;
 }
 .mt-card-grid__image-item img {
