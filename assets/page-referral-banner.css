@@ -110,6 +110,7 @@
   .mt-referral__cta {
     grid-column: 1;
     grid-row: 2;
+    margin-top: 1.625rem;
     padding: 1.03125rem 1.625rem;
     font-size: 0.9375rem;
   }
@@ -120,8 +121,10 @@
 
   .mt-referral__list {
     display: grid;
+    grid-column: 1 / -1;
+    grid-row: 3;
     grid-template-columns: 1fr 1fr;
     column-gap: 2.5rem;
-    padding-inline: 1.25rem;
+    margin-top: 1.875rem;
   }
 }
