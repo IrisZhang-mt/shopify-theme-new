@@ -9,7 +9,6 @@
   gap: 1.40625rem;
   width: min(100% - 1.875rem, 77.5rem);
   margin-inline: auto;
-  padding-block-end: 1.875rem;
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
