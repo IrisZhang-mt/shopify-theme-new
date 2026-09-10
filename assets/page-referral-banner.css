@@ -15,7 +15,7 @@
 
 .mt-referral__heading {
   margin: 0;
-  font-size: clamp(1.6875rem, calc(-2.426rem + 8.7755vw), 4.375rem);
+  font-size: 1.6875rem;
   line-height: var(--mt-h-xl-leading);
   letter-spacing: var(--mt-tracking-heading);
   color: var(--mt-ink);
@@ -23,7 +23,7 @@
 
 .mt-referral__sub {
   margin: 0;
-  font-size: clamp(0.875rem, calc(0.588rem + 0.6122vw), 1.0625rem);
+  font-size: 0.875rem;
   line-height: var(--mt-p-leading);
   color: var(--mt-ink);
 }
@@ -65,7 +65,7 @@
 @media screen and (min-width: 750px) {
   .mt-referral__inner {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr 1fr;
     column-gap: 2.5rem;
     padding: 2.5rem 1.25rem;
   }
@@ -73,12 +73,14 @@
   .mt-referral__heading {
     grid-column: 1;
     grid-row: 1;
+    font-size: var(--mt-h-xl-size);
   }
 
   .mt-referral__sub {
     grid-column: 2;
     grid-row: 1;
     align-self: center;
+    font-size: 1.0625rem;
   }
 
   .mt-referral__cta {
