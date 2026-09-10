@@ -31,6 +31,7 @@
 .mt-referral__cta {
   display: inline-flex;
   align-self: flex-start;
+  justify-self: start;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.25rem;

@@ -61,7 +61,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -153,7 +152,6 @@
         "everyday",
         "activities"
       ],
-      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
       }
