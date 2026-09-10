@@ -90,7 +90,7 @@
   }
 }
 
-@media screen and (min-width: 1240px) {
+@media screen and (min-width: 1280px) {
   :root {
     --mt-h-xxl-size: 5.625rem;
     --mt-h-xl-size: 4.375rem;
