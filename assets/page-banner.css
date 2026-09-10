@@ -113,7 +113,7 @@ html.mt-motion .mt-banner__media img {
   display: flex;
   justify-content: space-between;
   gap: 0.9375rem;
-  padding: 0 0.9375rem 1.25rem;
+  padding: 0 0.9375rem 1.25rem 0;
 }
 .mt-banner__stat-label {
   display: none;
@@ -179,6 +179,10 @@ html.mt-motion .mt-banner__media img {
   .mt-banner__stat {
     border-top: 1px solid rgba(29, 29, 29, 0.15);
     padding: 1.125rem 0 0.812rem 6.25rem;
+  }
+  .mt-banner__stat:first-child {
+    /* Matches .mt-banner__content's (100% - 66%) / 2 auto-margin inset, same column reference. */
+    padding-left: 17%;
   }
   .mt-banner__stat-label {
     display: block;
