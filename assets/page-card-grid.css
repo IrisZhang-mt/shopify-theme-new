@@ -33,6 +33,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 0.625rem;
   margin-top: 1.875rem;
+  border-radius: 1.1px;
 }
 
 .mt-card-grid__card {
