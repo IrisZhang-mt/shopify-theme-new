@@ -1,0 +1,56 @@
+{{ 'page-referral-banner.css' | asset_url | stylesheet_tag }}
+
+<section class="mt-referral">
+  <div class="mt-referral__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mt-referral__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subtext != blank -%}
+      <p class="mt-referral__sub">{{ section.settings.subtext | newline_to_br }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.cta_label != blank -%}
+      <a class="mt-referral__cta" href="{{ section.settings.cta_url | default: '#' }}">
+        <span>{{ section.settings.cta_label }}</span>
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Referral banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Give 15%, Get 15%."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "info": "Use a line break to control where the text wraps.",
+      "default": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Refer now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Referral banner"
+    }
+  ]
+}
+{% endschema %}
