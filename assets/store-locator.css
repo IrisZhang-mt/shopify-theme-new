@@ -74,6 +74,7 @@
 }
 
 .mt-store__chips {
+  grid-area: chips;
   display: flex;
   flex-wrap: nowrap;
   gap: 0.625rem;
@@ -127,6 +128,7 @@
 }
 
 .mt-store__count {
+  grid-area: count;
   margin: 0;
   font-family: var(--mt-font-mono);
   font-size: var(--mt-p-s-size);
@@ -136,12 +138,11 @@
 }
 
 .mt-store__panels {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  display: contents;
 }
 
 .mt-store__map-wrap {
+  grid-area: map;
   order: -1;
   width: 100%;
   height: 21.875rem;
