@@ -46,7 +46,7 @@
     margin: 0 0 1.25rem;
     padding: 0 0.9375rem;
     font-family: var(--mt-font-display);
-    font-size: var(--mt-h-xl-size);
+    font-size: 40px;
     line-height: var(--mt-h-xl-leading);
     letter-spacing: var(--mt-tracking-heading);
     color: #fafbf9;
@@ -67,6 +67,9 @@
 
   .mt-banner__body {
     padding: 0 0.9375rem;
+  }
+  .mt-banner__text {
+    margin: 30px 0;
   }
 }
 
