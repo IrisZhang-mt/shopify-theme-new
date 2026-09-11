@@ -33,5 +33,22 @@
         "info": "Default for all products. A product can override it with a custom.size_chart metafield (page reference or URL)."
       }
     ]
+  },
+  {
+    "name": "Store locator",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "store_default_image",
+        "label": "Default store image",
+        "info": "Used when a store has no photo available."
+      },
+      {
+        "type": "textarea",
+        "id": "store_locator_hidden",
+        "label": "Hidden stores (one per line)",
+        "info": "Enter a store's English name exactly as it appears on the Find a Store page (case and spacing don't matter) to hide it. Takes effect immediately, no code changes needed. Example: Shanghai Songjiang Incity"
+      }
+    ]
   }
 ]
