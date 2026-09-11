@@ -196,7 +196,7 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  margin: 0.25rem 0 0;
+  margin: 0.5rem 0 0;
   font-size: var(--mt-p-xs-size);
   color: rgba(var(--mt-ink-rgb), 0.55);
 }
@@ -209,7 +209,7 @@
 .mt-store__item-meta {
   display: flex;
   align-items: center;
-  padding-top: 0.625rem;
+  padding-top: 1rem;
 }
 .mt-store__item-line {
   display: flex;
