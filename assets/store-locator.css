@@ -220,8 +220,13 @@
   color: #7c7a73;
 }
 .mt-store__item-icon {
-  font-size: 0.75rem;
-  font-style: normal;
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: #ea4335;
+}
+.mt-store__item-icon svg {
+  width: 0.75rem;
+  height: 0.75rem;
 }
 .mt-store__directions {
   margin-left: auto;
