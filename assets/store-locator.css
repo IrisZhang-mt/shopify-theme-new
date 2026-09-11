@@ -1,12 +1,22 @@
 .mt-store {
-  display: block;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "intro"
+    "search"
+    "chips"
+    "map"
+    "count"
+    "list";
+  row-gap: 1.25rem;
   padding: 3.75rem 0.9375rem 6.25rem;
   background: var(--mt-paper);
 }
 
 .mt-store__intro {
+  grid-area: intro;
   max-width: 42.8125rem;
-  margin: 0 auto 1.875rem;
+  margin: 0 auto;
   text-align: left;
 }
 .mt-store__heading {
@@ -20,13 +30,11 @@
 }
 
 .mt-store__controls {
-  display: flex;
-  flex-direction: column;
-  gap: 0.9375rem;
-  margin: 0 auto 1.625rem;
+  display: contents;
 }
 
 .mt-store__search {
+  grid-area: search;
   display: flex;
   gap: 0;
   max-width: 25rem;
@@ -189,7 +197,7 @@
 }
 .mt-store__item-address {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   line-height: 1.4;
   color: #4a4844;
 }
