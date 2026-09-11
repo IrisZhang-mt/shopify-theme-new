@@ -180,6 +180,7 @@ if (!window.mtStoreLocatorInit) {
     let activeInfoWindow = null;
 
     const filteredStores = () => (activeFilter === 'all' ? stores : stores.filter((store) => matchesFilter(store, activeFilter)));
+    const visibleCountText = () => `${filteredStores().length} ${strings.storesLabel || 'Stores'}`;
 
     const itemMarkup = (store, index) => {
       const distanceLabel = (strings.milesAway || '__DISTANCE__ mi from your location').replace(
@@ -191,13 +192,21 @@ if (!window.mtStoreLocatorInit) {
       return `
         <div class="mt-store__item" data-store-index="${index}" data-store-name="${escapeHtml(store.name)}">
           <div class="mt-store__item-media">
-            <img src="${image}" alt="${escapeHtml(store.name)}" loading="lazy" data-store-img>
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" loading="lazy" data-store-img>
           </div>
           <div class="mt-store__item-body">
             <p class="mt-store__item-name">${escapeHtml(store.name)}</p>
             <p class="mt-store__item-address">${escapeHtml(store.address)}</p>
-            ${store.phone ? `<p class="mt-store__item-line">${escapeHtml(store.phone)}</p>` : ''}
-            ${store.hours ? `<p class="mt-store__item-line">${escapeHtml(store.hours)}</p>` : ''}
+            ${
+              store.phone
+                ? `<p class="mt-store__item-line">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    ${escapeHtml(store.phone)}
+                  </p>`
+                : ''
+            }
             <p class="mt-store__item-distance">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -222,11 +231,12 @@ if (!window.mtStoreLocatorInit) {
       const image = storeImage(store.storeId, defaultImage);
       return `
         <div class="mt-store-iw">
-          <img src="${image}" alt="${escapeHtml(store.name)}">
+          <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}">
           <h3>${escapeHtml(store.name)}</h3>
           <p>${escapeHtml(store.address)}</p>
-          ${store.phone ? `<p>${escapeHtml(store.phone)}</p>` : ''}
-          ${store.hours ? `<p>${escapeHtml(store.hours)}</p>` : ''}
+          ${store.phone ? `<p><strong>Phone:</strong> ${escapeHtml(store.phone)}</p>` : ''}
+          ${store.hours ? `<p><strong>Hours:</strong> ${escapeHtml(store.hours)}</p>` : ''}
+          ${store.email ? `<p><strong>Email:</strong> ${escapeHtml(store.email)}</p>` : ''}
           <a href="${directionsUrl}" target="_blank" rel="noopener">${escapeHtml(strings.getDirections || 'Get Directions')}</a>
         </div>`;
     };
@@ -299,7 +309,7 @@ if (!window.mtStoreLocatorInit) {
       chipsEl.querySelectorAll('[data-store-count]').forEach((el) => {
         el.textContent = counts[el.dataset.storeCount] || 0;
       });
-      countEl.textContent = `${filteredStores().length} ${strings.storesLabel || 'Stores'}`;
+      countEl.textContent = visibleCountText();
     };
 
     const recalculate = () => {
@@ -319,7 +329,7 @@ if (!window.mtStoreLocatorInit) {
       });
       renderList();
       renderMarkers();
-      countEl.textContent = `${filteredStores().length} ${strings.storesLabel || 'Stores'}`;
+      countEl.textContent = visibleCountText();
     };
 
     const setupMap = () => {
