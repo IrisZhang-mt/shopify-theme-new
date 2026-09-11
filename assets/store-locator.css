@@ -299,6 +299,8 @@
 
   .mt-store__count {
     grid-area: count;
+    font-size: 0.75rem;
+    color: #7c7a73;
   }
 
   .mt-store__chips {
