@@ -83,7 +83,7 @@
   flex: 0 0 auto;
   padding: 0.65625rem 0.875rem;
   border: 1px solid #e7e3da;
-  border-radius: 50%;
+  border-radius: 999px;
   background: transparent;
   color: #4a4844;
   cursor: pointer;
