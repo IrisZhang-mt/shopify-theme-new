@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "flagship": {
@@ -6,8 +15,23 @@
     },
     "main": {
       "type": "main-store-locator",
-      "settings": {}
+      "settings": {
+        "heading": "Find a moodytiger store.",
+        "subtext": "From flagship malls to premium outlets, find the moodytiger nearest you — and come stay in the play with the whole family."
+      }
+    },
+    "page_careers_roles_dxxGqM": {
+      "type": "page-careers-roles",
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Give 15%, Get 15%.",
+        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
+      }
     }
   },
-  "order": ["flagship", "main"]
+  "order": [
+    "flagship",
+    "main",
+    "page_careers_roles_dxxGqM"
+  ]
 }
