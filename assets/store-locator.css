@@ -152,9 +152,9 @@
 
 .mt-store__item {
   display: flex;
+  flex-shrink: 0;
   gap: 0.9375rem;
-  min-height: 7.5rem;
-  padding: 1.25rem 0;
+  padding: 1.28125rem 0;
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.12);
   color: #1d1d1d;
   cursor: pointer;
