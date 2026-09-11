@@ -175,7 +175,7 @@
     "filter_beijing": "Beijing",
     "filter_shenzhen": "Shenzhen",
     "filter_guangzhou": "Guangzhou",
-    "get_directions": "Get Directions",
+    "get_directions": "Directions →",
     "location_not_found": "Location not found. Please try a different search.",
     "no_results": "No stores match this filter yet.",
     "miles_away": "__DISTANCE__ mi from your location",

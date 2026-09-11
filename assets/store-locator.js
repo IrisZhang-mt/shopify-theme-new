@@ -197,16 +197,6 @@ if (!window.mtStoreLocatorInit) {
           <div class="mt-store__item-body">
             <p class="mt-store__item-name">${escapeHtml(store.name)}</p>
             <p class="mt-store__item-address">${escapeHtml(store.address)}</p>
-            ${
-              store.phone
-                ? `<p class="mt-store__item-line">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                    </svg>
-                    ${escapeHtml(store.phone)}
-                  </p>`
-                : ''
-            }
             <p class="mt-store__item-distance">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -214,14 +204,18 @@ if (!window.mtStoreLocatorInit) {
               </svg>
               ${distanceLabel}
             </p>
-            <a class="mt-store__directions" href="${directionsUrl}" target="_blank" rel="noopener" data-store-directions>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path>
-                <path d="M8 2v16"></path>
-                <path d="M16 6v16"></path>
-              </svg>
-              ${escapeHtml(strings.getDirections || 'Get Directions')}
-            </a>
+            <div class="mt-store__item-meta">
+              ${
+                store.phone
+                  ? `<span class="mt-store__item-line">
+                      <span class="mt-store__item-icon" aria-hidden="true">☎</span>${escapeHtml(store.phone)}
+                    </span>`
+                  : ''
+              }
+              <a class="mt-store__directions" href="${directionsUrl}" target="_blank" rel="noopener" data-store-directions>
+                ${escapeHtml(strings.getDirections || 'Directions →')}
+              </a>
+            </div>
           </div>
         </div>`;
     };
