@@ -372,7 +372,6 @@ if (!window.mtStoreLocatorInit) {
       if (result.code !== '200') throw new Error(result.message || 'Store API error');
       stores = (result.data || [])
         .map((store) => ({
-          id: store.id,
           storeId: store.store_id,
           name: (store.store_name_en || '').replace(/[\r\n]+/g, ' ').trim(),
           address: (store.store_address || '').replace(/[\r\n]+/g, ' ').trim(),
