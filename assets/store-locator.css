@@ -7,7 +7,7 @@
 .mt-store__intro {
   max-width: 42.8125rem;
   margin: 0 auto 1.875rem;
-  text-align: center;
+  text-align: left;
 }
 .mt-store__heading {
   margin: 0 0 0.625rem;
@@ -50,8 +50,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.625rem;
-  height: 2.625rem;
+  width: 2.62rem;
+  height: 2.62rem;
   flex: 0 0 auto;
   padding: 0;
   border: 0;
@@ -270,7 +270,6 @@
   .mt-store__intro {
     max-width: 87.5rem;
     margin: 0 auto 1.875rem;
-    text-align: left;
   }
   .mt-store__heading {
     font-size: 3.25rem;
