@@ -192,7 +192,7 @@
   min-width: 0;
 }
 .mt-store__item-name {
-  margin: 0;
+  margin: 3.5px;
   font-size: var(--mt-p-xl-size);
   font-weight: 500;
   color: inherit;
