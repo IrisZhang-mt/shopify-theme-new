@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "flagship": {
+      "type": "home-carousel",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-store-locator",
+      "settings": {}
+    }
+  },
+  "order": ["flagship", "main"]
+}

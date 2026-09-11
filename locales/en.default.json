@@ -150,6 +150,28 @@
     "no_results_page": "No results. Try a different search.",
     "start": "Type in the search bar to explore the store."
   },
+  "store_locator": {
+    "heading": "Find a moodytiger store.",
+    "search_placeholder": "Search by city, store or postcode",
+    "search_action": "Search location",
+    "filters_label": "Filter stores by region",
+    "filter_all": "All",
+    "filter_hongkong": "Hong Kong",
+    "filter_macau": "Macau",
+    "filter_malaysia": "Malaysia",
+    "filter_singapore": "Singapore",
+    "filter_usa": "The United States",
+    "filter_uae": "The United Arab Emirates",
+    "filter_shanghai": "Shanghai",
+    "filter_beijing": "Beijing",
+    "filter_shenzhen": "Shenzhen",
+    "filter_guangzhou": "Guangzhou",
+    "get_directions": "Directions →",
+    "location_not_found": "Location not found. Please try a different search.",
+    "no_results": "No stores match this filter yet.",
+    "miles_away": "__DISTANCE__ mi from your location",
+    "stores_label": "Stores"
+  },
   "onboarding": {
     "product_title": "Product title",
     "product_price": "From $60"
