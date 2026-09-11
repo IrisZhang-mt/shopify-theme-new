@@ -1,0 +1,130 @@
+{{ 'store-locator.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading_fallback = 'store_locator.heading' | t
+  assign search_fallback = 'store_locator.search_placeholder' | t
+  assign search_action_fallback = 'store_locator.search_action' | t
+  assign filters_fallback = 'store_locator.filters_label' | t
+  assign default_image_url = ''
+  if settings.store_default_image != blank
+    assign default_image_url = settings.store_default_image | image_url: width: 600
+  endif
+-%}
+
+<section
+  class="mt-store"
+  id="StoreLocator"
+  data-store-locator
+  data-api-endpoint="https://java.moodytiger.work:9001/api/stores/list"
+  data-default-image="{{ default_image_url }}"
+  data-hidden-stores="{{ settings.store_locator_hidden | escape }}"
+>
+  <div class="mt-store__intro">
+    <h2 class="mt-store__heading" data-reveal>{{ section.settings.heading | default: heading_fallback }}</h2>
+    {%- if section.settings.subtext != blank -%}
+      <p class="mt-store__subtext" data-reveal>{{ section.settings.subtext }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="mt-store__controls" data-reveal>
+    <div class="mt-store__search">
+      <label class="visually-hidden" for="StoreSearchInput">{{ search_fallback }}</label>
+      <input
+        type="text"
+        class="mt-store__search-input"
+        id="StoreSearchInput"
+        placeholder="{{ search_fallback }}"
+        autocomplete="off"
+      >
+      <button type="button" class="mt-store__search-btn" id="StoreSearchBtn" aria-label="{{ search_action_fallback }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mt-store__chips" id="StoreChips" role="group" aria-label="{{ filters_fallback }}">
+      <button type="button" class="mt-store__chip mt-store__chip--active" data-store-filter="all">
+        <span>{{ 'store_locator.filter_all' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="all">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="hongkong">
+        <span>{{ 'store_locator.filter_hongkong' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="hongkong">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="macau">
+        <span>{{ 'store_locator.filter_macau' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="macau">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="malaysia">
+        <span>{{ 'store_locator.filter_malaysia' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="malaysia">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="singapore">
+        <span>{{ 'store_locator.filter_singapore' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="singapore">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="usa">
+        <span>{{ 'store_locator.filter_usa' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="usa">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="uae">
+        <span>{{ 'store_locator.filter_uae' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="uae">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="shanghai">
+        <span>{{ 'store_locator.filter_shanghai' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="shanghai">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="beijing">
+        <span>{{ 'store_locator.filter_beijing' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="beijing">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="shenzhen">
+        <span>{{ 'store_locator.filter_shenzhen' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="shenzhen">0</span>
+      </button>
+      <button type="button" class="mt-store__chip" data-store-filter="guangzhou">
+        <span>{{ 'store_locator.filter_guangzhou' | t }}</span>
+        <span class="mt-store__chip-count" data-store-count="guangzhou">0</span>
+      </button>
+    </div>
+
+    <p class="mt-store__count" id="StoreCount" aria-live="polite"></p>
+  </div>
+
+  <div class="mt-store__panels">
+    <div class="mt-store__map-wrap">
+      <div class="mt-store__map" id="StoreMap"></div>
+    </div>
+    <div class="mt-store__list" id="StoreList" aria-live="polite"></div>
+  </div>
+</section>
+
+<script src="{{ 'store-locator.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Store locator",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find a moodytiger store."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "From flagship malls to premium outlets, find the moodytiger nearest you — and come stay in the play with the whole family."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store locator"
+    }
+  ]
+}
+{% endschema %}
