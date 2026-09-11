@@ -164,6 +164,7 @@
   background: var(--mt-surface);
 }
 .mt-store__item-media {
+  align-self: center;
   flex: 0 0 6rem;
   width: 6rem;
   height: 6rem;
