@@ -102,6 +102,16 @@
   </div>
 </section>
 
+<script type="application/json" id="StoreLocatorStrings">
+  {
+    "getDirections": {{ 'store_locator.get_directions' | t | json }},
+    "locationNotFound": {{ 'store_locator.location_not_found' | t | json }},
+    "noResults": {{ 'store_locator.no_results' | t | json }},
+    "milesAway": {{ 'store_locator.miles_away' | t | json }},
+    "storesLabel": {{ 'store_locator.stores_label' | t | json }}
+  }
+</script>
+
 <script src="{{ 'store-locator.js' | asset_url }}" type="module"></script>
 
 {% schema %}
