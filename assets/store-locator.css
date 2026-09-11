@@ -330,8 +330,10 @@
   }
 
   .mt-store__panels {
+    display: flex;
     flex-direction: row;
     align-items: stretch;
+    gap: 1.25rem;
     max-width: 87.5rem;
     height: clamp(31rem, calc(100vh - 11.25rem), 47.5rem);
     margin: 0 auto;
