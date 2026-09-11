@@ -155,6 +155,7 @@
 }
 
 .mt-store__list {
+  grid-area: list;
   display: flex;
   flex-direction: column;
 }
@@ -273,6 +274,7 @@
 
 @media screen and (min-width: 750px) {
   .mt-store {
+    display: block;
     padding: 6.25rem 1.25rem 7.5rem;
   }
 
