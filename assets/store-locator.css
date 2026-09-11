@@ -81,14 +81,14 @@
   align-items: center;
   gap: 0.375rem;
   flex: 0 0 auto;
-  height: 2.25rem;
-  padding: 0 0.8125rem;
-  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
+  padding: 0.65625rem 0.875rem;
+  border: 1px solid #e7e3da;
+  border-radius: 50%;
   background: transparent;
-  color: var(--mt-ink);
+  color: #4a4844;
   cursor: pointer;
   font-family: var(--mt-font-body);
-  font-size: var(--mt-tag-s-size);
+  font-size: 0.75rem;
   letter-spacing: var(--mt-tracking-tag);
   white-space: nowrap;
   transition:
