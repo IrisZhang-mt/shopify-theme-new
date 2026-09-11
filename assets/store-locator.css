@@ -294,6 +294,7 @@
   .mt-store__search {
     grid-area: search;
     max-width: none;
+    height: 2.625rem;
   }
 
   .mt-store__count {
