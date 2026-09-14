@@ -32,16 +32,38 @@
       {%- endfor -%}
     </nav>
   {%- endif -%}
-  {%- paginate source.articles by 12 -%}
+  {%- paginate source.articles by 9 -%}
     {%- if source.articles.size > 0 -%}
-      <div class="mt-blog__grid" data-blog-grid>
+      <div class="mt-blog__grid">
         {%- for article in source.articles -%}
           {%- assign column = forloop.index0 | modulo: 3 -%}
           {%- render 'article-card', article: article, column: column -%}
         {%- endfor -%}
       </div>
-      {%- if paginate.next -%}
-        <div class="mt-blog__sentinel" data-blog-more data-next-url="{{ paginate.next.url }}&section_id={{ section.id }}"></div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="mt-blog__pager" aria-label="{{ 'general.pagination' | t }}">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="mt-blog__pager-link">{{ 'general.previous' | t }}</a>
+          {%- else -%}
+            <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.previous' | t }}</span>
+          {%- endif -%}
+          <div class="mt-blog__pager-nums">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}" class="mt-blog__pager-num">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="mt-blog__pager-num mt-blog__pager-num--active" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="mt-blog__pager-num mt-blog__pager-num--dots">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="mt-blog__pager-link">{{ 'general.next' | t }}</a>
+          {%- else -%}
+            <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.next' | t }}</span>
+          {%- endif -%}
+        </nav>
       {%- endif -%}
     {%- else -%}
       <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
