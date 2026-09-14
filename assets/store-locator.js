@@ -376,10 +376,8 @@ if (!window.mtStoreLocatorInit) {
     };
 
     const fetchStores = async () => {
-      const response = await fetch(apiEndpoint);
-      const result = await response.json();
-      if (result.code !== '200') throw new Error(result.message || 'Store API error');
-      stores = (result.data || [])
+      const data = await window.mtFetchStores(apiEndpoint);
+      stores = (data || [])
         .map((store) => ({
           storeId: store.store_id,
           name: (store.store_name_en || '').replace(/[\r\n]+/g, ' ').trim(),
