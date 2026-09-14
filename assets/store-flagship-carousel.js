@@ -89,7 +89,7 @@ if (!window.mtStoreFlagshipInit) {
           storeId: store.store_id,
           name: (store.store_name_en || "").replace(/[\r\n]+/g, " ").trim(),
           city: (store.city_en || "").replace(/[\r\n]+/g, " ").trim(),
-          address: (store.store_address || "").replace(/[\r\n]+/g, " ").trim(),
+          address: (store.store_address_en || store.store_address || "").replace(/[\r\n]+/g, " ").trim(),
         }))
         .filter((store) => store.name && store.address)
         .filter((store) => !hiddenNames.includes(store.name.toLowerCase()));
