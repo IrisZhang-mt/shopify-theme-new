@@ -81,11 +81,16 @@
   .mt-flagship {
     --mt-flagship-card-w: max(20.9375rem, 22vw);
     padding: 6.25rem 1.25rem 0;
+    gap: 0;
+  }
+
+  .mt-flagship__intro {
+    max-width: 87.5rem;
+    margin: 0 auto 1.875rem;
   }
 
   .mt-flagship__heading {
     font-size: 3.25rem;
     line-height: 1.1;
-    max-width: 87.5rem;
   }
 }
