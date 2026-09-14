@@ -1,12 +1,11 @@
 {{ 'blog.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'blog.js' | asset_url }}" type="module"></script>
 
 {%- assign source = blog -%}
 {%- if section.settings.blog != blank -%}
   {%- assign source = section.settings.blog -%}
 {%- endif -%}
 
-<section class="mt-blog" data-blog>
+<section class="mt-blog">
   <div class="mt-blog__hero" data-mt-parallax>
     <div class="mt-blog__hero-in">
       {%- if section.settings.video != blank -%}
