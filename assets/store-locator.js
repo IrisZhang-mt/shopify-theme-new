@@ -25,7 +25,7 @@ if (!window.mtStoreLocatorInit) {
     mapsLoading = new Promise((resolve, reject) => {
       window.mtInitStoreMap = () => resolve();
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=mtInitStoreMap&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=mtInitStoreMap&libraries=places&language=en`;
       script.async = true;
       script.defer = true;
       script.onerror = () => reject(new Error('Failed to load Google Maps'));
