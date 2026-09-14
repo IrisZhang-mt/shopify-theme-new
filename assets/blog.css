@@ -1,6 +1,10 @@
 .mt-blog {
   background: var(--mt-paper);
 }
+.mt-blog[aria-busy='true'] .mt-blog__results {
+  opacity: 0.4;
+  transition: opacity 150ms var(--mt-ease);
+}
 
 .mt-blog__hero {
   position: relative;
