@@ -94,8 +94,6 @@ if (!window.mtStoreFlagshipInit) {
         .filter((store) => store.name && store.address)
         .filter((store) => !hiddenNames.includes(store.name.toLowerCase()));
 
-      console.log(`[store-flagship-carousel] ${stores.length} stores after filtering:`, stores);
-
       if (!stores.length) return;
 
       rowEl.innerHTML = stores
