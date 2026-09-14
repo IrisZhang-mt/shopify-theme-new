@@ -36,13 +36,18 @@ if (!window.mtStoreFlagshipInit) {
     };
   };
 
-  const cardMarkup = (store, defaultImage) => {
+  // Only the cards visible before any horizontal scroll benefit from loading eagerly;
+  // the rest sit off-screen until autoplay reveals them, so they stay lazy.
+  const EAGER_CARD_COUNT = 4;
+
+  const cardMarkup = (store, defaultImage, index) => {
     const image = storeImage(store.storeId, defaultImage);
     const caption = store.city ? `${store.city} · ${store.name}` : store.name;
+    const loading = index < EAGER_CARD_COUNT ? 'eager' : 'lazy';
     return `
       <div class="mt-flagship__card">
         <div class="mt-flagship__media">
-          <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" loading="lazy" data-flagship-img data-store-name="${escapeHtml(store.name)}">
+          <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" loading="${loading}" data-flagship-img data-store-name="${escapeHtml(store.name)}">
         </div>
         <p class="mt-flagship__caption">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -81,7 +86,7 @@ if (!window.mtStoreFlagshipInit) {
 
       if (!stores.length) return;
 
-      rowEl.innerHTML = stores.map((store) => cardMarkup(store, defaultImage)).join('');
+      rowEl.innerHTML = stores.map((store, index) => cardMarkup(store, defaultImage, index)).join('');
       rowEl.querySelectorAll('[data-flagship-img]').forEach((img) => {
         img.addEventListener('error', () => onImageError(img, img.dataset.storeName), { once: true });
       });
