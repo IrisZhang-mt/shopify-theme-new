@@ -25,6 +25,14 @@
   {%- if source == blank -%}
     <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
   {%- else -%}
+  {%- if section.settings.show_tag_nav and source.all_tags.size > 0 -%}
+    <nav class="mt-blog__tags" aria-label="{{ 'blog.categories_label' | t }}">
+      <a href="{{ source.url }}" class="mt-blog__tag{% if current_tags == blank %} mt-blog__tag--active{% endif %}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blog.all_posts' | t }}</a>
+      {%- for tag in source.all_tags -%}
+        <a href="{{ source.url }}/tagged/{{ tag | handle }}" class="mt-blog__tag{% if current_tags contains tag %} mt-blog__tag--active{% endif %}"{% if current_tags contains tag %} aria-current="page"{% endif %}>{{ tag }}</a>
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
   {%- paginate source.articles by 12 -%}
     {%- if source.articles.size > 0 -%}
       <div class="mt-blog__grid" data-blog-grid>
@@ -58,6 +66,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Featured Articles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag_nav",
+      "label": "Show category tags",
+      "default": true
     },
     {
       "type": "video",

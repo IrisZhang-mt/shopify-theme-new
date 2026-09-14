@@ -78,7 +78,9 @@
     "read_time": {
       "one": "{{ count }} min read",
       "other": "{{ count }} mins read"
-    }
+    },
+    "all_posts": "All Posts",
+    "categories_label": "Categories"
   },
   "article": {
     "share": "Share Article",
