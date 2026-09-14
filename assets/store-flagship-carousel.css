@@ -28,6 +28,9 @@
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
+  /* Reserve the card's rendered height (media aspect-ratio + gap + caption line)
+     before the async store fetch fills this row, so it doesn't cause a layout shift. */
+  min-height: calc(var(--mt-flagship-card-w) * 2 / 3 + 0.5rem + 1.125rem);
 }
 .mt-flagship__row::-webkit-scrollbar {
   display: none;
