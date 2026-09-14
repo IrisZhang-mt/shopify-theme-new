@@ -25,7 +25,7 @@ if (!window.mtStoreLocatorInit) {
     mapsLoading = new Promise((resolve, reject) => {
       window.mtInitStoreMap = () => resolve();
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=mtInitStoreMap&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=mtInitStoreMap&libraries=places&language=en`;
       script.async = true;
       script.defer = true;
       script.onerror = () => reject(new Error('Failed to load Google Maps'));
@@ -135,14 +135,16 @@ if (!window.mtStoreLocatorInit) {
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
-  const storeImage = (storeId, defaultImage) => {
-    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg`;
+  // Sidebar thumbnails render at 96px (see .mt-store__item-media); the map info window
+  // renders larger (~250px, see .mt-store-iw), so it asks for a bigger file explicitly.
+  const storeImage = (storeId, defaultImage, width = 300) => {
+    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg?width=${width}`;
     return defaultImage || fallbackImage();
   };
 
   const onImageError = (img, name) => {
     img.onerror = null;
-    img.src = `${IMAGE_HOST}/US0001.jpg`;
+    img.src = `${IMAGE_HOST}/US0001.jpg?width=300`;
     img.onerror = () => {
       img.onerror = null;
       img.src = fallbackImage(name);
@@ -182,6 +184,10 @@ if (!window.mtStoreLocatorInit) {
     const filteredStores = () => (activeFilter === 'all' ? stores : stores.filter((store) => matchesFilter(store, activeFilter)));
     const visibleCountText = () => `${filteredStores().length} ${strings.storesLabel || 'Stores'}`;
 
+    // Only the first few rows are visible in the sidebar before scrolling, so only those
+    // benefit from loading eagerly; the rest stay lazy.
+    const EAGER_ITEM_COUNT = 4;
+
     const itemMarkup = (store, index) => {
       const distanceLabel = (strings.milesAway || '__DISTANCE__ mi from your location').replace(
         '__DISTANCE__',
@@ -189,10 +195,11 @@ if (!window.mtStoreLocatorInit) {
       );
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${store.lat},${store.lng}`;
       const image = storeImage(store.storeId, defaultImage);
+      const loading = index < EAGER_ITEM_COUNT ? 'eager' : 'lazy';
       return `
         <div class="mt-store__item" data-store-index="${index}" data-store-name="${escapeHtml(store.name)}">
           <div class="mt-store__item-media">
-            <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" loading="lazy" data-store-img>
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" loading="${loading}" data-store-img>
           </div>
           <div class="mt-store__item-body">
             <p class="mt-store__item-name">${escapeHtml(store.name)}</p>
@@ -227,7 +234,7 @@ if (!window.mtStoreLocatorInit) {
 
     const infoWindowMarkup = (store) => {
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${store.lat},${store.lng}`;
-      const image = storeImage(store.storeId, defaultImage);
+      const image = storeImage(store.storeId, defaultImage, 500);
       return `
         <div class="mt-store-iw">
           <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}">
@@ -376,10 +383,8 @@ if (!window.mtStoreLocatorInit) {
     };
 
     const fetchStores = async () => {
-      const response = await fetch(apiEndpoint);
-      const result = await response.json();
-      if (result.code !== '200') throw new Error(result.message || 'Store API error');
-      stores = (result.data || [])
+      const data = await window.mtFetchStores(apiEndpoint);
+      stores = (data || [])
         .map((store) => ({
           storeId: store.store_id,
           name: (store.store_name_en || '').replace(/[\r\n]+/g, ' ').trim(),

@@ -1,7 +1,7 @@
 {
   "sections": {
     "flagship": {
-      "type": "home-carousel",
+      "type": "store-flagship-carousel",
       "settings": {}
     },
     "main": {
