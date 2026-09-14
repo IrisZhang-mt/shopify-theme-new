@@ -1,12 +1,21 @@
 if (!window.mtStoreFlagshipInit) {
   window.mtStoreFlagshipInit = true;
 
-  const IMAGE_HOST = 'https://cdn.shopify.com/s/files/1/0475/6920/7457/files';
+  const IMAGE_HOST = "https://cdn.shopify.com/s/files/1/0475/6920/7457/files";
 
   const escapeHtml = (value) =>
-    String(value ?? '').replace(/[&<>"']/g, (char) => (
-      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]
-    ));
+    String(value ?? "").replace(
+      /[&<>"']/g,
+      (char) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[char],
+    );
+  ``;
 
   const fallbackImage = (name) => {
     const svg = `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
@@ -17,19 +26,23 @@ if (!window.mtStoreFlagshipInit) {
         </linearGradient>
       </defs>
       <rect width="300" height="200" fill="url(#g)"/>
-      <text x="150" y="100" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle">${escapeHtml(name || 'Store')}</text>
+      <text x="150" y="100" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle">${escapeHtml(name || "Store")}</text>
     </svg>`;
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
+  // Cards render at most ~450px wide (see --mt-flagship-card-w); ask the CDN for a
+  // right-sized file instead of shipping the full-resolution store photo.
+  const IMAGE_WIDTH = 700;
+
   const storeImage = (storeId, defaultImage) => {
-    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg`;
+    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg?width=${IMAGE_WIDTH}`;
     return defaultImage || fallbackImage();
   };
 
   const onImageError = (img, name) => {
     img.onerror = null;
-    img.src = `${IMAGE_HOST}/US0001.jpg`;
+    img.src = `${IMAGE_HOST}/US0001.jpg?width=${IMAGE_WIDTH}`;
     img.onerror = () => {
       img.onerror = null;
       img.src = fallbackImage(name);
@@ -43,7 +56,7 @@ if (!window.mtStoreFlagshipInit) {
   const cardMarkup = (store, defaultImage, index) => {
     const image = storeImage(store.storeId, defaultImage);
     const caption = store.city ? `${store.city} · ${store.name}` : store.name;
-    const loading = index < EAGER_CARD_COUNT ? 'eager' : 'lazy';
+    const loading = index < EAGER_CARD_COUNT ? "eager" : "lazy";
     return `
       <div class="mt-flagship__card">
         <div class="mt-flagship__media">
@@ -60,11 +73,11 @@ if (!window.mtStoreFlagshipInit) {
   };
 
   const createFlagshipCarousel = async (root) => {
-    const rowEl = root.querySelector('[data-autoplay]');
+    const rowEl = root.querySelector("[data-autoplay]");
     if (!rowEl) return;
     const apiEndpoint = root.dataset.apiEndpoint;
-    const defaultImage = root.dataset.defaultImage || '';
-    const hiddenNames = (root.dataset.hiddenStores || '')
+    const defaultImage = root.dataset.defaultImage || "";
+    const hiddenNames = (root.dataset.hiddenStores || "")
       .split(/\r?\n/)
       .map((line) => line.trim().toLowerCase())
       .filter(Boolean);
@@ -72,39 +85,48 @@ if (!window.mtStoreFlagshipInit) {
     try {
       const response = await fetch(apiEndpoint);
       const result = await response.json();
-      if (result.code !== '200') throw new Error(result.message || 'Store API error');
+      if (result.code !== "200")
+        throw new Error(result.message || "Store API error");
 
       const stores = (result.data || [])
         .map((store) => ({
           storeId: store.store_id,
-          name: (store.store_name_en || '').replace(/[\r\n]+/g, ' ').trim(),
-          city: (store.city_en || '').replace(/[\r\n]+/g, ' ').trim(),
-          address: (store.store_address || '').replace(/[\r\n]+/g, ' ').trim(),
+          name: (store.store_name_en || "").replace(/[\r\n]+/g, " ").trim(),
+          city: (store.city_en || "").replace(/[\r\n]+/g, " ").trim(),
+          address: (store.store_address || "").replace(/[\r\n]+/g, " ").trim(),
         }))
         .filter((store) => store.name && store.address)
         .filter((store) => !hiddenNames.includes(store.name.toLowerCase()));
 
       if (!stores.length) return;
 
-      rowEl.innerHTML = stores.map((store, index) => cardMarkup(store, defaultImage, index)).join('');
-      rowEl.querySelectorAll('[data-flagship-img]').forEach((img) => {
-        img.addEventListener('error', () => onImageError(img, img.dataset.storeName), { once: true });
+      rowEl.innerHTML = stores
+        .map((store, index) => cardMarkup(store, defaultImage, index))
+        .join("");
+      rowEl.querySelectorAll("[data-flagship-img]").forEach((img) => {
+        img.addEventListener(
+          "error",
+          () => onImageError(img, img.dataset.storeName),
+          { once: true },
+        );
       });
 
-      document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+      document.dispatchEvent(new CustomEvent("mt:reveal-scan"));
     } catch (error) {
-      console.error('[store-flagship-carousel]', error);
+      console.error("[store-flagship-carousel]", error);
     }
   };
 
   const initAll = (scope) => {
-    scope.querySelectorAll('[data-store-flagship-carousel]').forEach((root) => {
+    scope.querySelectorAll("[data-store-flagship-carousel]").forEach((root) => {
       if (root.dataset.mtReady) return;
-      root.dataset.mtReady = 'true';
+      root.dataset.mtReady = "true";
       createFlagshipCarousel(root);
     });
   };
 
   initAll(document);
-  document.addEventListener('shopify:section:load', (event) => initAll(event.target));
+  document.addEventListener("shopify:section:load", (event) =>
+    initAll(event.target),
+  );
 }
