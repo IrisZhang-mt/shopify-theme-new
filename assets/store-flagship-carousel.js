@@ -15,7 +15,6 @@ if (!window.mtStoreFlagshipInit) {
           "'": "&#39;",
         })[char],
     );
-  ``;
 
   const fallbackImage = (name) => {
     const svg = `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
@@ -83,12 +82,9 @@ if (!window.mtStoreFlagshipInit) {
       .filter(Boolean);
 
     try {
-      const response = await fetch(apiEndpoint);
-      const result = await response.json();
-      if (result.code !== "200")
-        throw new Error(result.message || "Store API error");
+      const data = await window.mtFetchStores(apiEndpoint);
 
-      const stores = (result.data || [])
+      const stores = (data || [])
         .map((store) => ({
           storeId: store.store_id,
           name: (store.store_name_en || "").replace(/[\r\n]+/g, " ").trim(),
