@@ -19,16 +19,16 @@
     </div>
   </div>
 
-  <h1 class="mt-blog__title mt-rise" data-reveal>{{ section.settings.heading | default: source.title }}</h1>
+  <h1 id="mt-blog-title" class="mt-blog__title mt-rise" data-reveal>{{ section.settings.heading | default: source.title }}</h1>
 
   {%- if source == blank -%}
     <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
   {%- else -%}
   {%- if section.settings.show_tag_nav and source.all_tags.size > 0 -%}
     <nav class="mt-blog__tags" aria-label="{{ 'blog.categories_label' | t }}">
-      <a href="{{ source.url }}" class="mt-blog__tag{% if current_tags == blank %} mt-blog__tag--active{% endif %}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blog.all_posts' | t }}</a>
+      <a href="{{ source.url }}#mt-blog-title" class="mt-blog__tag{% if current_tags == blank %} mt-blog__tag--active{% endif %}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blog.all_posts' | t }}</a>
       {%- for tag in source.all_tags -%}
-        <a href="{{ source.url }}/tagged/{{ tag | handle }}" class="mt-blog__tag{% if current_tags contains tag %} mt-blog__tag--active{% endif %}"{% if current_tags contains tag %} aria-current="page"{% endif %}>{{ tag }}</a>
+        <a href="{{ source.url }}/tagged/{{ tag | handle }}#mt-blog-title" class="mt-blog__tag{% if current_tags contains tag %} mt-blog__tag--active{% endif %}"{% if current_tags contains tag %} aria-current="page"{% endif %}>{{ tag }}</a>
       {%- endfor -%}
     </nav>
   {%- endif -%}
@@ -43,14 +43,14 @@
       {%- if paginate.pages > 1 -%}
         <nav class="mt-blog__pager" aria-label="{{ 'general.pagination' | t }}">
           {%- if paginate.previous -%}
-            <a href="{{ paginate.previous.url }}" class="mt-blog__pager-link">{{ 'general.previous' | t }}</a>
+            <a href="{{ paginate.previous.url }}#mt-blog-title" class="mt-blog__pager-link">{{ 'general.previous' | t }}</a>
           {%- else -%}
             <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.previous' | t }}</span>
           {%- endif -%}
           <div class="mt-blog__pager-nums">
             {%- for part in paginate.parts -%}
               {%- if part.is_link -%}
-                <a href="{{ part.url }}" class="mt-blog__pager-num">{{ part.title }}</a>
+                <a href="{{ part.url }}#mt-blog-title" class="mt-blog__pager-num">{{ part.title }}</a>
               {%- elsif part.title == paginate.current_page -%}
                 <span class="mt-blog__pager-num mt-blog__pager-num--active" aria-current="page">{{ part.title }}</span>
               {%- else -%}
@@ -59,7 +59,7 @@
             {%- endfor -%}
           </div>
           {%- if paginate.next -%}
-            <a href="{{ paginate.next.url }}" class="mt-blog__pager-link">{{ 'general.next' | t }}</a>
+            <a href="{{ paginate.next.url }}#mt-blog-title" class="mt-blog__pager-link">{{ 'general.next' | t }}</a>
           {%- else -%}
             <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.next' | t }}</span>
           {%- endif -%}

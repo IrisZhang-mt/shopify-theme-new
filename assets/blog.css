@@ -41,6 +41,7 @@ html.mt-motion .mt-blog__hero video {
   padding: 6.25rem 0.9375rem 1.25rem;
   font-size: var(--mt-h-m-size);
   line-height: var(--mt-h-m-leading);
+  scroll-margin-top: var(--mt-header-h);
 }
 
 .mt-blog__tags {
