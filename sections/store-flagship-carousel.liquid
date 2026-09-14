@@ -14,7 +14,9 @@
   data-default-image="{{ default_image_url }}"
   data-hidden-stores="{{ settings.store_locator_hidden | escape }}"
 >
-  <h2 class="mt-flagship__heading" data-reveal>{{ 'store_flagship_carousel.heading' | t }}</h2>
+  <div class="mt-flagship__intro">
+    <h2 class="mt-flagship__heading" data-reveal>{{ 'store_flagship_carousel.heading' | t }}</h2>
+  </div>
   <div class="mt-flagship__stage" data-row-stage>
     <div class="mt-flagship__row" data-autoplay="20" data-wheel-lock id="StoreFlagshipRow" aria-live="off"></div>
   </div>

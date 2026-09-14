@@ -1,0 +1,90 @@
+.mt-flagship {
+  --mt-flagship-card-w: 13.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 3.75rem 0.9375rem 0;
+  background: var(--mt-paper);
+}
+
+.mt-flagship__intro {
+  max-width: 42.8125rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.mt-flagship__heading {
+  margin: 0;
+}
+
+.mt-flagship__stage {
+  position: relative;
+}
+
+.mt-flagship__row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.3125rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.mt-flagship__row::-webkit-scrollbar {
+  display: none;
+}
+
+.mt-flagship__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: var(--mt-flagship-card-w);
+  flex: 0 0 var(--mt-flagship-card-w);
+  color: var(--mt-ink);
+}
+
+.mt-flagship__media {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--mt-off-white);
+}
+.mt-flagship__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mt-flagship__caption {
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem;
+  margin: 0;
+  font-size: var(--mt-p-xs-size);
+  color: rgba(var(--mt-ink-rgb), 0.65);
+}
+.mt-flagship__caption svg {
+  flex: 0 0 auto;
+  width: 0.75rem;
+  height: 0.75rem;
+  color: #ea4335;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-flagship * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-flagship {
+    --mt-flagship-card-w: max(20.9375rem, 22vw);
+    padding: 6.25rem 1.25rem 0;
+  }
+
+  .mt-flagship__heading {
+    font-size: 3.25rem;
+    line-height: 1.1;
+  }
+}
