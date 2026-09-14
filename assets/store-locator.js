@@ -135,14 +135,16 @@ if (!window.mtStoreLocatorInit) {
     return `data:image/svg+xml,${encodeURIComponent(svg)}`;
   };
 
-  const storeImage = (storeId, defaultImage) => {
-    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg`;
+  // Sidebar thumbnails render at 96px (see .mt-store__item-media); the map info window
+  // renders larger (~250px, see .mt-store-iw), so it asks for a bigger file explicitly.
+  const storeImage = (storeId, defaultImage, width = 300) => {
+    if (storeId) return `${IMAGE_HOST}/${storeId}.jpg?width=${width}`;
     return defaultImage || fallbackImage();
   };
 
   const onImageError = (img, name) => {
     img.onerror = null;
-    img.src = `${IMAGE_HOST}/US0001.jpg`;
+    img.src = `${IMAGE_HOST}/US0001.jpg?width=300`;
     img.onerror = () => {
       img.onerror = null;
       img.src = fallbackImage(name);
@@ -227,7 +229,7 @@ if (!window.mtStoreLocatorInit) {
 
     const infoWindowMarkup = (store) => {
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLocation.lat},${userLocation.lng}&destination=${store.lat},${store.lng}`;
-      const image = storeImage(store.storeId, defaultImage);
+      const image = storeImage(store.storeId, defaultImage, 500);
       return `
         <div class="mt-store-iw">
           <img src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}">
