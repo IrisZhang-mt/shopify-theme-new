@@ -1,0 +1,34 @@
+{{ 'store-flagship-carousel.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign default_image_url = ''
+  if settings.store_default_image != blank
+    assign default_image_url = settings.store_default_image | image_url: width: 800
+  endif
+-%}
+
+<section
+  class="mt-flagship"
+  data-store-flagship-carousel
+  data-api-endpoint="https://java.moodytiger.work:9001/api/stores/list"
+  data-default-image="{{ default_image_url }}"
+  data-hidden-stores="{{ settings.store_locator_hidden | escape }}"
+>
+  <h2 class="mt-flagship__heading" data-reveal>{{ 'store_flagship_carousel.heading' | t }}</h2>
+  <div class="mt-flagship__stage" data-row-stage>
+    <div class="mt-flagship__row" data-autoplay="20" data-wheel-lock id="StoreFlagshipRow" aria-live="off"></div>
+  </div>
+</section>
+
+<script src="{{ 'store-flagship-carousel.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Store flagship carousel",
+  "presets": [
+    {
+      "name": "Store flagship carousel"
+    }
+  ]
+}
+{% endschema %}
