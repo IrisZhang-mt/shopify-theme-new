@@ -16,7 +16,7 @@
 .mt-store__intro {
   grid-area: intro;
   max-width: 42.8125rem;
-  margin: 0 auto;
+  margin: 0;
   text-align: left;
 }
 .mt-store__heading {
