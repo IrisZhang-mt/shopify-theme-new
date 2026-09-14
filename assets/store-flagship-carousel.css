@@ -7,6 +7,12 @@
   background: var(--mt-paper);
 }
 
+.mt-flagship__intro {
+  max-width: 42.8125rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
 .mt-flagship__heading {
   margin: 0;
 }
