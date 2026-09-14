@@ -17,8 +17,20 @@ if (!window.mtBlogInit) {
   const scrollToTitle = (root) => {
     const title = root.querySelector('#mt-blog-title');
     if (!title) return;
-    const reduced = window.mtReducedMq && window.mtReducedMq.matches;
-    title.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    const rootStyle = getComputedStyle(document.documentElement);
+    const headerOffset =
+      parseFloat(rootStyle.getPropertyValue('--mt-header-h')) * parseFloat(rootStyle.fontSize) || 0;
+    let top = -headerOffset;
+    let node = title;
+    while (node) {
+      top += node.offsetTop;
+      node = node.offsetParent;
+    }
+    if (window.mtScrollTo) {
+      window.mtScrollTo(top);
+    } else {
+      window.scrollTo(0, top);
+    }
   };
 
   const load = async (root, url) => {
