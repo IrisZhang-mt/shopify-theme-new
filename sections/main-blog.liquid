@@ -6,7 +6,7 @@
   {%- assign source = section.settings.blog -%}
 {%- endif -%}
 
-<section class="mt-blog" data-blog>
+<section class="mt-blog" data-blog data-section-id="{{ section.id }}">
   <div class="mt-blog__hero" data-mt-parallax>
     <div class="mt-blog__hero-in">
       {%- if section.settings.video != blank -%}
@@ -20,26 +20,58 @@
     </div>
   </div>
 
-  <h1 class="mt-blog__title mt-rise" data-reveal>{{ section.settings.heading | default: source.title }}</h1>
+  <h1 id="mt-blog-title" class="mt-blog__title mt-rise" data-reveal>{{ section.settings.heading | default: source.title }}</h1>
 
   {%- if source == blank -%}
     <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
   {%- else -%}
-  {%- paginate source.articles by 12 -%}
+  {%- if section.settings.show_tag_nav and source.all_tags.size > 0 -%}
+    <nav class="mt-blog__tags" data-blog-tags aria-label="{{ 'blog.categories_label' | t }}">
+      <a href="{{ source.url }}#mt-blog-title" class="mt-blog__tag{% if current_tags == blank %} mt-blog__tag--active{% endif %}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blog.all_posts' | t }}</a>
+      {%- for tag in source.all_tags -%}
+        <a href="{{ source.url }}/tagged/{{ tag | handle }}#mt-blog-title" class="mt-blog__tag{% if current_tags contains tag %} mt-blog__tag--active{% endif %}"{% if current_tags contains tag %} aria-current="page"{% endif %}>{{ tag }}</a>
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
+  <div class="mt-blog__results" data-blog-results>
+  {%- paginate source.articles by 9 -%}
     {%- if source.articles.size > 0 -%}
-      <div class="mt-blog__grid" data-blog-grid>
+      <div class="mt-blog__grid">
         {%- for article in source.articles -%}
           {%- assign column = forloop.index0 | modulo: 3 -%}
           {%- render 'article-card', article: article, column: column -%}
         {%- endfor -%}
       </div>
-      {%- if paginate.next -%}
-        <div class="mt-blog__sentinel" data-blog-more data-next-url="{{ paginate.next.url }}&section_id={{ section.id }}"></div>
+      {%- if paginate.pages > 1 -%}
+        <nav class="mt-blog__pager" data-blog-pager aria-label="{{ 'general.pagination' | t }}">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}#mt-blog-title" class="mt-blog__pager-link">{{ 'general.previous' | t }}</a>
+          {%- else -%}
+            <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.previous' | t }}</span>
+          {%- endif -%}
+          <div class="mt-blog__pager-nums">
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a href="{{ part.url }}#mt-blog-title" class="mt-blog__pager-num">{{ part.title }}</a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span class="mt-blog__pager-num mt-blog__pager-num--active" aria-current="page">{{ part.title }}</span>
+              {%- else -%}
+                <span class="mt-blog__pager-num mt-blog__pager-num--dots">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}#mt-blog-title" class="mt-blog__pager-link">{{ 'general.next' | t }}</a>
+          {%- else -%}
+            <span class="mt-blog__pager-link mt-blog__pager-link--disabled">{{ 'general.next' | t }}</span>
+          {%- endif -%}
+        </nav>
       {%- endif -%}
     {%- else -%}
       <p class="mt-blog__empty">{{ 'blog.empty' | t }}</p>
     {%- endif -%}
   {%- endpaginate -%}
+  </div>
   {%- endif -%}
 </section>
 
@@ -58,6 +90,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Featured Articles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag_nav",
+      "label": "Show category tags",
+      "default": true
     },
     {
       "type": "video",

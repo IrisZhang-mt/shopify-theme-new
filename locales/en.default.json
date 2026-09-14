@@ -15,6 +15,7 @@
     "continue_to": "Continue to {{ shop }}",
     "previous": "Previous",
     "next": "Next",
+    "pagination": "Pagination",
     "slides": "Slides",
     "slide_n": "Slide {{ number }}"
   },
@@ -78,7 +79,9 @@
     "read_time": {
       "one": "{{ count }} min read",
       "other": "{{ count }} mins read"
-    }
+    },
+    "all_posts": "All Posts",
+    "categories_label": "Categories"
   },
   "article": {
     "share": "Share Article",
