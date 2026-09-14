@@ -43,6 +43,42 @@ html.mt-motion .mt-blog__hero video {
   line-height: var(--mt-h-m-leading);
 }
 
+.mt-blog__tags {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.625rem;
+  max-width: var(--mt-container);
+  margin-inline: auto;
+  padding: 0 0.9375rem 1.875rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mt-blog__tags::-webkit-scrollbar {
+  display: none;
+}
+.mt-blog__tag {
+  flex: 0 0 auto;
+  padding: 0.59375rem 0.75rem;
+  border: 1px solid #e7e3da;
+  border-radius: 999px;
+  color: var(--mt-ink);
+  font-family: var(--mt-font-mono);
+  font-size: var(--mt-tag-s-size);
+  letter-spacing: var(--mt-tracking-tag);
+  text-decoration: none;
+  transition: border-color 250ms var(--mt-ease), background 250ms var(--mt-ease), color 250ms var(--mt-ease);
+}
+.mt-blog__tag--active {
+  border-color: var(--mt-ink);
+  background: var(--mt-ink);
+  color: var(--mt-cloud);
+}
+@media (hover: hover) {
+  .mt-blog__tag:not(.mt-blog__tag--active):hover {
+    border-color: var(--mt-ink);
+  }
+}
+
 .mt-blog__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -154,6 +190,12 @@ html.mt-motion .mt-blog__hero video {
 
   .mt-blog__title {
     padding: 6.25rem 1.25rem 1.5625rem;
+  }
+
+  .mt-blog__tags {
+    flex-wrap: wrap;
+    padding: 0 1.25rem 1.875rem;
+    overflow: visible;
   }
 
   .mt-blog__grid {
