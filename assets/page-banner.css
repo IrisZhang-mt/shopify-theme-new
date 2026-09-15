@@ -186,7 +186,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 0;
     padding: 0;
-    z-index: 10;
+    z-index: 3;
   }
   .mt-banner__stat {
     border-top: 1px solid rgba(29, 29, 29, 0.15);
