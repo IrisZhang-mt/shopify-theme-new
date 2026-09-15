@@ -49,34 +49,31 @@ html.mt-motion .mt-blog__hero video {
 }
 
 .mt-blog__tags {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.625rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.225rem;
   max-width: var(--mt-container);
   margin-inline: auto;
   padding: 0 0.9375rem 1.875rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.mt-blog__tags::-webkit-scrollbar {
-  display: none;
 }
 .mt-blog__tag {
-  flex: 0 0 auto;
-  padding: 0.59375rem 0.75rem;
-  border: 1px solid #e7e3da;
-  border-radius: 999px;
-  color: var(--mt-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.625rem 0.5rem;
+  border: 1px solid #dbdfe7;
+  color: #1d1d1d;
   font-family: var(--mt-font-mono);
-  font-size: var(--mt-tag-s-size);
+  font-size: 0.75rem;
   letter-spacing: var(--mt-tracking-tag);
   text-decoration: none;
   transition: border-color 250ms var(--mt-ease), background 250ms var(--mt-ease), color 250ms var(--mt-ease);
 }
 .mt-blog__tag--active {
-  border-color: var(--mt-ink);
-  background: var(--mt-ink);
-  color: var(--mt-cloud);
+  border-color: transparent;
+  background: #f37434;
+  color: #fafbf9;
 }
 @media (hover: hover) {
   .mt-blog__tag:not(.mt-blog__tag--active):hover {
@@ -255,9 +252,16 @@ html.mt-motion .mt-blog__hero video {
   }
 
   .mt-blog__tags {
-    flex-wrap: wrap;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.3125rem;
     padding: 0 1.25rem 1.875rem;
-    overflow: visible;
+  }
+  .mt-blog__tag {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.875rem 0.75rem;
+    font-size: 0.875rem;
   }
 
   .mt-blog__grid {
