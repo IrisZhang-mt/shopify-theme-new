@@ -109,17 +109,27 @@ html.mt-motion .mt-blog__hero video {
   color: var(--mt-ink);
 }
 .mt-blog__pager-link {
-  text-decoration: none;
-  color: var(--mt-ink);
-  transition: opacity var(--mt-dur) var(--mt-ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mt-blog__pager-link img {
+  width: 1.125rem;
+  transition: transform var(--mt-dur) var(--mt-ease);
+}
+.mt-blog__pager-link--prev img {
+  transform: scaleX(-1);
 }
 .mt-blog__pager-link--disabled {
-  color: var(--mt-moss);
+  opacity: 0.35;
   pointer-events: none;
 }
 @media (hover: hover) {
-  .mt-blog__pager-link:not(.mt-blog__pager-link--disabled):hover {
-    opacity: 0.55;
+  .mt-blog__pager-link:not(.mt-blog__pager-link--disabled):hover img {
+    transform: translateX(0.1875rem);
+  }
+  .mt-blog__pager-link--prev:not(.mt-blog__pager-link--disabled):hover img {
+    transform: scaleX(-1) translateX(0.1875rem);
   }
 }
 .mt-blog__pager-link:focus-visible {
@@ -137,7 +147,9 @@ html.mt-motion .mt-blog__hero video {
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
 .mt-blog__pager-num--active {
-  color: var(--mt-ink);
+  color: #f37434;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 .mt-blog__pager-num--dots {
   pointer-events: none;
@@ -276,6 +288,13 @@ html.mt-motion .mt-blog__hero video {
   }
   .mt-blog__pager {
     padding: 0 1.25rem 12.5rem;
+  }
+  .mt-blog__pager-nums {
+    gap: 2.375rem;
+  }
+  .mt-blog__pager-num {
+    font-size: 1.5rem;
+    line-height: 1.2;
   }
   .mt-blog__card {
     margin-top: 6.25rem;
