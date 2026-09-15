@@ -50,6 +50,7 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
+        {% if customer %}'user_id': "{{ customer.id }}",{% endif %}
         'login_status': {{ login_status | json }},
         'content_group': {{ content_group | json }}
       });
@@ -171,6 +172,10 @@
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N5N9PJ72"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <a class="mt-skip" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
     <div class="mt-scroll">
       <div class="mt-scroll__inner">
