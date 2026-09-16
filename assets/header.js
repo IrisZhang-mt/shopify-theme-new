@@ -253,6 +253,18 @@ if (!window.mtHeaderInit) {
     });
   });
 
+  document.addEventListener('click', (event) => {
+    const nav = event.target.closest('[data-nav1]');
+    if (!nav) return;
+    const params = { first_navigation: nav.dataset.nav1 };
+    if (nav.dataset.side) params.side_navigation = nav.dataset.side;
+    if (nav.dataset.nav2) params.second_navigation = nav.dataset.nav2;
+    if (nav.dataset.nav3) params.third_navigation = nav.dataset.nav3;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'top_navigation', event_parameters: params });
+  });
+
   document.addEventListener('keydown', (event) => {
     const { header, panel } = searchParts();
     const searchIsOpen = header?.classList.contains('mt-header--search');
