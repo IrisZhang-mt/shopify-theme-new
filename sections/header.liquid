@@ -9,12 +9,12 @@
       {%- for link in menu.links -%}
         {%- if link.links.size > 0 -%}
           <details class="mt-header__mega">
-            <summary class="mt-header__link" {% if link.url != blank and link.url != '#' %}data-url="{{ link.url }}"{% endif %}>{{ link.title }}</summary>
+            <summary class="mt-header__link" data-nav1="{{ link.title | escape }}" {% if link.url != blank and link.url != '#' %}data-url="{{ link.url }}"{% endif %}>{{ link.title }}</summary>
             <div class="mt-header__panel">
               <div class="mt-header__featured">
                 {%- for child in link.links -%}
                   {%- if child.links.size == 0 -%}
-                    <a href="{{ child.url }}">{{ child.title }}</a>
+                    <a href="{{ child.url }}" data-nav1="{{ link.title | escape }}" data-side="{{ child.title | escape }}">{{ child.title }}</a>
                   {%- endif -%}
                 {%- endfor -%}
               </div>
@@ -22,10 +22,10 @@
                 {%- for child in link.links -%}
                   {%- if child.links.size > 0 -%}
                     <div class="mt-header__group">
-                      <a class="mt-header__group-title" href="{{ child.url }}">{{ child.title }}</a>
+                      <a class="mt-header__group-title" href="{{ child.url }}" data-nav1="{{ link.title | escape }}" data-nav2="{{ child.title | escape }}">{{ child.title }}</a>
                       <div class="mt-header__group-links">
                         {%- for grandchild in child.links -%}
-                          <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                          <a href="{{ grandchild.url }}" data-nav1="{{ link.title | escape }}" data-nav2="{{ child.title | escape }}" data-nav3="{{ grandchild.title | escape }}">{{ grandchild.title }}</a>
                         {%- endfor -%}
                       </div>
                     </div>
@@ -35,7 +35,7 @@
             </div>
           </details>
         {%- else -%}
-          <a class="mt-header__link" href="{{ link.url }}">{{ link.title }}</a>
+          <a class="mt-header__link" href="{{ link.url }}" data-nav1="{{ link.title | escape }}">{{ link.title }}</a>
         {%- endif -%}
       {%- endfor -%}
     </nav>
