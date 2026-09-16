@@ -61,6 +61,7 @@ if (!window.mtHeaderInit) {
   const searchReset = (panel) => {
     clearTimeout(searchQueryTimer);
     searchSeq += 1;
+    lastViewedItemIds = '';
     const input = panel.querySelector('[data-search-input]');
     if (!input) return;
     input.value = '';
