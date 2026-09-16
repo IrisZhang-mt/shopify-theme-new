@@ -49,25 +49,25 @@
     <div class="mt-header__utils">
       {%- if section.settings.signup_text != blank -%}
         {%- if section.settings.signup_url != blank -%}
-          <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}">{{ section.settings.signup_text }}</a>
+          <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}</a>
         {%- else -%}
-          <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}">{{ section.settings.signup_text }}</button>
+          <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}</button>
         {%- endif -%}
       {%- endif -%}
-      <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
+      <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open data-func="Search" aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
         <span class="mt-header__search-text">{{ 'header.search' | t }}</span>
         <svg class="mt-header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="m11.2 11.2 3.8 3.8" stroke="currentColor"/></svg>
       </a>
-      <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open>({{ cart.item_count }})</a>
+      <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open data-func="Cart">({{ cart.item_count }})</a>
 
       <details class="mt-header__drawer">
-        <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}"><span class="mt-burger"><span></span></span></summary>
+        <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}" data-func="Menu"><span class="mt-burger"><span></span></span></summary>
         <div class="mt-drawer">
           <div class="mt-drawer__links">
             {%- for link in menu.links -%}
               {%- if link.links.size > 0 -%}
                 <details class="mt-drawer__item">
-                  <summary>
+                  <summary data-nav1="{{ link.title | escape }}">
                     <span>{{ link.title }}</span>
                     <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
                   </summary>
@@ -78,7 +78,7 @@
                       {%- endif -%}
                       {%- for child in link.links -%}
                         {%- if child.links.size == 0 -%}
-                          <a href="{{ child.url }}">{{ child.title }}</a>
+                          <a href="{{ child.url }}" data-nav1="{{ link.title | escape }}" data-side="{{ child.title | escape }}">{{ child.title }}</a>
                         {%- endif -%}
                       {%- endfor -%}
                     </div>
@@ -86,13 +86,13 @@
                       {%- for child in link.links -%}
                         {%- if child.links.size > 0 -%}
                           <details class="mt-drawer__acc">
-                            <summary>
+                            <summary data-nav1="{{ link.title | escape }}" data-nav2="{{ child.title | escape }}">
                               <span>{{ child.title }}</span>
                               <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
                             </summary>
                             <div class="mt-drawer__acc-links">
                               {%- for grandchild in child.links -%}
-                                <a href="{{ grandchild.url }}">{{ grandchild.title }}</a>
+                                <a href="{{ grandchild.url }}" data-nav1="{{ link.title | escape }}" data-nav2="{{ child.title | escape }}" data-nav3="{{ grandchild.title | escape }}">{{ grandchild.title }}</a>
                               {%- endfor -%}
                             </div>
                           </details>
@@ -102,7 +102,7 @@
                   </div>
                 </details>
               {%- else -%}
-                <a class="mt-drawer__link" href="{{ link.url }}">{{ link.title }}</a>
+                <a class="mt-drawer__link" href="{{ link.url }}" data-nav1="{{ link.title | escape }}">{{ link.title }}</a>
               {%- endif -%}
             {%- endfor -%}
           </div>

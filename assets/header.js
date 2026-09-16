@@ -265,6 +265,18 @@ if (!window.mtHeaderInit) {
     window.dataLayer.push({ event: 'ga4Event', event_name: 'top_navigation', event_parameters: params });
   });
 
+  document.addEventListener('click', (event) => {
+    const func = event.target.closest('[data-func]');
+    if (!func) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'click_function',
+      event_parameters: { module_name: 'Top Function', button_name: func.dataset.func },
+    });
+  });
+
   document.addEventListener('keydown', (event) => {
     const { header, panel } = searchParts();
     const searchIsOpen = header?.classList.contains('mt-header--search');
