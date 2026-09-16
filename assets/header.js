@@ -232,6 +232,13 @@ if (!window.mtHeaderInit) {
         searchSize(input);
         searchQuery(input);
       }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'search',
+        event_parameters: { search_term: chip.dataset.searchChip, search_method: 'Suggest' },
+      });
       return;
     }
 
@@ -274,6 +281,20 @@ if (!window.mtHeaderInit) {
       event: 'ga4Event',
       event_name: 'click_function',
       event_parameters: { module_name: 'Top Function', button_name: func.dataset.func },
+    });
+  });
+
+  document.addEventListener('submit', (event) => {
+    const form = event.target.closest?.('.mt-header__srch-form');
+    if (!form) return;
+    const term = form.querySelector('[data-search-input]')?.value.trim();
+    if (!term) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'search',
+      event_parameters: { search_term: term, search_method: 'Manual' },
     });
   });
 
