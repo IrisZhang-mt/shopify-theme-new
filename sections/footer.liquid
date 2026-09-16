@@ -53,6 +53,15 @@
             <p class="mt-footer__form-msg" role="status">{{ form.errors.messages.email }}</p>
           {%- elsif form.posted_successfully? -%}
             <p class="mt-footer__form-msg" role="status">{{ 'footer.success' | t }}</p>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({ event_parameters: null });
+              window.dataLayer.push({
+                event: 'ga4Event',
+                event_name: 'subscribe',
+                event_parameters: { module_name: 'Bottom Function' }
+              });
+            </script>
           {%- endif -%}
         {%- endform -%}
       </div>
