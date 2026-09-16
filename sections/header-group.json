@@ -13,15 +13,26 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "settings": {}
+      "settings": {
+        "scheme": "accent",
+        "rotate": 5
+      }
     },
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "menu": "inscoder-main-menu",
+        "signup_text": "Sign up for 10% Off",
+        "signup_url": "",
+        "popular_searches": "Leggings, T-shirts, Outerwear, Dresses"
+      }
     },
     "cart-drawer": {
       "type": "cart-drawer",
-      "settings": {}
+      "settings": {
+        "miles_text": "Earn moody miles points on this order. Gift cards and promotional codes applied at checkout.",
+        "recs_heading": "We think you'll love"
+      }
     }
   },
   "order": [
