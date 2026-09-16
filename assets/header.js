@@ -306,6 +306,35 @@ if (!window.mtHeaderInit) {
   });
 
   document.addEventListener('click', (event) => {
+    const item = event.target.closest('.mt-header__srch-item');
+    if (!item) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_item',
+      event_parameters: {
+        item_list_name: 'Search Box',
+        item_list_id: 'search_box',
+        currency: item.closest('[data-search]')?.dataset.searchCurrency,
+        button_name: 'Search Result',
+        items: [
+          {
+            item_id: item.dataset.itemId,
+            item_name: item.dataset.itemName,
+            item_list_id: 'search_box',
+            item_list_name: 'Search Box',
+            item_brand: item.dataset.itemBrand,
+            index: +item.dataset.itemIndex,
+            price: +item.dataset.itemPrice,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+  });
+
+  document.addEventListener('click', (event) => {
     const func = event.target.closest('[data-func]');
     if (!func) return;
     window.dataLayer = window.dataLayer || [];

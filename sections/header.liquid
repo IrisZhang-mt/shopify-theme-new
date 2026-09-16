@@ -111,7 +111,7 @@
     </div>
   </div>
 
-  <div class="mt-header__srch" id="HeaderSearch" data-search data-search-url="{{ routes.search_url }}" data-search-from="{{ 'products.from' | t }}" hidden>
+  <div class="mt-header__srch" id="HeaderSearch" data-search data-search-url="{{ routes.search_url }}" data-search-from="{{ 'products.from' | t }}" data-search-currency="{{ cart.currency.iso_code }}" hidden>
     <form class="mt-header__srch-form" action="{{ routes.search_url }}" method="get" role="search">
       <input
         class="mt-header__srch-input"
