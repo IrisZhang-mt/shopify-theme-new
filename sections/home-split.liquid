@@ -1,4 +1,5 @@
 {{ 'home-split.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'home-split.js' | asset_url }}" type="module"></script>
 
 <section class="mt-split">
   {%- for block in section.blocks -%}
@@ -6,11 +7,15 @@
     {%- if block.settings.url != blank -%}
       {%- assign tile_tag = 'a' -%}
     {%- endif -%}
+    {%- assign banner_name = block.settings.heading | escape -%}
     <{{ tile_tag }}
       class="mt-split__tile"
       {% if tile_tag == 'a' %}href="{{ block.settings.url }}"{% endif %}
       data-reveal
       style="--mt-reveal-i: {{ forloop.index0 }}"
+      data-banner-slot="{{ forloop.index }}"
+      data-banner-name="{{ banner_name }}"
+      data-button-name="{{ banner_name }}"
       {{ block.shopify_attributes }}
     >
       <div class="mt-split__media">
