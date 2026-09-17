@@ -57,8 +57,8 @@ if (!window.mtCartInit) {
     root.querySelector('[data-cart-recs-title]')?.removeAttribute('hidden');
     bindProgress(wrap);
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    const cards = [...wrap.querySelectorAll('.mt-cart__cards .mt-card[data-item-id]')];
-    if (cards.length) {
+    const recCards = [...wrap.querySelectorAll('.mt-cart__cards .mt-card[data-item-id]')];
+    if (recCards.length) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
       window.dataLayer.push({
@@ -66,10 +66,10 @@ if (!window.mtCartInit) {
         event_name: 'view_item_list',
         event_parameters: {
           module_name: 'Side Cart',
-          item_list_id: cards[0].dataset.itemListId,
-          item_list_name: cards[0].dataset.itemListName,
+          item_list_id: recCards[0].dataset.itemListId,
+          item_list_name: recCards[0].dataset.itemListName,
           currency: root.dataset.currency,
-          items: cards.map((card) => ({
+          items: recCards.map((card) => ({
             item_id: card.dataset.itemId,
             item_name: card.dataset.itemName,
             discount: +card.dataset.itemDiscount || 0,
