@@ -14,7 +14,7 @@
       <div class="mt-plp__tiles">
         {%- for entry in linked -%}
           {%- assign tile_image = entry.image | default: entry.featured_image -%}
-          <a class="mt-plp__tile" href="{{ entry.url }}" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}">
+          <a class="mt-plp__tile" href="{{ entry.url }}" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" data-category-name="{{ entry.title | escape }}">
             {%- if tile_image != blank -%}
               {{ tile_image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: entry.title | escape }}
             {%- endif -%}
@@ -25,7 +25,7 @@
     {%- elsif section.blocks.size > 0 -%}
       <div class="mt-plp__tiles">
         {%- for block in section.blocks -%}
-          <a class="mt-plp__tile"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <a class="mt-plp__tile"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" data-category-name="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
             {%- if block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: block.settings.label | escape }}
             {%- endif -%}
