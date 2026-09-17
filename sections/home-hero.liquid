@@ -2,9 +2,10 @@
 <script src="{{ 'home-hero.js' | asset_url }}" type="module"></script>
 
 {%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
+{%- assign hero_banner_name = section.settings.heading | strip_newlines | escape -%}
 
 <section class="mt-hero" data-hero>
-  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide>
+  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
     {%- for block in section.blocks -%}
       {%- if block.type == 'panel' -%}
         <div class="mt-hero__panel" {{ block.shopify_attributes }}>
@@ -34,7 +35,7 @@
                 <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
               {%- endif -%}
               {%- if section.settings.cta_label != blank -%}
-                <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}"><span>{{ section.settings.cta_label }}</span></a>
+                <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
               {%- endif -%}
             </div>
           {%- endif -%}
