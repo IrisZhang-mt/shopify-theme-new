@@ -1,6 +1,67 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}" translate="no">
   <head>
+    {%- liquid
+      case request.page_type
+        when 'index'
+          assign content_group = 'Home Page'
+        when 'collection'
+          assign content_group = 'Product List Page'
+        when 'product'
+          assign content_group = 'Product Detail Page'
+        when 'cart'
+          assign content_group = 'Cart Page'
+        when 'search'
+          assign content_group = 'Search Result Page'
+        when 'blog'
+          assign content_group = 'Blog List Page'
+        when 'article'
+          assign content_group = 'Blog Detail Page'
+        when 'page'
+          case template.suffix
+            when 'about-us'
+              assign content_group = 'About Us Page'
+            when 'contact-us'
+              assign content_group = 'Contact Us Page'
+            when 'faq'
+              assign content_group = 'FAQs Page'
+            when 'reviews'
+              assign content_group = 'Reviews Page'
+            when 'blog'
+              assign content_group = 'Blog List Page'
+            else
+              assign content_group = 'Support & Info Page'
+          endcase
+        else
+          if request.page_type contains 'customers'
+            assign content_group = 'Account Page'
+          else
+            assign content_group = 'Support & Info Page'
+          endif
+      endcase
+
+      if customer
+        assign login_status = 'log in'
+      else
+        assign login_status = 'log out'
+      endif
+    -%}
+    <!-- Google Tag Manager -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        {% if customer %}'user_id': "{{ customer.id }}",{% endif %}
+        'login_status': {{ login_status | json }},
+        'content_group': {{ content_group | json }}
+      });
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-N5N9PJ72');
+    </script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
@@ -111,6 +172,10 @@
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N5N9PJ72"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <a class="mt-skip" href="#MainContent">{{ 'general.skip_to_content' | t }}</a>
     <div class="mt-scroll">
       <div class="mt-scroll__inner">

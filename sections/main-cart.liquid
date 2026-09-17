@@ -1,7 +1,7 @@
 {{ 'cart.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cart.js' | asset_url }}" type="module"></script>
 
-<section class="mt-cart-page" data-cart-root data-url="{{ routes.cart_url }}?section_id={{ section.id }}">
+<section class="mt-cart-page" data-cart-root data-url="{{ routes.cart_url }}?section_id={{ section.id }}" data-currency="{{ cart.currency.iso_code }}">
   <div data-cart-content>
     <h1 class="mt-cart-page__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h1>
     {%- if cart.item_count == 0 -%}
@@ -9,9 +9,27 @@
         <p>{{ 'cart.empty' | t }}</p>
       </div>
     {%- else -%}
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'view_cart',
+          event_parameters: {
+            module_name: 'Cart Page',
+            currency: {{ cart.currency.iso_code | json }},
+            value: {{ cart.total_price | divided_by: 100.0 }},
+            item_list_id: 'cart_page',
+            item_list_name: 'Cart Page',
+            items: [
+              {%- render 'cart-items-ga4', item_list_id: 'cart_page', item_list_name: 'Cart Page' -%}
+            ]
+          }
+        });
+      </script>
       <div class="mt-cart__lines">
         {%- for item in cart.items -%}
-          {% render 'cart-line', item: item, line: forloop.index %}
+          {% render 'cart-line', item: item, line: forloop.index, item_list_id: 'cart_page', item_list_name: 'Cart Page', module_name: 'Cart Page' %}
         {%- endfor -%}
       </div>
       <div class="mt-cart-page__bar">

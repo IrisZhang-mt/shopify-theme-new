@@ -78,6 +78,23 @@ if (!window.mtFooterInit) {
     select?.form?.submit();
   });
 
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-club-entry]')) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'club_entry' });
+  });
+
+  document.addEventListener('click', (event) => {
+    const nav = event.target.closest('[data-fnav1]');
+    if (!nav) return;
+    const params = { first_navigation: nav.dataset.fnav1 };
+    if (nav.dataset.fnav2) params.second_navigation = nav.dataset.fnav2;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'bottom_navigation', event_parameters: params });
+  });
+
   const msg = document.querySelector('.mt-footer__form-msg');
   msg?.closest('.mt-footer__signup')?.scrollIntoView({ block: 'center', behavior: 'instant' });
 }

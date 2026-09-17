@@ -1,4 +1,17 @@
-<div class="mt-cart__line">
+{%- capture ga4_variant -%}{% render 'item-variant-ga4', item: item %}{%- endcapture -%}
+{%- assign ga4_variant = ga4_variant | strip -%}
+<div
+  class="mt-cart__line"
+  data-item-list-id="{{ item_list_id }}"
+  data-item-list-name="{{ item_list_name | escape }}"
+  data-module-name="{{ module_name | escape }}"
+  data-item-id="{{ item.sku }}"
+  data-item-name="{{ item.product.title | escape }}"
+  data-item-brand="{{ item.product.vendor | escape }}"
+  data-item-price="{{ item.final_price | divided_by: 100.0 }}"
+  {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
+  data-item-index="{{ line }}"
+>
   <a class="mt-cart__media" href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
     {%- if item.image -%}
       {{ item.image | image_url: width: 400 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 140px, 100px', alt: item.product.title | escape }}

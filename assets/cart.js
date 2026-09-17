@@ -102,6 +102,15 @@ if (!window.mtCartInit) {
     });
     initRecs(cartEl);
     cartEl.querySelector('[data-cart-close]:not(.mt-cart__backdrop)')?.focus({ preventScroll: true });
+    const viewCartData = cartEl.querySelector('[data-cart-view-cart]');
+    if (viewCartData) {
+      try {
+        const params = JSON.parse(viewCartData.textContent);
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({ event: 'ga4Event', event_name: 'view_cart', event_parameters: params });
+      } catch {}
+    }
   };
 
   const close = () => {
@@ -152,6 +161,38 @@ if (!window.mtCartInit) {
       })
     );
 
+  const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
+    if (!lineEl || deltaQty <= 0) return;
+    const price = +lineEl.dataset.itemPrice || 0;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: eventName,
+      event_parameters: {
+        module_name: lineEl.dataset.moduleName,
+        button_name: buttonName,
+        currency: lineEl.closest('[data-cart-root]')?.dataset.currency,
+        value: +(price * deltaQty).toFixed(2),
+        item_list_id: lineEl.dataset.itemListId,
+        item_list_name: lineEl.dataset.itemListName,
+        items: [
+          {
+            item_list_id: lineEl.dataset.itemListId,
+            item_list_name: lineEl.dataset.itemListName,
+            item_id: lineEl.dataset.itemId,
+            item_name: lineEl.dataset.itemName,
+            index: +lineEl.dataset.itemIndex,
+            ...(lineEl.dataset.itemVariant ? { item_variant: lineEl.dataset.itemVariant } : {}),
+            item_brand: lineEl.dataset.itemBrand,
+            price,
+            quantity: deltaQty,
+          },
+        ],
+      },
+    });
+  };
+
   document.addEventListener('click', (event) => {
     const opener = event.target.closest?.('[data-cart-open]');
     if (opener && drawer()) {
@@ -166,17 +207,22 @@ if (!window.mtCartInit) {
     const minus = event.target.closest?.('[data-cart-minus]');
     if (minus) {
       const qty = Number(minus.parentElement.querySelector('[data-cart-qty]').textContent);
+      pushCartLineEvent('remove_from_cart', 'minus', minus.closest('.mt-cart__line'), 1);
       change(Number(minus.dataset.line), Math.max(0, qty - 1));
       return;
     }
     const plus = event.target.closest?.('[data-cart-plus]');
     if (plus) {
       const qty = Number(plus.parentElement.querySelector('[data-cart-qty]').textContent);
+      pushCartLineEvent('add_to_cart', 'plus', plus.closest('.mt-cart__line'), 1);
       change(Number(plus.dataset.line), qty + 1);
       return;
     }
     const remove = event.target.closest?.('[data-cart-remove]');
     if (remove) {
+      const removeLine = remove.closest('.mt-cart__line');
+      const qty = Number(removeLine?.querySelector('[data-cart-qty]')?.textContent) || 0;
+      pushCartLineEvent('remove_from_cart', 'remove', removeLine, qty);
       change(Number(remove.dataset.line), 0);
       return;
     }

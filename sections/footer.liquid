@@ -13,7 +13,7 @@
     {%- if section.settings.club_url != blank -%}
       {%- assign club_tag = 'a' -%}
     {%- endif -%}
-    <{{ club_tag }} class="mt-footer__club" {% if club_tag == 'a' %}href="{{ section.settings.club_url }}"{% endif %}>
+    <{{ club_tag }} class="mt-footer__club" {% if club_tag == 'a' %}href="{{ section.settings.club_url }}" data-club-entry{% endif %}>
       <h2 class="mt-footer__heading">{{ section.settings.heading }}</h2>
       <img class="mt-footer__mark" src="{{ 'logo-mark.svg' | asset_url }}" width="87" height="87" alt="">
     </{{ club_tag }}>
@@ -53,6 +53,15 @@
             <p class="mt-footer__form-msg" role="status">{{ form.errors.messages.email }}</p>
           {%- elsif form.posted_successfully? -%}
             <p class="mt-footer__form-msg" role="status">{{ 'footer.success' | t }}</p>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({ event_parameters: null });
+              window.dataLayer.push({
+                event: 'ga4Event',
+                event_name: 'subscribe',
+                event_parameters: { module_name: 'Bottom Function' }
+              });
+            </script>
           {%- endif -%}
         {%- endform -%}
       </div>
@@ -76,10 +85,10 @@
                     <div class="mt-footer__col-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}">{{ link.title }}</a>
+                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}">{{ group.title }}</a>
+                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
                       {%- endif -%}
                     </div>
                   </div>
@@ -90,7 +99,7 @@
                 <p class="mt-footer__col-title">{{ menu.title }}</p>
                 <div class="mt-footer__col-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}">{{ link.title }}</a>
+                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                   {%- endfor -%}
                 </div>
               </div>
@@ -112,17 +121,17 @@
               <div class="mt-footer__group">
                 {%- for group in menu.links -%}
                   <details class="mt-footer__acc">
-                    <summary>
+                    <summary data-fnav1="{{ group.title | escape }}">
                       <span>{{ group.title }}</span>
                       <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
                     </summary>
                     <div class="mt-footer__acc-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}">{{ link.title }}</a>
+                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}">{{ group.title }}</a>
+                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
                       {%- endif -%}
                     </div>
                   </details>
@@ -130,13 +139,13 @@
               </div>
             {%- elsif menu.links.size > 0 -%}
               <details class="mt-footer__acc">
-                <summary>
+                <summary data-fnav1="{{ menu.title | escape }}">
                   <span>{{ menu.title }}</span>
                   <span class="mt-icon"><img class="mt-icon__plus" src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt=""><img class="mt-icon__x" src="{{ 'x.svg' | asset_url }}" width="9" height="9" alt=""></span>
                 </summary>
                 <div class="mt-footer__acc-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}">{{ link.title }}</a>
+                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                   {%- endfor -%}
                 </div>
               </details>

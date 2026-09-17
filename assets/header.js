@@ -51,6 +51,7 @@ if (!window.mtHeaderInit) {
   let searchCloseTimer = 0;
   let searchQueryTimer = 0;
   let searchSeq = 0;
+  let lastViewedItemIds = '';
 
   const searchParts = () => {
     const header = document.querySelector('.mt-header');
@@ -60,6 +61,7 @@ if (!window.mtHeaderInit) {
   const searchReset = (panel) => {
     clearTimeout(searchQueryTimer);
     searchSeq += 1;
+    lastViewedItemIds = '';
     const input = panel.querySelector('[data-search-input]');
     if (!input) return;
     input.value = '';
@@ -127,10 +129,15 @@ if (!window.mtHeaderInit) {
     });
     suggest.hidden = queries.length === 0;
     results.textContent = '';
-    products.forEach((item) => {
+    products.forEach((item, index) => {
       const card = document.createElement('a');
       card.className = 'mt-header__srch-item';
       card.href = item.url;
+      card.dataset.itemId = item.id;
+      card.dataset.itemName = item.title;
+      card.dataset.itemBrand = item.vendor;
+      card.dataset.itemPrice = item.price;
+      card.dataset.itemIndex = index + 1;
       if (item.featured_image?.url) {
         const img = document.createElement('img');
         img.src = searchImage(item.featured_image.url);
@@ -152,6 +159,32 @@ if (!window.mtHeaderInit) {
     });
     results.hidden = products.length === 0;
     empty.hidden = queries.length > 0 || products.length > 0;
+
+    const viewedIds = products.map((item) => item.id).join(',');
+    if (products.length > 0 && viewedIds !== lastViewedItemIds) {
+      lastViewedItemIds = viewedIds;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'view_item_list',
+        event_parameters: {
+          item_list_name: 'Search Box',
+          item_list_id: 'search_box',
+          currency: panel.dataset.searchCurrency,
+          items: products.map((item, index) => ({
+            item_id: String(item.id),
+            item_name: item.title,
+            item_list_id: 'search_box',
+            item_list_name: 'Search Box',
+            item_brand: item.vendor,
+            index: index + 1,
+            price: +item.price,
+            quantity: 1,
+          })),
+        },
+      });
+    }
   };
 
   const searchQuery = async (input) => {
@@ -232,6 +265,13 @@ if (!window.mtHeaderInit) {
         searchSize(input);
         searchQuery(input);
       }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'search',
+        event_parameters: { search_term: chip.dataset.searchChip, search_method: 'Suggest' },
+      });
       return;
     }
 
@@ -250,6 +290,73 @@ if (!window.mtHeaderInit) {
 
     document.querySelectorAll('.mt-header details[open]').forEach((item) => {
       if (item !== clickedDetails && !item.contains(event.target)) closeDetails(item);
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    const nav = event.target.closest('[data-nav1]');
+    if (!nav) return;
+    const params = { first_navigation: nav.dataset.nav1 };
+    if (nav.dataset.side) params.side_navigation = nav.dataset.side;
+    if (nav.dataset.nav2) params.second_navigation = nav.dataset.nav2;
+    if (nav.dataset.nav3) params.third_navigation = nav.dataset.nav3;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'top_navigation', event_parameters: params });
+  });
+
+  document.addEventListener('click', (event) => {
+    const item = event.target.closest('.mt-header__srch-item');
+    if (!item) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_item',
+      event_parameters: {
+        item_list_name: 'Search Box',
+        item_list_id: 'search_box',
+        currency: item.closest('[data-search]')?.dataset.searchCurrency,
+        button_name: 'Search Result',
+        items: [
+          {
+            item_id: item.dataset.itemId,
+            item_name: item.dataset.itemName,
+            item_list_id: 'search_box',
+            item_list_name: 'Search Box',
+            item_brand: item.dataset.itemBrand,
+            index: +item.dataset.itemIndex,
+            price: +item.dataset.itemPrice,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    const func = event.target.closest('[data-func]');
+    if (!func) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'click_function',
+      event_parameters: { module_name: 'Top Function', button_name: func.dataset.func },
+    });
+  });
+
+  document.addEventListener('submit', (event) => {
+    const form = event.target.closest?.('.mt-header__srch-form');
+    if (!form) return;
+    const term = form.querySelector('[data-search-input]')?.value.trim();
+    if (!term) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'search',
+      event_parameters: { search_term: term, search_method: 'Manual' },
     });
   });
 

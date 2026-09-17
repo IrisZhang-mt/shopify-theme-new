@@ -1,0 +1,22 @@
+{%- comment -%}
+  GA4 ecommerce items[] entries for the current cart (view_cart event).
+  Params: item_list_id, item_list_name
+{%- endcomment -%}
+{%- for item in cart.items -%}
+  {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: item %}{%- endcapture -%}
+  {%- assign ga4_variant = ga4_variant | strip -%}
+  {
+    "item_list_id": {{ item_list_id | json }},
+    "item_list_name": {{ item_list_name | json }},
+    "item_id": {{ item.sku | json }},
+    "item_name": {{ item.product.title | json }},
+    "index": {{ forloop.index }},
+    {%- if ga4_variant != blank -%}
+    "item_variant": {{ ga4_variant | json }},
+    {%- endif -%}
+    "item_brand": {{ item.product.vendor | json }},
+    "discount": {{ item.total_discount | divided_by: 100.0 }},
+    "price": {{ item.final_price | divided_by: 100.0 }},
+    "quantity": {{ item.quantity }}
+  }{%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}
