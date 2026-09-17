@@ -232,6 +232,7 @@ if (!window.mtPlpInit) {
   syncAll();
   applySwatches(document);
   queueAlign();
+  document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
   window.addEventListener('resize', queueAlign);
   document.addEventListener('transitionend', (event) => {
     if (event.propertyName === 'width' && event.target.matches('[data-plp-aside]')) queueAlign();
@@ -243,6 +244,7 @@ if (!window.mtPlpInit) {
     observeMore();
     syncAll();
     applySwatches(document);
+    document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
   });
 
   document.addEventListener('click', (event) => {
