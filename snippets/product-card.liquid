@@ -12,6 +12,7 @@
     {%- if item_list_id != blank %}
       data-item-list-id="{{ item_list_id }}"
       data-item-list-name="{{ item_list_name | escape }}"
+      {% if item_list_label != blank %}data-item-list-label="{{ item_list_label | escape }}"{% endif %}
       data-item-id="{{ ga4_pick.sku }}"
       data-item-name="{{ product.title | escape }}"
       data-item-brand="{{ product.vendor | escape }}"
