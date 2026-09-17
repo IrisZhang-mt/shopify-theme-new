@@ -1,7 +1,7 @@
 {{ 'cart.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cart.js' | asset_url }}" type="module"></script>
 
-<div class="mt-cart" data-cart data-cart-root data-url="{{ routes.root_url }}?section_id=cart-drawer" hidden>
+<div class="mt-cart" data-cart data-cart-root data-url="{{ routes.root_url }}?section_id=cart-drawer" data-currency="{{ cart.currency.iso_code }}" hidden>
   <div class="mt-cart__backdrop" data-cart-close></div>
   <aside class="mt-cart__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
     <div class="mt-cart__inner" data-cart-content>
