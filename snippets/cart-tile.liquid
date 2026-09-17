@@ -13,7 +13,6 @@
     data-item-id="{{ pick.sku }}"
     data-item-name="{{ item.title | escape }}"
     data-item-brand="{{ item.vendor | escape }}"
-    data-item-category2="{{ item.type | escape }}"
     {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
     data-item-price="{{ item.price_min | divided_by: 100.0 }}"
     data-item-discount="{% if item.compare_at_price_min > item.price_min %}{{ item.compare_at_price_min | minus: item.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"

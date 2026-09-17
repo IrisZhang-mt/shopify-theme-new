@@ -76,7 +76,6 @@ if (!window.mtCartInit) {
             index: +card.dataset.itemIndex,
             item_list_id: card.dataset.itemListId,
             item_list_name: card.dataset.itemListName,
-            ...(card.dataset.itemCategory2 ? { item_category2: card.dataset.itemCategory2 } : {}),
             ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
             item_brand: card.dataset.itemBrand,
             price: +card.dataset.itemPrice,
