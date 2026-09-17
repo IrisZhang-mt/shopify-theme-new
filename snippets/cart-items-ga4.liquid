@@ -3,25 +3,8 @@
   Params: item_list_id, item_list_name
 {%- endcomment -%}
 {%- for item in cart.items -%}
-  {%- assign ga4_color = blank -%}
-  {%- assign ga4_size = blank -%}
-  {%- for option in item.options_with_values -%}
-    {%- case option.name -%}
-      {%- when 'Color' -%}
-        {%- assign ga4_color = option.value -%}
-      {%- when 'Size' -%}
-        {%- assign ga4_size = option.value -%}
-    {%- endcase -%}
-  {%- endfor -%}
-  {%- if ga4_color != blank and ga4_size != blank -%}
-    {%- assign ga4_variant = ga4_color | append: '_' | append: ga4_size -%}
-  {%- elsif ga4_color != blank -%}
-    {%- assign ga4_variant = ga4_color -%}
-  {%- elsif ga4_size != blank -%}
-    {%- assign ga4_variant = ga4_size -%}
-  {%- else -%}
-    {%- assign ga4_variant = blank -%}
-  {%- endif -%}
+  {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: item %}{%- endcapture -%}
+  {%- assign ga4_variant = ga4_variant | strip -%}
   {
     "item_list_id": {{ item_list_id | json }},
     "item_list_name": {{ item_list_name | json }},

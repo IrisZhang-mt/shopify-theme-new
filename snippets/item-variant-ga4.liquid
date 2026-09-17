@@ -1,0 +1,21 @@
+{%- comment -%}
+  Outputs "$color_$size" (or whichever of the two is available) for the GA4 item_variant field.
+  Param: item — any object exposing options_with_values (cart line item, product variant).
+{%- endcomment -%}
+{%- assign ga4_item_color = blank -%}
+{%- assign ga4_item_size = blank -%}
+{%- for option in item.options_with_values -%}
+  {%- case option.name -%}
+    {%- when 'Color' -%}
+      {%- assign ga4_item_color = option.value -%}
+    {%- when 'Size' -%}
+      {%- assign ga4_item_size = option.value -%}
+  {%- endcase -%}
+{%- endfor -%}
+{%- if ga4_item_color != blank and ga4_item_size != blank -%}
+  {{- ga4_item_color }}_{{ ga4_item_size -}}
+{%- elsif ga4_item_color != blank -%}
+  {{- ga4_item_color -}}
+{%- elsif ga4_item_size != blank -%}
+  {{- ga4_item_size -}}
+{%- endif -%}
