@@ -2,13 +2,13 @@
   <div data-cart-recs-items>
     <div class="mt-cart__tiles" data-cart-tiles>
       {%- for product in recommendations.products limit: 8 -%}
-        {% render 'cart-tile', item: product, index: forloop.index0, item_list_id: 'cart_recommendations', item_list_name: recommendations_title %}
+        {% render 'cart-tile', item: product, index: forloop.index0, item_list_id: 'cart_recommendations', item_list_name: "We think you'll love" %}
       {%- endfor -%}
     </div>
     <div class="mt-cart__progress"><span data-cart-progress></span></div>
     <div class="mt-cart__cards">
       {%- for product in recommendations.products limit: 8 -%}
-        {% render 'product-card', product: product, quick: true, index: forloop.index0, sizes: '170px', item_list_id: 'cart_recommendations', item_list_name: recommendations_title %}
+        {% render 'product-card', product: product, quick: true, index: forloop.index0, sizes: '170px', item_list_id: 'cart_recommendations', item_list_name: "We think you'll love" %}
       {%- endfor -%}
     </div>
   </div>
