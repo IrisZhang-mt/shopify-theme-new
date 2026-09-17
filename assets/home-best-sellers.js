@@ -82,5 +82,44 @@ if (!window.mtBestSellersInit) {
       if (text) text.textContent = (window.mtStrings?.shopCollection || 'Shop [label]').replace('[label]', button.dataset.bsLabel);
     }
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    trackList(section, row);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (event.target.closest?.('[data-qs-open]')) return;
+    const card = event.target.closest?.('[data-bs-row] .mt-card[data-item-id]');
+    if (!card) return;
+    const section = card.closest('.mt-bs');
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_item',
+      event_parameters: {
+        item_list_id: card.dataset.itemListId,
+        item_list_name: card.dataset.itemListName,
+        currency: section?.dataset.currency,
+        button_name: 'Product Card',
+        items: [
+          {
+            item_id: card.dataset.itemId,
+            item_name: card.dataset.itemName,
+            discount: +card.dataset.itemDiscount || 0,
+            index: +card.dataset.itemIndex,
+            item_list_id: card.dataset.itemListId,
+            item_list_name: card.dataset.itemListName,
+            ...(card.dataset.itemCategory2 ? { item_category2: card.dataset.itemCategory2 } : {}),
+            ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+            item_brand: card.dataset.itemBrand,
+            price: +card.dataset.itemPrice,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+  });
+
+  document.querySelectorAll('.mt-bs [data-bs-row]').forEach((row) => {
+    trackList(row.closest('.mt-bs'), row);
   });
 }
