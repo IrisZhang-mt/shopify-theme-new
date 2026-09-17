@@ -28,11 +28,30 @@ if (!window.mtHeroInit) {
     window.mtFrame(measure, apply);
   };
 
+  const trackBanner = (slide) => {
+    if (!slide || slide.dataset.bannerTracked) return;
+    slide.dataset.bannerTracked = 'true';
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_banner',
+      event_parameters: {
+        module_name: 'Top Banner',
+        banner_slot: slide.dataset.bannerSlot,
+        banner_name: slide.dataset.bannerName,
+      },
+    });
+  };
+
   const initSlides = () => {
     document.querySelectorAll('[data-hero]').forEach((hero) => {
       if (hero.dataset.heroReady) return;
       const slides = [...hero.querySelectorAll('[data-hero-slide]')];
-      if (slides.length < 2) return;
+      if (slides.length < 2) {
+        trackBanner(slides[0]);
+        return;
+      }
       hero.dataset.heroReady = 'true';
       const dots = [...hero.querySelectorAll('[data-hero-dot]')];
       let index = 0;
@@ -51,6 +70,7 @@ if (!window.mtHeroInit) {
           });
         });
         dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+        trackBanner(slides[index]);
       };
       const stop = () => {
         clearInterval(timer);
@@ -92,6 +112,23 @@ if (!window.mtHeroInit) {
       play();
     });
   };
+
+  document.addEventListener('click', (event) => {
+    const banner = event.target.closest?.('.mt-hero__cta, .mt-hero__slide-link');
+    if (!banner) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'click_banner',
+      event_parameters: {
+        module_name: 'Top Banner',
+        banner_slot: banner.dataset.bannerSlot,
+        banner_name: banner.dataset.bannerName,
+        button_name: banner.dataset.buttonName,
+      },
+    });
+  });
 
   document.addEventListener('scroll', queue, { capture: true, passive: true });
   window.addEventListener('resize', queue);
