@@ -28,9 +28,6 @@
     "item_id": {{ item.sku | json }},
     "item_name": {{ item.product.title | json }},
     "index": {{ forloop.index }},
-    {%- if item.product.type != blank -%}
-    "item_category2": {{ item.product.type | json }},
-    {%- endif -%}
     {%- if ga4_variant != blank -%}
     "item_variant": {{ ga4_variant | json }},
     {%- endif -%}
