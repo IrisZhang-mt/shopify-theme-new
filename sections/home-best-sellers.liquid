@@ -2,8 +2,10 @@
 <script src="{{ 'home-best-sellers.js' | asset_url }}" type="module"></script>
 
 {%- assign first_block = section.blocks.first -%}
+{%- assign bs_item_list_id = 'best_sellers' -%}
+{%- assign bs_item_list_name = section.settings.heading | default: 'Best Sellers' -%}
 
-<section class="mt-bs">
+<section class="mt-bs" data-currency="{{ cart.currency.iso_code }}">
   <div class="mt-bs__intro">
     <div class="mt-bs__lead">
       {%- if section.settings.heading != blank -%}
