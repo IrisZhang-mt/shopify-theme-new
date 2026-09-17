@@ -79,6 +79,13 @@ if (!window.mtFooterInit) {
   });
 
   document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-club-entry]')) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'club_entry' });
+  });
+
+  document.addEventListener('click', (event) => {
     const nav = event.target.closest('[data-fnav1]');
     if (!nav) return;
     const params = { first_navigation: nav.dataset.fnav1 };
