@@ -54,7 +54,9 @@
   </div>
 
   {%- for block in extra_slides -%}
-    <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide {{ block.shopify_attributes }}>
+    {%- assign slide_banner_slot = forloop.index | plus: 1 -%}
+    {%- assign slide_banner_name = block.settings.heading | default: section.settings.heading | strip_newlines | escape -%}
+    <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" {{ block.shopify_attributes }}>
       <div class="mt-hero__panel mt-hero__panel--full">
         <div class="mt-hero__media">
           {%- if block.settings.video != blank -%}
@@ -76,11 +78,11 @@
             <p class="mt-hero__sub">{{ block.settings.subtext }}</p>
           {%- endif -%}
           {%- if block.settings.cta_label != blank -%}
-            <a class="mt-hero__cta" href="{{ block.settings.cta_url | default: '#' }}"><span>{{ block.settings.cta_label }}</span></a>
+            <a class="mt-hero__cta" href="{{ block.settings.cta_url | default: '#' }}" data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" data-button-name="{{ block.settings.cta_label | escape }}"><span>{{ block.settings.cta_label }}</span></a>
           {%- endif -%}
         </div>
         {%- if block.settings.link != blank -%}
-          <a class="mt-hero__slide-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: section.settings.heading | strip_newlines | escape }}"></a>
+          <a class="mt-hero__slide-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: section.settings.heading | strip_newlines | escape }}" data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" data-button-name="{{ slide_banner_name }}"></a>
         {%- endif -%}
       </div>
     </div>
