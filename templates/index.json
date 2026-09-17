@@ -33,6 +33,7 @@
         "stat_9Y8XXJ",
         "stat_z88cPe"
       ],
+      "disabled": true,
       "name": "Page banner",
       "settings": {
         "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
@@ -49,6 +50,7 @@
         "panel-1": {
           "type": "panel",
           "settings": {
+            "image": "shopify://shop_images/3_5ab16991-6056-4321-8f47-fd6b9e0514aa.jpg",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -56,6 +58,7 @@
         "panel-2": {
           "type": "panel",
           "settings": {
+            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -65,7 +68,6 @@
         "panel-1",
         "panel-2"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
