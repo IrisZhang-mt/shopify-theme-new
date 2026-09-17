@@ -273,13 +273,67 @@ if (!window.mtPlpInit) {
       });
       setOverlay(plp, false);
       apply(plp);
+      return;
+    }
+    const tile = event.target.closest?.('[data-category-name]');
+    if (tile) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_category',
+        event_parameters: { button_name: tile.dataset.categoryName },
+      });
+      return;
+    }
+    if (event.target.closest?.('[data-qs-open]')) return;
+    const card = event.target.closest?.('[data-plp-grid] .mt-card[data-item-id]');
+    if (card) {
+      const plp = card.closest('[data-plp]');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_item',
+        event_parameters: {
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          currency: plp?.dataset.currency,
+          button_name: 'Product Card',
+          items: [
+            {
+              item_id: card.dataset.itemId,
+              item_name: card.dataset.itemName,
+              discount: +card.dataset.itemDiscount || 0,
+              index: +card.dataset.itemIndex,
+              item_list_id: card.dataset.itemListId,
+              item_list_name: card.dataset.itemListName,
+              ...(card.dataset.itemCategory2 ? { item_category2: card.dataset.itemCategory2 } : {}),
+              ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+              item_brand: card.dataset.itemBrand,
+              price: +card.dataset.itemPrice,
+              quantity: 1,
+            },
+          ],
+        },
+      });
     }
   });
 
   document.addEventListener('change', (event) => {
-    if (!desktopMq.matches) return;
     const input = event.target.closest?.('[data-plp-filters] input');
-    if (input) apply(input.closest('[data-plp]'));
+    if (!input) return;
+    if (input.checked) {
+      const filterType = input.closest('[data-plp-group]')?.dataset.filterType;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_filter',
+        event_parameters: { filter_type: filterType, filter_content: input.dataset.filterContent },
+      });
+    }
+    if (desktopMq.matches) apply(input.closest('[data-plp]'));
   });
 
   document.addEventListener('submit', (event) => {
