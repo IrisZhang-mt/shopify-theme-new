@@ -138,7 +138,6 @@ if (!window.mtHeaderInit) {
       card.dataset.itemBrand = item.vendor;
       card.dataset.itemPrice = item.price;
       card.dataset.itemIndex = index + 1;
-      if (item.type) card.dataset.itemCategory2 = item.type;
       if (item.featured_image?.url) {
         const img = document.createElement('img');
         img.src = searchImage(item.featured_image.url);
@@ -179,7 +178,6 @@ if (!window.mtHeaderInit) {
             item_list_id: 'search_box',
             item_list_name: 'Search Box',
             item_brand: item.vendor,
-            ...(item.type ? { item_category2: item.type } : {}),
             index: index + 1,
             price: +item.price,
             quantity: 1,
@@ -327,7 +325,6 @@ if (!window.mtHeaderInit) {
             item_list_id: 'search_box',
             item_list_name: 'Search Box',
             item_brand: item.dataset.itemBrand,
-            ...(item.dataset.itemCategory2 ? { item_category2: item.dataset.itemCategory2 } : {}),
             index: +item.dataset.itemIndex,
             price: +item.dataset.itemPrice,
             quantity: 1,
