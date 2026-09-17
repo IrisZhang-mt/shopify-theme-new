@@ -25,11 +25,11 @@ if (!window.mtPlpInit) {
         item_list_id: plp.dataset.itemListId,
         item_list_name: plp.dataset.itemListName,
         currency: plp.dataset.currency,
-        items: freshCards.map((card) => ({
+        items: freshCards.map((card, i) => ({
           item_id: card.dataset.itemId,
           item_name: card.dataset.itemName,
           discount: +card.dataset.itemDiscount || 0,
-          index: +card.dataset.itemIndex,
+          index: already + i + 1,
           item_list_id: card.dataset.itemListId,
           item_list_name: card.dataset.itemListName,
           ...(card.dataset.itemCategory2 ? { item_category2: card.dataset.itemCategory2 } : {}),
