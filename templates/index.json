@@ -52,10 +52,10 @@
           "settings": {
             "image": "shopify://shop_images/v34a.jpg",
             "link": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "",
-            "cta_url": ""
+            "heading": "HEADING TITLE",
+            "subtext": "XXXXXXXX",
+            "cta_label": "SHOP NEW ARRIVALS",
+            "cta_url": "shopify://collections/bestseller-leggings"
           }
         },
         "panel-1": {
