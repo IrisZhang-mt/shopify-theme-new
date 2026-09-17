@@ -102,6 +102,15 @@ if (!window.mtCartInit) {
     });
     initRecs(cartEl);
     cartEl.querySelector('[data-cart-close]:not(.mt-cart__backdrop)')?.focus({ preventScroll: true });
+    const viewCartData = cartEl.querySelector('[data-cart-view-cart]');
+    if (viewCartData) {
+      try {
+        const params = JSON.parse(viewCartData.textContent);
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({ event: 'ga4Event', event_name: 'view_cart', event_parameters: params });
+      } catch {}
+    }
   };
 
   const close = () => {

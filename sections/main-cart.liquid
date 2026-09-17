@@ -9,6 +9,24 @@
         <p>{{ 'cart.empty' | t }}</p>
       </div>
     {%- else -%}
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'view_cart',
+          event_parameters: {
+            module_name: 'Cart Page',
+            currency: {{ cart.currency.iso_code | json }},
+            value: {{ cart.total_price | divided_by: 100.0 }},
+            item_list_id: 'cart_page',
+            item_list_name: 'Cart Page',
+            items: [
+              {%- render 'cart-items-ga4', item_list_id: 'cart_page', item_list_name: 'Cart Page' -%}
+            ]
+          }
+        });
+      </script>
       <div class="mt-cart__lines">
         {%- for item in cart.items -%}
           {% render 'cart-line', item: item, line: forloop.index %}
