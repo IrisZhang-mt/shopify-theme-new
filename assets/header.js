@@ -327,6 +327,7 @@ if (!window.mtHeaderInit) {
             item_list_id: 'search_box',
             item_list_name: 'Search Box',
             item_brand: item.dataset.itemBrand,
+            ...(item.dataset.itemCategory2 ? { item_category2: item.dataset.itemCategory2 } : {}),
             index: +item.dataset.itemIndex,
             price: +item.dataset.itemPrice,
             quantity: 1,
