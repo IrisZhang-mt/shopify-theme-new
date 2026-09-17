@@ -2,7 +2,9 @@
 <script src="{{ 'plp.js' | asset_url }}" type="module"></script>
 
 {%- paginate collection.products by 24 -%}
-  <div class="mt-plp" data-plp data-url="{{ collection.url }}">
+  {%- assign plp_item_list_id = collection.handle -%}
+  {%- assign plp_item_list_name = collection.title -%}
+  <div class="mt-plp" data-plp data-url="{{ collection.url }}" data-currency="{{ cart.currency.iso_code }}" data-item-list-id="{{ plp_item_list_id }}" data-item-list-name="{{ plp_item_list_name | escape }}">
     <div class="mt-plp__title">
       <h1>{{ collection.title }}</h1>
     </div>
