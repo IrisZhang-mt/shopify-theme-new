@@ -15,6 +15,18 @@
             <p>{{ 'cart.empty' | t }}</p>
           </div>
         {%- else -%}
+          <script type="application/json" data-cart-view-cart>
+            {
+              "module_name": "Side Cart",
+              "currency": {{ cart.currency.iso_code | json }},
+              "value": {{ cart.total_price | divided_by: 100.0 }},
+              "item_list_id": "side_cart",
+              "item_list_name": "Side Cart",
+              "items": [
+                {%- render 'cart-items-ga4', item_list_id: 'side_cart', item_list_name: 'Side Cart' -%}
+              ]
+            }
+          </script>
           <div class="mt-cart__lines">
             {%- for item in cart.items -%}
               {% render 'cart-line', item: item, line: forloop.index %}
