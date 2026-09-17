@@ -51,7 +51,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/v34a.jpg",
-            "link": "",
+            "link": "shopify://blogs/news",
             "heading": "HEADING TITLE",
             "subtext": "XXXXXXXX",
             "cta_label": "SHOP NEW ARRIVALS",
