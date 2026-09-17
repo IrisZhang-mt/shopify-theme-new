@@ -77,7 +77,7 @@
             <p>{{ 'cart.taxes_note' | t }}</p>
             <a class="mt-cart__view" href="{{ routes.cart_url }}">{{ 'cart.view' | t }}</a>
           </div>
-          <a class="mt-cart__checkout" href="/checkout">{{ 'cart.checkout' | t }} &ndash; {{ cart.total_price | money_without_trailing_zeros }}</a>
+          <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Side Cart">{{ 'cart.checkout' | t }} &ndash; {{ cart.total_price | money_without_trailing_zeros }}</a>
         </div>
       {%- endif -%}
     </div>

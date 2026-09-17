@@ -222,6 +222,17 @@ if (!window.mtCartInit) {
   };
 
   document.addEventListener('click', (event) => {
+    const checkout = event.target.closest?.('[data-checkout]');
+    if (checkout) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'click_checkout',
+        event_parameters: { module_name: checkout.dataset.moduleName },
+      });
+      return;
+    }
     const opener = event.target.closest?.('[data-cart-open]');
     if (opener && drawer()) {
       event.preventDefault();
