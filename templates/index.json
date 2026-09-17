@@ -47,6 +47,17 @@
     "hero": {
       "type": "home-hero",
       "blocks": {
+        "slide_JWemY6": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/v34a.jpg",
+            "link": "",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
         "panel-1": {
           "type": "panel",
           "settings": {
@@ -65,6 +76,7 @@
         }
       },
       "block_order": [
+        "slide_JWemY6",
         "panel-1",
         "panel-2"
       ],
