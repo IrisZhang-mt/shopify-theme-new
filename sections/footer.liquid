@@ -85,10 +85,10 @@
                     <div class="mt-footer__col-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}">{{ link.title }}</a>
+                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}">{{ group.title }}</a>
+                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
                       {%- endif -%}
                     </div>
                   </div>
@@ -99,7 +99,7 @@
                 <p class="mt-footer__col-title">{{ menu.title }}</p>
                 <div class="mt-footer__col-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}">{{ link.title }}</a>
+                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
                   {%- endfor -%}
                 </div>
               </div>
