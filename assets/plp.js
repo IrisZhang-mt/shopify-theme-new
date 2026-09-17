@@ -5,6 +5,42 @@ if (!window.mtPlpInit) {
 
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
+  const trackedCount = new WeakMap();
+
+  const trackGrid = (grid) => {
+    if (!grid) return;
+    const plp = grid.closest('[data-plp]');
+    if (!plp) return;
+    const cards = [...grid.querySelectorAll('.mt-card[data-item-id]')];
+    const already = trackedCount.get(grid) || 0;
+    const freshCards = cards.slice(already);
+    if (!freshCards.length) return;
+    trackedCount.set(grid, cards.length);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_item_list',
+      event_parameters: {
+        item_list_id: plp.dataset.itemListId,
+        item_list_name: plp.dataset.itemListName,
+        currency: plp.dataset.currency,
+        items: freshCards.map((card) => ({
+          item_id: card.dataset.itemId,
+          item_name: card.dataset.itemName,
+          discount: +card.dataset.itemDiscount || 0,
+          index: +card.dataset.itemIndex,
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          ...(card.dataset.itemCategory2 ? { item_category2: card.dataset.itemCategory2 } : {}),
+          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+          item_brand: card.dataset.itemBrand,
+          price: +card.dataset.itemPrice,
+          quantity: 1,
+        })),
+      },
+    });
+  };
 
   const sectionId = (plp) => plp.closest('[id^="shopify-section-"]')?.id.replace('shopify-section-', '') || '';
 
@@ -148,6 +184,7 @@ if (!window.mtPlpInit) {
     observeMore();
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    trackGrid(plp.querySelector('[data-plp-grid]'));
   };
 
   const apply = (plp) => {
@@ -185,6 +222,7 @@ if (!window.mtPlpInit) {
         }
         queueAlign();
         document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+        trackGrid(plp.querySelector('[data-plp-grid]'));
       });
     },
     { rootMargin: '600px 0px' }
