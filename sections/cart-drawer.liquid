@@ -29,7 +29,7 @@
           </script>
           <div class="mt-cart__lines">
             {%- for item in cart.items -%}
-              {% render 'cart-line', item: item, line: forloop.index %}
+              {% render 'cart-line', item: item, line: forloop.index, item_list_id: 'side_cart', item_list_name: 'Side Cart', module_name: 'Side Cart' %}
             {%- endfor -%}
           </div>
           {%- if section.settings.miles_text != blank -%}
