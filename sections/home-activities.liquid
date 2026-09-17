@@ -14,6 +14,7 @@
         <a
           class="mt-act__row"
           href="{{ collection.url | default: '#' }}"
+          data-category-name="{{ label | escape }}"
           {{ block.shopify_attributes }}
         >
           <span class="mt-act__label">{{ label }}</span>

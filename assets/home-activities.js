@@ -129,6 +129,18 @@ if (!window.mtActivitiesInit) {
     if (section && !section.contains(event.relatedTarget)) clear(section);
   });
 
+  document.addEventListener('click', (event) => {
+    const row = event.target.closest?.('.mt-act__row[data-category-name]');
+    if (!row) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_category',
+      event_parameters: { button_name: row.dataset.categoryName },
+    });
+  });
+
   const flip = (media, now) => {
     if (!flipAt.has(media)) {
       flipAt.set(media, now + FLIP);
