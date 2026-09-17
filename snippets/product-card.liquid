@@ -18,7 +18,7 @@
       data-item-category2="{{ product.type | escape }}"
       {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
       data-item-price="{{ product.price_min | divided_by: 100.0 }}"
-      {% if product.compare_at_price_min > product.price_min %}data-item-discount="{{ product.compare_at_price_min | minus: product.price_min | divided_by: 100.0 }}"{% endif %}
+      data-item-discount="{% if product.compare_at_price_min > product.price_min %}{{ product.compare_at_price_min | minus: product.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"
       data-item-index="{{ index | default: 0 | plus: 1 }}"
     {%- endif -%}
   >
