@@ -80,6 +80,7 @@
         "panel-1",
         "panel-2"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
@@ -109,7 +110,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -293,6 +293,7 @@
         "item_DVWh4t",
         "item_RaNkxe"
       ],
+      "disabled": true,
       "name": "Referral banner",
       "settings": {
         "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
@@ -538,6 +539,7 @@
         "item_ccqnJg",
         "item_Lt3cmz"
       ],
+      "disabled": true,
       "name": "Careers roles",
       "settings": {
         "heading": "Find your place.",
