@@ -1,5 +1,27 @@
 {%- if product != blank -%}
-  <div class="mt-card" data-reveal style="--mt-reveal-i: {{ index | default: 0 }}"{% if quick %} data-quick-url="{{ product.url }}"{% endif %}>
+  {%- if item_list_id != blank -%}
+    {%- assign ga4_pick = product.selected_or_first_available_variant -%}
+    {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
+    {%- assign ga4_variant = ga4_variant | strip -%}
+  {%- endif -%}
+  <div
+    class="mt-card"
+    data-reveal
+    style="--mt-reveal-i: {{ index | default: 0 }}"
+    {%- if quick %} data-quick-url="{{ product.url }}"{% endif %}
+    {%- if item_list_id != blank %}
+      data-item-list-id="{{ item_list_id }}"
+      data-item-list-name="{{ item_list_name | escape }}"
+      data-item-id="{{ ga4_pick.sku }}"
+      data-item-name="{{ product.title | escape }}"
+      data-item-brand="{{ product.vendor | escape }}"
+      data-item-category2="{{ product.type | escape }}"
+      {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
+      data-item-price="{{ product.price_min | divided_by: 100.0 }}"
+      {% if product.compare_at_price_min > product.price_min %}data-item-discount="{{ product.compare_at_price_min | minus: product.price_min | divided_by: 100.0 }}"{% endif %}
+      data-item-index="{{ index | default: 0 | plus: 1 }}"
+    {%- endif -%}
+  >
     <a class="mt-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
     <div class="mt-card__media">
       {%- if product.featured_image -%}
