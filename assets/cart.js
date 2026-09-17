@@ -255,7 +255,44 @@ if (!window.mtCartInit) {
       return;
     }
     const quickAdd = event.target.closest?.('[data-cart-add]');
-    if (quickAdd) add(Number(quickAdd.dataset.cartAdd));
+    if (quickAdd) {
+      add(Number(quickAdd.dataset.cartAdd));
+      return;
+    }
+    const recsCard = event.target.closest?.(
+      '[data-cart-recs] .mt-card[data-item-id], [data-cart-recs] .mt-cart__tile[data-item-id]'
+    );
+    if (recsCard && !event.target.closest('[data-qs-open]')) {
+      const recsRoot = recsCard.closest('[data-cart-root]');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_item',
+        event_parameters: {
+          module_name: 'Side Cart',
+          item_list_id: recsCard.dataset.itemListId,
+          item_list_name: recsCard.dataset.itemListName,
+          currency: recsRoot?.dataset.currency,
+          button_name: 'Product Card',
+          items: [
+            {
+              item_id: recsCard.dataset.itemId,
+              item_name: recsCard.dataset.itemName,
+              discount: +recsCard.dataset.itemDiscount || 0,
+              index: +recsCard.dataset.itemIndex,
+              item_list_id: recsCard.dataset.itemListId,
+              item_list_name: recsCard.dataset.itemListName,
+              ...(recsCard.dataset.itemCategory2 ? { item_category2: recsCard.dataset.itemCategory2 } : {}),
+              ...(recsCard.dataset.itemVariant ? { item_variant: recsCard.dataset.itemVariant } : {}),
+              item_brand: recsCard.dataset.itemBrand,
+              price: +recsCard.dataset.itemPrice,
+              quantity: 1,
+            },
+          ],
+        },
+      });
+    }
   });
 
   document.addEventListener('keydown', (event) => {
