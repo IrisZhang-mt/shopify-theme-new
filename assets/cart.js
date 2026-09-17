@@ -266,6 +266,38 @@ if (!window.mtCartInit) {
     }
     const quickAdd = event.target.closest?.('[data-cart-add]');
     if (quickAdd) {
+      const card = quickAdd.closest('.mt-card, .mt-cart__tile');
+      if (card && card.dataset.itemId) {
+        const quickAddRoot = card.closest('[data-cart-root]');
+        const price = +card.dataset.itemPrice || 0;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'add_to_cart',
+          event_parameters: {
+            module_name: 'Side Cart',
+            button_name: 'plus',
+            currency: quickAddRoot?.dataset.currency,
+            value: price,
+            item_list_id: card.dataset.itemListId,
+            item_list_name: card.dataset.itemListName,
+            items: [
+              {
+                item_list_id: card.dataset.itemListId,
+                item_list_name: card.dataset.itemListName,
+                item_id: card.dataset.itemId,
+                item_name: card.dataset.itemName,
+                index: +card.dataset.itemIndex,
+                ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+                item_brand: card.dataset.itemBrand,
+                price,
+                quantity: 1,
+              },
+            ],
+          },
+        });
+      }
       add(Number(quickAdd.dataset.cartAdd));
       return;
     }
@@ -293,7 +325,6 @@ if (!window.mtCartInit) {
               index: +recsCard.dataset.itemIndex,
               item_list_id: recsCard.dataset.itemListId,
               item_list_name: recsCard.dataset.itemListName,
-              ...(recsCard.dataset.itemCategory2 ? { item_category2: recsCard.dataset.itemCategory2 } : {}),
               ...(recsCard.dataset.itemVariant ? { item_variant: recsCard.dataset.itemVariant } : {}),
               item_brand: recsCard.dataset.itemBrand,
               price: +recsCard.dataset.itemPrice,
