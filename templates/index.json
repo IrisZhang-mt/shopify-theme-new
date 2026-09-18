@@ -145,6 +145,7 @@
         "girls",
         "boys"
       ],
+      "disabled": true,
       "settings": {}
     },
     "activities": {
@@ -154,21 +155,21 @@
           "type": "activity",
           "settings": {
             "collection": "ice-skating",
-            "label": ""
+            "label": "Ice-skating"
           }
         },
         "skiing": {
           "type": "activity",
           "settings": {
             "collection": "skiing",
-            "label": ""
+            "label": "Skiing"
           }
         },
         "golf": {
           "type": "activity",
           "settings": {
             "collection": "golf",
-            "label": ""
+            "label": "Golf"
           }
         },
         "tennis": {
@@ -209,7 +210,6 @@
         "everyday",
         "activities"
       ],
-      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
       }
