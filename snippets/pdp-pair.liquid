@@ -93,6 +93,6 @@
     <a class="mt-pair__details" href="{{ item.url }}">{{ 'products.see_details' | t }}</a>
   </div>
   <script type="application/json" data-pair-variants>
-    [{%- for variant in item.variants -%}{"id":{{ variant.id }},"available":{{ variant.available }},"options":{{ variant.options | json }},"image":{% if variant.featured_media %}{{ variant.featured_media | image_url: width: 700 | json }}{% else %}null{% endif %}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+    [{%- for variant in item.variants -%}{%- capture v_ga4_variant -%}{% render 'item-variant-ga4', item: variant %}{%- endcapture -%}{%- assign v_ga4_variant = v_ga4_variant | strip -%}{"id":{{ variant.id }},"sku":{{ variant.sku | json }},"available":{{ variant.available }},"options":{{ variant.options | json }},"image":{% if variant.featured_media %}{{ variant.featured_media | image_url: width: 700 | json }}{% else %}null{% endif %},"priceValue":{{ variant.price | divided_by: 100.0 }},"discountValue":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | minus: variant.price | divided_by: 100.0 }}{% else %}0{% endif %},"itemVariant":{{ v_ga4_variant | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
   </script>
 </article>
