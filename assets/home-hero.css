@@ -3,8 +3,6 @@
   --mt-hero-pad: 0.9375rem;
   position: relative;
   display: flex;
-  min-height: calc(100vh - var(--mt-hero-header));
-  min-height: calc(100svh - var(--mt-hero-header));
   background: var(--mt-surface);
 }
 
