@@ -15,16 +15,16 @@ param(
     [string]$Store = "moody-tiger-athletics.myshopify.com"
 )
 
-$ThemeId = "161185300726"
+$ThemeId = "161784496374"
 
 $shopifyArgs = @(
     "theme", "push",
     "--theme", $ThemeId,
     "--store", $Store,
-    "--only", "layout/",
-    "--only", "sections/",
-    "--only", "snippets/",
-    "--only", "assets/",
+    "--only", "layout/*",
+    "--only", "sections/*",
+    "--only", "snippets/*",
+    "--only", "assets/*",
     "--only", "config/settings_schema.json"
 )
 
