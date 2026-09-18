@@ -14,7 +14,7 @@
     {%- endif -%}
   </div>
   {%- if more != blank -%}
-    <button class="mt-pdp__toggle" type="button" data-pdp-toggle aria-expanded="false" aria-controls="PdpPerk-{{ panel_id }}-{{ key }}" aria-label="{{ 'products.more_about' | t: title: title | escape }}">
+    <button class="mt-pdp__toggle" type="button" data-pdp-toggle data-content-name="{{ title | escape }}" aria-expanded="false" aria-controls="PdpPerk-{{ panel_id }}-{{ key }}" aria-label="{{ 'products.more_about' | t: title: title | escape }}">
       <img src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt="">
     </button>
   {%- endif -%}
