@@ -8,21 +8,28 @@
 <section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
   <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
     {%- for block in panels -%}
-      <div class="mt-hero__panel" {{ block.shopify_attributes }}>
+      {%- assign pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
+      {%- assign mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
+      <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="1b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
         <div class="mt-hero__media">
           {%- if block.settings.video != blank -%}
             {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-          {%- elsif block.settings.image != blank -%}
-            {%- if forloop.first -%}
-              {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
-            {%- else -%}
-              {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
-            {%- endif -%}
+          {%- elsif mob_image != blank -%}
+            <picture>
+              {%- if pc_image != blank -%}
+                <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 2880 }}">
+              {%- endif -%}
+              {%- if forloop.first -%}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+              {%- else -%}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+              {%- endif -%}
+            </picture>
           {%- endif -%}
         </div>
 
         {%- if block.settings.link != blank -%}
-          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
+          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" {% unless forloop.first %}data-mobile-banner-slot="1b"{% endunless %} data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
         {%- endif -%}
 
         {%- if forloop.first -%}
@@ -60,12 +67,19 @@
     {%- assign slide_banner_slot = forloop.index | plus: 1 -%}
     {%- assign slide_banner_name = block.settings.heading | default: section.settings.heading | strip_newlines | escape -%}
     <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" {{ block.shopify_attributes }}>
+      {%- assign slide_pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
+      {%- assign slide_mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
       <div class="mt-hero__panel mt-hero__panel--full">
         <div class="mt-hero__media">
           {%- if block.settings.video != blank -%}
             {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-          {%- elsif block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: '' }}
+          {%- elsif slide_mob_image != blank -%}
+            <picture>
+              {%- if slide_pc_image != blank -%}
+                <source media="(min-width: 750px)" srcset="{{ slide_pc_image | image_url: width: 2880 }}">
+              {%- endif -%}
+              {{ slide_mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: '' }}
+            </picture>
           {%- endif -%}
         </div>
         <div class="mt-hero__content">
