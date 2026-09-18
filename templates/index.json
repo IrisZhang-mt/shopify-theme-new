@@ -50,6 +50,9 @@
         "panel-2": {
           "type": "panel",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -57,6 +60,9 @@
         "panel-1": {
           "type": "panel",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -64,10 +70,12 @@
         "slide_bLWiD8": {
           "type": "slide",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-w.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
             "link": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "",
+            "heading": "ji\nijjhh",
+            "subtext": "5555555555",
+            "cta_label": "55555555555555",
             "cta_url": ""
           }
         }
@@ -81,7 +89,8 @@
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
         "cta_label": "Shop New Arrivals",
-        "cta_url": "shopify://collections/best-sellers"
+        "cta_url": "shopify://collections/best-sellers",
+        "slide_interval": 5
       }
     },
     "best-sellers": {
@@ -117,6 +126,7 @@
         "girls": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
             "heading": "For Girls",
             "url": "shopify://collections/girls"
           }
@@ -124,6 +134,7 @@
         "boys": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/3_5ab16991-6056-4321-8f47-fd6b9e0514aa.jpg",
             "heading": "For Boys",
             "url": "shopify://collections/boys"
           }
@@ -143,21 +154,21 @@
           "type": "activity",
           "settings": {
             "collection": "ice-skating",
-            "label": ""
+            "label": "Ice-skating"
           }
         },
         "skiing": {
           "type": "activity",
           "settings": {
             "collection": "skiing",
-            "label": ""
+            "label": "Skiing"
           }
         },
         "golf": {
           "type": "activity",
           "settings": {
             "collection": "golf",
-            "label": ""
+            "label": "Golf"
           }
         },
         "tennis": {
@@ -198,7 +209,6 @@
         "everyday",
         "activities"
       ],
-      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
       }
@@ -540,6 +550,53 @@
         "heading": "Find your place.",
         "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
       }
+    },
+    "home_hero_jqRfq7": {
+      "type": "home-hero",
+      "blocks": {
+        "slide_Ctr3Nr": {
+          "type": "slide",
+          "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-w.png",
+            "link": "",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "panel_i4FrDT": {
+          "type": "panel",
+          "disabled": true,
+          "settings": {
+            "link": "",
+            "info_heading": "Made To Move",
+            "info_text": "Breathable, durable, quick-drying fabrics"
+          }
+        },
+        "panel_EggTEt": {
+          "type": "panel",
+          "disabled": true,
+          "settings": {
+            "link": "",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world."
+          }
+        }
+      },
+      "block_order": [
+        "slide_Ctr3Nr",
+        "panel_i4FrDT",
+        "panel_EggTEt"
+      ],
+      "name": "Hero",
+      "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop New Arrivals",
+        "cta_url": "",
+        "slide_interval": 5
+      }
     }
   },
   "order": [
@@ -550,6 +607,7 @@
     "activities",
     "carousel",
     "page_referral_banner_BjA9gQ",
+    "home_hero_jqRfq7",
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g",
