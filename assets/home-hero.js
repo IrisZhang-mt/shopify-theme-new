@@ -141,13 +141,20 @@ if (!window.mtHeroInit) {
       const secondary = hero.querySelector('.mt-hero__panel--secondary');
       if (!mainSlide || !secondary) return;
       hero.dataset.heroPanelReady = 'true';
+      const mainDot = hero.querySelector('[data-hero-dot]');
+      const panelDot = hero.querySelector('[data-hero-panel-dot]');
       let showingSecondary = false;
       let timer = 0;
+      const setActive = (next) => {
+        showingSecondary = next;
+        secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
+        if (mainDot) mainDot.setAttribute('aria-current', String(!showingSecondary));
+        if (panelDot) panelDot.setAttribute('aria-current', String(showingSecondary));
+        if (showingSecondary) trackBanner(secondary);
+      };
       const swap = () => {
         if (desktopMq.matches || !mainSlide.classList.contains('mt-hero__slide--active')) return;
-        showingSecondary = !showingSecondary;
-        secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
-        if (showingSecondary) trackBanner(secondary);
+        setActive(!showingSecondary);
       };
       const stop = () => {
         clearInterval(timer);
@@ -158,6 +165,18 @@ if (!window.mtHeroInit) {
         const interval = (parseFloat(hero.dataset.heroInterval) || 5) * 1000;
         timer = setInterval(swap, interval);
       };
+      if (panelDot) {
+        panelDot.addEventListener('click', () => {
+          stop();
+          setActive(true);
+        });
+      }
+      if (mainDot) {
+        mainDot.addEventListener('click', () => {
+          stop();
+          setActive(false);
+        });
+      }
       hero.addEventListener('pointerenter', stop);
       hero.addEventListener('pointerleave', play);
       hero.addEventListener('focusin', stop);
