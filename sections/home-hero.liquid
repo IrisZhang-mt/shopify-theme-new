@@ -8,12 +8,17 @@
 <section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
   <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
     {%- for block in panels -%}
+      {%- assign pc_video = block.settings.pc_video -%}
+      {%- assign mob_video = block.settings.mob_video -%}
       {%- assign pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
       {%- assign mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
       <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="1b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
         <div class="mt-hero__media">
-          {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- if pc_video != blank and mob_video != blank -%}
+            {{ pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {{ mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif pc_video != blank or mob_video != blank -%}
+            {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif mob_image != blank -%}
             <picture>
               {%- if pc_image != blank -%}
@@ -67,12 +72,17 @@
     {%- assign slide_banner_slot = forloop.index | plus: 1 -%}
     {%- assign slide_banner_name = block.settings.heading | default: section.settings.heading | strip_newlines | escape -%}
     <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" {{ block.shopify_attributes }}>
+      {%- assign slide_pc_video = block.settings.pc_video -%}
+      {%- assign slide_mob_video = block.settings.mob_video -%}
       {%- assign slide_pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
       {%- assign slide_mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
       <div class="mt-hero__panel mt-hero__panel--full">
         <div class="mt-hero__media">
-          {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- if slide_pc_video != blank and slide_mob_video != blank -%}
+            {{ slide_pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {{ slide_mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif slide_pc_video != blank or slide_mob_video != blank -%}
+            {{ slide_pc_video | default: slide_mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif slide_mob_image != blank -%}
             <picture>
               {%- if slide_pc_image != blank -%}
