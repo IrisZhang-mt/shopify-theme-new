@@ -1,0 +1,46 @@
+{{ 'full-image.css' | asset_url | stylesheet_tag }}
+
+{%- assign pc_image = section.settings.pc_image -%}
+{%- assign mob_image = section.settings.mob_image | default: pc_image -%}
+
+<section class="mt-full-image">
+  {%- if mob_image != blank -%}
+    <div class="mt-full-image__media">
+      {%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
+      <picture>
+        {%- if pc_image != blank -%}
+          <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w">
+        {%- endif -%}
+        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+      </picture>
+    </div>
+  {%- else -%}
+    <div class="mt-full-image__media">
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Full image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "pc_image",
+      "label": "PC image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mob_image",
+      "label": "Mobile image",
+      "info": "留空时使用 PC 图片"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Full image"
+    }
+  ]
+}
+{% endschema %}
