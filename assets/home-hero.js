@@ -78,13 +78,14 @@ if (!window.mtHeroInit) {
       };
       const play = () => {
         if (timer || reducedMq.matches || document.hidden) return;
+        const interval = (parseFloat(hero.dataset.heroInterval) || 5) * 1000;
         timer = setInterval(() => {
           if (!hero.isConnected) {
             stop();
             return;
           }
           show(index + 1);
-        }, 6000);
+        }, interval);
       };
       hero.addEventListener('pointerenter', stop);
       hero.addEventListener('pointerleave', play);

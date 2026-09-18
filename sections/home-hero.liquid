@@ -5,7 +5,7 @@
 {%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
 {%- assign hero_banner_name = section.settings.heading | strip_newlines | escape -%}
 
-<section class="mt-hero" data-hero>
+<section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
   <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
     {%- for block in panels -%}
       <div class="mt-hero__panel" {{ block.shopify_attributes }}>
@@ -128,6 +128,17 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "label": "Slide interval",
+      "info": "Only applies when there's more than one slide",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "unit": "s",
+      "default": 5
     }
   ],
   "blocks": [
