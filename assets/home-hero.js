@@ -63,7 +63,10 @@ if (!window.mtHeroInit) {
           const active = i === index;
           slide.classList.toggle('mt-hero__slide--active', active);
           slide.querySelectorAll('video').forEach((video) => {
-            if (active || i === 0) {
+            const isPc = video.classList.contains('mt-hero__video--pc');
+            const isMob = video.classList.contains('mt-hero__video--mob');
+            const applicable = (!isPc && !isMob) || (isPc && desktopMq.matches) || (isMob && !desktopMq.matches);
+            if (applicable && (active || i === 0)) {
               video.play().catch(() => {});
             } else {
               video.pause();
@@ -110,7 +113,60 @@ if (!window.mtHeroInit) {
         if (reducedMq.matches) stop();
         else play();
       });
+      desktopMq.addEventListener('change', () => {
+        if (!hero.isConnected) return;
+        show(index);
+      });
       show(0);
+      play();
+    });
+  };
+
+  const initPanelRotation = () => {
+    document.querySelectorAll('[data-hero]').forEach((hero) => {
+      if (hero.dataset.heroPanelReady) return;
+      const mainSlide = hero.querySelector('[data-hero-slide]');
+      const secondary = hero.querySelector('.mt-hero__panel--secondary');
+      if (!mainSlide || !secondary) return;
+      hero.dataset.heroPanelReady = 'true';
+      let showingSecondary = false;
+      let timer = 0;
+      const swap = () => {
+        if (desktopMq.matches || !mainSlide.classList.contains('mt-hero__slide--active')) return;
+        showingSecondary = !showingSecondary;
+        secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
+        if (showingSecondary) trackBanner(secondary);
+      };
+      const stop = () => {
+        clearInterval(timer);
+        timer = 0;
+      };
+      const play = () => {
+        if (timer || desktopMq.matches || reducedMq.matches || document.hidden) return;
+        const interval = (parseFloat(hero.dataset.heroInterval) || 5) * 1000;
+        timer = setInterval(swap, interval);
+      };
+      hero.addEventListener('pointerenter', stop);
+      hero.addEventListener('pointerleave', play);
+      hero.addEventListener('focusin', stop);
+      hero.addEventListener('focusout', (event) => {
+        if (!hero.contains(event.relatedTarget)) play();
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!hero.isConnected) return;
+        if (document.hidden) stop();
+        else play();
+      });
+      reducedMq.addEventListener('change', () => {
+        if (!hero.isConnected) return;
+        if (reducedMq.matches) stop();
+        else play();
+      });
+      desktopMq.addEventListener('change', () => {
+        if (!hero.isConnected) return;
+        stop();
+        if (!desktopMq.matches) play();
+      });
       play();
     });
   };
@@ -118,6 +174,7 @@ if (!window.mtHeroInit) {
   document.addEventListener('click', (event) => {
     const banner = event.target.closest?.('.mt-hero__cta, .mt-hero__slide-link, .mt-hero__panel-link');
     if (!banner) return;
+    const slot = (!desktopMq.matches && banner.dataset.mobileBannerSlot) || banner.dataset.bannerSlot;
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
@@ -125,7 +182,7 @@ if (!window.mtHeroInit) {
       event_name: 'click_banner',
       event_parameters: {
         module_name: 'Top Banner',
-        banner_slot: banner.dataset.bannerSlot,
+        banner_slot: slot,
         banner_name: banner.dataset.bannerName,
         button_name: banner.dataset.buttonName,
       },
@@ -137,7 +194,9 @@ if (!window.mtHeroInit) {
   document.addEventListener('shopify:section:load', () => {
     queue();
     initSlides();
+    initPanelRotation();
   });
   queue();
   initSlides();
+  initPanelRotation();
 }
