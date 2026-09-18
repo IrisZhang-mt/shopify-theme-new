@@ -2,7 +2,9 @@
 <script src="{{ 'plp.js' | asset_url }}" type="module"></script>
 
 {%- paginate collection.products by 24 -%}
-  <div class="mt-plp" data-plp data-url="{{ collection.url }}">
+  {%- assign plp_item_list_id = collection.handle -%}
+  {%- assign plp_item_list_name = collection.title -%}
+  <div class="mt-plp" data-plp data-url="{{ collection.url }}" data-currency="{{ cart.currency.iso_code }}" data-item-list-id="{{ plp_item_list_id }}" data-item-list-name="{{ plp_item_list_name | escape }}">
     <div class="mt-plp__title">
       <h1>{{ collection.title }}</h1>
     </div>
@@ -12,7 +14,7 @@
       <div class="mt-plp__tiles">
         {%- for entry in linked -%}
           {%- assign tile_image = entry.image | default: entry.featured_image -%}
-          <a class="mt-plp__tile" href="{{ entry.url }}" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}">
+          <a class="mt-plp__tile" href="{{ entry.url }}" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" data-category-name="{{ entry.title | escape }}">
             {%- if tile_image != blank -%}
               {{ tile_image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: entry.title | escape }}
             {%- endif -%}
@@ -23,7 +25,7 @@
     {%- elsif section.blocks.size > 0 -%}
       <div class="mt-plp__tiles">
         {%- for block in section.blocks -%}
-          <a class="mt-plp__tile"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <a class="mt-plp__tile"{% if block.settings.link != blank %} href="{{ block.settings.link }}"{% endif %} data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" data-category-name="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
             {%- if block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 33vw, 30vw', alt: block.settings.label | escape }}
             {%- endif -%}
@@ -49,7 +51,7 @@
           </div>
           {%- for filter in collection.filters -%}
             {%- if filter.type == 'list' or filter.type == 'boolean' -%}
-              <details class="mt-plp__group" data-plp-group="{{ filter.param_name }}">
+              <details class="mt-plp__group" data-plp-group="{{ filter.param_name }}" data-filter-type="{{ filter.label | escape }}">
                 <summary class="mt-plp__group-head">
                   <span>{{ filter.label }}</span>
                   <span class="mt-plp__group-icon" aria-hidden="true"></span>
@@ -62,7 +64,7 @@
                 <div class="mt-plp__options{% if is_color %} mt-plp__options--swatches{% endif %}">
                   {%- for value in filter.values -%}
                     <label class="mt-plp__option{% if value.count == 0 and value.active == false %} mt-plp__option--off{% endif %}"{% if is_color %} title="{{ value.label | escape }}"{% endif %}>
-                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" data-filter-content="{{ value.label | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
                       {%- if value.swatch.color -%}
                         <span class="mt-plp__swatch" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
                       {%- elsif value.swatch.image -%}
@@ -95,7 +97,7 @@
               {%- if forloop.index0 < 4 -%}
                 {%- assign card_eager = true -%}
               {%- endif -%}
-              {% render 'product-card', product: product, quick: true, align: true, index: card_index, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw' %}
+              {% render 'product-card', product: product, quick: true, align: true, index: card_index, ga4_index: forloop.index0, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw', item_list_id: plp_item_list_id, item_list_name: plp_item_list_name %}
             {%- endfor -%}
           </div>
           {%- if paginate.next -%}

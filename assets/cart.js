@@ -57,6 +57,33 @@ if (!window.mtCartInit) {
     root.querySelector('[data-cart-recs-title]')?.removeAttribute('hidden');
     bindProgress(wrap);
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    const recCards = [...wrap.querySelectorAll('.mt-cart__cards .mt-card[data-item-id]')];
+    if (recCards.length) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'view_item_list',
+        event_parameters: {
+          module_name: 'Side Cart',
+          item_list_id: recCards[0].dataset.itemListId,
+          item_list_name: recCards[0].dataset.itemListName,
+          currency: root.dataset.currency,
+          items: recCards.map((card) => ({
+            item_id: card.dataset.itemId,
+            item_name: card.dataset.itemName,
+            discount: +card.dataset.itemDiscount || 0,
+            index: +card.dataset.itemIndex,
+            item_list_id: card.dataset.itemListId,
+            item_list_name: card.dataset.itemListName,
+            ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+            item_brand: card.dataset.itemBrand,
+            price: +card.dataset.itemPrice,
+            quantity: 1,
+          })),
+        },
+      });
+    }
   };
 
   let refreshId = 0;
@@ -194,6 +221,17 @@ if (!window.mtCartInit) {
   };
 
   document.addEventListener('click', (event) => {
+    const checkout = event.target.closest?.('[data-checkout]');
+    if (checkout) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'click_checkout',
+        event_parameters: { module_name: checkout.dataset.moduleName },
+      });
+      return;
+    }
     const opener = event.target.closest?.('[data-cart-open]');
     if (opener && drawer()) {
       event.preventDefault();
@@ -227,7 +265,75 @@ if (!window.mtCartInit) {
       return;
     }
     const quickAdd = event.target.closest?.('[data-cart-add]');
-    if (quickAdd) add(Number(quickAdd.dataset.cartAdd));
+    if (quickAdd) {
+      const card = quickAdd.closest('.mt-card, .mt-cart__tile');
+      if (card && card.dataset.itemId) {
+        const quickAddRoot = card.closest('[data-cart-root]');
+        const price = +card.dataset.itemPrice || 0;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'add_to_cart',
+          event_parameters: {
+            module_name: 'Side Cart',
+            button_name: 'plus',
+            currency: quickAddRoot?.dataset.currency,
+            value: price,
+            item_list_id: card.dataset.itemListId,
+            item_list_name: card.dataset.itemListName,
+            items: [
+              {
+                item_list_id: card.dataset.itemListId,
+                item_list_name: card.dataset.itemListName,
+                item_id: card.dataset.itemId,
+                item_name: card.dataset.itemName,
+                index: +card.dataset.itemIndex,
+                ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+                item_brand: card.dataset.itemBrand,
+                price,
+                quantity: 1,
+              },
+            ],
+          },
+        });
+      }
+      add(Number(quickAdd.dataset.cartAdd));
+      return;
+    }
+    const recsCard = event.target.closest?.(
+      '[data-cart-recs] .mt-card[data-item-id], [data-cart-recs] .mt-cart__tile[data-item-id]'
+    );
+    if (recsCard && !event.target.closest('[data-qs-open]')) {
+      const recsRoot = recsCard.closest('[data-cart-root]');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_item',
+        event_parameters: {
+          module_name: 'Side Cart',
+          item_list_id: recsCard.dataset.itemListId,
+          item_list_name: recsCard.dataset.itemListName,
+          currency: recsRoot?.dataset.currency,
+          button_name: 'Product Card',
+          items: [
+            {
+              item_id: recsCard.dataset.itemId,
+              item_name: recsCard.dataset.itemName,
+              discount: +recsCard.dataset.itemDiscount || 0,
+              index: +recsCard.dataset.itemIndex,
+              item_list_id: recsCard.dataset.itemListId,
+              item_list_name: recsCard.dataset.itemListName,
+              ...(recsCard.dataset.itemVariant ? { item_variant: recsCard.dataset.itemVariant } : {}),
+              item_brand: recsCard.dataset.itemBrand,
+              price: +recsCard.dataset.itemPrice,
+              quantity: 1,
+            },
+          ],
+        },
+      });
+    }
   });
 
   document.addEventListener('keydown', (event) => {

@@ -5,6 +5,41 @@ if (!window.mtPlpInit) {
 
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
+  const trackedCount = new WeakMap();
+
+  const trackGrid = (grid) => {
+    if (!grid) return;
+    const plp = grid.closest('[data-plp]');
+    if (!plp) return;
+    const cards = [...grid.querySelectorAll('.mt-card[data-item-id]')];
+    const already = trackedCount.get(grid) || 0;
+    const freshCards = cards.slice(already);
+    if (!freshCards.length) return;
+    trackedCount.set(grid, cards.length);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_item_list',
+      event_parameters: {
+        item_list_id: plp.dataset.itemListId,
+        item_list_name: plp.dataset.itemListName,
+        currency: plp.dataset.currency,
+        items: freshCards.map((card, i) => ({
+          item_id: card.dataset.itemId,
+          item_name: card.dataset.itemName,
+          discount: +card.dataset.itemDiscount || 0,
+          index: already + i + 1,
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+          item_brand: card.dataset.itemBrand,
+          price: +card.dataset.itemPrice,
+          quantity: 1,
+        })),
+      },
+    });
+  };
 
   const sectionId = (plp) => plp.closest('[id^="shopify-section-"]')?.id.replace('shopify-section-', '') || '';
 
@@ -148,6 +183,7 @@ if (!window.mtPlpInit) {
     observeMore();
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    trackGrid(plp.querySelector('[data-plp-grid]'));
   };
 
   const apply = (plp) => {
@@ -185,6 +221,7 @@ if (!window.mtPlpInit) {
         }
         queueAlign();
         document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+        trackGrid(plp.querySelector('[data-plp-grid]'));
       });
     },
     { rootMargin: '600px 0px' }
@@ -194,6 +231,7 @@ if (!window.mtPlpInit) {
   syncAll();
   applySwatches(document);
   queueAlign();
+  document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
   window.addEventListener('resize', queueAlign);
   document.addEventListener('transitionend', (event) => {
     if (event.propertyName === 'width' && event.target.matches('[data-plp-aside]')) queueAlign();
@@ -205,6 +243,7 @@ if (!window.mtPlpInit) {
     observeMore();
     syncAll();
     applySwatches(document);
+    document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
   });
 
   document.addEventListener('click', (event) => {
@@ -233,13 +272,66 @@ if (!window.mtPlpInit) {
       });
       setOverlay(plp, false);
       apply(plp);
+      return;
+    }
+    const tile = event.target.closest?.('[data-category-name]');
+    if (tile) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_category',
+        event_parameters: { button_name: tile.dataset.categoryName },
+      });
+      return;
+    }
+    if (event.target.closest?.('[data-qs-open]')) return;
+    const card = event.target.closest?.('[data-plp-grid] .mt-card[data-item-id]');
+    if (card) {
+      const plp = card.closest('[data-plp]');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_item',
+        event_parameters: {
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          currency: plp?.dataset.currency,
+          button_name: 'Product Card',
+          items: [
+            {
+              item_id: card.dataset.itemId,
+              item_name: card.dataset.itemName,
+              discount: +card.dataset.itemDiscount || 0,
+              index: +card.dataset.itemIndex,
+              item_list_id: card.dataset.itemListId,
+              item_list_name: card.dataset.itemListName,
+                  ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+              item_brand: card.dataset.itemBrand,
+              price: +card.dataset.itemPrice,
+              quantity: 1,
+            },
+          ],
+        },
+      });
     }
   });
 
   document.addEventListener('change', (event) => {
-    if (!desktopMq.matches) return;
     const input = event.target.closest?.('[data-plp-filters] input');
-    if (input) apply(input.closest('[data-plp]'));
+    if (!input) return;
+    if (input.checked) {
+      const filterType = input.closest('[data-plp-group]')?.dataset.filterType;
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_filter',
+        event_parameters: { filter_type: filterType, filter_content: input.dataset.filterContent },
+      });
+    }
+    if (desktopMq.matches) apply(input.closest('[data-plp]'));
   });
 
   document.addEventListener('submit', (event) => {

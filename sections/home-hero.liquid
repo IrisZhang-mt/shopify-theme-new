@@ -1,65 +1,95 @@
 {{ 'home-hero.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'home-hero.js' | asset_url }}" type="module"></script>
 
+{%- assign panels = section.blocks | where: 'type', 'panel' -%}
 {%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
+{%- assign hero_banner_name = section.settings.heading | strip_newlines | escape -%}
 
-<section class="mt-hero" data-hero>
-  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide>
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'panel' -%}
-        <div class="mt-hero__panel" {{ block.shopify_attributes }}>
-          <div class="mt-hero__media">
-            {%- if block.settings.video != blank -%}
-              {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-            {%- elsif block.settings.image != blank -%}
+<section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
+  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
+    {%- for block in panels -%}
+      {%- assign pc_video = block.settings.pc_video -%}
+      {%- assign mob_video = block.settings.mob_video -%}
+      {%- assign pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
+      {%- assign mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
+      <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="1b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
+        <div class="mt-hero__media">
+          {%- if pc_video != blank and mob_video != blank -%}
+            {{ pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {{ mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+          {%- elsif pc_video != blank or mob_video != blank -%}
+            {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif mob_image != blank -%}
+            <picture>
+              {%- if pc_image != blank -%}
+                <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 2880 }}">
+              {%- endif -%}
               {%- if forloop.first -%}
-                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
               {%- else -%}
-                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
               {%- endif -%}
-            {%- endif -%}
-          </div>
-
-          {%- if forloop.first -%}
-            <div class="mt-hero__content">
-              {%- if section.settings.heading != blank -%}
-                <h1 class="mt-hero__heading">
-                  {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
-                  {%- for line in lines -%}
-                    <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
-                  {%- endfor -%}
-                </h1>
-              {%- endif -%}
-              {%- if section.settings.subtext != blank -%}
-                <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
-              {%- endif -%}
-              {%- if section.settings.cta_label != blank -%}
-                <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}"><span>{{ section.settings.cta_label }}</span></a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-
-          {%- if block.settings.info_heading != blank -%}
-            <div class="mt-hero__info">
-              <p class="mt-hero__info-title">{{ block.settings.info_heading }}</p>
-              {%- if block.settings.info_text != blank -%}
-                <p class="mt-hero__info-text">{{ block.settings.info_text }}</p>
-              {%- endif -%}
-            </div>
+            </picture>
           {%- endif -%}
         </div>
-      {%- endif -%}
+
+        {%- if block.settings.link != blank -%}
+          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" {% unless forloop.first %}data-mobile-banner-slot="1b"{% endunless %} data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
+        {%- endif -%}
+
+        {%- if forloop.first -%}
+          <div class="mt-hero__content">
+            {%- if section.settings.heading != blank -%}
+              <h1 class="mt-hero__heading">
+                {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
+                {%- endfor -%}
+              </h1>
+            {%- endif -%}
+            {%- if section.settings.subtext != blank -%}
+              <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
+            {%- endif -%}
+            {%- if section.settings.cta_label != blank -%}
+              <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.info_heading != blank -%}
+          <div class="mt-hero__info">
+            <p class="mt-hero__info-title">{{ block.settings.info_heading }}</p>
+            {%- if block.settings.info_text != blank -%}
+              <p class="mt-hero__info-text">{{ block.settings.info_text }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
     {%- endfor -%}
   </div>
 
   {%- for block in extra_slides -%}
-    <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide {{ block.shopify_attributes }}>
+    {%- assign slide_banner_slot = forloop.index | plus: 1 -%}
+    {%- assign slide_banner_name = block.settings.heading | default: section.settings.heading | strip_newlines | escape -%}
+    <div class="mt-hero__slide mt-hero__slide--layer" data-hero-slide data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" {{ block.shopify_attributes }}>
+      {%- assign slide_pc_video = block.settings.pc_video -%}
+      {%- assign slide_mob_video = block.settings.mob_video -%}
+      {%- assign slide_pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
+      {%- assign slide_mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
       <div class="mt-hero__panel mt-hero__panel--full">
         <div class="mt-hero__media">
-          {%- if block.settings.video != blank -%}
-            {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-          {%- elsif block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: '' }}
+          {%- if slide_pc_video != blank and slide_mob_video != blank -%}
+            {{ slide_pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {{ slide_mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+          {%- elsif slide_pc_video != blank or slide_mob_video != blank -%}
+            {{ slide_pc_video | default: slide_mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif slide_mob_image != blank -%}
+            <picture>
+              {%- if slide_pc_image != blank -%}
+                <source media="(min-width: 750px)" srcset="{{ slide_pc_image | image_url: width: 2880 }}">
+              {%- endif -%}
+              {{ slide_mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: '' }}
+            </picture>
           {%- endif -%}
         </div>
         <div class="mt-hero__content">
@@ -75,21 +105,33 @@
             <p class="mt-hero__sub">{{ block.settings.subtext }}</p>
           {%- endif -%}
           {%- if block.settings.cta_label != blank -%}
-            <a class="mt-hero__cta" href="{{ block.settings.cta_url | default: '#' }}"><span>{{ block.settings.cta_label }}</span></a>
+            <a class="mt-hero__cta" href="{{ block.settings.cta_url | default: '#' }}" data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" data-button-name="{{ block.settings.cta_label | escape }}"><span>{{ block.settings.cta_label }}</span></a>
           {%- endif -%}
         </div>
         {%- if block.settings.link != blank -%}
-          <a class="mt-hero__slide-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: section.settings.heading | strip_newlines | escape }}"></a>
+          <a class="mt-hero__slide-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.heading | default: section.settings.heading | strip_newlines | escape }}" data-banner-slot="{{ slide_banner_slot }}" data-banner-name="{{ slide_banner_name }}" data-button-name="{{ slide_banner_name }}"></a>
         {%- endif -%}
       </div>
     </div>
   {%- endfor -%}
 
-  {%- if extra_slides.size > 0 -%}
+  {%- assign has_secondary_panel = false -%}
+  {%- if panels.size == 2 -%}
+    {%- assign has_secondary_panel = true -%}
+  {%- endif -%}
+
+  {%- if extra_slides.size > 0 or has_secondary_panel -%}
     <div class="mt-hero__dots" aria-label="{{ 'general.slides' | t }}">
-      {%- assign slide_total = extra_slides.size | plus: 1 -%}
-      {%- for i in (1..slide_total) -%}
-        <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+      <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: 1 }}" aria-current="true"></button>
+      {%- if has_secondary_panel -%}
+        <button class="mt-hero__dot mt-hero__dot--panel" type="button" data-hero-panel-dot aria-label="{{ 'general.slide_n' | t: number: 2 }}" aria-current="false"></button>
+      {%- endif -%}
+      {%- for block in extra_slides -%}
+        {%- assign dot_number = forloop.index | plus: 1 -%}
+        {%- if has_secondary_panel -%}
+          {%- assign dot_number = dot_number | plus: 1 -%}
+        {%- endif -%}
+        <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: dot_number }}" aria-current="false"></button>
       {%- endfor -%}
     </div>
   {%- endif -%}
@@ -122,6 +164,17 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "slide_interval",
+      "label": "Slide interval",
+      "info": "Only applies when there's more than one slide",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "unit": "s",
+      "default": 5
     }
   ],
   "blocks": [
@@ -132,14 +185,33 @@
       "settings": [
         {
           "type": "image_picker",
-          "id": "image",
-          "label": "Image"
+          "id": "pc_image",
+          "label": "PC image",
+          "info": "建议上传960*1140比例的图片"
+        },
+        {
+          "type": "image_picker",
+          "id": "mob_image",
+          "label": "Mobile image",
+          "info": "建议上传1:2比例的图片"
         },
         {
           "type": "video",
-          "id": "video",
-          "label": "Video",
-          "info": "Overrides the image"
+          "id": "pc_video",
+          "label": "PC video",
+          "info": "建议上传960*1140比例的视频，会覆盖图片"
+        },
+        {
+          "type": "video",
+          "id": "mob_video",
+          "label": "Mobile video",
+          "info": "建议上传1:2比例的视频，会覆盖图片"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Image link",
+          "info": "Makes the image clickable"
         },
         {
           "type": "text",
@@ -160,14 +232,27 @@
       "settings": [
         {
           "type": "image_picker",
-          "id": "image",
-          "label": "Image"
+          "id": "pc_image",
+          "label": "PC image",
+          "info": "建议上传1920*1141比例的图片"
+        },
+        {
+          "type": "image_picker",
+          "id": "mob_image",
+          "label": "Mobile image",
+          "info": "建议上传1:2比例的图片"
         },
         {
           "type": "video",
-          "id": "video",
-          "label": "Video",
-          "info": "Overrides the image"
+          "id": "pc_video",
+          "label": "PC video",
+          "info": "建议上传1920*1141比例的视频，会覆盖图片"
+        },
+        {
+          "type": "video",
+          "id": "mob_video",
+          "label": "Mobile video",
+          "info": "建议上传1:2比例的视频，会覆盖图片"
         },
         {
           "type": "url",

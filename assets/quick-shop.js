@@ -109,6 +109,19 @@ if (!window.mtQuickShopInit) {
     if (variants.length) syncSelection();
   };
 
+  const qsItem = (card) => ({
+    item_id: card.dataset.itemId,
+    item_name: card.dataset.itemName,
+    discount: +card.dataset.itemDiscount || 0,
+    index: +card.dataset.itemIndex,
+    item_list_id: card.dataset.itemListId,
+    item_list_name: card.dataset.itemListName,
+    ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+    item_brand: card.dataset.itemBrand,
+    price: +card.dataset.itemPrice,
+    quantity: 1,
+  });
+
   let opening = false;
   let openSeq = 0;
   let closeTimer = 0;
@@ -117,6 +130,21 @@ if (!window.mtQuickShopInit) {
     const card = trigger.closest('[data-quick-url]');
     const qs = modal();
     if (!card || !qs || opening) return;
+    if (card.dataset.itemListId) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_item',
+        event_parameters: {
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          currency: card.closest('[data-currency]')?.dataset.currency,
+          button_name: 'QUICK SHOP',
+          items: [qsItem(card)],
+        },
+      });
+    }
     opening = true;
     const seq = ++openSeq;
     clearTimeout(closeTimer);
@@ -144,6 +172,22 @@ if (!window.mtQuickShopInit) {
     qs.querySelector('[data-qs-box]').replaceChildren(content);
     initPanel(content);
     qs.hidden = false;
+    if (card.dataset.itemListId) {
+      const item = qsItem(card);
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'view_item',
+        event_parameters: {
+          currency: card.closest('[data-currency]')?.dataset.currency,
+          value: item.price,
+          item_list_id: card.dataset.itemListId,
+          item_list_name: card.dataset.itemListName,
+          items: [item],
+        },
+      });
+    }
     document.documentElement.classList.add('mt-qs-lock');
     requestAnimationFrame(() => {
       syncArrows();
