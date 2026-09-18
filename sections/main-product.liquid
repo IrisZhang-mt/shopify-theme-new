@@ -2,6 +2,8 @@
 <script src="{{ 'pdp.js' | asset_url }}" type="module"></script>
 
 {%- assign current = product.selected_or_first_available_variant -%}
+{%- capture pdp_ga4_variant -%}{% render 'item-variant-ga4', item: current %}{%- endcapture -%}
+{%- assign pdp_ga4_variant = pdp_ga4_variant | strip -%}
 
 {%- assign color_index = -1 -%}
 {%- assign color_names = '' -%}
@@ -23,7 +25,40 @@
   {%- endfor -%}
 {%- endif -%}
 
-<section class="mt-pdp" data-pdp{% if color_index >= 0 %} data-pdp-color-opt="{{ color_index }}"{% endif %}{% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}>
+<section
+  class="mt-pdp"
+  data-pdp
+  data-currency="{{ cart.currency.iso_code }}"
+  data-item-name="{{ product.title | escape }}"
+  data-item-brand="{{ product.vendor | escape }}"
+  {% if color_index >= 0 %} data-pdp-color-opt="{{ color_index }}"{% endif %}
+  {% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}
+>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_item',
+      event_parameters: {
+        currency: {{ cart.currency.iso_code | json }},
+        value: {{ current.price | divided_by: 100.0 }},
+        items: [
+          {
+            item_id: {{ current.sku | json }},
+            item_name: {{ product.title | json }},
+            discount: {% if current.compare_at_price > current.price %}{{ current.compare_at_price | minus: current.price | divided_by: 100.0 }}{% else %}0{% endif %},
+            {%- if pdp_ga4_variant != blank %}
+            item_variant: {{ pdp_ga4_variant | json }},
+            {%- endif %}
+            item_brand: {{ product.vendor | json }},
+            price: {{ current.price | divided_by: 100.0 }},
+            quantity: 1
+          }
+        ]
+      }
+    });
+  </script>
   <div class="mt-pdp__hero">
     <div class="mt-pdp__gallery" data-pdp-col>
       <div class="mt-pdp__track" data-pdp-track>
