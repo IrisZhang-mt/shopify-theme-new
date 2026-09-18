@@ -21,6 +21,10 @@
           {%- endif -%}
         </div>
 
+        {%- if block.settings.link != blank -%}
+          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
+        {%- endif -%}
+
         {%- if forloop.first -%}
           <div class="mt-hero__content">
             {%- if section.settings.heading != blank -%}
@@ -142,6 +146,12 @@
           "id": "video",
           "label": "Video",
           "info": "Overrides the image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Image link",
+          "info": "Makes the image clickable"
         },
         {
           "type": "text",
