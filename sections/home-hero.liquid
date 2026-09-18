@@ -115,11 +115,23 @@
     </div>
   {%- endfor -%}
 
-  {%- if extra_slides.size > 0 -%}
+  {%- assign has_secondary_panel = false -%}
+  {%- if panels.size == 2 -%}
+    {%- assign has_secondary_panel = true -%}
+  {%- endif -%}
+
+  {%- if extra_slides.size > 0 or has_secondary_panel -%}
     <div class="mt-hero__dots" aria-label="{{ 'general.slides' | t }}">
-      {%- assign slide_total = extra_slides.size | plus: 1 -%}
-      {%- for i in (1..slide_total) -%}
-        <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+      <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: 1 }}" aria-current="true"></button>
+      {%- if has_secondary_panel -%}
+        <button class="mt-hero__dot mt-hero__dot--panel" type="button" data-hero-panel-dot aria-label="{{ 'general.slide_n' | t: number: 2 }}" aria-current="false"></button>
+      {%- endif -%}
+      {%- for block in extra_slides -%}
+        {%- assign dot_number = forloop.index | plus: 1 -%}
+        {%- if has_secondary_panel -%}
+          {%- assign dot_number = dot_number | plus: 1 -%}
+        {%- endif -%}
+        <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: dot_number }}" aria-current="false"></button>
       {%- endfor -%}
     </div>
   {%- endif -%}
