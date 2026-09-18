@@ -50,7 +50,9 @@
         "panel-2": {
           "type": "panel",
           "settings": {
-            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "shopify://blogs/journal",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -58,7 +60,9 @@
         "panel-1": {
           "type": "panel",
           "settings": {
-            "image": "shopify://shop_images/3_5ab16991-6056-4321-8f47-fd6b9e0514aa.jpg",
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "shopify://products/sensory-friendly-kids-clothes-pants",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -66,7 +70,8 @@
         "slide_bLWiD8": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/img_v3_0215k_64dd1659-e228-4791-a58b-baa45e4762fg.jpg",
+            "pc_image": "shopify://shop_images/hero-pc-w.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
             "link": "",
             "heading": "",
             "subtext": "",
@@ -84,7 +89,8 @@
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
         "cta_label": "Shop New Arrivals",
-        "cta_url": "shopify://collections/best-sellers"
+        "cta_url": "shopify://collections/best-sellers",
+        "slide_interval": 5
       }
     },
     "best-sellers": {
