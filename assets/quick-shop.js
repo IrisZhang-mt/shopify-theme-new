@@ -122,6 +122,24 @@ if (!window.mtQuickShopInit) {
     quantity: 1,
   });
 
+  const qsCurrentItem = () => {
+    const card = state.card;
+    const variant = currentVariant();
+    if (!card || !variant || !card.dataset.itemListId) return null;
+    return {
+      item_id: variant.sku,
+      item_name: card.dataset.itemName,
+      discount: variant.discountValue || 0,
+      index: +card.dataset.itemIndex,
+      item_list_id: card.dataset.itemListId,
+      item_list_name: card.dataset.itemListName,
+      ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+      item_brand: card.dataset.itemBrand,
+      price: variant.priceValue,
+      quantity: 1,
+    };
+  };
+
   let opening = false;
   let openSeq = 0;
   let closeTimer = 0;
