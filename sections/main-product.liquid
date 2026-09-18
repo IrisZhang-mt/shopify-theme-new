@@ -59,6 +59,11 @@
       }
     });
   </script>
+  {%- comment -%} TEMP DEBUG — remove after GA4 verification {%- endcomment -%}
+  <script>
+    console.log('DEBUG_PDP_RAW_PRODUCT', {{ product | json }});
+    console.log('DEBUG_PDP_RAW_SELECTED_VARIANT', {{ current | json }});
+  </script>
   <div class="mt-pdp__hero">
     <div class="mt-pdp__gallery" data-pdp-col>
       <div class="mt-pdp__track" data-pdp-track>
