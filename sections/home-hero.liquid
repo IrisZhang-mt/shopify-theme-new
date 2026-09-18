@@ -1,55 +1,54 @@
 {{ 'home-hero.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'home-hero.js' | asset_url }}" type="module"></script>
 
+{%- assign panels = section.blocks | where: 'type', 'panel' -%}
 {%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
 {%- assign hero_banner_name = section.settings.heading | strip_newlines | escape -%}
 
 <section class="mt-hero" data-hero>
   <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'panel' -%}
-        <div class="mt-hero__panel" {{ block.shopify_attributes }}>
-          <div class="mt-hero__media">
-            {%- if block.settings.video != blank -%}
-              {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-            {%- elsif block.settings.image != blank -%}
-              {%- if forloop.first -%}
-                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
-              {%- else -%}
-                {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
-              {%- endif -%}
+    {%- for block in panels -%}
+      <div class="mt-hero__panel" {{ block.shopify_attributes }}>
+        <div class="mt-hero__media">
+          {%- if block.settings.video != blank -%}
+            {{ block.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- elsif block.settings.image != blank -%}
+            {%- if forloop.first -%}
+              {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+            {%- else -%}
+              {{ block.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
             {%- endif -%}
-          </div>
-
-          {%- if forloop.first -%}
-            <div class="mt-hero__content">
-              {%- if section.settings.heading != blank -%}
-                <h1 class="mt-hero__heading">
-                  {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
-                  {%- for line in lines -%}
-                    <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
-                  {%- endfor -%}
-                </h1>
-              {%- endif -%}
-              {%- if section.settings.subtext != blank -%}
-                <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
-              {%- endif -%}
-              {%- if section.settings.cta_label != blank -%}
-                <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-
-          {%- if block.settings.info_heading != blank -%}
-            <div class="mt-hero__info">
-              <p class="mt-hero__info-title">{{ block.settings.info_heading }}</p>
-              {%- if block.settings.info_text != blank -%}
-                <p class="mt-hero__info-text">{{ block.settings.info_text }}</p>
-              {%- endif -%}
-            </div>
           {%- endif -%}
         </div>
-      {%- endif -%}
+
+        {%- if forloop.first -%}
+          <div class="mt-hero__content">
+            {%- if section.settings.heading != blank -%}
+              <h1 class="mt-hero__heading">
+                {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
+                {%- for line in lines -%}
+                  <span class="mt-hero__line"><span style="--mt-i: {{ forloop.index0 }}">{{ line | strip }}</span></span>
+                {%- endfor -%}
+              </h1>
+            {%- endif -%}
+            {%- if section.settings.subtext != blank -%}
+              <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
+            {%- endif -%}
+            {%- if section.settings.cta_label != blank -%}
+              <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.info_heading != blank -%}
+          <div class="mt-hero__info">
+            <p class="mt-hero__info-title">{{ block.settings.info_heading }}</p>
+            {%- if block.settings.info_text != blank -%}
+              <p class="mt-hero__info-text">{{ block.settings.info_text }}</p>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
     {%- endfor -%}
   </div>
 
