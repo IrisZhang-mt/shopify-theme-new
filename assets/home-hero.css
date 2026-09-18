@@ -127,6 +127,10 @@ html.mt-motion .mt-hero__media video {
   will-change: transform;
 }
 
+.mt-hero__video--pc {
+  display: none;
+}
+
 @keyframes mt-hero-media-in {
   from {
     transform: scale(1.06);
@@ -313,6 +317,12 @@ html.mt-motion .mt-hero__media video {
   }
   .mt-hero__panel--full {
     width: 100%;
+  }
+  .mt-hero__video--pc {
+    display: block;
+  }
+  .mt-hero__video--mob {
+    display: none;
   }
   .mt-hero__dots {
     bottom: 1.25rem;
