@@ -37,7 +37,7 @@
   - `item_list_id: "cart_recommendations"`
   - `item_list_name: "We think you'll love"`
   - `currency` 正确
-  - `items[]` 里每个商品带 `item_id`（sku）、`item_name`、`item_brand`、`item_variant`（颜色_尺码）、`price`、`index`、`discount`（无折扣则为 0）
+  - `items[]` 里每个商品带 `item_id`（sku）、`item_name`、`item_brand`、`item_variant`（颜色\_尺码）、`price`、`index`、`discount`（无折扣则为 0）
   - 确认 `items[]` 里没有 `item_category`、`item_category2`（按约定暂不传，见下方更正说明）
 - [ ] 点击推荐商品列表里的某个商品卡片（点图片/标题区域，不要点右上角加号）跳转到 PDP，跳转前控制台应出现 `select_item`：
   - `button_name: "Product Card"`
@@ -63,9 +63,10 @@
 > xlsx 没有插入新行/新编号，只在 U 列备注里加了说明。
 
 > **去重范围说明（2026-09-17，讨论后维持现状不改）**：
+>
 > - `view_item_list` 的去重标记挂在购物车抽屉的 DOM 节点上，只在"单纯开关抽屉、购物车内容没变"时生效；一旦购物车内容变化（加购/改数量/移除），抽屉会整体刷新 DOM，标记跟着丢失，`view_item_list` 会重新触发——这是预期行为，因为推荐商品列表本身可能因为购物车变化而变了。
 > - `view_cart` 事件目前**没有做任何去重**：每次打开侧边购物车（哪怕只是关了又开，内容完全没变）都会重新触发一次。这个和 Top Banner 的"同一张 slide 不重复曝光"不是一回事——xlsx 里只有 Top Banner（第32行 E32）明确写了"重复曝光只触发一次"，其他 view_item_list/view_cart 的去重都是我自己按 GA4 惯例加的，不是文档硬性要求。
-> 这两点目前按你的决定保持现状，没有改代码。
+>   这两点目前按你的决定保持现状，没有改代码。
 
 > **更正（2026-09-17）**：`item_category2` 最初取的是 `product.type`，
 > 已按反馈撤回——`item_category2` 应该取 `product.category`（Shopify
@@ -225,7 +226,7 @@
 > **已知限制（讨论后维持现状，不算 bug）**：这个修复让 `item_id` 稳定
 > 不为空，但代价是 `item_variant` 不保证跟当前筛选条件一致——比如筛选
 > `Size=22 (180)` 之后，`items[]` 里可能出现 `item_variant: "Birch_4
-> (110)"` 这种跟筛选尺码不一样的值，因为它现在只看"这个商品第一个有
+(110)"` 这种跟筛选尺码不一样的值，因为它现在只看"这个商品第一个有
 > 库存的变体是什么"，不看当前筛选条件。要让 `item_variant` 跟筛选联动
 > 需要额外按 `collection.filters` 里勾选的值去匹配对应变体，讨论后决定
 > 不做这个（收益不确定，会增加复杂度），保持现状。
@@ -365,7 +366,7 @@ fetch 用的那个 section）渲染 `pdp-pair` 时都传了
 
 ## 验证清单：Reviews 模块（No.47/48）
 
-- [ ] PDP 下方 Reviews 区域，点击 "Write a review" 按钮，控制台应出现：
+- [ ] PDP 下方 Reviews 区域 ，点击 "Write a review" 按钮，控制台应出现：
   - `event_name: write_review`（没有 `event_parameters`，这条本来就该是空的）
 - [ ] 在弹出的表单里填好信息并提交成功后（弹窗提示感谢/评论已保存），应该出现：
   - `event_name: submit_review`（同样没有 `event_parameters`）

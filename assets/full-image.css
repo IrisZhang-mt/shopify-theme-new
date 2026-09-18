@@ -1,0 +1,22 @@
+.mt-full-image {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  background: var(--mt-paper);
+  overflow: hidden;
+}
+
+.mt-full-image__media {
+  position: absolute;
+  inset: 0;
+}
+
+.mt-full-image__media img,
+.mt-full-image__media svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
