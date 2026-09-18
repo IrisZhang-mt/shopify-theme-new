@@ -173,6 +173,19 @@ if (!window.mtPdpInit) {
         const open = toggle.getAttribute('aria-expanded') !== 'true';
         toggle.setAttribute('aria-expanded', String(open));
         panel?.classList.toggle('mt-open', open);
+        if (open) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'select_content',
+            event_parameters: {
+              module_name: 'Product Details',
+              content_name: toggle.dataset.contentName,
+              button_name: '',
+            },
+          });
+        }
         return;
       }
       const qtyEl = root.querySelector('[data-pdp-qty]');
