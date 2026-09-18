@@ -2,6 +2,7 @@ if (!window.mtHeroInit) {
   window.mtHeroInit = true;
 
   const reducedMq = window.mtReducedMq;
+  const desktopMq = window.matchMedia('(min-width: 750px)');
   const slack = () => window.mtParallaxSlack || 150;
 
   const measure = () =>
