@@ -62,7 +62,7 @@ if (!window.mtHeroInit) {
   };
 
   const setActiveDot = (hero, activeDot) => {
-    hero.querySelectorAll('[data-hero-dot], [data-hero-panel-dot]').forEach((dot) => {
+    hero.querySelectorAll('[data-hero-dot]').forEach((dot) => {
       dot.setAttribute('aria-current', String(dot === activeDot));
     });
   };
@@ -135,80 +135,7 @@ if (!window.mtHeroInit) {
         if (!hero.isConnected) return;
         show(index);
       });
-      hero._mtGotoMain = () => {
-        stop();
-        show(0);
-        play();
-      };
       show(0);
-      play();
-    });
-  };
-
-  const initPanelRotation = () => {
-    document.querySelectorAll('[data-hero]').forEach((hero) => {
-      if (hero.dataset.heroPanelReady) return;
-      const mainSlide = hero.querySelector('[data-hero-slide]');
-      const secondary = hero.querySelector('.mt-hero__panel--secondary');
-      if (!mainSlide || !secondary) return;
-      hero.dataset.heroPanelReady = 'true';
-      const mainDot = hero.querySelector('[data-hero-dot]');
-      const panelDot = hero.querySelector('[data-hero-panel-dot]');
-      let showingSecondary = false;
-      let timer = 0;
-      const setActive = (next) => {
-        showingSecondary = next;
-        secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
-        setActiveDot(hero, showingSecondary ? panelDot : mainDot);
-        if (showingSecondary) trackBanner(secondary);
-      };
-      const swap = () => {
-        if (desktopMq.matches || !mainSlide.classList.contains('mt-hero__slide--active')) return;
-        setActive(!showingSecondary);
-      };
-      const stop = () => {
-        clearInterval(timer);
-        timer = 0;
-      };
-      const play = () => {
-        if (timer || desktopMq.matches || reducedMq.matches || document.hidden) return;
-        const interval = (parseFloat(hero.dataset.heroInterval) || 5) * 1000;
-        timer = setInterval(swap, interval);
-      };
-      if (panelDot) {
-        panelDot.addEventListener('click', () => {
-          stop();
-          hero._mtGotoMain?.();
-          setActive(true);
-        });
-      }
-      if (mainDot) {
-        mainDot.addEventListener('click', () => {
-          stop();
-          setActive(false);
-        });
-      }
-      hero.addEventListener('pointerenter', stop);
-      hero.addEventListener('pointerleave', play);
-      hero.addEventListener('focusin', stop);
-      hero.addEventListener('focusout', (event) => {
-        if (!hero.contains(event.relatedTarget)) play();
-      });
-      document.addEventListener('visibilitychange', () => {
-        if (!hero.isConnected) return;
-        if (document.hidden) stop();
-        else play();
-      });
-      reducedMq.addEventListener('change', () => {
-        if (!hero.isConnected) return;
-        if (reducedMq.matches) stop();
-        else play();
-      });
-      desktopMq.addEventListener('change', () => {
-        if (!hero.isConnected) return;
-        stop();
-        if (!desktopMq.matches) play();
-      });
       play();
     });
   };
