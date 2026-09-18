@@ -130,6 +130,7 @@ if (!window.mtQuickShopInit) {
     const card = trigger.closest('[data-quick-url]');
     const qs = modal();
     if (!card || !qs || opening) return;
+    state.card = card;
     if (card.dataset.itemListId) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
