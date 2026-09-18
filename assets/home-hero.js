@@ -114,7 +114,7 @@ if (!window.mtHeroInit) {
   };
 
   document.addEventListener('click', (event) => {
-    const banner = event.target.closest?.('.mt-hero__cta, .mt-hero__slide-link');
+    const banner = event.target.closest?.('.mt-hero__cta, .mt-hero__slide-link, .mt-hero__panel-link');
     if (!banner) return;
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
