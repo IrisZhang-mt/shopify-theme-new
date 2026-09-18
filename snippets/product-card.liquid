@@ -1,6 +1,7 @@
 {%- if product != blank -%}
   {%- if item_list_id != blank -%}
     {%- assign ga4_pick = product.selected_or_first_available_variant -%}
+    <script>console.log('GA4-debug-pick', {{ product.title | json }}, {{ ga4_pick | json }});</script>
     {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
     {%- assign ga4_variant = ga4_variant | strip -%}
   {%- endif -%}
