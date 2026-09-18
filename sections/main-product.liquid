@@ -273,7 +273,7 @@
               {%- endif -%}
               {%- if block.settings.title != blank and body != blank -%}
                 <div class="mt-pdp__acc-item" {{ block.shopify_attributes }}>
-                  <button class="mt-pdp__acc-head" type="button" data-pdp-toggle aria-expanded="false" aria-controls="PdpAcc-{{ block.id }}">
+                  <button class="mt-pdp__acc-head" type="button" data-pdp-toggle data-content-name="{{ block.settings.title | escape }}" aria-expanded="false" aria-controls="PdpAcc-{{ block.id }}">
                     <span>{{ block.settings.title }}</span>
                     <img src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt="" aria-hidden="true">
                   </button>
@@ -297,9 +297,11 @@
             {%- assign pairs_source = product.collections.first -%}
             {%- if pairs_source -%}
               <div data-pdp-pairs-fallback hidden>
+                {%- assign pair_i = 0 -%}
                 {%- for item in pairs_source.products limit: 5 -%}
                   {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
-                  {% render 'pdp-pair', item: item %}
+                  {% render 'pdp-pair', item: item, index: pair_i, item_list_id: 'pdp_pairs', item_list_name: section.settings.pairs_heading %}
+                  {%- assign pair_i = pair_i | plus: 1 -%}
                 {%- endfor -%}
               </div>
             {%- endif -%}

@@ -1,7 +1,7 @@
 {%- if recommendations.performed and recommendations.products_count > 0 -%}
   <div data-pdp-pairs-items>
     {%- for item in recommendations.products limit: 2 -%}
-      {% render 'pdp-pair', item: item %}
+      {% render 'pdp-pair', item: item, index: forloop.index0, item_list_id: 'pdp_pairs', item_list_name: 'Pairs well with' %}
     {%- endfor -%}
   </div>
 {%- endif -%}
