@@ -50,6 +50,9 @@
         "panel-2": {
           "type": "panel",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -57,6 +60,9 @@
         "panel-1": {
           "type": "panel",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-half.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
+            "link": "",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -64,6 +70,8 @@
         "slide_bLWiD8": {
           "type": "slide",
           "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-w.png",
+            "mob_image": "shopify://shop_images/hero.jpg",
             "link": "",
             "heading": "",
             "subtext": "",
@@ -81,7 +89,8 @@
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
         "cta_label": "Shop New Arrivals",
-        "cta_url": "shopify://collections/best-sellers"
+        "cta_url": "shopify://collections/best-sellers",
+        "slide_interval": 5
       }
     },
     "best-sellers": {
