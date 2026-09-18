@@ -159,8 +159,7 @@ if (!window.mtHeroInit) {
       const setActive = (next) => {
         showingSecondary = next;
         secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
-        if (mainDot) mainDot.setAttribute('aria-current', String(!showingSecondary));
-        if (panelDot) panelDot.setAttribute('aria-current', String(showingSecondary));
+        setActiveDot(hero, showingSecondary ? panelDot : mainDot);
         if (showingSecondary) trackBanner(secondary);
       };
       const swap = () => {
@@ -179,6 +178,7 @@ if (!window.mtHeroInit) {
       if (panelDot) {
         panelDot.addEventListener('click', () => {
           stop();
+          hero._mtGotoMain?.();
           setActive(true);
         });
       }
