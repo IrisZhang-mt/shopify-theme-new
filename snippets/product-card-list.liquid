@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script>console.log('GA4-debug', {{ collection.products | json }});</script>
 
 {%- if collection.products.size > 0 -%}
@@ -9,3 +10,16 @@
     {% render 'product-card', product: blank, index: i %}
   {%- endfor -%}
 {%- endif -%}
+=======
+<script>console.log('GA4-debug', {{ collection.products | json }});</script>
+
+{%- if collection.products.size > 0 -%}
+  {%- for product in collection.products -%}
+    {% render 'product-card', product: product, index: forloop.index0, item_list_id: item_list_id, item_list_name: item_list_name, item_list_label: item_list_label %}
+  {%- endfor -%}
+{%- else -%}
+  {%- for i in (0..3) -%}
+    {% render 'product-card', product: blank, index: i %}
+  {%- endfor -%}
+{%- endif -%}
+>>>>>>> bfc270abf2746a74dfc400c46d21a2c8ce5bf724
