@@ -187,7 +187,34 @@ if (!window.mtPdpInit) {
         return;
       }
       const add = event.target.closest('[data-pdp-add]');
-      if (add) window.mtAddToCart(add, state.qty);
+      if (add) {
+        const variant = matchVariant(state.variants, state.selected);
+        if (variant) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'add_to_cart',
+            event_parameters: {
+              button_name: 'Add to Cart',
+              currency: root.dataset.currency,
+              value: +(variant.priceValue * state.qty).toFixed(2),
+              items: [
+                {
+                  item_id: variant.sku,
+                  item_name: root.dataset.itemName,
+                  discount: variant.discountValue || 0,
+                  ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+                  item_brand: root.dataset.itemBrand,
+                  price: variant.priceValue,
+                  quantity: state.qty,
+                },
+              ],
+            },
+          });
+        }
+        window.mtAddToCart(add, state.qty);
+      }
     });
 
     const defaultColor = root.dataset.pdpDefaultColor;
