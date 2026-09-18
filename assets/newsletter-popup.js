@@ -73,6 +73,13 @@ if (!window.mtPopInit) {
     if (new URLSearchParams(window.location.search).get('mt-pop') === 'success') {
       el.querySelector('.mt-pop__form')?.setAttribute('hidden', '');
       el.querySelector('[data-pop-success]')?.removeAttribute('hidden');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'subscribe',
+        event_parameters: { module_name: 'Popup Function' },
+      });
       snooze(365);
       clean();
       open(el);

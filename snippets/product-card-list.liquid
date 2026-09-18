@@ -2,7 +2,11 @@
 
 {%- if collection.products.size > 0 -%}
   {%- for product in collection.products -%}
+<<<<<<< HEAD
     {% render 'product-card', product: product, index: forloop.index0, item_list_id: item_list_id, item_list_name: item_list_name %}
+=======
+    {% render 'product-card', product: product, index: forloop.index0, item_list_id: item_list_id, item_list_name: item_list_name, item_list_label: item_list_label %}
+>>>>>>> dev/point
   {%- endfor -%}
 {%- else -%}
   {%- for i in (0..3) -%}
