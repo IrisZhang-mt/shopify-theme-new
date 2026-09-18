@@ -45,12 +45,33 @@ if (!window.mtHeroInit) {
     });
   };
 
+  const applicableVideo = (video) => {
+    const isPc = video.classList.contains('mt-hero__video--pc');
+    const isMob = video.classList.contains('mt-hero__video--mob');
+    return (!isPc && !isMob) || (isPc && desktopMq.matches) || (isMob && !desktopMq.matches);
+  };
+
+  const syncVideos = (slide, active) => {
+    slide.querySelectorAll('video').forEach((video) => {
+      if (applicableVideo(video) && active) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  };
+
   const initSlides = () => {
     document.querySelectorAll('[data-hero]').forEach((hero) => {
       if (hero.dataset.heroReady) return;
       const slides = [...hero.querySelectorAll('[data-hero-slide]')];
       if (slides.length < 2) {
         trackBanner(slides[0]);
+        if (slides[0] && !hero.dataset.heroVideoReady) {
+          hero.dataset.heroVideoReady = 'true';
+          syncVideos(slides[0], true);
+          desktopMq.addEventListener('change', () => syncVideos(slides[0], true));
+        }
         return;
       }
       hero.dataset.heroReady = 'true';
@@ -62,16 +83,7 @@ if (!window.mtHeroInit) {
         slides.forEach((slide, i) => {
           const active = i === index;
           slide.classList.toggle('mt-hero__slide--active', active);
-          slide.querySelectorAll('video').forEach((video) => {
-            const isPc = video.classList.contains('mt-hero__video--pc');
-            const isMob = video.classList.contains('mt-hero__video--mob');
-            const applicable = (!isPc && !isMob) || (isPc && desktopMq.matches) || (isMob && !desktopMq.matches);
-            if (applicable && (active || i === 0)) {
-              video.play().catch(() => {});
-            } else {
-              video.pause();
-            }
-          });
+          syncVideos(slide, active || i === 0);
         });
         dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
         trackBanner(slides[index]);
