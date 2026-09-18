@@ -34,7 +34,7 @@
         </div>
 
         {%- if block.settings.link != blank -%}
-          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" {% unless forloop.first %}data-mobile-banner-slot="1b"{% endunless %} data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
+          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
         {%- endif -%}
 
         {%- if forloop.first -%}
