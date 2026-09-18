@@ -79,8 +79,8 @@
       <div class="mt-hero__panel mt-hero__panel--full">
         <div class="mt-hero__media">
           {%- if slide_pc_video != blank and slide_mob_video != blank -%}
-            {{ slide_pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-            {{ slide_mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {{ slide_pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {{ slide_mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
           {%- elsif slide_pc_video != blank or slide_mob_video != blank -%}
             {{ slide_pc_video | default: slide_mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif slide_mob_image != blank -%}
