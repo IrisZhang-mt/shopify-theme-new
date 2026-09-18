@@ -318,6 +318,9 @@ html.mt-motion .mt-hero__media video {
   .mt-hero__panel--full {
     width: 100%;
   }
+  .mt-hero__dot--panel {
+    display: none;
+  }
   .mt-hero__video--pc {
     display: block;
   }
