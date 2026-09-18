@@ -1,5 +1,24 @@
 {%- assign pick = item.selected_or_first_available_variant -%}
-<article class="mt-pair" data-pair data-reveal>
+{%- if item_list_id != blank -%}
+  {%- capture pair_ga4_variant -%}{% render 'item-variant-ga4', item: pick %}{%- endcapture -%}
+  {%- assign pair_ga4_variant = pair_ga4_variant | strip -%}
+{%- endif -%}
+<article
+  class="mt-pair"
+  data-pair
+  data-reveal
+  {%- if item_list_id != blank %}
+    data-item-list-id="{{ item_list_id }}"
+    data-item-list-name="{{ item_list_name | escape }}"
+    data-item-id="{{ pick.sku }}"
+    data-item-name="{{ item.title | escape }}"
+    data-item-brand="{{ item.vendor | escape }}"
+    {% if pair_ga4_variant != blank %}data-item-variant="{{ pair_ga4_variant | escape }}"{% endif %}
+    data-item-price="{{ pick.price | divided_by: 100.0 }}"
+    data-item-discount="{% if pick.compare_at_price > pick.price %}{{ pick.compare_at_price | minus: pick.price | divided_by: 100.0 }}{% else %}0{% endif %}"
+    data-item-index="{{ index | default: 0 | plus: 1 }}"
+  {%- endif -%}
+>
   <div class="mt-pair__content">
     <div class="mt-pair__media">
       {%- if item.featured_image -%}
