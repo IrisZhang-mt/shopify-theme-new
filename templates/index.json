@@ -47,15 +47,12 @@
     "hero": {
       "type": "home-hero",
       "blocks": {
-        "slide_bLWiD8": {
-          "type": "slide",
+        "panel-2": {
+          "type": "panel",
           "settings": {
-            "image": "shopify://shop_images/img_v3_0215k_64dd1659-e228-4791-a58b-baa45e4762fg.jpg",
-            "link": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "",
-            "cta_url": ""
+            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world."
           }
         },
         "panel-1": {
@@ -66,19 +63,22 @@
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
         },
-        "panel-2": {
-          "type": "panel",
+        "slide_bLWiD8": {
+          "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
-            "info_heading": "Worldwide Shipping",
-            "info_text": "Fast delivery to families around the world."
+            "image": "shopify://shop_images/img_v3_0215k_64dd1659-e228-4791-a58b-baa45e4762fg.jpg",
+            "link": "",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
           }
         }
       },
       "block_order": [
-        "slide_bLWiD8",
+        "panel-2",
         "panel-1",
-        "panel-2"
+        "slide_bLWiD8"
       ],
       "settings": {
         "heading": "Stay in\nthe play.",
