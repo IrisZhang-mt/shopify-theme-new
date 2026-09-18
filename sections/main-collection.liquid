@@ -90,6 +90,7 @@
 
       <div class="mt-plp__main">
         {%- if collection.products.size > 0 -%}
+          <script>console.log('GA4-debug', {{ collection.products | json }});</script>
           <div class="mt-plp__grid{% if section.settings.single_line_titles %} mt-plp__grid--one-line{% endif %}" data-plp-grid>
             {%- for product in collection.products -%}
               {%- assign card_index = forloop.index0 | modulo: 4 -%}

@@ -136,6 +136,9 @@ if (!window.mtReviewFormInit) {
     }
 
     review.time = Date.now();
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: 'submit_review' });
     window.mtReviewStore.add({
       scope: review.scope,
       productId: review.productId,
@@ -207,6 +210,9 @@ if (!window.mtReviewFormInit) {
     const trigger = event.target.closest?.('[data-rf-open]');
     if (trigger) {
       event.preventDefault();
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({ event: 'ga4Event', event_name: 'write_review' });
       open(trigger);
       return;
     }

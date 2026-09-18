@@ -122,6 +122,24 @@ if (!window.mtQuickShopInit) {
     quantity: 1,
   });
 
+  const qsCurrentItem = () => {
+    const card = state.card;
+    const variant = currentVariant();
+    if (!card || !variant || !card.dataset.itemListId) return null;
+    return {
+      item_id: variant.sku,
+      item_name: card.dataset.itemName,
+      discount: variant.discountValue || 0,
+      index: +card.dataset.itemIndex,
+      item_list_id: card.dataset.itemListId,
+      item_list_name: card.dataset.itemListName,
+      ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+      item_brand: card.dataset.itemBrand,
+      price: variant.priceValue,
+      quantity: 1,
+    };
+  };
+
   let opening = false;
   let openSeq = 0;
   let closeTimer = 0;
@@ -130,6 +148,7 @@ if (!window.mtQuickShopInit) {
     const card = trigger.closest('[data-quick-url]');
     const qs = modal();
     if (!card || !qs || opening) return;
+    state.card = card;
     if (card.dataset.itemListId) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
@@ -281,7 +300,46 @@ if (!window.mtQuickShopInit) {
       return;
     }
     const add = event.target.closest('[data-qs-add]');
-    if (add) window.mtAddToCart(add, 1, close);
+    if (add) {
+      const item = qsCurrentItem();
+      if (item) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'add_to_cart',
+          event_parameters: {
+            button_name: 'Add to Cart',
+            currency: state.card?.closest('[data-currency]')?.dataset.currency,
+            value: item.price,
+            item_list_id: item.item_list_id,
+            item_list_name: item.item_list_name,
+            items: [item],
+          },
+        });
+      }
+      window.mtAddToCart(add, 1, close);
+      return;
+    }
+    const details = event.target.closest('.mt-qs__details');
+    if (details) {
+      const item = qsCurrentItem();
+      if (item) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'select_item',
+          event_parameters: {
+            item_list_id: item.item_list_id,
+            item_list_name: item.item_list_name,
+            currency: state.card?.closest('[data-currency]')?.dataset.currency,
+            button_name: 'See Details',
+            items: [item],
+          },
+        });
+      }
+    }
   });
 
   document.addEventListener('keydown', (event) => {

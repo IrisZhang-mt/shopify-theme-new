@@ -12,7 +12,7 @@
             {%- assign open = true -%}
           {%- endif -%}
           <div class="mt-faq__item{% if open %} mt-faq__item--open{% endif %}" data-faq-item {{ block.shopify_attributes }}>
-            <button class="mt-faq__q" type="button" data-faq-toggle aria-expanded="{{ open }}" aria-controls="Faq-{{ block.id }}">
+            <button class="mt-faq__q" type="button" data-faq-toggle data-content-name="{{ block.settings.question | escape }}" aria-expanded="{{ open }}" aria-controls="Faq-{{ block.id }}">
               <span>{{ block.settings.question }}</span>
               <img src="{{ 'plus.svg' | asset_url }}" width="12" height="12" alt="" aria-hidden="true">
             </button>

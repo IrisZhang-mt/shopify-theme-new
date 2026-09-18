@@ -4,6 +4,7 @@
 <section
   class="mt-pdp-rel{% unless recommendations.performed %} mt-pdp-rel--pending{% endunless %}"
   data-rel
+  data-currency="{{ cart.currency.iso_code }}"
   {% unless recommendations.performed %}
     data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=8&intent=related"
   {% endunless %}
@@ -14,7 +15,7 @@
     <div class="mt-pdp-rel__stage" data-row-stage>
       <div class="mt-pdp-rel__row" data-autoplay="30" data-wheel-lock>
         {%- for item in recommendations.products limit: 8 -%}
-          {% render 'product-card', product: item, index: forloop.index0, sizes: '(min-width: 750px) 335px, 258px' %}
+          {% render 'product-card', product: item, index: forloop.index0, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
         {%- endfor -%}
       </div>
       <button class="mt-row-nav mt-row-nav--prev" type="button" data-row-arrow="prev" aria-label="{{ 'general.previous' | t }}">
@@ -31,7 +32,7 @@
         {%- assign rel_i = 0 -%}
         {%- for item in rel_source.products limit: 13 -%}
           {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
-          {% render 'product-card', product: item, index: rel_i, sizes: '(min-width: 750px) 335px, 258px' %}
+          {% render 'product-card', product: item, index: rel_i, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
           {%- assign rel_i = rel_i | plus: 1 -%}
         {%- endfor -%}
       </div>

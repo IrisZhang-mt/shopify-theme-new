@@ -173,6 +173,19 @@ if (!window.mtPdpInit) {
         const open = toggle.getAttribute('aria-expanded') !== 'true';
         toggle.setAttribute('aria-expanded', String(open));
         panel?.classList.toggle('mt-open', open);
+        if (open) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'select_content',
+            event_parameters: {
+              module_name: 'Product Details',
+              content_name: toggle.dataset.contentName,
+              button_name: '',
+            },
+          });
+        }
         return;
       }
       const qtyEl = root.querySelector('[data-pdp-qty]');
@@ -187,7 +200,34 @@ if (!window.mtPdpInit) {
         return;
       }
       const add = event.target.closest('[data-pdp-add]');
-      if (add) window.mtAddToCart(add, state.qty);
+      if (add) {
+        const variant = matchVariant(state.variants, state.selected);
+        if (variant) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'add_to_cart',
+            event_parameters: {
+              button_name: 'Add to Cart',
+              currency: root.dataset.currency,
+              value: +(variant.priceValue * state.qty).toFixed(2),
+              items: [
+                {
+                  item_id: variant.sku,
+                  item_name: root.dataset.itemName,
+                  discount: variant.discountValue || 0,
+                  ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+                  item_brand: root.dataset.itemBrand,
+                  price: variant.priceValue,
+                  quantity: state.qty,
+                },
+              ],
+            },
+          });
+        }
+        window.mtAddToCart(add, state.qty);
+      }
     });
 
     const defaultColor = root.dataset.pdpDefaultColor;
@@ -255,6 +295,23 @@ if (!window.mtPdpInit) {
       }
     };
 
+    const pairGa4Item = () => {
+      const variant = matchVariant(state.variants, state.selected);
+      if (!variant || !pair.dataset.itemListId) return null;
+      return {
+        item_id: variant.sku,
+        item_name: pair.dataset.itemName,
+        discount: variant.discountValue || 0,
+        index: +pair.dataset.itemIndex,
+        item_list_id: pair.dataset.itemListId,
+        item_list_name: pair.dataset.itemListName,
+        ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+        item_brand: pair.dataset.itemBrand,
+        price: variant.priceValue,
+        quantity: 1,
+      };
+    };
+
     pair.addEventListener('click', (event) => {
       const value = event.target.closest('[data-pair-value]');
       if (value) {
@@ -268,7 +325,46 @@ if (!window.mtPdpInit) {
         return;
       }
       const add = event.target.closest('[data-pair-add]');
-      if (add) window.mtAddToCart(add, 1);
+      if (add) {
+        const item = pairGa4Item();
+        if (item) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'add_to_cart',
+            event_parameters: {
+              button_name: 'Add to Cart',
+              currency: pair.closest('[data-currency]')?.dataset.currency,
+              value: item.price,
+              item_list_id: item.item_list_id,
+              item_list_name: item.item_list_name,
+              items: [item],
+            },
+          });
+        }
+        window.mtAddToCart(add, 1);
+        return;
+      }
+      const details = event.target.closest('.mt-pair__details');
+      if (details) {
+        const item = pairGa4Item();
+        if (item) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'select_item',
+            event_parameters: {
+              item_list_id: item.item_list_id,
+              item_list_name: item.item_list_name,
+              currency: pair.closest('[data-currency]')?.dataset.currency,
+              button_name: 'See Details',
+              items: [item],
+            },
+          });
+        }
+      }
     });
 
     if (variants.length) sync();

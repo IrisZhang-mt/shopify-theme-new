@@ -1,6 +1,7 @@
 {{ 'search.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'search-results.js' | asset_url }}" type="module"></script>
 
-<section class="mt-srp">
+<section class="mt-srp" data-srp data-currency="{{ cart.currency.iso_code }}">
   {%- if search.performed -%}
     {%- assign terms = search.terms | escape -%}
     <h1 class="mt-srp__title" data-reveal>
@@ -12,12 +13,49 @@
         <div class="mt-srp__grid">
           {%- for item in search.results -%}
             {%- if item.object_type == 'product' -%}
-              {% render 'product-card', product: item, index: forloop.index0, quick: true %}
+              {% render 'product-card', product: item, index: forloop.index0, quick: true, item_list_id: 'search_results', item_list_name: 'Search Results' %}
             {%- else -%}
               <a class="mt-srp__row" href="{{ item.url }}" data-reveal>{{ item.title }}</a>
             {%- endif -%}
           {%- endfor -%}
         </div>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'view_item_list',
+            event_parameters: {
+              item_list_id: 'search_results',
+              item_list_name: 'Search Results',
+              currency: {{ cart.currency.iso_code | json }},
+              items: [
+                {%- for item in search.results -%}
+                  {%- if item.object_type == 'product' -%}
+                    {%- assign ga4_pick = item.variants | where: 'available', true | first -%}
+                    {%- assign ga4_pick = ga4_pick | default: item.variants.first -%}
+                    {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
+                    {%- assign ga4_variant = ga4_variant | strip -%}
+                    {
+                      item_id: {{ ga4_pick.sku | json }},
+                      item_name: {{ item.title | json }},
+                      discount: {% if item.compare_at_price_min > item.price_min %}{{ item.compare_at_price_min | minus: item.price_min | divided_by: 100.0 }}{% else %}0{% endif %},
+                      index: {{ forloop.index }},
+                      item_list_id: 'search_results',
+                      item_list_name: 'Search Results',
+                      {%- if ga4_variant != blank %}
+                      item_variant: {{ ga4_variant | json }},
+                      {%- endif %}
+                      item_brand: {{ item.vendor | json }},
+                      price: {{ item.price_min | divided_by: 100.0 }},
+                      quantity: 1
+                    }{%- unless forloop.last -%},{%- endunless -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              ]
+            }
+          });
+        </script>
         {%- if paginate.pages > 1 -%}
           <nav class="mt-srp__pager">
             {%- if paginate.previous -%}

@@ -16,9 +16,18 @@
 - [产品列表页 - 产品列表模块（No.35/36）](#验证清单产品列表页---产品列表模块no3536)
 - [产品列表页 - 筛选按钮（No.37）](#验证清单产品列表页---筛选按钮no37)
 - [QUICK SHOP 模块（No.38/39）](#验证清单quick-shop-模块no3839)
+- [Quick Shop 弹窗内 See Details / Add to Cart（No.40/41）](#验证清单quick-shop-弹窗内-see-details--add-to-cartno4041)
+- [PDP 页面浏览（No.42）](#验证清单pdp-页面浏览no42)
+- [PDP 主体 Add to Cart（No.43）](#验证清单pdp-主体-add-to-cartno43)
+- [PDP Details 手风琴（No.44）](#验证清单pdp-details-手风琴no44)
+- [Pairs well with 模块（No.45/46）](#验证清单pairs-well-with-模块no4546)
+- [Reviews 模块（No.47/48）](#验证清单reviews-模块no4748)
+- [FAQ 模块（No.49）](#验证清单faq-模块no49)
+- [You May Also Like 模块（No.50/51）](#验证清单you-may-also-like-模块no5051)
+- [搜索结果页（No.52-57）](#验证清单搜索结果页no52-57)
 
-还没做的（sheet3 No.40 及以后）：产品详情页（PDP）相关埋点，等这批
-验证完之后继续按文档顺序做。
+结账/配送/支付/支付成功（No.58-61）文档里已经标"不处理"，不需要开发，
+到这里 sheet3「代码部署详情」这一批就全部做完了。
 
 ## 验证清单：We think you'll love 模块（No.23/24）
 
@@ -193,9 +202,33 @@
   - `currency` 正确
   - `items[]` 字段同前面几个模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`）
 - [ ] 往下滚动触发"加载更多"（无限滚动），应该**再触发一条** `view_item_list`，这次 `items[]` 里**只包含新加载出来的商品**，`index` 从上一批的最后一个数字往后接着算（不是从 1 重新开始）
-- [ ] 勾选左侧筛选条件后页面刷新出新的商品列表，应该**再触发一条** `view_item_list`（整批新商品）
+- [ ] 勾选左侧筛选条件后页面刷新出新的商品列表，应该**再触发一条** `view_item_list`（整批新商品），**并且 `items[]` 里每个商品的 `item_id` 都不应该是空字符串**（见下方 Bug 修复说明）
 - [ ] 点击任意商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
+
+> **Bug 修复（2026-09-18）**：按 Size/Color 等变体选项筛选分类页后，
+> 部分商品的 `item_id` 会变成空字符串 `""`。根因：`product-card.liquid`
+> 原来用 `product.selected_or_first_available_variant` 取变体，这个属性
+> 会自动跟着当前分类页的筛选条件去匹配对应变体，筛选状态下取到的匹配
+> 结果不稳定，导致部分商品的 SKU 取不到。
+>
+> 修复：改成不受筛选影响、自己手动取"第一个有库存的变体，没有就取
+> 第一个变体"：`product.variants | where: 'available', true | first`，
+> 取不到再 `default` 到 `product.variants.first`。这个函数在
+> `snippets/product-card.liquid` 里，是 We think you'll love / Best
+> Sellers / 分类页商品列表 / Quick Shop 共用的，这几个模块的 `item_id`/
+> `item_variant` 已经一起修复，不需要分别改。
+>
+> 已用 `curl` 模拟 `Size=4 (110)` 筛选实测：修复前 24 个商品卡片里有多个
+> `item_id` 是空的，修复后 24 个全部有正确的值。
+>
+> **已知限制（讨论后维持现状，不算 bug）**：这个修复让 `item_id` 稳定
+> 不为空，但代价是 `item_variant` 不保证跟当前筛选条件一致——比如筛选
+> `Size=22 (180)` 之后，`items[]` 里可能出现 `item_variant: "Birch_4
+> (110)"` 这种跟筛选尺码不一样的值，因为它现在只看"这个商品第一个有
+> 库存的变体是什么"，不看当前筛选条件。要让 `item_variant` 跟筛选联动
+> 需要额外按 `collection.filters` 里勾选的值去匹配对应变体，讨论后决定
+> 不做这个（收益不确定，会增加复杂度），保持现状。
 
 代码改动：`sections/main-collection.liquid` 给商品网格的 `product-card`
 渲染传入 `item_list_id`/`item_list_name`/`ga4_index`；`snippets/product-card.liquid`
@@ -238,3 +271,161 @@
 都直接复用触发按钮所在商品卡片（`product-card.liquid`）上已有的 GA4 data
 属性，未新增 Liquid 改动。`currency` 通过 `closest('[data-currency]')`
 从最近的祖先节点读取。未新建文件。
+
+---
+
+## 验证清单：Quick Shop 弹窗内 See Details / Add to Cart（No.40/41）
+
+- [ ] 打开 Quick Shop 弹窗后，点弹窗右下角的 "See Details" 链接，跳转前控制台应出现：
+  - `event_name: select_item`
+  - `button_name: "See Details"`
+  - `items[]` 里该商品字段齐全，`item_id`/`item_variant` 是弹窗里**当前选中**的那个变体（不是打开弹窗那一刻的默认变体）
+- [ ] 在弹窗里切换颜色/尺码之后再点 "See Details"，`item_id`/`item_variant`/`price` 应该跟着变成你刚选的那个变体
+- [ ] 点弹窗里的 "Add to Cart" 按钮，应该出现一条 `add_to_cart`：
+  - `button_name: "Add to Cart"`
+  - `value` 等于当前选中变体的单价
+  - `items[]` 同样反映当前选中的变体
+
+代码改动：`sections/quick-shop.liquid` 里输出变体列表的那段 JSON
+（`data-qs-variants`）新增了 `sku`/`priceValue`/`discountValue`/`itemVariant`
+四个字段（原来只有给页面展示用的格式化价格字符串，没有 GA4 需要的原始
+数值和 SKU，复用了 `item-variant-ga4` 拼接逻辑）；`assets/quick-shop.js`
+新增 `qsCurrentItem()`，从"当前选中的变体 + 打开弹窗时记下来的商品卡片"
+拼出 GA4 的 item 对象，`.mt-qs__details` 和 `.mt-qs__add` 点击时分别
+触发 `select_item`/`add_to_cart`。未新建文件。
+
+---
+
+## 验证清单：PDP 页面浏览（No.42）
+
+- [ ] 打开任意商品详情页（PDP），控制台应出现一条 `view_item`：
+  - `currency`、`value` 正确（`value` = 当前变体单价，默认数量 1）
+  - `items[]` 里该商品字段齐全（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`discount`）
+  - 确认**没有** `item_list_id`/`item_list_name`/`index`（直接进 PDP 没有列表来源，不传）、也没有 `item_category`/`item_category2`
+- [ ] 如果 URL 带 `?variant=xxx` 打开（比如从 Quick Shop 的 See Details 链接跳转过来），`items[]` 里的字段应该反映 URL 指定的那个变体，不是默认变体
+
+代码改动：`sections/main-product.liquid` 顶部加了一段内联执行的
+`<script>`，页面首次渲染时直接触发 `view_item`，取值用页面已有的
+`product.selected_or_first_available_variant`。未新建文件。
+
+---
+
+## 验证清单：PDP 主体 Add to Cart（No.43）
+
+- [ ] PDP 页面价格旁边的 Add to Cart 按钮，点击后应出现一条 `add_to_cart`：
+  - `button_name: "Add to Cart"`
+  - `value` = 当前选中变体单价 × 当前数量（用 +/- 调整过数量的话要跟着变）
+  - `items[]` 里 `item_id`/`item_variant`/`price` 是**当前选中**的变体（切换颜色/尺码后点加购要跟着变）
+  - 确认没有 `item_list_id`/`item_list_name`（无来源，不传）
+
+代码改动：`sections/main-product.liquid` 的 `data-pdp-variants` JSON 新增
+`priceValue`/`discountValue`/`itemVariant` 字段（跟 Quick Shop 那次修复
+同一个思路，原来只有展示用的格式化价格字符串）；`assets/pdp.js` 的
+`[data-pdp-add]` 点击处理里，用 `matchVariant()` 找到当前选中的变体后
+触发 `add_to_cart`。未新建文件。
+
+---
+
+## 验证清单：PDP Details 手风琴（No.44）
+
+- [ ] PDP 下方的手风琴条目（如 "Product Description"/"Material & Care"/"Sustainability"，具体标题看主题编辑器怎么配置），点击**展开**时应出现：
+  - `event_name: select_content`
+  - `module_name: "Product Details"`
+  - `content_name` 等于该条目的标题
+  - `button_name` 是空字符串 `""`
+- [ ] 点击收起（再点一次已展开的条目）**不应该**触发这条事件
+
+代码改动：`sections/main-product.liquid` 给手风琴标题按钮加了
+`data-content-name`；`assets/pdp.js` 的 `[data-pdp-toggle]` 点击处理里，
+只在展开（`open === true`）时触发 `select_content`。未新建文件。
+
+---
+
+## 验证清单：Pairs well with 模块（No.45/46）
+
+- [ ] PDP 下方 "Pairs well with"（搭配推荐）模块，点击某个搭配商品的 Add to Cart 按钮，应出现一条 `add_to_cart`：
+  - `item_list_id: "pdp_pairs"`
+  - `item_list_name`：主题编辑器里配置的 Pairs 标题（默认 "Pairs well with"）
+  - `items[]` 里的变体是**当前选中**的（如果搭配卡片自己也能选颜色/尺码）
+- [ ] 点击该搭配商品的 "See Details" 链接，跳转前应出现一条 `select_item`：
+  - `button_name: "See Details"`
+  - `item_list_id`/`item_list_name` 同上
+- [ ] 这两条事件都应该只对"你点的那个搭配商品"生效，不要跟当前 PDP 主商品的数据混在一起
+
+代码改动：`snippets/pdp-pair.liquid` 的 `.mt-pair` 卡片加了跟
+`product-card.liquid` 一样的 GA4 data 属性，`data-pair-variants` JSON
+补了 `sku`/`priceValue`/`discountValue`/`itemVariant`；
+`sections/main-product.liquid`、`sections/product-pairs.liquid`（异步
+fetch 用的那个 section）渲染 `pdp-pair` 时都传了
+`item_list_id`/`item_list_name`/`index`；`assets/pdp.js` 的 `initPair()`
+新增 `pairGa4Item()`，`.mt-pair__add`/`.mt-pair__details` 点击时分别
+触发 `add_to_cart`/`select_item`。未新建文件。
+
+---
+
+## 验证清单：Reviews 模块（No.47/48）
+
+- [ ] PDP 下方 Reviews 区域，点击 "Write a review" 按钮，控制台应出现：
+  - `event_name: write_review`（没有 `event_parameters`，这条本来就该是空的）
+- [ ] 在弹出的表单里填好信息并提交成功后（弹窗提示感谢/评论已保存），应该出现：
+  - `event_name: submit_review`（同样没有 `event_parameters`）
+- [ ] 如果提交失败（比如必填项没填、网络报错），**不应该**触发 `submit_review`
+
+代码改动：`assets/review-form.js` 里，点击 `[data-rf-open]` 打开表单时
+触发 `write_review`；Judge.me 提交接口调用成功后触发 `submit_review`。
+未新建文件。
+
+---
+
+## 验证清单：FAQ 模块（No.49）
+
+- [ ] PDP 下方 FAQ 区域，点击某个问题标题展开时，应出现：
+  - `event_name: select_content`
+  - `content_type: "FAQ"`
+  - `content_name` 等于该问题的文案
+  - `button_name` 是空字符串 `""`
+- [ ] 点击收起**不应该**触发这条事件
+
+代码改动：`sections/product-faq.liquid` 给问题标题按钮加了
+`data-content-name`；`assets/product-faq.js` 的点击处理里，只在展开时
+触发 `select_content`。未新建文件。
+
+---
+
+## 验证清单：You May Also Like 模块（No.50/51）
+
+- [ ] PDP 下方 "You May Also Like" 模块加载后，控制台应出现一条 `view_item_list`：
+  - `item_list_id: "you_may_also_like"`
+  - `item_list_name`：主题编辑器里配置的标题（默认 "You May Also Like"）
+  - `items[]` 字段跟前面几个商品列表模块一致
+- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
+- [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
+
+代码改动：`sections/product-related.liquid`（含首次渲染的兜底池分支和
+异步 fetch 用的 `recommendations.performed` 分支）都给 `product-card`
+渲染传了 `item_list_id: 'you_may_also_like'`；`assets/product-related.js`
+新增 `view_item_list`（推荐商品渲染完成后触发一次）和 `select_item`
+（点击卡片，排除 Quick Shop 按钮）逻辑。未新建文件。
+
+---
+
+## 验证清单：搜索结果页（No.52-57）
+
+- [ ] 搜索出有结果的商品（如访问 `/search?q=jacket&type=product`），页面加载后控制台应出现一条 `view_item_list`：
+  - `item_list_id: "search_results"`
+  - `item_list_name: "Search Results"`（固定文案，不含搜索词）
+  - `items[]` 字段跟前面几个商品列表模块一致
+- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
+- [ ] 点击卡片上的 Quick Shop 按钮，应该正常触发 `select_item`（`button_name: "QUICK SHOP"`）——这个是直接复用 Quick Shop 已有逻辑，不是本次新写的
+- [ ] Quick Shop 弹窗展示后应出现 `view_item`，点弹窗里的 "See Details"/"Add to Cart" 也应该分别触发 `select_item`/`add_to_cart`——这三个也是复用逻辑
+- [ ] 翻页（如果搜索结果超过 24 个）到第 2 页，应该**再触发一条** `view_item_list`（翻页是整页刷新，不是无限滚动，跟分类页的"加载更多"不一样，不需要担心 index 累加的问题）
+
+代码改动：`sections/main-search.liquid` 给商品网格加了内联执行的
+`<script>` 触发 `view_item_list`（因为搜索结果页是纯服务端渲染、没有
+异步 fetch，直接在渲染时算好 `items[]` 输出），商品卡片渲染时传了
+`item_list_id: 'search_results'`；新建 `assets/search-results.js`
+处理点击卡片触发 `select_item`（排除 Quick Shop 按钮）——这是这个
+section 第一次有独立 JS 文件，遵循命名对称约定新建。Quick Shop 相关的
+三条（No.54/55/56/57，QUICK SHOP点击/预览/See Details/Add to Cart）
+完全复用 `assets/quick-shop.js` 里 No.38-41 时已经写好的逻辑，没有新增
+任何代码——只要商品卡片带了 `item_list_id`，Quick Shop 就自动能用。
