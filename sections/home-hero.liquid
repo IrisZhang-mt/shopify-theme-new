@@ -15,8 +15,8 @@
       <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="1b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
         <div class="mt-hero__media">
           {%- if pc_video != blank and mob_video != blank -%}
-            {{ pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-            {{ mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {{ pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {{ mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
           {%- elsif pc_video != blank or mob_video != blank -%}
             {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif mob_image != blank -%}
@@ -25,7 +25,7 @@
                 <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 2880 }}">
               {%- endif -%}
               {%- if forloop.first -%}
-                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
               {%- else -%}
                 {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
               {%- endif -%}
