@@ -310,6 +310,53 @@
         "show_icon": true
       }
     },
+    "home_hero_jqRfq7": {
+      "type": "home-hero",
+      "blocks": {
+        "slide_Ctr3Nr": {
+          "type": "slide",
+          "settings": {
+            "pc_image": "shopify://shop_images/hero-pc-w.png",
+            "link": "",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
+        "panel_i4FrDT": {
+          "type": "panel",
+          "disabled": true,
+          "settings": {
+            "link": "",
+            "info_heading": "Made To Move",
+            "info_text": "Breathable, durable, quick-drying fabrics"
+          }
+        },
+        "panel_EggTEt": {
+          "type": "panel",
+          "disabled": true,
+          "settings": {
+            "link": "",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world."
+          }
+        }
+      },
+      "block_order": [
+        "slide_Ctr3Nr",
+        "panel_i4FrDT",
+        "panel_EggTEt"
+      ],
+      "name": "Hero",
+      "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop New Arrivals",
+        "cta_url": "",
+        "slide_interval": 5
+      }
+    },
     "page_card_grid_ygFVW9": {
       "type": "page-card-grid",
       "blocks": {
@@ -551,51 +598,12 @@
         "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
       }
     },
-    "home_hero_jqRfq7": {
-      "type": "home-hero",
-      "blocks": {
-        "slide_Ctr3Nr": {
-          "type": "slide",
-          "settings": {
-            "pc_image": "shopify://shop_images/hero-pc-w.png",
-            "link": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "",
-            "cta_url": ""
-          }
-        },
-        "panel_i4FrDT": {
-          "type": "panel",
-          "disabled": true,
-          "settings": {
-            "link": "",
-            "info_heading": "Made To Move",
-            "info_text": "Breathable, durable, quick-drying fabrics"
-          }
-        },
-        "panel_EggTEt": {
-          "type": "panel",
-          "disabled": true,
-          "settings": {
-            "link": "",
-            "info_heading": "Worldwide Shipping",
-            "info_text": "Fast delivery to families around the world."
-          }
-        }
-      },
-      "block_order": [
-        "slide_Ctr3Nr",
-        "panel_i4FrDT",
-        "panel_EggTEt"
-      ],
-      "name": "Hero",
+    "full_image_JRY9PH": {
+      "type": "full-image",
+      "name": "Full image",
       "settings": {
-        "heading": "Stay in\nthe play.",
-        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
-        "cta_label": "Shop New Arrivals",
-        "cta_url": "",
-        "slide_interval": 5
+        "pc_image": "shopify://shop_images/hero-pc-w.png",
+        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg"
       }
     }
   },
@@ -611,6 +619,7 @@
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g",
-    "page_careers_roles_Wkqjnc"
+    "page_careers_roles_Wkqjnc",
+    "full_image_JRY9PH"
   ]
 }
