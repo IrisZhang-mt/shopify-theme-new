@@ -2,6 +2,7 @@
 {%- if item_list_id != blank -%}
   {%- capture pair_ga4_variant -%}{% render 'item-variant-ga4', item: pick %}{%- endcapture -%}
   {%- assign pair_ga4_variant = pair_ga4_variant | strip -%}
+  <script>console.log('GA4-debug-pair', {{ item.title | json }}, {{ item | json }});</script>
 {%- endif -%}
 <article
   class="mt-pair"
