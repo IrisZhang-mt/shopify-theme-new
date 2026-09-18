@@ -61,6 +61,12 @@ if (!window.mtHeroInit) {
     });
   };
 
+  const setActiveDot = (hero, activeDot) => {
+    hero.querySelectorAll('[data-hero-dot], [data-hero-panel-dot]').forEach((dot) => {
+      dot.setAttribute('aria-current', String(dot === activeDot));
+    });
+  };
+
   const initSlides = () => {
     document.querySelectorAll('[data-hero]').forEach((hero) => {
       if (hero.dataset.heroReady) return;
@@ -85,7 +91,7 @@ if (!window.mtHeroInit) {
           slide.classList.toggle('mt-hero__slide--active', active);
           syncVideos(slide, active || i === 0);
         });
-        dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+        setActiveDot(hero, dots[index]);
         trackBanner(slides[index]);
       };
       const stop = () => {
@@ -129,6 +135,11 @@ if (!window.mtHeroInit) {
         if (!hero.isConnected) return;
         show(index);
       });
+      hero._mtGotoMain = () => {
+        stop();
+        show(0);
+        play();
+      };
       show(0);
       play();
     });
