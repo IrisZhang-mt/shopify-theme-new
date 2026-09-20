@@ -217,6 +217,7 @@ if (!window.mtPdpInit) {
                   item_id: variant.sku,
                   item_name: root.dataset.itemName,
                   discount: variant.discountValue || 0,
+                  ...(root.dataset.itemCategory ? { item_category: root.dataset.itemCategory } : {}),
                   ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
                   item_brand: root.dataset.itemBrand,
                   price: variant.priceValue,
