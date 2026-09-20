@@ -48,6 +48,18 @@
     ]
   },
   {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "Amount in your store's currency (e.g. 79) shown on the cart progress bar. This does not read your Settings > Shipping and delivery rate automatically — keep it in sync manually when that rate changes. Leave blank to hide the bar.",
+        "default": 79
+      }
+    ]
+  },
+  {
     "name": "Store locator",
     "settings": [
       {
