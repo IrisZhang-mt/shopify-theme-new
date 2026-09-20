@@ -1,0 +1,40 @@
+.single-image {
+  padding: 0 15px;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media only screen and (min-width: 768px) {
+  .single-image {
+    padding: 0 50px;
+  }
+}
+
+.single-image {
+  text-align: center;
+}
+.single-image.full-width--true {
+  max-width: none;
+  padding: 0;
+}
+.single-image img,
+.single-image svg {
+  margin: 0 auto;
+}
+
+.single-image.section-spacing {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+@media only screen and (min-width: 768px) {
+  .single-image.section-spacing {
+    margin-top: 80px;
+    margin-bottom: 80px;
+  }
+}
+.single-image.section-spacing.section-spacing--disable-top {
+  margin-top: 0;
+}
+.single-image.section-spacing.section-spacing--disable-bottom {
+  margin-bottom: 0;
+}
