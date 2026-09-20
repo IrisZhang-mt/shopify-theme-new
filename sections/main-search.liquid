@@ -43,6 +43,9 @@
                       index: {{ forloop.index }},
                       item_list_id: 'search_results',
                       item_list_name: 'Search Results',
+                      {%- if item.type != blank %}
+                      item_category: {{ item.type | json }},
+                      {%- endif %}
                       {%- if ga4_variant != blank %}
                       item_variant: {{ ga4_variant | json }},
                       {%- endif %}

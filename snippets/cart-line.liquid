@@ -8,6 +8,7 @@
   data-item-id="{{ item.sku }}"
   data-item-name="{{ item.product.title | escape }}"
   data-item-brand="{{ item.product.vendor | escape }}"
+  {% if item.product.type != blank %}data-item-category="{{ item.product.type | escape }}"{% endif %}
   data-item-price="{{ item.final_price | divided_by: 100.0 }}"
   {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
   data-item-index="{{ line }}"

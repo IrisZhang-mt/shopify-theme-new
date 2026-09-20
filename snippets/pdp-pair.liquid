@@ -14,6 +14,7 @@
     data-item-id="{{ pick.sku }}"
     data-item-name="{{ item.title | escape }}"
     data-item-brand="{{ item.vendor | escape }}"
+    {% if item.type != blank %}data-item-category="{{ item.type | escape }}"{% endif %}
     {% if pair_ga4_variant != blank %}data-item-variant="{{ pair_ga4_variant | escape }}"{% endif %}
     data-item-price="{{ pick.price | divided_by: 100.0 }}"
     data-item-discount="{% if pick.compare_at_price > pick.price %}{{ pick.compare_at_price | minus: pick.price | divided_by: 100.0 }}{% else %}0{% endif %}"

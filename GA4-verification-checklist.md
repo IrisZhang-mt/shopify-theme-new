@@ -4,6 +4,20 @@
 完成浏览器验证后，请告知对应模块，我会同步把 xlsx 里的开发进度列
 （U 列）从"代码已完成，待验证"改成"已完成"。
 
+> **全局规则更新（2026-09-20）**：经查，Shopify 接口已经不返回
+> `category`（标准商品分类）这个字段了，所以 `item_category` 改成用
+> 商品自带的 `product.type` 来传（跟之前 `item_category2` 一度尝试过
+> 的做法一样，但这次是正式定为 `item_category`）。`item_category2`
+> 确认**删除**，不传。这个改动覆盖了下面几乎每一个带 `items[]` 的
+> 事件——We think you'll love / Best Sellers / 分类页商品列表 / 搜索
+> 结果页 / PDP（view_item、Pairs well with）/ You May Also Like /
+> Quick Shop / 购物车（view_cart、加购/移除）/ Checkout Custom Pixel，
+> 全部一次性加上了 `item_category`，没有数据（`product.type` 为空）
+> 的商品就不传这个字段。下文各模块里原来写"没有 `item_category`/
+> `item_category2`"的地方，现在应该理解为"带 `item_category`（值是
+> product type，如 Jackets & Coats/Leggings/Pants），没有
+> `item_category2`"，不再逐条改写。
+
 ## 目录
 
 - [We think you'll love 模块（No.23/24）](#验证清单we-think-youll-love-模块no2324)
@@ -25,9 +39,9 @@
 - [FAQ 模块（No.49）](#验证清单faq-模块no49)
 - [You May Also Like 模块（No.50/51）](#验证清单you-may-also-like-模块no5051)
 - [搜索结果页（No.52-57）](#验证清单搜索结果页no52-57)
+- [结账/配送/支付/支付成功（No.58-61，Custom Pixel）](#验证清单结账配送支付支付成功no58-61custom-pixel)
 
-结账/配送/支付/支付成功（No.58-61）文档里已经标"不处理"，不需要开发，
-到这里 sheet3「代码部署详情」这一批就全部做完了。
+到这里 sheet3「代码部署详情」全部做完了。
 
 ## 验证清单：We think you'll love 模块（No.23/24）
 
@@ -56,7 +70,9 @@
 变体拼接逻辑）；`assets/cart.js` 的 `initRecs()` 里触发 `view_item_list`，
 新增点击监听触发 `select_item`（排除加购按钮和 Quick Shop 按钮）。
 
-`item_category`（一级分类）、`item_category2`（二级分类）均无可靠数据源，不传。
+`item_category2`（二级分类）无可靠数据源，不传。`item_category`（一级分类）
+原本也无数据源，2026-09-20 起改用 `product.type` 传值（见文件最开头的
+"全局规则更新"）。
 
 > **补充（2026-09-17）**：原文档漏了推荐商品卡片"+"加购按钮的埋点，
 > 已按反馈补上 `add_to_cart`（见上面验证点），仍算在 No.23/24 里，
@@ -125,24 +141,29 @@
 
 - [ ] 首页 Best Sellers 模块加载后，控制台应出现一条 `view_item_list`：
   - `item_list_id: "best_sellers"`
-  - `item_list_name: "Best Sellers"`（或 section 设置里自定义的标题）
-  - `item_list_label`：当前激活 tab 的标签文案（如 "Girls"，运营在主题编辑器的 Best Sellers 区块设置里自己配置的，不是写死的）
+  - `item_list_name`：拼接成 `Best Sellers_` + 当前激活 tab 的标签，比如默认 Girls tab 是 `"Best Sellers_Girls"`
+  - **确认没有** `item_list_label` 字段了（已删除，信息现在并入 `item_list_name`）
   - `currency` 正确
-  - `items[]` 字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`）
-- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，应该**再触发一次** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_label` 也应该跟着变成新 tab 的标签（如切到 Boys 就是 "Boys"）
+  - `items[]` 字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`），每个商品的 `item_list_name` 也是 `"Best Sellers_Girls"` 这种格式
+- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，应该**再触发一次** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_name` 也应该跟着变成 `"Best Sellers_Boys"`
 - [ ] 切换回之前看过的同一个 tab，**不应该**重复触发（按商品 id 集合去重）
-- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`，`item_list_label` 同样要有值且跟当前 tab 一致
+- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`，`item_list_name` 同样是 `"Best Sellers_Girls"`/`"Best Sellers_Boys"` 这种格式，跟当前 tab 一致
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
 
-代码改动：`sections/home-best-sellers.liquid` 把每个 collection block 的
-`settings.label`（运营在主题编辑器里配的 Girls/Boys 这种标签）透传为
-`item_list_label`，经 `snippets/product-card-list.liquid` 传给
-`snippets/product-card.liquid`（新增 `item_list_label` 可选参数，写成
-`data-item-list-label`，跟 `item_list_id`/`item_list_name` 一样是可选属性，
-没传就不渲染，不影响其他调用方）；`assets/home-best-sellers.js` 的
-`view_item_list`/`select_item` 都带上这个字段（值不存在时不传）。
-`item_list_label` 目前只有 Best Sellers 这个模块用，We think you'll love/
-分类页商品列表暂时没有对应的"标签"配置，没加这个字段。未新建文件。
+> **更新（2026-09-20）**：按反馈把 `item_list_label` 字段整个删掉了，
+> 原来单独传的 tab 标签信息现在直接拼进 `item_list_name` 里
+> （`Best Sellers_` + 标签，如 `Best Sellers_Girls`/`Best Sellers_Boys`），
+> `view_item_list`/`select_item` 里所有出现 `item_list_name` 的地方
+> （事件顶层 + `items[]` 里每一项）都是这个拼接后的值，不再是固定的
+> `"Best Sellers"`。
+
+代码改动：`sections/home-best-sellers.liquid` 不再用 section 标题作为
+`item_list_name`，改成每个 tab 单独算 `'Best Sellers_' | append: block.settings.label`
+（Liquid 的 `render` 标签不支持在参数里直接用过滤器，所以先 `assign`
+算好再传）；撤销了 `item_list_label` 相关的改动——`snippets/product-card-list.liquid`、
+`snippets/product-card.liquid`、`assets/home-best-sellers.js` 里新增的
+`item_list_label` 透传/属性/字段全部删除，恢复成只有
+`item_list_id`/`item_list_name` 两个可选参数。未新建文件。
 
 ---
 
@@ -430,3 +451,79 @@ section 第一次有独立 JS 文件，遵循命名对称约定新建。Quick Sh
 三条（No.54/55/56/57，QUICK SHOP点击/预览/See Details/Add to Cart）
 完全复用 `assets/quick-shop.js` 里 No.38-41 时已经写好的逻辑，没有新增
 任何代码——只要商品卡片带了 `item_list_id`，Quick Shop 就自动能用。
+
+---
+
+## 验证清单：结账/配送/支付/支付成功（No.58-61，Custom Pixel）
+
+**这四条不是主题代码，是 Shopify 后台的 Custom Pixel**——checkout/
+thank-you/orders 页面不跟主题共享 dataLayer/GTM 实例，sheet2 文档
+第81-83行（"九、如何在shopify web-pixel中部署GTM"）给的方案就是让
+pixel 自己加载一份独立的 GTM + 同步 Shopify 的隐私同意状态到 Google
+Consent Mode v2。代码在仓库根目录 `checkout-custom-pixel.js`（新建
+文件，不属于主题，theme push 不会带上它）。
+
+### 部署步骤
+
+1. Shopify 后台 → Settings → Customer events → Add custom pixel
+2. 起个名字（如 "GA4 Checkout Events"），把 `checkout-custom-pixel.js`
+   整个文件内容粘进代码框
+3. 保存后需要给这个 pixel 授权对应的隐私分类（一般选 Analytics），
+   否则在有隐私同意管理的地区可能不生效
+4. **这一步不需要发布新主题**——checkout 是店铺级别的共享流程，不挂在
+   某个具体主题下，Customer events 里配置的 pixel 对所有主题的结账流程
+   都生效，包括你现在用来开发的这个还没上线的主题
+
+### 怎么触发这四个事件来测试
+
+- `checkout_started`（No.58 begin_checkout）：购物车页点 Checkout 进入结账页就会触发
+- `checkout_shipping_info_submitted`（No.59 add_shipping_info）：结账页填完地址、选好配送方式点"继续"触发
+- `payment_info_submitted`（No.60 add_payment_info）：**需要走到填写付款信息这一步**——如果用 100% 折扣码把订单金额变成 $0，Shopfy 结账通常会跳过付款步骤，这个事件就不会触发，测不出真实的 `payment_type`。建议：
+  - 如果店铺已经能用 Shopify Payments 的测试模式（Bogus Gateway），用测试卡号走一遍完整流程
+  - 或者在 Settings → Payments 里加一个 "Bogus Gateway"（测试网关）专门用于测试下单
+- `checkout_completed`（No.61 purchase）：完成下单、进入 Thank you 页触发
+
+### 怎么验证（这个场景用 GTM Preview，不是浏览器 console）
+
+因为这个 pixel 是在 Shopify 的沙盒环境里运行的（有自己独立的
+`window`/`dataLayer`，不是当前页面主 window 那个），直接在浏览器
+DevTools 里对着 checkout 页面敲 `dataLayer` 大概率看不到东西，或者看到
+的是另一份不相关的数据。正确的验证方式：
+
+- [ ] 打开 GTM 工作区，进入 Preview 模式，**在开始结账流程之前**就把
+      Tag Assistant 连接到店铺域名（连接后走完整个"加购 → 结账 → 填地址
+      → 填支付 → 提交订单"流程，中途不要断开）
+- [ ] Tag Assistant 的时间线里应该依次出现四次 `ga4Event` 记录，
+      `event_name` 分别是 `begin_checkout`/`add_shipping_info`/
+      `add_payment_info`/`purchase`
+- [ ] 逐条检查 `event_parameters`：
+  - `begin_checkout`/`add_shipping_info`/`add_payment_info` 应该有
+    `currency`/`value`/`items[]`，**没有** `item_list_id`/`item_list_name`
+    （结账页没有列表来源，不传）
+  - `add_shipping_info` 多一个 `shipping_tier`（配送方式名称，比如
+    "Standard"）
+  - `add_payment_info`/`purchase` 多一个 `payment_type`
+  - `purchase` 额外有 `transaction_id`（订单 ID）、`shipping`、`tax`，
+    **没有** `order_type`（无数据源不传）
+- [ ] 也可以在 GA4 后台的 DebugView 里对照看这四个事件有没有正确进来
+
+### 有几点提前告诉你，免得测的时候以为是 bug
+
+1. `item_variant` 取的是 Shopify 结账对象里 `variant.title`（格式一般是
+   "颜色 / 尺码"，我把中间的 " / " 换成了 "_" 来对齐其他埋点的格式），
+   不是走 `item-variant-ga4.liquid` 那套逻辑——因为 pixel 沙盒里拿到的
+   是 Shopify 的 checkout 数据对象，不是 Liquid 对象，没法复用那个
+   snippet
+2. `discount` 是把这个商品所有折扣分摊（`discountAllocations`）加起来，
+   没有折扣就是 0
+3. 因为 pixel 里默认把欧盟/英国/瑞士地区的 `analytics_storage` 设成
+   "denied"（Google Consent Mode v2 默认值），如果你是从这些地区测试、
+   又没有触发"同意"流程，GA4 标签可能不会正常触发或者只发 cookieless
+   ping——如果你在国内/美国测试一般不受影响，只是提前说明一下这个机制，
+   免得测出"没反应"时以为是代码问题
+
+代码新建：仓库根目录 `checkout-custom-pixel.js`（不是主题 asset，需要
+手动粘贴到 Shopify 后台）。字段来源已对照 Shopify Web Pixels API 官方
+文档核实（`checkout.currencyCode`/`totalPrice`/`totalTax`/`lineItems`/
+`transactions`/`delivery.selectedDeliveryOptions`/`order` 等），不是
+凭印象猜的。

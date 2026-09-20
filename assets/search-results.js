@@ -24,6 +24,7 @@ if (!window.mtSearchResultsInit) {
             index: +card.dataset.itemIndex,
             item_list_id: card.dataset.itemListId,
             item_list_name: card.dataset.itemListName,
+            ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
             ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
             item_brand: card.dataset.itemBrand,
             price: +card.dataset.itemPrice,

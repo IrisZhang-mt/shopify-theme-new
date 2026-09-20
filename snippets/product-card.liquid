@@ -13,10 +13,10 @@
     {%- if item_list_id != blank %}
       data-item-list-id="{{ item_list_id }}"
       data-item-list-name="{{ item_list_name | escape }}"
-      {% if item_list_label != blank %}data-item-list-label="{{ item_list_label | escape }}"{% endif %}
       data-item-id="{{ ga4_pick.sku }}"
       data-item-name="{{ product.title | escape }}"
       data-item-brand="{{ product.vendor | escape }}"
+      {% if product.type != blank %}data-item-category="{{ product.type | escape }}"{% endif %}
       {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
       data-item-price="{{ product.price_min | divided_by: 100.0 }}"
       data-item-discount="{% if product.compare_at_price_min > product.price_min %}{{ product.compare_at_price_min | minus: product.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"

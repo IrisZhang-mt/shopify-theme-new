@@ -3,7 +3,7 @@
 <section class="mt-referral">
   <div class="mt-referral__inner{% if section.settings.subtext == blank %} mt-referral__inner--no-sub{% endif %}">
     {%- if section.settings.heading != blank -%}
-      <h2 class="mt-referral__heading">{{ section.settings.heading }}</h2>
+      <h2 class="mt-referral__heading">{{ section.settings.heading | newline_to_br }}</h2>
     {%- endif -%}
 
     {%- if section.settings.subtext != blank -%}
@@ -32,7 +32,7 @@
                 </h3>
               {%- endif -%}
               {%- if block.settings.subtitle != blank -%}
-                <p class="mt-referral__list-subtitle">{{ block.settings.subtitle }}</p>
+                <p class="mt-referral__list-subtitle">{{ block.settings.subtitle | newline_to_br }}</p>
               {%- endif -%}
             </div>
           {%- endif -%}
@@ -47,9 +47,10 @@
   "name": "Referral banner",
   "settings": [
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
+      "info": "Use a line break to control where the text wraps.",
       "default": "Give 15%, Get 15%."
     },
     {
@@ -98,6 +99,7 @@
           "type": "textarea",
           "id": "subtitle",
           "label": "Subtitle",
+          "info": "Use a line break to control where the text wraps.",
           "default": "A responsibly acting party of the textile supply chain."
         }
       ]

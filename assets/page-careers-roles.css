@@ -33,8 +33,19 @@
 }
 
 .mt-careers-roles__list-item {
+  position: relative;
   padding-block: 1.25rem;
   border-top: 1px solid #e7e3da;
+}
+
+.mt-careers-roles__list-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.mt-careers-roles__list-link:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
 }
 
 .mt-careers-roles__list-title {

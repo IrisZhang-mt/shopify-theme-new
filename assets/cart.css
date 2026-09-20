@@ -377,6 +377,13 @@
     background-size: 100% 100%;
   }
 }
+.mt-cart__checkout-compare {
+  color: var(--mt-cloud);
+}
+.mt-cart__checkout-price {
+  color: var(--mt-accent);
+  font-weight: 700;
+}
 
 .mt-cart button:focus-visible,
 .mt-cart a:focus-visible {

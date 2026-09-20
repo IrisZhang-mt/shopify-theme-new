@@ -15,6 +15,9 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'item' -%}
             <div class="mt-careers-roles__list-item" {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}
+                <a class="mt-careers-roles__list-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.job_title | escape }}"></a>
+              {%- endif -%}
               {%- if block.settings.job_title != blank -%}
                 <h3 class="mt-careers-roles__list-title">
                   <span>{{ block.settings.job_title }}</span>
@@ -89,6 +92,12 @@
           "id": "location",
           "label": "Location",
           "default": "San Jose, CA"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional. Where this role should open when clicked, e.g. the job posting."
         }
       ]
     },
