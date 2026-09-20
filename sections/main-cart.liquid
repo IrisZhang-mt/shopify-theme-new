@@ -34,7 +34,7 @@
       </div>
       <div class="mt-cart-page__bar">
         <p>{{ 'cart.taxes_note' | t }}</p>
-        <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Cart Page">{{ 'cart.checkout' | t }} &ndash; {{ cart.total_price | money_without_trailing_zeros }}</a>
+        <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Cart Page">{{ 'cart.checkout' | t }} &ndash; {%- if cart.original_total_price > cart.total_price -%}<s class="mt-cart__checkout-compare">{{ cart.original_total_price | money_without_trailing_zeros }}</s> - {%- endif -%}<span class="mt-cart__checkout-price">{{ cart.total_price | money_without_trailing_zeros }}</span></a>
       </div>
     {%- endif -%}
   </div>
