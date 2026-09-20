@@ -41,7 +41,7 @@
     "remove": "Remove",
     "add_product": "Add {{ title }} to cart",
     "free_shipping_remaining": "Spend {{ amount }} more for free shipping",
-    "free_shipping_unlocked": "You've unlocked free shipping"
+    "free_shipping_unlocked": "🎉FREE shipping unlocked !"
   },
   "products": {
     "add_to_cart": "Add to Cart",
