@@ -8,7 +8,8 @@
     </div>
     {%- if shipping_remaining_cents > 0 -%}
       {%- assign shipping_remaining_money = shipping_remaining_cents | money_without_trailing_zeros -%}
-      <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_remaining' | t: amount: shipping_remaining_money }}</p>
+      {%- assign shipping_remaining_phrase = 'cart.free_shipping_remaining' | t: amount: '__AMOUNT__' | replace: '__AMOUNT__', shipping_remaining_money -%}
+      <p class="mt-cart__shipping-text">{{ shipping_remaining_phrase }}</p>
     {%- else -%}
       <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_unlocked' | t }}</p>
     {%- endif -%}
