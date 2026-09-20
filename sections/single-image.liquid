@@ -1,0 +1,98 @@
+{{ 'single-image.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign full_width = section.settings.full_width
+  assign image = section.settings.image
+  assign image_mobile = section.settings.image_mobile
+  assign disable_top_spacing = section.settings.disable_top_spacing
+  assign disable_bottom_spacing = section.settings.disable_bottom_spacing
+  assign link = section.settings.link
+
+  assign loading = 'lazy'
+  assign fetchpriority = 'auto'
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  endif
+-%}
+<div class="single-image full-width--{{ full_width }} section-spacing{% if disable_top_spacing %} section-spacing--disable-top{% endif %}{% if disable_bottom_spacing %} section-spacing--disable-bottom{% endif %}">
+  {%- if link != blank -%}<a href="{{ link }}" class="single-image__link" style="display: block;">{%- endif -%}
+  {%- if image_mobile -%}
+    {%- assign mobile_width = image_mobile.width | at_most: 750 -%}
+    {{- image_mobile | image_url: width: mobile_width | image_tag:
+      class: 'single-image--mobile',
+      loading: loading,
+      fetchpriority: fetchpriority,
+      sizes: '100vw',
+      alt: image_mobile.alt
+    -}}
+  {%- endif -%}
+  {%- if image -%}
+    {%- assign desktop_class = '' -%}
+    {%- if image_mobile -%}
+      {%- assign desktop_class = 'single-image--desktop' -%}
+    {%- endif -%}
+    {%- assign desktop_width = image.width | at_most: 1920 -%}
+    {{- image | image_url: width: desktop_width | image_tag:
+      class: desktop_class,
+      loading: loading,
+      fetchpriority: fetchpriority,
+      sizes: '100vw',
+      alt: image.alt
+    -}}
+  {%- else -%}
+    <div class="thb-placeholder{% if image_mobile %} single-image--desktop{% endif %}">
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
+    </div>
+  {%- endif -%}
+  {%- if link != blank -%}</a>{%- endif -%}
+</div>
+{% schema %}
+  {
+    "name": "Single image",
+    "class": "section-single-image",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_mobile",
+        "label": "Mobile image (optional)"
+      },
+      {
+        "type": "url",
+        "id": "link",
+        "label": "Image link (optional)"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Make section full width",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Spacing"
+      },
+      {
+        "type": "checkbox",
+        "id": "disable_top_spacing",
+        "default": false,
+        "label": "Remove top spacing"
+      },
+      {
+        "type": "checkbox",
+        "id": "disable_bottom_spacing",
+        "default": false,
+        "label": "Remove bottom spacing"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Single image"
+      }
+    ]
+  }
+{% endschema %}
