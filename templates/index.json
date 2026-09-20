@@ -522,7 +522,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         },
         "title_j6MBCU": {
@@ -537,7 +538,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         },
         "item_Lt3cmz": {
@@ -545,7 +547,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         }
       },
@@ -586,7 +589,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": "shopify://pages/activity"
           }
         }
       },
