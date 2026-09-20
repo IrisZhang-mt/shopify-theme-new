@@ -659,6 +659,18 @@
         "autoplay_interval": 5,
         "analytics_label": "Slideshow"
       }
+    },
+    "single_image_LFJAJf": {
+      "type": "single-image",
+      "name": "Single image",
+      "settings": {
+        "image": "shopify://shop_images/pc_8ecd7c81-df8d-44af-bcbc-fdb5b1d683e0.jpg",
+        "image_mobile": "shopify://shop_images/m_c6c0060e-4f7e-4db4-b8cf-2afa1df76ea0.jpg",
+        "link": "",
+        "full_width": false,
+        "disable_top_spacing": false,
+        "disable_bottom_spacing": false
+      }
     }
   },
   "order": [
@@ -676,6 +688,7 @@
     "page_careers_roles_Wkqjnc",
     "product_reviews_tbibN7",
     "page_careers_roles_awehxq",
-    "slideshow_gWbURe"
+    "slideshow_gWbURe",
+    "single_image_LFJAJf"
   ]
 }
