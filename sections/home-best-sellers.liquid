@@ -49,8 +49,9 @@
     </button>
   </div>
   {%- for block in section.blocks offset: 1 -%}
+    {%- assign bs_panel_list_name = 'Sellers_' | append: block.settings.label -%}
     <template data-bs-panel="{{ forloop.index }}">
-      {% render 'product-card-list', collection: block.settings.collection, item_list_id: bs_item_list_id, item_list_name: 'Sellers_' | append: block.settings.label %}
+      {% render 'product-card-list', collection: block.settings.collection, item_list_id: bs_item_list_id, item_list_name: bs_panel_list_name %}
     </template>
   {%- endfor -%}
 </section>
