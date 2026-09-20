@@ -55,7 +55,8 @@
           {%- assign custom_color_keys = '' -%}
           {%- assign custom_color_values = '' -%}
           {%- if settings.color_swatches != blank -%}
-            {%- for line in settings.color_swatches | newline_to_br | split: '<br />' -%}
+            {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+            {%- for line in custom_color_lines -%}
               {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
               {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
               {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
