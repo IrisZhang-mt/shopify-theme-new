@@ -554,7 +554,7 @@ a.mt-plp__tile:focus-visible {
   .mt-plp {
     --mt-plp-swatch: 1.125rem;
   }
-  .mt-plp .mt-card__swatches span {
+  .mt-plp .mt-card__swatches .mt-card__swatch {
     width: var(--mt-plp-swatch);
     height: var(--mt-plp-swatch);
   }
