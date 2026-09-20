@@ -77,7 +77,11 @@
             <p>{{ 'cart.taxes_note' | t }}</p>
             <a class="mt-cart__view" href="{{ routes.cart_url }}">{{ 'cart.view' | t }}</a>
           </div>
+<<<<<<< HEAD
+          <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Side Cart"><span class="mt-cart__checkout-label">{{ 'cart.checkout' | t }} &ndash; {% if cart.original_total_price > cart.total_price %}<s class="mt-cart__checkout-compare">{{ cart.original_total_price | money_without_trailing_zeros }}</s> - {% endif %}<span class="mt-cart__checkout-price">{{ cart.total_price | money_without_trailing_zeros }}</span></span></a>
+=======
           <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Side Cart">{{ 'cart.checkout' | t }} &ndash; {% if cart.original_total_price > cart.total_price %}<s class="mt-cart__checkout-compare">{{ cart.original_total_price | money_without_trailing_zeros }}</s> - {% endif %}<span class="mt-cart__checkout-price">{{ cart.total_price | money_without_trailing_zeros }}</span></a>
+>>>>>>> 87eb044f5dfe7b16246dc5917b8b767cab03f00e
         </div>
       {%- endif -%}
     </div>
