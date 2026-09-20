@@ -10,6 +10,7 @@
 {
   "current": {
     "logo": "shopify://shop_images/logo.png",
+    "color_swatches": "Rose Quartz: #f2c9c2\nMidnight: #1c2331\nCloud Dancer: #f4f1ec\nLeopard Print Pink Purple: leopard-pink.png",
     "store_locator_hidden": "Shanghai Songjiang Incity\nShanghai Hongqiao Airport\nShanghai Mixcity\nShanghai IKEA LAVIT\nShanghai The Place\nShanghai_Grand Gateway66\nChangning Raffles City\nShanghai Global Harbor\nJiuguang Department Store\nShanghai Jing An Kerry Center\nShanghai Mix World\nShanghai Daning Jiuguang\nShanghai Florentia Village\nBeijing LIVAT Center\nBeijing Yansha Outlets\nBeijing Well Town\nBeijing HanGuang\nBeijing Seasons Place\nBeijing China World Trade Center\nBeijing Joycity\nBeijing GR Shopping Mall\nBeijing SOLANA\nBeijing INDIGO\nBeijing DT51\nBeijing Qinghe The Mixc\nShenzhen UpperHills\nSCPG Center\nGuangzhou panyu Teemall",
     "content_for_index": []
   },
