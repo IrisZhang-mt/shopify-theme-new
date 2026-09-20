@@ -33,12 +33,11 @@
         "stat_9Y8XXJ",
         "stat_z88cPe"
       ],
-      "disabled": true,
       "name": "Page banner",
       "settings": {
         "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
         "image_mobile": "shopify://shop_images/hero-m.png",
-        "heading": "Join our team.",
+        "heading": "Join\n our team.",
         "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
         "cta_label": "See open roles",
         "cta_url": ""
@@ -85,6 +84,7 @@
         "panel-1",
         "slide_bLWiD8"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
@@ -115,7 +115,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -209,8 +208,18 @@
         "everyday",
         "activities"
       ],
+      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
+      }
+    },
+    "full_image_JRY9PH": {
+      "type": "full-image",
+      "disabled": true,
+      "name": "Full image",
+      "settings": {
+        "pc_image": "shopify://shop_images/hero-pc-w.png",
+        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg"
       }
     },
     "carousel": {
@@ -277,14 +286,14 @@
           "type": "item",
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": ""
+            "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
           }
         },
         "item_DVWh4t": {
           "type": "item",
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": ""
+            "subtitle": "We take responsibility for our impact."
           }
         },
         "item_RaNkxe": {
@@ -302,59 +311,12 @@
       ],
       "name": "Referral banner",
       "settings": {
-        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
+        "heading": "Give 15%, Get 15%.\nGive 15%, Get 15%.",
         "subtext": "",
         "show_cta": false,
         "cta_label": "ddd",
         "cta_url": "",
         "show_icon": true
-      }
-    },
-    "home_hero_jqRfq7": {
-      "type": "home-hero",
-      "blocks": {
-        "slide_Ctr3Nr": {
-          "type": "slide",
-          "settings": {
-            "pc_image": "shopify://shop_images/hero-pc-w.png",
-            "link": "",
-            "heading": "",
-            "subtext": "",
-            "cta_label": "",
-            "cta_url": ""
-          }
-        },
-        "panel_i4FrDT": {
-          "type": "panel",
-          "disabled": true,
-          "settings": {
-            "link": "",
-            "info_heading": "Made To Move",
-            "info_text": "Breathable, durable, quick-drying fabrics"
-          }
-        },
-        "panel_EggTEt": {
-          "type": "panel",
-          "disabled": true,
-          "settings": {
-            "link": "",
-            "info_heading": "Worldwide Shipping",
-            "info_text": "Fast delivery to families around the world."
-          }
-        }
-      },
-      "block_order": [
-        "slide_Ctr3Nr",
-        "panel_i4FrDT",
-        "panel_EggTEt"
-      ],
-      "name": "Hero",
-      "settings": {
-        "heading": "Stay in\nthe play.",
-        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
-        "cta_label": "Shop New Arrivals",
-        "cta_url": "",
-        "slide_interval": 5
       }
     },
     "page_card_grid_ygFVW9": {
@@ -558,7 +520,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         },
         "title_j6MBCU": {
@@ -573,7 +536,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         },
         "item_Lt3cmz": {
@@ -581,7 +545,8 @@
           "settings": {
             "job_title": "Store Manager",
             "employment_type": "Full-time",
-            "location": "San Jose, CA"
+            "location": "San Jose, CA",
+            "link": ""
           }
         }
       },
@@ -592,18 +557,50 @@
         "item_ccqnJg",
         "item_Lt3cmz"
       ],
+      "disabled": true,
       "name": "Careers roles",
       "settings": {
         "heading": "Find your place.",
         "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
       }
     },
-    "full_image_JRY9PH": {
-      "type": "full-image",
-      "name": "Full image",
+    "product_reviews_tbibN7": {
+      "type": "product-reviews",
+      "disabled": true,
+      "name": "Product reviews",
       "settings": {
-        "pc_image": "shopify://shop_images/hero-pc-w.png",
-        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg"
+        "heading": "Customer Reviews"
+      }
+    },
+    "page_careers_roles_awehxq": {
+      "type": "page-careers-roles",
+      "blocks": {
+        "title_c3XRf8": {
+          "type": "title",
+          "settings": {
+            "country": "The United States",
+            "count": "6 roles"
+          }
+        },
+        "item_tPAFNt": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA",
+            "link": "shopify://pages/activity"
+          }
+        }
+      },
+      "block_order": [
+        "title_c3XRf8",
+        "item_tPAFNt"
+      ],
+      "disabled": true,
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Give 15%, Get 15%.",
+        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
       }
     }
   },
@@ -613,13 +610,14 @@
     "best-sellers",
     "split",
     "activities",
+    "full_image_JRY9PH",
     "carousel",
     "page_referral_banner_BjA9gQ",
-    "home_hero_jqRfq7",
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g",
     "page_careers_roles_Wkqjnc",
-    "full_image_JRY9PH"
+    "product_reviews_tbibN7",
+    "page_careers_roles_awehxq"
   ]
 }
