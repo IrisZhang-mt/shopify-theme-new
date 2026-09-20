@@ -116,7 +116,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -145,6 +144,7 @@
         "girls",
         "boys"
       ],
+      "disabled": true,
       "settings": {}
     },
     "activities": {
@@ -216,6 +216,7 @@
     },
     "full_image_JRY9PH": {
       "type": "full-image",
+      "disabled": true,
       "name": "Full image",
       "settings": {
         "pc_image": "shopify://shop_images/hero-pc-w.png",
@@ -497,6 +498,7 @@
         "question_wqrkc7",
         "question_qWDxyE"
       ],
+      "disabled": true,
       "name": "FAQ",
       "settings": {
         "heading": "Frequently Asked Questions",
@@ -563,6 +565,7 @@
     },
     "product_reviews_tbibN7": {
       "type": "product-reviews",
+      "disabled": true,
       "name": "Product reviews",
       "settings": {
         "heading": "Customer Reviews"
@@ -591,6 +594,7 @@
         "title_c3XRf8",
         "item_tPAFNt"
       ],
+      "disabled": true,
       "name": "Careers roles",
       "settings": {
         "heading": "Give 15%, Get 15%.",
