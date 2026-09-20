@@ -97,7 +97,7 @@
   background-image: repeating-linear-gradient(
     -45deg,
     var(--mt-accent) 0 10px,
-    rgba(var(--mt-accent-rgb), 0.55) 10px 20px
+    rgba(var(--mt-accent-rgb), 0) 10px 20px
   );
   background-size: 28px 28px;
   animation: mt-shipping-stripe 1s linear infinite;
