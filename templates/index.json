@@ -602,6 +602,63 @@
         "heading": "Give 15%, Get 15%.",
         "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
       }
+    },
+    "slideshow_gWbURe": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_ALyEXn": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/1-flash_sale.jpg",
+            "subheading": "",
+            "heading": "Room to move",
+            "subtext": "Play clothes built for real movement.",
+            "content_position": "left",
+            "cta_label": "Shop new arrivals",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 10
+          }
+        },
+        "slide_hcKMjr": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/pc-2_7891f0b4-4dbe-4170-a37f-7c3ec5c0046c.jpg",
+            "subheading": "",
+            "heading": "Built for outside days",
+            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
+            "content_position": "right",
+            "cta_label": "Shop outdoor",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_8E7PWL": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "Soft where it counts",
+            "subtext": "Tagless, chafe-free seams they won't even notice.",
+            "content_position": "center",
+            "cta_label": "Shop essentials",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_ALyEXn",
+        "slide_hcKMjr",
+        "slide_8E7PWL"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "analytics_label": "Slideshow"
+      }
     }
   },
   "order": [
@@ -618,6 +675,7 @@
     "product_faq_8L8K4g",
     "page_careers_roles_Wkqjnc",
     "product_reviews_tbibN7",
-    "page_careers_roles_awehxq"
+    "page_careers_roles_awehxq",
+    "slideshow_gWbURe"
   ]
 }
