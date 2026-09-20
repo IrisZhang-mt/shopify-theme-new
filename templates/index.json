@@ -287,14 +287,14 @@
           "type": "item",
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": ""
+            "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
           }
         },
         "item_DVWh4t": {
           "type": "item",
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": ""
+            "subtitle": "We take responsibility for our impact."
           }
         },
         "item_RaNkxe": {
@@ -310,7 +310,6 @@
         "item_DVWh4t",
         "item_RaNkxe"
       ],
-      "disabled": true,
       "name": "Referral banner",
       "settings": {
         "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
@@ -598,6 +597,7 @@
         "title_c3XRf8",
         "item_tPAFNt"
       ],
+      "disabled": true,
       "name": "Careers roles",
       "settings": {
         "heading": "Give 15%, Get 15%.",
