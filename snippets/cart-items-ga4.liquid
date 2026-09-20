@@ -14,6 +14,9 @@
     {%- if ga4_variant != blank -%}
     "item_variant": {{ ga4_variant | json }},
     {%- endif -%}
+    {%- if item.product.type != blank -%}
+    "item_category": {{ item.product.type | json }},
+    {%- endif -%}
     "item_brand": {{ item.product.vendor | json }},
     "discount": {{ item.total_discount | divided_by: 100.0 }},
     "price": {{ item.final_price | divided_by: 100.0 }},
