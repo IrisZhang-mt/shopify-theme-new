@@ -86,7 +86,7 @@
 .mt-cart__shipping-track {
   height: 0.5rem;
   overflow: hidden;
-  background: var(--mt-surface);
+  background: #f37434;
 }
 .mt-cart__panel .mt-cart__shipping-track {
   margin-inline: 1.25rem;
@@ -267,7 +267,7 @@
   background: var(--mt-accent);
 }
 .mt-cart__miles-mark::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0.3125rem;
   background: var(--mt-cloud);
