@@ -4,7 +4,8 @@
   {%- assign shipping_progress = cart.total_price | times: 100.0 | divided_by: shipping_threshold_cents | at_most: 100 -%}
   <div class="mt-cart__shipping-bar">
     {%- if shipping_remaining_cents > 0 -%}
-      <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_remaining' | t: amount: shipping_remaining_cents | money_without_trailing_zeros }}</p>
+      {%- assign shipping_remaining_money = shipping_remaining_cents | money_without_trailing_zeros -%}
+      <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_remaining' | t: amount: shipping_remaining_money }}</p>
     {%- else -%}
       <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_unlocked' | t }}</p>
     {%- endif -%}
