@@ -6,6 +6,7 @@
   assign disable_top_spacing = section.settings.disable_top_spacing
   assign disable_bottom_spacing = section.settings.disable_bottom_spacing
   assign link = section.settings.link
+  assign image_alt = image.alt | default: image_mobile.alt | default: '' | escape
 
   assign loading = 'lazy'
   assign fetchpriority = 'auto'
@@ -16,33 +17,17 @@
 -%}
 <div class="single-image full-width--{{ full_width }} section-spacing{% if disable_top_spacing %} section-spacing--disable-top{% endif %}{% if disable_bottom_spacing %} section-spacing--disable-bottom{% endif %}">
   {%- if link != blank -%}<a href="{{ link }}" class="single-image__link" style="display: block;">{%- endif -%}
-  {%- if image_mobile -%}
-    {%- assign mobile_width = image_mobile.width | at_most: 750 -%}
-    {{- image_mobile | image_url: width: mobile_width | image_tag:
-      class: 'single-image--mobile',
-      loading: loading,
-      fetchpriority: fetchpriority,
-      sizes: '100vw',
-      alt: image_mobile.alt
-    -}}
-  {%- endif -%}
-  {%- if image -%}
-    {%- assign desktop_class = '' -%}
-    {%- if image_mobile -%}
-      {%- assign desktop_class = 'single-image--desktop' -%}
-    {%- endif -%}
-    {%- assign desktop_width = image.width | at_most: 1920 -%}
-    {{- image | image_url: width: desktop_width | image_tag:
-      class: desktop_class,
-      loading: loading,
-      fetchpriority: fetchpriority,
-      sizes: '100vw',
-      alt: image.alt
-    -}}
+  {%- if image != blank and image_mobile != blank -%}
+    <picture>
+      <source media="(min-width: 768px)" srcset="{{ image | image_url: width: 750 }} 750w, {{ image | image_url: width: 1440 }} 1440w, {{ image | image_url: width: 1920 }} 1920w">
+      {{ image_mobile | image_url: width: 750 | image_tag: decoding: 'async', loading: loading, fetchpriority: fetchpriority, sizes: '100vw', alt: image_alt }}
+    </picture>
+  {%- elsif image != blank -%}
+    {{ image | image_url: width: 1920 | image_tag: decoding: 'async', loading: loading, fetchpriority: fetchpriority, sizes: '100vw', alt: image_alt }}
+  {%- elsif image_mobile != blank -%}
+    {{ image_mobile | image_url: width: 750 | image_tag: decoding: 'async', loading: loading, fetchpriority: fetchpriority, sizes: '100vw', alt: image_alt }}
   {%- else -%}
-    <div class="thb-placeholder{% if image_mobile %} single-image--desktop{% endif %}">
-      {{ 'lifestyle-1' | placeholder_svg_tag }}
-    </div>
+    {{ 'lifestyle-1' | placeholder_svg_tag }}
   {%- endif -%}
   {%- if link != blank -%}</a>{%- endif -%}
 </div>
