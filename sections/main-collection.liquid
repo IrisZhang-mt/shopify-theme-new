@@ -138,20 +138,19 @@
     {%- assign custom_swatch_keys = custom_swatch_keys | remove_first: ',' | strip_newlines | split: ',' -%}
     {%- assign custom_swatch_values = custom_swatch_values | remove_first: ',' | split: ',' -%}
   {%- endif -%}
-  {%- assign metaobject_swatch_count = shop.metaobjects.color_swatch.values.size -%}
-  <script type="application/json" data-plp-swatch-map>
-    {
-      {%- for key in custom_swatch_keys -%}
-        {%- assign custom_swatch_value = custom_swatch_values[forloop.index0] -%}
-        {{ key | json }}: {% if custom_swatch_value contains '.' %}{{ custom_swatch_value | file_url | prepend: "url('" | append: "')" | json }}{% else %}{{ custom_swatch_value | json }}{% endif %}{% unless forloop.last and metaobject_swatch_count == 0 %},{% endunless %}
+  {%- capture swatch_map_pairs -%}
+    {%- for key in custom_swatch_keys -%}
+      {%- assign custom_swatch_value = custom_swatch_values[forloop.index0] -%}
+      ~~PAIR~~{{ key | json }}: {% if custom_swatch_value contains '.' %}{{ custom_swatch_value | file_url | prepend: "url('" | append: "')" | json }}{% else %}{{ custom_swatch_value | json }}{% endif %}
+    {%- endfor -%}
+    {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
+      {%- for entry in shop.metaobjects.color_swatch.values -%}
+        ~~PAIR~~{{ entry.system.handle | json }}: {{ entry.color.value | default: entry.color | json }}
       {%- endfor -%}
-      {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
-        {%- for entry in shop.metaobjects.color_swatch.values -%}
-          {{ entry.system.handle | json }}: {{ entry.color.value | default: entry.color | json }}{% unless forloop.last %},{% endunless %}
-        {%- endfor -%}
-      {%- endpaginate -%}
-    }
-  </script>
+    {%- endpaginate -%}
+  {%- endcapture -%}
+  {%- assign swatch_map_list = swatch_map_pairs | remove_first: '~~PAIR~~' | split: '~~PAIR~~' -%}
+  <script type="application/json" data-plp-swatch-map>{ {{ swatch_map_list | join: ',' }} }</script>
 {%- endif -%}
 
 {% schema %}
