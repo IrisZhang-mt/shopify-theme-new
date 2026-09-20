@@ -49,9 +49,21 @@
         {%- assign color_option = product.options_with_values | where: 'name', 'Colour' | first -%}
       {%- endunless -%}
       {%- capture swatches -%}
-        {%- if color_option -%}
+        {%- if color_option and settings.show_products_swatches -%}
           {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
           {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
+          {%- assign custom_color_keys = '' -%}
+          {%- assign custom_color_values = '' -%}
+          {%- if settings.color_swatches != blank -%}
+            {%- for line in settings.color_swatches | newline_to_br | split: '<br />' -%}
+              {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+              {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+              {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+              {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+            {%- endfor -%}
+            {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+            {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
+          {%- endif -%}
           {%- for value in color_option.values limit: 4 -%}
             {%- liquid
               assign swatch_handle = value | handleize
@@ -70,10 +82,37 @@
                   endif
                 endif
               endfor
+
+              assign custom_color_lookup = value | downcase | escape
+              assign custom_color_value = ''
+              for key in custom_color_keys
+                if key == custom_color_lookup
+                  assign custom_color_value = custom_color_values[forloop.index0]
+                endif
+              endfor
+
+              assign swatch_value = ''
+              if swatch_images[forloop.index0]
+                assign swatch_value = swatch_images[forloop.index0] | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif swatch_entry.image
+                assign swatch_value = swatch_entry.image | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif value.swatch.color
+                assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
+              elsif value.swatch.image
+                assign swatch_value = value.swatch.image | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif swatch_entry.color
+                assign swatch_value = swatch_entry.color
+              elsif swatch_colors[forloop.index0]
+                assign swatch_value = swatch_colors[forloop.index0]
+              elsif custom_color_value contains '.'
+                assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
+              elsif custom_color_value != blank
+                assign swatch_value = custom_color_value
+              endif
             -%}
             <span
               class="mt-card__swatch{% if swatch_active %} is-active{% endif %}"
-              style="--mt-swatch: {% if swatch_images[forloop.index0] %}url('{{ swatch_images[forloop.index0] | image_url: width: 30 }}'){% elsif swatch_entry.image %}url('{{ swatch_entry.image | image_url: width: 30 }}'){% elsif value.swatch.color %}rgb({{ value.swatch.color.rgb }}){% elsif value.swatch.image %}url('{{ value.swatch.image | image_url: width: 30 }}'){% elsif swatch_entry.color %}{{ swatch_entry.color }}{% elsif swatch_colors[forloop.index0] %}{{ swatch_colors[forloop.index0] }}{% endif %}"
+              style="--mt-swatch: {{ swatch_value }}"
               {%- if swatch_href != blank %} data-swatch-href="{{ swatch_href }}"{% endif -%}
               {%- if swatch_src != blank %} data-swatch-src="{{ swatch_src }}"{% endif -%}
             ><span class="visually-hidden">{{ value }}</span></span>
