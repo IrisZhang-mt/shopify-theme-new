@@ -306,6 +306,7 @@ if (!window.mtPdpInit) {
         index: +pair.dataset.itemIndex,
         item_list_id: pair.dataset.itemListId,
         item_list_name: pair.dataset.itemListName,
+        ...(pair.dataset.itemCategory ? { item_category: pair.dataset.itemCategory } : {}),
         ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
         item_brand: pair.dataset.itemBrand,
         price: variant.priceValue,
