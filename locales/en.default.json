@@ -39,7 +39,9 @@
     "view": "View Cart",
     "checkout": "Checkout",
     "remove": "Remove",
-    "add_product": "Add {{ title }} to cart"
+    "add_product": "Add {{ title }} to cart",
+    "free_shipping_remaining": "Spend {{ amount }} more for free shipping",
+    "free_shipping_unlocked": "You've unlocked free shipping"
   },
   "products": {
     "add_to_cart": "Add to Cart",
