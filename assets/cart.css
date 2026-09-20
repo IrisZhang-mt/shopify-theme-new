@@ -120,22 +120,6 @@
   line-height: 1.2;
   text-align: center;
 }
-.mt-cart__shipping-text {
-  margin: 0 0 0.625rem;
-  font-size: var(--mt-p-s-size);
-  line-height: var(--mt-p-leading);
-}
-.mt-cart__shipping-track {
-  height: 2px;
-  background: var(--mt-surface);
-}
-.mt-cart__shipping-fill {
-  display: block;
-  height: 100%;
-  background: var(--mt-accent);
-  transition: width 300ms var(--mt-ease);
-}
-
 .mt-cart__body {
   flex: 1;
   min-height: 0;
