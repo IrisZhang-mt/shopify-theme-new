@@ -157,9 +157,29 @@
                     <div class="mt-pdp__tiles" data-pdp-tiles>
                       {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
                       {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
+                      {%- assign custom_color_keys = '' -%}
+                      {%- assign custom_color_values = '' -%}
+                      {%- if settings.color_swatches != blank -%}
+                        {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+                        {%- for line in custom_color_lines -%}
+                          {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+                          {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+                          {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+                          {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+                        {%- endfor -%}
+                        {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+                        {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
+                      {%- endif -%}
                       {%- for value in option.values -%}
                         {%- assign swatch_handle = value | handleize -%}
                         {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
+                        {%- assign custom_color_lookup = value | downcase | escape -%}
+                        {%- assign custom_color_value = '' -%}
+                        {%- for key in custom_color_keys -%}
+                          {%- if key == custom_color_lookup -%}
+                            {%- assign custom_color_value = custom_color_values[forloop.index0] -%}
+                          {%- endif -%}
+                        {%- endfor -%}
                         <button class="mt-pdp__tile" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}">
                           {%- if swatch_images[forloop.index0] -%}
                             {{ swatch_images[forloop.index0] | image_url: width: 210 | image_tag: decoding: 'async', loading: 'lazy', widths: '70, 140, 210', sizes: '70px', alt: value | escape }}
@@ -175,6 +195,10 @@
                             <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ swatch_entry.color }}"></span>
                           {%- elsif swatch_colors[forloop.index0] -%}
                             <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"></span>
+                          {%- elsif custom_color_value contains '.' -%}
+                            <span class="mt-pdp__tile-fill" style="--mt-swatch: url('{{ custom_color_value | file_url }}')"></span>
+                          {%- elsif custom_color_value != blank -%}
+                            <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ custom_color_value }}"></span>
                           {%- endif -%}
                         </button>
                       {%- endfor -%}

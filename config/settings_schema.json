@@ -31,6 +31,31 @@
         "id": "size_chart_url",
         "label": "Size chart link",
         "info": "Default for all products. A product can override it with a custom.size_chart metafield (page reference or URL)."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_products_swatches",
+        "label": "Show color swatches",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "color_swatches",
+        "label": "Custom colors",
+        "placeholder": "Black: #000000\nWhite: #F3F3F3\nRose Quartz: rose-quartz.png",
+        "info": "Maps a Color/Colour option value to a HEX color or an image filename already uploaded to Settings > Files. Format: <Color>: <HEX color or filename>, one per line. Used when a color has no native Shopify swatch or metaobject entry."
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "Amount in your store's currency (e.g. 79) shown on the cart progress bar. This does not read your Settings > Shipping and delivery rate automatically — keep it in sync manually when that rate changes. Leave blank to hide the bar.",
+        "default": 79
       }
     ]
   },

@@ -2,6 +2,7 @@
 
 {%- assign pc_image = section.settings.pc_image -%}
 {%- assign mob_image = section.settings.mob_image | default: pc_image -%}
+{%- assign link = section.settings.link -%}
 
 <section class="mt-full-image">
   {%- if mob_image != blank -%}
@@ -19,6 +20,9 @@
       {{ 'lifestyle-1' | placeholder_svg_tag }}
     </div>
   {%- endif -%}
+  {%- if link != blank -%}
+    <a class="mt-full-image__link" href="{{ link }}" aria-label="{{ image_alt }}"></a>
+  {%- endif -%}
 </section>
 
 {% schema %}
@@ -35,6 +39,11 @@
       "id": "mob_image",
       "label": "Mobile image",
       "info": "留空时使用 PC 图片"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (optional)"
     }
   ],
   "presets": [

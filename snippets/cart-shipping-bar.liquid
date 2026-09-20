@@ -1,0 +1,17 @@
+{%- if settings.free_shipping_threshold > 0 -%}
+  {%- assign shipping_threshold_cents = settings.free_shipping_threshold | times: 100 -%}
+  {%- assign shipping_remaining_cents = shipping_threshold_cents | minus: cart.total_price -%}
+  {%- assign shipping_progress = cart.total_price | times: 100.0 | divided_by: shipping_threshold_cents | at_most: 100 -%}
+  <div class="mt-cart__shipping-bar">
+    <div class="mt-cart__shipping-track">
+      <span class="mt-cart__shipping-fill" style="width: {{ shipping_progress }}%"></span>
+    </div>
+    {%- if shipping_remaining_cents > 0 -%}
+      {%- assign shipping_remaining_money = shipping_remaining_cents | money_without_trailing_zeros -%}
+      {%- assign shipping_remaining_phrase = 'cart.free_shipping_remaining' | t: amount: '__AMOUNT__' | replace: '__AMOUNT__', shipping_remaining_money -%}
+      <p class="mt-cart__shipping-text">{{ shipping_remaining_phrase }}</p>
+    {%- else -%}
+      <p class="mt-cart__shipping-text">{{ 'cart.free_shipping_unlocked' | t }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

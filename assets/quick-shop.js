@@ -77,10 +77,10 @@ if (!window.mtQuickShopInit) {
       add.disabled = !variant.available;
       add.textContent = variant.available ? strings.addToCart : strings.soldOut;
       const price = root.querySelector('[data-qs-price]');
-      if (price && variant.price) price.textContent = variant.price;
+      if (price && variant.price) price.innerHTML = variant.price;
       const compare = root.querySelector('[data-qs-compare]');
       if (compare) {
-        compare.textContent = variant.compare || '';
+        compare.innerHTML = variant.compare || '';
         compare.hidden = !variant.compare;
       }
     } else {

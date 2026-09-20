@@ -39,7 +39,9 @@
     "view": "View Cart",
     "checkout": "Checkout",
     "remove": "Remove",
-    "add_product": "Add {{ title }} to cart"
+    "add_product": "Add {{ title }} to cart",
+    "free_shipping_remaining": "Spend {{ amount }} more for free shipping",
+    "free_shipping_unlocked": "🎉FREE shipping unlocked !"
   },
   "products": {
     "add_to_cart": "Add to Cart",
@@ -59,6 +61,10 @@
     "shop_collection": "Shop {{ label }}",
     "more_about": "More about {{ title }}",
     "sku": "SKU",
+    "available_colors": {
+      "one": "Available in {{ count }} color",
+      "other": "Available in {{ count }} colors"
+    },
     "show_all_colors": "Show all colors",
     "show_fewer_colors": "Show fewer colors"
   },

@@ -1,0 +1,201 @@
+.mt-slideshow {
+  position: relative;
+  overflow: hidden;
+  background: var(--mt-surface);
+  aspect-ratio: 375 / 500;
+}
+
+.mt-slideshow__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms var(--mt-ease);
+}
+.mt-slideshow__slide--active {
+  z-index: 1;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mt-slideshow__media,
+.mt-slideshow__media img,
+.mt-slideshow__media video,
+.mt-slideshow__media svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+html.mt-motion .mt-slideshow__media img,
+html.mt-motion .mt-slideshow__media video {
+  height: calc(100% + var(--mt-parallax-slack));
+  will-change: transform;
+}
+
+.mt-slideshow__video--pc {
+  display: none;
+}
+
+.mt-slideshow__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(var(--mt-ink-rgb), var(--mt-slideshow-overlay, 0));
+  pointer-events: none;
+}
+
+.mt-slideshow__slide-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.mt-slideshow__slide-link:focus-visible {
+  outline: 2px solid var(--mt-cloud);
+  outline-offset: -4px;
+}
+
+.mt-slideshow__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.875rem 1.25rem;
+  text-align: left;
+}
+.mt-slideshow__content--center {
+  align-items: center;
+  text-align: center;
+}
+.mt-slideshow__content--right {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.mt-slideshow__eyebrow {
+  margin: 0;
+  font-size: var(--mt-p-s-size);
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+  color: var(--mt-cloud);
+}
+
+.mt-slideshow__heading {
+  margin: 0;
+  font-family: var(--mt-font-display);
+  font-size: var(--mt-h-xl-size);
+  line-height: var(--mt-h-xl-leading);
+  letter-spacing: var(--mt-tracking-heading);
+  color: var(--mt-cloud);
+}
+
+.mt-slideshow__sub {
+  max-width: 26rem;
+  margin: 0;
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+  color: var(--mt-cloud);
+}
+
+.mt-slideshow__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.8125rem;
+  margin-top: 0.3125rem;
+  padding: 0 1.5625rem;
+  border-radius: 1px;
+  background: var(--mt-cloud);
+  font-size: var(--mt-cta-s-size);
+  text-decoration: none;
+  color: var(--mt-ink);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-slideshow__cta:active {
+  transform: scale(0.97);
+}
+.mt-slideshow__cta:focus-visible {
+  outline: 2px solid var(--mt-cloud);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  .mt-slideshow__cta:hover {
+    opacity: 0.85;
+  }
+}
+
+.mt-slideshow__dots {
+  position: absolute;
+  bottom: 0.9375rem;
+  left: 50%;
+  z-index: 4;
+  display: flex;
+  transform: translateX(-50%);
+}
+.mt-slideshow__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.mt-slideshow__dot::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid var(--mt-cloud);
+  border-radius: 50%;
+  transition: background-color var(--mt-dur) var(--mt-ease);
+}
+.mt-slideshow__dot[aria-current='true']::before {
+  background: var(--mt-cloud);
+}
+.mt-slideshow__dot:focus-visible {
+  outline: 2px solid var(--mt-cloud);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-slideshow__slide {
+    transition: none;
+  }
+  html.mt-motion .mt-slideshow__media img,
+  html.mt-motion .mt-slideshow__media video {
+    height: 100%;
+    transform: none !important;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-slideshow {
+    aspect-ratio: auto;
+    min-height: clamp(28rem, 46vw, 42.5rem);
+  }
+
+  .mt-slideshow__video--pc {
+    display: block;
+  }
+  .mt-slideshow__video--mob {
+    display: none;
+  }
+
+  .mt-slideshow__content {
+    padding: 3.75rem;
+    gap: 1rem;
+  }
+
+  .mt-slideshow__dots {
+    bottom: 1.5625rem;
+  }
+}

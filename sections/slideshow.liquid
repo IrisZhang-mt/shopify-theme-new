@@ -1,0 +1,292 @@
+{{ 'slideshow.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'slideshow.js' | asset_url }}" type="module"></script>
+
+{%- liquid
+  assign slides = section.blocks | where: 'type', 'slide'
+  assign autoplay = section.settings.autoplay
+  assign interval = section.settings.autoplay_interval | default: 5
+  assign module_name = section.settings.analytics_label | default: 'Slideshow'
+  assign show_dots = false
+  if slides.size > 1
+    assign show_dots = true
+  endif
+-%}
+
+<section
+  class="mt-slideshow"
+  data-slideshow
+  data-slideshow-autoplay="{{ autoplay }}"
+  data-slideshow-interval="{{ interval }}"
+  data-slideshow-module="{{ module_name | escape }}"
+>
+  {%- for block in slides -%}
+    {%- liquid
+      assign image = block.settings.image
+      assign mobile_image = block.settings.mobile_image | default: image
+      assign video = block.settings.video
+      assign mobile_video = block.settings.mobile_video | default: video
+      assign heading = block.settings.heading
+      assign banner_name = heading | default: block.settings.subheading | strip_newlines | escape
+      assign eager = false
+      if forloop.first
+        assign eager = true
+      endif
+      assign overlay_opacity = block.settings.overlay_opacity | divided_by: 100.0
+      assign image_alt = image.alt | default: heading | strip_newlines | escape
+      assign has_content = false
+      if heading != blank or block.settings.subheading != blank or block.settings.subtext != blank or block.settings.cta_label != blank
+        assign has_content = true
+      endif
+    -%}
+    <div
+      class="mt-slideshow__slide{% if forloop.first %} mt-slideshow__slide--active{% endif %}"
+      data-slideshow-slide
+      data-banner-slot="{{ forloop.index }}"
+      data-banner-name="{{ banner_name }}"
+      {{ block.shopify_attributes }}
+    >
+      <div class="mt-slideshow__media" data-mt-parallax>
+        {%- if video != blank -%}
+          {%- if mobile_video != blank and mobile_video != video -%}
+            {{ video | video_tag: class: 'mt-slideshow__video mt-slideshow__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {{ mobile_video | video_tag: class: 'mt-slideshow__video mt-slideshow__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+          {%- else -%}
+            {{ video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+          {%- endif -%}
+        {%- elsif image != blank -%}
+          <picture>
+            {%- if mobile_image != image -%}
+              <source media="(min-width: 750px)" srcset="{{ image | image_url: width: 750 }} 750w, {{ image | image_url: width: 1500 }} 1500w, {{ image | image_url: width: 2200 }} 2200w">
+            {%- endif -%}
+            {%- if eager -%}
+              {{ mobile_image | image_url: width: 1200 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+            {%- else -%}
+              {{ mobile_image | image_url: width: 1200 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+            {%- endif -%}
+          </picture>
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag }}
+        {%- endif -%}
+      </div>
+
+      {%- if overlay_opacity > 0 -%}
+        <div class="mt-slideshow__scrim" style="--mt-slideshow-overlay: {{ overlay_opacity }}" aria-hidden="true"></div>
+      {%- endif -%}
+
+      {%- if block.settings.link != blank -%}
+        <a
+          class="mt-slideshow__slide-link"
+          href="{{ block.settings.link }}"
+          aria-label="{{ banner_name }}"
+          data-banner-slot="{{ forloop.index }}"
+          data-banner-name="{{ banner_name }}"
+          data-button-name="{{ banner_name }}"
+        ></a>
+      {%- endif -%}
+
+      {%- if has_content -%}
+        <div class="mt-slideshow__content mt-slideshow__content--{{ block.settings.content_position }}">
+          {%- if block.settings.subheading != blank -%}
+            <p class="mt-slideshow__eyebrow" data-reveal>{{ block.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if heading != blank -%}
+            <h2 class="mt-slideshow__heading" data-reveal>{{ heading | newline_to_br }}</h2>
+          {%- endif -%}
+          {%- if block.settings.subtext != blank -%}
+            <p class="mt-slideshow__sub" data-reveal>{{ block.settings.subtext }}</p>
+          {%- endif -%}
+          {%- if block.settings.cta_label != blank -%}
+            <a
+              class="mt-slideshow__cta"
+              href="{{ block.settings.cta_url | default: '#' }}"
+              data-reveal
+              data-banner-slot="{{ forloop.index }}"
+              data-banner-name="{{ banner_name }}"
+              data-button-name="{{ block.settings.cta_label | escape }}"
+            ><span>{{ block.settings.cta_label }}</span></a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+
+  {%- if show_dots -%}
+    <div class="mt-slideshow__dots" aria-label="{{ 'general.slides' | t }}">
+      {%- for block in slides -%}
+        <button
+          class="mt-slideshow__dot"
+          type="button"
+          data-slideshow-dot
+          aria-label="{{ 'general.slide_n' | t: number: forloop.index }}"
+          aria-current="{{ forloop.first }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "class": "section-slideshow",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "info": "Only applies when there's more than one slide.",
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "analytics_label",
+      "label": "Analytics label",
+      "info": "Identifies this slideshow in analytics reports if you use more than one on the site.",
+      "default": "Slideshow"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "2800 x 1000 recommended for full-bleed layouts."
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "Falls back to the image above when empty."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Shopify-hosted video. Overrides the image above."
+        },
+        {
+          "type": "video",
+          "id": "mobile_video",
+          "label": "Mobile video",
+          "info": "Falls back to the video above."
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Room to move"
+        },
+        {
+          "type": "textarea",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Add a line about this collection or moment."
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "info": "Leave blank to hide the button.",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Button link"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Slide link",
+          "info": "Makes the whole slide clickable. Leave blank if you're using the button link above."
+        },
+        {
+          "type": "header",
+          "content": "Overlay"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 60,
+          "step": 5,
+          "unit": "%",
+          "label": "Image overlay",
+          "info": "Darkens the image to improve text legibility.",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Slideshow",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Room to move",
+            "subtext": "Play clothes built for real movement.",
+            "cta_label": "Shop new arrivals"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Built for outside days",
+            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
+            "cta_label": "Shop outdoor"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Soft where it counts",
+            "subtext": "Tagless, chafe-free seams they won't even notice.",
+            "cta_label": "Shop essentials"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

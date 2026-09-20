@@ -80,6 +80,46 @@
   }
 }
 
+.mt-cart__shipping-bar {
+  margin-top: 1.25rem;
+}
+.mt-cart__shipping-track {
+  height: 0.5rem;
+  overflow: hidden;
+  background: #f8f4ee;
+}
+.mt-cart__panel .mt-cart__shipping-track {
+  margin-inline: 1.25rem;
+}
+.mt-cart__shipping-fill {
+  display: block;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--mt-accent) 0 5px,
+    rgba(var(--mt-accent-rgb), 0) 5px 10px
+  );
+  background-size: 28px 28px;
+  animation: mt-shipping-stripe 1s linear infinite;
+  transition: width 300ms var(--mt-ease);
+}
+@keyframes mt-shipping-stripe {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 28px 0;
+  }
+}
+.mt-cart__shipping-text {
+  margin: 22.5px 0;
+  padding: 7px 1rem;
+  background: var(--mt-surface);
+  color: #2c2a25;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+}
 .mt-cart__body {
   flex: 1;
   min-height: 0;
@@ -227,7 +267,7 @@
   background: var(--mt-accent);
 }
 .mt-cart__miles-mark::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0.3125rem;
   background: var(--mt-cloud);

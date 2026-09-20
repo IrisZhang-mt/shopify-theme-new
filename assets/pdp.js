@@ -87,10 +87,10 @@ if (!window.mtPdpInit) {
         add.disabled = !variant.available;
         add.textContent = variant.available ? strings.addToCart : strings.soldOut;
         const price = root.querySelector('[data-pdp-price]');
-        if (price) price.textContent = variant.price;
+        if (price) price.innerHTML = variant.price;
         const compare = root.querySelector('[data-pdp-compare]');
         if (compare) {
-          compare.textContent = variant.compare || '';
+          compare.innerHTML = variant.compare || '';
           compare.hidden = !variant.compare;
         }
         const sku = root.querySelector('[data-pdp-sku]');
