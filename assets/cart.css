@@ -112,11 +112,11 @@
   }
 }
 .mt-cart__shipping-text {
-  margin: 22.5px 0 0;
+  margin: 22.5px 0;
   padding: 7px 1rem;
   background: var(--mt-surface);
   color: #2c2a25;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.2;
   text-align: center;
 }
