@@ -18,7 +18,6 @@ if (!window.mtBestSellersInit) {
       event_parameters: {
         item_list_id: cards[0].dataset.itemListId,
         item_list_name: cards[0].dataset.itemListName,
-        ...(cards[0].dataset.itemListLabel ? { item_list_label: cards[0].dataset.itemListLabel } : {}),
         currency: section.dataset.currency,
         items: cards.map((card) => ({
           item_id: card.dataset.itemId,
@@ -98,7 +97,6 @@ if (!window.mtBestSellersInit) {
       event_parameters: {
         item_list_id: card.dataset.itemListId,
         item_list_name: card.dataset.itemListName,
-        ...(card.dataset.itemListLabel ? { item_list_label: card.dataset.itemListLabel } : {}),
         currency: section?.dataset.currency,
         button_name: 'Product Card',
         items: [
