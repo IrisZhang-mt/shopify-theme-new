@@ -51,23 +51,38 @@
       {%- capture swatches -%}
         {%- if color_option -%}
           {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
+          {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
           {%- for value in color_option.values limit: 4 -%}
-            {%- assign swatch_handle = value | handleize -%}
-            {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
-            {%- if value.swatch.color -%}
-              <span style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
-            {%- elsif value.swatch.image -%}
-              <span style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 30 }}')"></span>
-            {%- elsif swatch_entry.color -%}
-              <span style="--mt-swatch: {{ swatch_entry.color }}"></span>
-            {%- elsif swatch_colors[forloop.index0] -%}
-              <span style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"></span>
-            {%- endif -%}
+            {%- liquid
+              assign swatch_handle = value | handleize
+              assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
+              assign swatch_active = false
+              assign swatch_href = ''
+              assign swatch_src = ''
+              for variant in product.variants
+                if variant.title contains value
+                  assign swatch_href = variant.url
+                  if variant.featured_image
+                    assign swatch_src = variant.featured_image | image_url: width: 750
+                  endif
+                  if variant.featured_image and product.featured_image and variant.featured_image.id == product.featured_image.id
+                    assign swatch_active = true
+                  endif
+                endif
+              endfor
+            -%}
+            <span
+              class="mt-card__swatch{% if swatch_active %} is-active{% endif %}"
+              style="--mt-swatch: {% if swatch_images[forloop.index0] %}url('{{ swatch_images[forloop.index0] | image_url: width: 30 }}'){% elsif swatch_entry.image %}url('{{ swatch_entry.image | image_url: width: 30 }}'){% elsif value.swatch.color %}rgb({{ value.swatch.color.rgb }}){% elsif value.swatch.image %}url('{{ value.swatch.image | image_url: width: 30 }}'){% elsif swatch_entry.color %}{{ swatch_entry.color }}{% elsif swatch_colors[forloop.index0] %}{{ swatch_colors[forloop.index0] }}{% endif %}"
+              {%- if swatch_href != blank %} data-swatch-href="{{ swatch_href }}"{% endif -%}
+              {%- if swatch_src != blank %} data-swatch-src="{{ swatch_src }}"{% endif -%}
+            ><span class="visually-hidden">{{ value }}</span></span>
           {%- endfor -%}
         {%- endif -%}
       {%- endcapture -%}
-      {%- if swatches contains 'span' -%}
+      {%- if swatches contains 'mt-card__swatch' -%}
         <div class="mt-card__swatches">{{ swatches }}</div>
+        <p class="mt-card__swatches-caption">{{ 'products.available_colors' | t: count: color_option.values.size }}</p>
       {%- elsif align -%}
         <div class="mt-card__swatches"></div>
       {%- endif -%}

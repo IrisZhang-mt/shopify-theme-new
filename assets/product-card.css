@@ -81,16 +81,32 @@
 }
 
 .mt-card__swatches {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.625rem;
 }
-.mt-card__swatches span {
+.mt-card__swatches .mt-card__swatch {
+  display: block;
   width: 0.9375rem;
   height: 0.9375rem;
   border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
   background: var(--mt-swatch);
   background-size: cover;
+  cursor: pointer;
+}
+.mt-card__swatches .mt-card__swatch.is-active {
+  border-color: var(--mt-ink);
+}
+.mt-card__swatches-caption {
+  margin: 0;
+  font-family: var(--mt-font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+  color: rgba(var(--mt-ink-rgb), 0.5);
 }
 
 .mt-card__quick {
