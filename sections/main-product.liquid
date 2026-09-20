@@ -31,6 +31,7 @@
   data-currency="{{ cart.currency.iso_code }}"
   data-item-name="{{ product.title | escape }}"
   data-item-brand="{{ product.vendor | escape }}"
+  {% if product.type != blank %}data-item-category="{{ product.type | escape }}"{% endif %}
   {% if color_index >= 0 %} data-pdp-color-opt="{{ color_index }}"{% endif %}
   {% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}
 >
@@ -48,6 +49,9 @@
             item_id: {{ current.sku | json }},
             item_name: {{ product.title | json }},
             discount: {% if current.compare_at_price > current.price %}{{ current.compare_at_price | minus: current.price | divided_by: 100.0 }}{% else %}0{% endif %},
+            {%- if product.type != blank %}
+            item_category: {{ product.type | json }},
+            {%- endif %}
             {%- if pdp_ga4_variant != blank %}
             item_variant: {{ pdp_ga4_variant | json }},
             {%- endif %}
