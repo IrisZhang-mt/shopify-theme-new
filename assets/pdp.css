@@ -553,14 +553,14 @@
   gap: 1.25rem;
 }
 .mt-pair__media {
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--mt-off-white);
 }
 .mt-pair__media img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
 }
 .mt-pair__info {
   display: flex;
@@ -847,7 +847,7 @@
   }
   .mt-pair__media {
     flex: 0 0 13.5625rem;
-    aspect-ratio: 2 / 3;
+    aspect-ratio: 3 / 4;
   }
   .mt-pair__info {
     flex: 1;

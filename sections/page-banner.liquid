@@ -1,7 +1,7 @@
 {{ 'page-banner.css' | asset_url | stylesheet_tag }}
 
 <section class="mt-banner">
-  <div class="mt-banner__media" data-mt-parallax>
+  <div class="mt-banner__media">
     {%- assign image_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
     {%- if section.settings.image != blank and section.settings.image_mobile != blank -%}
       <picture>

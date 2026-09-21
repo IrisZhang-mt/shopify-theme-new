@@ -7,7 +7,7 @@
 {%- endif -%}
 
 <section class="mt-blog" data-blog data-section-id="{{ section.id }}">
-  <div class="mt-blog__hero" data-mt-parallax>
+  <div class="mt-blog__hero">
     <div class="mt-blog__hero-in">
       {%- if section.settings.video != blank -%}
         {{ section.settings.video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}

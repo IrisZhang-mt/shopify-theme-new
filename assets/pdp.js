@@ -59,11 +59,11 @@ if (!window.mtPdpInit) {
 
     const syncGallery = () => {
       if (!track || colorOpt < 0) return false;
-      const color = state.selected[colorOpt];
+      const color = (state.selected[colorOpt] || '').toLowerCase();
       const slides = [...track.querySelectorAll('[data-pdp-color]')];
-      const matched = slides.some((slide) => slide.dataset.pdpColor === color);
+      const matched = slides.some((slide) => slide.dataset.pdpColor.toLowerCase() === color);
       slides.forEach((slide) => {
-        slide.hidden = matched && slide.dataset.pdpColor !== '' && slide.dataset.pdpColor !== color;
+        slide.hidden = matched && slide.dataset.pdpColor !== '' && slide.dataset.pdpColor.toLowerCase() !== color;
       });
       return matched;
     };

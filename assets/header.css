@@ -190,6 +190,16 @@
   display: block;
 }
 
+.mt-header__cart {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--mt-ink);
+}
+.mt-header__cart-icon {
+  display: block;
+}
+
 .mt-header__burger {
   display: flex;
   align-items: center;

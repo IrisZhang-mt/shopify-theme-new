@@ -189,7 +189,7 @@
     "get_directions": "Directions →",
     "location_not_found": "Location not found. Please try a different search.",
     "no_results": "No stores match this filter yet.",
-    "miles_away": "__DISTANCE__ mi from your location",
+    "miles_away": "__DISTANCE__ miles from your location",
     "stores_label": "Stores"
   },
   "store_flagship_carousel": {

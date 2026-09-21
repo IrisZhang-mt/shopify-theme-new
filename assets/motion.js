@@ -4,7 +4,7 @@ if (!window.mtMotionInit) {
   window.mtReducedMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   window.mtCartCount = (count) => {
-    document.querySelectorAll('.mt-header__cart').forEach((el) => {
+    document.querySelectorAll('.mt-header__cart-count').forEach((el) => {
       el.textContent = `(${count})`;
     });
   };

@@ -6,23 +6,14 @@
 {%- assign pdp_ga4_variant = pdp_ga4_variant | strip -%}
 
 {%- assign color_index = -1 -%}
-{%- assign color_names = '' -%}
 {%- for option in product.options_with_values -%}
   {%- if option.name == 'Color' or option.name == 'Colour' -%}
     {%- assign color_index = forloop.index0 -%}
-    {%- assign color_names = option.values | join: '~~' -%}
   {%- endif -%}
 {%- endfor -%}
-{%- assign color_list = color_names | split: '~~' -%}
 {%- assign current_color = '' -%}
 {%- if color_index >= 0 -%}
   {%- assign current_color = current.options[color_index] -%}
-  {%- assign media_owners = '|' -%}
-  {%- for variant in product.variants -%}
-    {%- if variant.featured_media -%}
-      {%- assign media_owners = media_owners | append: variant.featured_media.position | append: ':' | append: variant.options[color_index] | append: '|' -%}
-    {%- endif -%}
-  {%- endfor -%}
 {%- endif -%}
 
 <section
@@ -68,33 +59,24 @@
       <div class="mt-pdp__track" data-pdp-track>
         {%- assign image_count = 0 -%}
         {%- assign shown_count = 0 -%}
-        {%- for media in product.media limit: 50 -%}
+        {%- for media in product.media -%}
           {%- if media.media_type == 'image' -%}
             {%- assign image_count = image_count | plus: 1 -%}
             {%- assign media_color = '' -%}
-            {%- if color_index >= 0 -%}
-              {%- assign alt_text = media.alt | default: '' | downcase -%}
-              {%- assign match_len = 0 -%}
-              {%- for value in color_list -%}
-                {%- assign needle = value | downcase -%}
-                {%- if alt_text contains needle -%}
-                  {%- assign needle_len = needle | size -%}
-                  {%- if needle_len > match_len -%}
-                    {%- assign match_len = needle_len -%}
-                    {%- assign media_color = value -%}
-                  {%- endif -%}
-                {%- endif -%}
-              {%- endfor -%}
-              {%- if media_color == blank -%}
-                {%- assign owner_key = '|' | append: media.position | append: ':' -%}
-                {%- if media_owners contains owner_key -%}
-                  {%- assign media_color = media_owners | split: owner_key | last | split: '|' | first -%}
-                {%- endif -%}
+            {%- assign alt_text = media.alt | default: '' -%}
+            {%- if color_index >= 0 and alt_text contains '**' -%}
+              {%- assign alt_marker_parts = alt_text | split: '**' -%}
+              {%- if alt_marker_parts.size >= 2 -%}
+                {%- assign media_color = alt_marker_parts[1] | strip -%}
               {%- endif -%}
             {%- endif -%}
             {%- assign hide_slide = false -%}
-            {%- if media_color != blank and current_color != blank and media_color != current_color -%}
-              {%- assign hide_slide = true -%}
+            {%- if media_color != blank and current_color != blank -%}
+              {%- assign media_color_cmp = media_color | downcase -%}
+              {%- assign current_color_cmp = current_color | downcase -%}
+              {%- if media_color_cmp != current_color_cmp -%}
+                {%- assign hide_slide = true -%}
+              {%- endif -%}
             {%- endif -%}
             {%- unless hide_slide -%}
               {%- assign shown_count = shown_count | plus: 1 -%}

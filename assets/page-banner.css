@@ -22,11 +22,6 @@
     max-width: none;
     object-fit: cover;
   }
-  html.mt-motion .mt-banner__media img {
-    height: calc(100% + var(--mt-parallax-slack));
-    will-change: transform;
-  }
-
   .mt-banner__scrim,
   .mt-banner__heading,
   .mt-banner__stats {
@@ -126,11 +121,6 @@
     max-width: none;
     object-fit: cover;
   }
-  html.mt-motion .mt-banner__media img {
-    height: calc(100% + var(--mt-parallax-slack));
-    will-change: transform;
-  }
-
   .mt-banner__content {
     display: flex;
     flex-direction: column;

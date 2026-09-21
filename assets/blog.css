@@ -27,12 +27,6 @@
   max-width: none;
   object-fit: cover;
 }
-html.mt-motion .mt-blog__hero img,
-html.mt-motion .mt-blog__hero video {
-  height: calc(100% + var(--mt-parallax-slack));
-  will-change: transform;
-}
-
 @keyframes mt-blog-hero-in {
   from {
     transform: scale(1.06);
@@ -65,7 +59,6 @@ html.mt-motion .mt-blog__hero video {
   padding: 0 5px;
   border: 1px solid #dbdfe7;
   color: #1d1d1d;
-  font-family: var(--mt-font-mono);
   font-size: 0.75rem;
   letter-spacing: var(--mt-tracking-tag);
   text-decoration: none;
@@ -152,7 +145,7 @@ html.mt-motion .mt-blog__hero video {
   color: #f37434;
 }
 .mt-blog__pager-num--active::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   bottom: -0.375em;
@@ -213,7 +206,6 @@ html.mt-motion .mt-blog__hero video {
   align-items: center;
   gap: 0.625rem;
   margin: 0.9375rem 0 0;
-  font-family: var(--mt-font-mono);
   font-size: var(--mt-tag-s-size);
   font-weight: 500;
   line-height: 1;
@@ -293,7 +285,7 @@ html.mt-motion .mt-blog__hero video {
   .mt-blog__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: 1.25rem;
-    row-gap: 0;
+    row-gap: 3.75rem;
     padding: 0 1.25rem 3.75rem;
   }
   .mt-blog__pager {
@@ -306,18 +298,8 @@ html.mt-motion .mt-blog__hero video {
     font-size: 1.5rem;
     line-height: 1.2;
   }
-  .mt-blog__card {
-    margin-top: 6.25rem;
-  }
-  .mt-blog__card:nth-child(-n + 3),
-  .mt-blog__card:nth-child(6n + 5) {
-    margin-top: 0;
-  }
   .mt-blog__media {
     aspect-ratio: 453 / 500;
-  }
-  .mt-blog__card:nth-child(2n) .mt-blog__media {
-    aspect-ratio: 453 / 400;
   }
   .mt-blog__extra {
     display: flex;
