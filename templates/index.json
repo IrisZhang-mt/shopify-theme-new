@@ -9,40 +9,6 @@
  */
 {
   "sections": {
-    "page_banner_RHNQRz": {
-      "type": "page-banner",
-      "blocks": {
-        "stat_9Y8XXJ": {
-          "type": "stat",
-          "settings": {
-            "label": "Open roles",
-            "value": "7 positions",
-            "placement": "panel"
-          }
-        },
-        "stat_z88cPe": {
-          "type": "stat",
-          "settings": {
-            "label": "Locations",
-            "value": "United States · Malaysia",
-            "placement": "media"
-          }
-        }
-      },
-      "block_order": [
-        "stat_9Y8XXJ",
-        "stat_z88cPe"
-      ],
-      "name": "Page banner",
-      "settings": {
-        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
-        "image_mobile": "shopify://shop_images/hero-m.png",
-        "heading": "Join\n our team.",
-        "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
-        "cta_label": "See open roles",
-        "cta_url": ""
-      }
-    },
     "hero": {
       "type": "home-hero",
       "blocks": {
@@ -218,8 +184,11 @@
       "disabled": true,
       "name": "Full image",
       "settings": {
+        "heading": "",
+        "eager_load": false,
         "pc_image": "shopify://shop_images/hero-pc-w.png",
-        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg"
+        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg",
+        "link": ""
       }
     },
     "carousel": {
@@ -659,11 +628,43 @@
         "autoplay_interval": 5,
         "analytics_label": "Slideshow"
       }
+    },
+    "page_banner_KPXCMC": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_xmAU9g": {
+          "type": "stat",
+          "settings": {
+            "label": "Open roles",
+            "value": "7 positions",
+            "placement": "panel"
+          }
+        },
+        "stat_gbHeA9": {
+          "type": "stat",
+          "settings": {
+            "label": "Locations",
+            "value": "United States · Malaysia",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_xmAU9g",
+        "stat_gbHeA9"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "heading": "Join our team.",
+        "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
+        "cta_label": "See open roles",
+        "cta_url": ""
+      }
     }
   },
   "order": [
-    "page_banner_RHNQRz",
     "hero",
+    "page_banner_KPXCMC",
     "best-sellers",
     "split",
     "activities",
