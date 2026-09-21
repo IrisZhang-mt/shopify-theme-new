@@ -161,7 +161,8 @@
   text-align: center;
 }
 .mt-cart__tier-badge {
-  padding: 3px;
+  padding: 3px 8px;
+  min-width: 61.9px;
   border: 1px solid var(--mt-off-white);
   background: var(--mt-white);
   font-size: 10px;
