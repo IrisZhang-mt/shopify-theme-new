@@ -106,6 +106,10 @@
     min-height: clamp(31.25rem, 52vw, 47.5rem);
   }
 
+  .mt-banner__mobile-overlay {
+    display: none;
+  }
+
   .mt-banner__media {
     position: relative;
     grid-column: 2;

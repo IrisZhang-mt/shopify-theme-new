@@ -9,6 +9,7 @@
         <h2 class="mt-cart__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h2>
         <button class="mt-cart__close" type="button" data-cart-close>{{ 'general.close' | t }}</button>
       </div>
+      {% render 'cart-tier-bar' %}
       {% render 'cart-shipping-bar' %}
       <div class="mt-cart__body">
         {%- if cart.item_count == 0 -%}
