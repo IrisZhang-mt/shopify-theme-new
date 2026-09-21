@@ -65,7 +65,7 @@
             {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
             {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
           {%- endif -%}
-          {%- for value in color_option.values limit: 4 -%}
+          {%- for value in color_option.values -%}
             {%- liquid
               assign swatch_handle = value | handleize
               assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
