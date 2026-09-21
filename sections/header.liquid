@@ -58,7 +58,10 @@
         <span class="mt-header__search-text">{{ 'header.search' | t }}</span>
         <svg class="mt-header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="m11.2 11.2 3.8 3.8" stroke="currentColor"/></svg>
       </a>
-      <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open data-func="Cart">({{ cart.item_count }})</a>
+      <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open data-func="Cart">
+        <svg class="mt-header__cart-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6h8l-.6 7.2a1 1 0 0 1-1 .8H5.6a1 1 0 0 1-1-.8L4 6Z" stroke="currentColor"/><path d="M6 6V4.5a2 2 0 0 1 4 0V6" stroke="currentColor"/></svg>
+        <span class="mt-header__cart-count">({{ cart.item_count }})</span>
+      </a>
 
       <details class="mt-header__drawer">
         <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}" data-func="Menu"><span class="mt-burger"><span></span></span></summary>
