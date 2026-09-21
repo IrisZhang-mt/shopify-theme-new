@@ -65,7 +65,6 @@ html.mt-motion .mt-blog__hero video {
   padding: 0 5px;
   border: 1px solid #dbdfe7;
   color: #1d1d1d;
-  font-family: var(--mt-font-mono);
   font-size: 0.75rem;
   letter-spacing: var(--mt-tracking-tag);
   text-decoration: none;
@@ -152,7 +151,7 @@ html.mt-motion .mt-blog__hero video {
   color: #f37434;
 }
 .mt-blog__pager-num--active::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 50%;
   bottom: -0.375em;
