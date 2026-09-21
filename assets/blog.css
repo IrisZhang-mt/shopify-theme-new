@@ -27,12 +27,6 @@
   max-width: none;
   object-fit: cover;
 }
-html.mt-motion .mt-blog__hero img,
-html.mt-motion .mt-blog__hero video {
-  height: calc(100% + var(--mt-parallax-slack));
-  will-change: transform;
-}
-
 @keyframes mt-blog-hero-in {
   from {
     transform: scale(1.06);
