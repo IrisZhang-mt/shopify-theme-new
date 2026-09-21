@@ -176,6 +176,7 @@
   border-color: var(--mt-accent);
   background: var(--mt-accent);
   color: var(--mt-white);
+  font-weight: 700;
 }
 .mt-cart__tier-node--active .mt-cart__tier-ordinal {
   color: var(--mt-accent);
