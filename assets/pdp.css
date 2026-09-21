@@ -558,9 +558,9 @@
   background: var(--mt-off-white);
 }
 .mt-pair__media img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
 }
 .mt-pair__info {
   display: flex;
