@@ -95,7 +95,16 @@
   overflow: hidden;
 }
 .mt-hero__panel--secondary {
-  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms var(--mt-ease);
+}
+.mt-hero__panel--secondary.mt-hero__panel--active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mt-hero__media {
@@ -299,13 +308,18 @@ html.mt-motion .mt-hero__media video {
     padding: var(--mt-hero-pad);
   }
   .mt-hero__panel--secondary {
-    display: flex;
     position: relative;
     inset: auto;
     z-index: auto;
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
   }
   .mt-hero__panel--full {
     width: 100%;
+  }
+  .mt-hero__dot--panel {
+    display: none;
   }
   .mt-hero__video--pc {
     display: block;

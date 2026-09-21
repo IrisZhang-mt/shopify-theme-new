@@ -34,7 +34,7 @@
         </div>
 
         {%- if block.settings.link != blank -%}
-          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
+          <a class="mt-hero__panel-link" href="{{ block.settings.link }}" aria-label="{{ hero_banner_name }}" data-banner-slot="1" {% unless forloop.first %}data-mobile-banner-slot="1b"{% endunless %} data-banner-name="{{ hero_banner_name }}" data-button-name="{{ hero_banner_name }}"></a>
         {%- endif -%}
 
         {%- if forloop.first -%}
@@ -115,11 +115,22 @@
     </div>
   {%- endfor -%}
 
-  {%- if extra_slides.size > 0 -%}
+  {%- assign has_secondary_panel = false -%}
+  {%- if panels.size == 2 -%}
+    {%- assign has_secondary_panel = true -%}
+  {%- endif -%}
+
+  {%- if extra_slides.size > 0 or has_secondary_panel -%}
     <div class="mt-hero__dots" aria-label="{{ 'general.slides' | t }}">
       <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: 1 }}" aria-current="true"></button>
+      {%- if has_secondary_panel -%}
+        <button class="mt-hero__dot mt-hero__dot--panel" type="button" data-hero-panel-dot aria-label="{{ 'general.slide_n' | t: number: 2 }}" aria-current="false"></button>
+      {%- endif -%}
       {%- for block in extra_slides -%}
         {%- assign dot_number = forloop.index | plus: 1 -%}
+        {%- if has_secondary_panel -%}
+          {%- assign dot_number = dot_number | plus: 1 -%}
+        {%- endif -%}
         <button class="mt-hero__dot" type="button" data-hero-dot aria-label="{{ 'general.slide_n' | t: number: dot_number }}" aria-current="false"></button>
       {%- endfor -%}
     </div>
@@ -176,7 +187,7 @@
           "type": "image_picker",
           "id": "pc_image",
           "label": "PC image",
-          "info": "建议上传721:856比例的图片"
+          "info": "建议上传960*1140比例的图片"
         },
         {
           "type": "image_picker",
@@ -188,7 +199,7 @@
           "type": "video",
           "id": "pc_video",
           "label": "PC video",
-          "info": "建议上传721:856比例的视频，会覆盖图片"
+          "info": "建议上传960*1140比例的视频，会覆盖图片"
         },
         {
           "type": "video",
@@ -223,7 +234,7 @@
           "type": "image_picker",
           "id": "pc_image",
           "label": "PC image",
-          "info": "建议上传1440*856比例的图片"
+          "info": "建议上传1920*1141比例的图片"
         },
         {
           "type": "image_picker",
@@ -235,7 +246,7 @@
           "type": "video",
           "id": "pc_video",
           "label": "PC video",
-          "info": "建议上传1440*856比例的视频，会覆盖图片"
+          "info": "建议上传1920*1141比例的视频，会覆盖图片"
         },
         {
           "type": "video",
