@@ -22,9 +22,11 @@
     max-width: none;
     object-fit: cover;
   }
-  html.mt-motion .mt-banner__media img {
-    height: calc(100% + var(--mt-parallax-slack));
-    will-change: transform;
+  /* Mobile image should render at the full container ratio with no parallax
+     crop/pan — override the shared parallax slack + JS transform (motion.js
+     sets this inline on scroll; !important in the stylesheet wins over it). */
+  .mt-banner__media img {
+    transform: none !important;
   }
 
   .mt-banner__scrim,
