@@ -23,6 +23,7 @@
       "blocks": {
         "tile_QWDjnt": {
           "type": "tile",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
             "label": "Cloudie Essential — Soft, easy all year.11111",
@@ -31,6 +32,7 @@
         },
         "tile_wqhHKp": {
           "type": "tile",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
             "label": "2222Cloudie Essential — Soft, easy all year.",
@@ -39,6 +41,7 @@
         },
         "tile_k7T9Q7": {
           "type": "tile",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
             "label": "333Cloudie Essential — Soft, easy all year.",
