@@ -7,6 +7,13 @@
 {%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
 {%- assign ratio_mobile = mob_image.aspect_ratio | default: pc_image.aspect_ratio | default: 1 -%}
 {%- assign ratio_desktop = pc_image.aspect_ratio | default: mob_image.aspect_ratio | default: 1 -%}
+{%- if section.settings.eager_load -%}
+  {%- assign img_loading = 'eager' -%}
+  {%- assign img_fetchpriority = 'high' -%}
+{%- else -%}
+  {%- assign img_loading = 'lazy' -%}
+  {%- assign img_fetchpriority = 'auto' -%}
+{%- endif -%}
 
 <section class="mt-full-image">
   {%- if heading != blank -%}
@@ -21,7 +28,7 @@
         {%- if pc_image != blank -%}
           <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w">
         {%- endif -%}
-        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, sizes: '100vw', alt: image_alt }}
       </picture>
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
