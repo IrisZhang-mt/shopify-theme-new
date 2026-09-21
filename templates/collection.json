@@ -13,6 +13,8 @@
       "type": "full-image",
       "name": "Full image",
       "settings": {
+        "heading": "",
+        "eager_load": false,
         "pc_image": "shopify://shop_images/pc_8ecd7c81-df8d-44af-bcbc-fdb5b1d683e0.jpg",
         "mob_image": "shopify://shop_images/m_c6c0060e-4f7e-4db4-b8cf-2afa1df76ea0.jpg",
         "link": ""
@@ -55,7 +57,7 @@
         "tile_k7T9Q7"
       ],
       "settings": {
-        "single_line_titles": false
+        "single_line_titles": true
       }
     }
   },
