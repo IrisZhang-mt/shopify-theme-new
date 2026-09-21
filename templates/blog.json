@@ -1,10 +1,21 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-blog",
       "settings": {
+        "blog": "",
         "heading": "Featured Articles",
-        "image": "shopify://shop_images/mt-blog-hero.png"
+        "show_tag_nav": true,
+        "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg"
       }
     }
   },
