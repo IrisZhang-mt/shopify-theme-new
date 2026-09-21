@@ -9,6 +9,15 @@
  */
 {
   "sections": {
+    "full_image_nWYHtT": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "pc_image": "shopify://shop_images/pc_8ecd7c81-df8d-44af-bcbc-fdb5b1d683e0.jpg",
+        "mob_image": "shopify://shop_images/m_c6c0060e-4f7e-4db4-b8cf-2afa1df76ea0.jpg",
+        "link": ""
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -48,6 +57,7 @@
     }
   },
   "order": [
+    "full_image_nWYHtT",
     "main"
   ]
 }
