@@ -3,32 +3,45 @@
 {%- assign pc_image = section.settings.pc_image -%}
 {%- assign mob_image = section.settings.mob_image | default: pc_image -%}
 {%- assign link = section.settings.link -%}
+{%- assign heading = section.settings.heading -%}
+{%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
+{%- assign ratio_mobile = mob_image.aspect_ratio | default: pc_image.aspect_ratio | default: 1 -%}
+{%- assign ratio_desktop = pc_image.aspect_ratio | default: mob_image.aspect_ratio | default: 1 -%}
 
 <section class="mt-full-image">
-  {%- if mob_image != blank -%}
-    <div class="mt-full-image__media">
-      {%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
+  {%- if heading != blank -%}
+    <div class="mt-full-image__inner">
+      <h2 class="mt-full-image__heading">{{ heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="mt-full-image__media" style="--mt-full-image-ratio: {{ ratio_mobile }}; --mt-full-image-ratio-desktop: {{ ratio_desktop }}">
+    {%- if mob_image != blank -%}
       <picture>
         {%- if pc_image != blank -%}
           <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w">
         {%- endif -%}
         {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
       </picture>
-    </div>
-  {%- else -%}
-    <div class="mt-full-image__media">
+    {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
-    </div>
-  {%- endif -%}
-  {%- if link != blank -%}
-    <a class="mt-full-image__link" href="{{ link }}" aria-label="{{ image_alt }}"></a>
-  {%- endif -%}
+    {%- endif -%}
+    {%- if link != blank -%}
+      <a class="mt-full-image__link" href="{{ link }}" aria-label="{{ image_alt }}"></a>
+    {%- endif -%}
+  </div>
 </section>
 
 {% schema %}
 {
   "name": "Full image",
   "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "留空时不展示"
+    },
     {
       "type": "image_picker",
       "id": "pc_image",
