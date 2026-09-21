@@ -212,7 +212,6 @@ html.mt-motion .mt-blog__hero video {
   align-items: center;
   gap: 0.625rem;
   margin: 0.9375rem 0 0;
-  font-family: var(--mt-font-mono);
   font-size: var(--mt-tag-s-size);
   font-weight: 500;
   line-height: 1;
