@@ -291,7 +291,7 @@ html.mt-motion .mt-blog__hero video {
   .mt-blog__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: 1.25rem;
-    row-gap: 0;
+    row-gap: 3.75rem;
     padding: 0 1.25rem 3.75rem;
   }
   .mt-blog__pager {
@@ -304,18 +304,8 @@ html.mt-motion .mt-blog__hero video {
     font-size: 1.5rem;
     line-height: 1.2;
   }
-  .mt-blog__card {
-    margin-top: 6.25rem;
-  }
-  .mt-blog__card:nth-child(-n + 3),
-  .mt-blog__card:nth-child(6n + 5) {
-    margin-top: 0;
-  }
   .mt-blog__media {
     aspect-ratio: 453 / 500;
-  }
-  .mt-blog__card:nth-child(2n) .mt-blog__media {
-    aspect-ratio: 453 / 400;
   }
   .mt-blog__extra {
     display: flex;
