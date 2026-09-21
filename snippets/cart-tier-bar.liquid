@@ -1,5 +1,5 @@
 {%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
-{%- if tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
+{%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
   {%- assign eligible_tag = tier_config.eligible_tag -%}
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
