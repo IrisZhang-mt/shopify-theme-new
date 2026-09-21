@@ -140,6 +140,51 @@ if (!window.mtHeroInit) {
     });
   };
 
+  const initSwipe = () => {
+    document.querySelectorAll('[data-hero]').forEach((hero) => {
+      if (hero.dataset.heroSwipeReady) return;
+      hero.dataset.heroSwipeReady = 'true';
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+      hero.addEventListener(
+        'touchstart',
+        (event) => {
+          if (desktopMq.matches || event.touches.length > 1) {
+            tracking = false;
+            return;
+          }
+          startX = event.touches[0].clientX;
+          startY = event.touches[0].clientY;
+          tracking = true;
+        },
+        { passive: true }
+      );
+      hero.addEventListener('touchcancel', () => {
+        tracking = false;
+      });
+      hero.addEventListener(
+        'touchend',
+        (event) => {
+          if (!tracking) return;
+          tracking = false;
+          const touch = event.changedTouches[0];
+          if (!touch) return;
+          const dx = touch.clientX - startX;
+          const dy = touch.clientY - startY;
+          if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+          const dots = [...hero.querySelectorAll('[data-hero-dot]')];
+          if (dots.length < 2) return;
+          const current = dots.findIndex((dot) => dot.getAttribute('aria-current') === 'true');
+          const from = current === -1 ? 0 : current;
+          const next = dx < 0 ? (from + 1) % dots.length : (from - 1 + dots.length) % dots.length;
+          dots[next].click();
+        },
+        { passive: true }
+      );
+    });
+  };
+
   document.addEventListener('click', (event) => {
     const banner = event.target.closest?.('.mt-hero__cta, .mt-hero__slide-link, .mt-hero__panel-link');
     if (!banner) return;
@@ -163,7 +208,9 @@ if (!window.mtHeroInit) {
   document.addEventListener('shopify:section:load', () => {
     queue();
     initSlides();
+    initSwipe();
   });
   queue();
   initSlides();
+  initSwipe();
 }
