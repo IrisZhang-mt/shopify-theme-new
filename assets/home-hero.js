@@ -62,7 +62,7 @@ if (!window.mtHeroInit) {
   };
 
   const setActiveDot = (hero, activeDot) => {
-    hero.querySelectorAll('[data-hero-dot], [data-hero-panel-dot]').forEach((dot) => {
+    hero.querySelectorAll('[data-hero-dot]').forEach((dot) => {
       dot.setAttribute('aria-current', String(dot === activeDot));
     });
   };
@@ -135,126 +135,8 @@ if (!window.mtHeroInit) {
         if (!hero.isConnected) return;
         show(index);
       });
-      hero._mtGotoMain = () => {
-        stop();
-        show(0);
-        play();
-      };
       show(0);
       play();
-    });
-  };
-
-  const initPanelRotation = () => {
-    document.querySelectorAll('[data-hero]').forEach((hero) => {
-      if (hero.dataset.heroPanelReady) return;
-      const mainSlide = hero.querySelector('[data-hero-slide]');
-      const secondary = hero.querySelector('.mt-hero__panel--secondary');
-      if (!mainSlide || !secondary) return;
-      hero.dataset.heroPanelReady = 'true';
-      const mainDot = hero.querySelector('[data-hero-dot]');
-      const panelDot = hero.querySelector('[data-hero-panel-dot]');
-      let showingSecondary = false;
-      let timer = 0;
-      const setActive = (next) => {
-        showingSecondary = next;
-        secondary.classList.toggle('mt-hero__panel--active', showingSecondary);
-        setActiveDot(hero, showingSecondary ? panelDot : mainDot);
-        if (showingSecondary) trackBanner(secondary);
-      };
-      const swap = () => {
-        if (desktopMq.matches || !mainSlide.classList.contains('mt-hero__slide--active')) return;
-        setActive(!showingSecondary);
-      };
-      const stop = () => {
-        clearInterval(timer);
-        timer = 0;
-      };
-      const play = () => {
-        if (timer || desktopMq.matches || reducedMq.matches || document.hidden) return;
-        const interval = (parseFloat(hero.dataset.heroInterval) || 5) * 1000;
-        timer = setInterval(swap, interval);
-      };
-      if (panelDot) {
-        panelDot.addEventListener('click', () => {
-          stop();
-          hero._mtGotoMain?.();
-          setActive(true);
-        });
-      }
-      if (mainDot) {
-        mainDot.addEventListener('click', () => {
-          stop();
-          setActive(false);
-        });
-      }
-      hero.addEventListener('pointerenter', stop);
-      hero.addEventListener('pointerleave', play);
-      hero.addEventListener('focusin', stop);
-      hero.addEventListener('focusout', (event) => {
-        if (!hero.contains(event.relatedTarget)) play();
-      });
-      document.addEventListener('visibilitychange', () => {
-        if (!hero.isConnected) return;
-        if (document.hidden) stop();
-        else play();
-      });
-      reducedMq.addEventListener('change', () => {
-        if (!hero.isConnected) return;
-        if (reducedMq.matches) stop();
-        else play();
-      });
-      desktopMq.addEventListener('change', () => {
-        if (!hero.isConnected) return;
-        stop();
-        if (!desktopMq.matches) play();
-      });
-      play();
-    });
-  };
-
-  const initSwipe = () => {
-    document.querySelectorAll('[data-hero]').forEach((hero) => {
-      if (hero.dataset.heroSwipeReady) return;
-      hero.dataset.heroSwipeReady = 'true';
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
-      hero.addEventListener(
-        'touchstart',
-        (event) => {
-          if (desktopMq.matches || event.touches.length > 1) {
-            tracking = false;
-            return;
-          }
-          startX = event.touches[0].clientX;
-          startY = event.touches[0].clientY;
-          tracking = true;
-        },
-        { passive: true }
-      );
-      hero.addEventListener('touchcancel', () => {
-        tracking = false;
-      });
-      hero.addEventListener(
-        'touchend',
-        (event) => {
-          if (!tracking) return;
-          tracking = false;
-          const touch = event.changedTouches[0];
-          if (!touch) return;
-          const dx = touch.clientX - startX;
-          const dy = touch.clientY - startY;
-          if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-          const dots = [...hero.querySelectorAll('[data-hero-dot], [data-hero-panel-dot]')];
-          if (dots.length < 2) return;
-          const current = dots.findIndex((dot) => dot.getAttribute('aria-current') === 'true');
-          const from = current === -1 ? 0 : current;
-          const next = dx < 0 ? (from + 1) % dots.length : (from - 1 + dots.length) % dots.length;
-          dots[next].click();
-        },
-        { passive: true }
-      );
     });
   };
 
@@ -281,11 +163,7 @@ if (!window.mtHeroInit) {
   document.addEventListener('shopify:section:load', () => {
     queue();
     initSlides();
-    initPanelRotation();
-    initSwipe();
   });
   queue();
   initSlides();
-  initPanelRotation();
-  initSwipe();
 }
