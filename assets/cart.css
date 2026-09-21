@@ -152,8 +152,7 @@
   transition: width 300ms var(--mt-ease);
 }
 .mt-cart__tier-node {
-  flex: 0 0 61px;
-  width: 61px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -168,6 +167,7 @@
   font-size: 10px;
   line-height: 1;
   color: var(--mt-moss);
+  white-space: nowrap;
 }
 .mt-cart__tier-ordinal {
   font-size: 10px;
