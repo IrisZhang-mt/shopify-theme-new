@@ -31,7 +31,8 @@
         {%- assign tier_index = forloop.index0 -%}
         {%- assign segment_floor = 0 -%}
         {%- unless tier_index == 0 -%}
-          {%- assign segment_floor = tiers[tier_index | minus: 1].qty -%}
+          {%- assign prev_index = tier_index | minus: 1 -%}
+          {%- assign segment_floor = tiers[prev_index].qty -%}
         {%- endunless -%}
         {%- assign segment_span = tier.qty | minus: segment_floor -%}
         {%- assign segment_progress = tier_qty | minus: segment_floor -%}
