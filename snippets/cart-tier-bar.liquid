@@ -1,5 +1,5 @@
 {%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
-{%- if tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
+{%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
   {%- assign eligible_tag = tier_config.eligible_tag -%}
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
@@ -16,42 +16,45 @@
     {%- endif -%}
   {%- endfor -%}
   {%- assign active_index = unlocked_count | minus: 1 -%}
-  {%- if unlocked_count >= tier_total -%}
-    {%- assign tier_fill = 100 -%}
-  {%- else -%}
+  {%- unless unlocked_count >= tier_total -%}
     {%- assign next_tier = tiers[unlocked_count] -%}
-    {%- assign segment_floor = 0 -%}
-    {%- if unlocked_count > 0 -%}
-      {%- assign segment_floor = tiers[active_index].qty -%}
-    {%- endif -%}
-    {%- assign segment_span = next_tier.qty | minus: segment_floor -%}
-    {%- assign segment_progress = tier_qty | minus: segment_floor -%}
-    {%- assign segment_pct = segment_progress | times: 100.0 | divided_by: segment_span | at_most: 100 -%}
-    {%- assign tier_fill = unlocked_count | times: 100.0 | plus: segment_pct | divided_by: tier_total -%}
     {%- assign tier_remaining = next_tier.qty | minus: tier_qty -%}
-  {%- endif -%}
+  {%- endunless -%}
   <div class="mt-cart__tier-bar">
     {%- if unlocked_count >= tier_total -%}
       <p class="mt-cart__tier-text">{{ 'cart.tier_progress_complete' | t }}</p>
     {%- else -%}
       <p class="mt-cart__tier-text">{{ 'cart.tier_progress_remaining' | t: count: tier_remaining, reward: next_tier.reward_label }}</p>
     {%- endif -%}
-    <div class="mt-cart__tier-track">
-      <span class="mt-cart__tier-fill" style="width: {{ tier_fill }}%"></span>
-    </div>
     <div class="mt-cart__tier-nodes">
       {%- for tier in tiers -%}
+        {%- assign tier_index = forloop.index0 -%}
+        {%- assign segment_floor = 0 -%}
+        {%- unless tier_index == 0 -%}
+          {%- assign prev_index = tier_index | minus: 1 -%}
+          {%- assign segment_floor = tiers[prev_index].qty -%}
+        {%- endunless -%}
+        {%- assign segment_span = tier.qty | minus: segment_floor -%}
+        {%- assign segment_progress = tier_qty | minus: segment_floor -%}
+        {%- assign segment_pct = segment_progress | times: 100.0 | divided_by: segment_span | at_most: 100 | at_least: 0 -%}
+        <span class="mt-cart__tier-segment"><span class="mt-cart__tier-segment-fill" style="width: {{ segment_pct }}%"></span></span>
         {%- case tier.qty -%}
           {%- when 1 -%}{%- assign tier_ordinal = '1st' -%}
           {%- when 2 -%}{%- assign tier_ordinal = '2nd' -%}
           {%- when 3 -%}{%- assign tier_ordinal = '3rd' -%}
           {%- else -%}{%- assign tier_ordinal = tier.qty | append: 'th' -%}
         {%- endcase -%}
-        <div class="mt-cart__tier-node{% if forloop.index0 == active_index %} mt-cart__tier-node--active{% endif %}">
+        <div class="mt-cart__tier-node{% if tier_index == active_index %} mt-cart__tier-node--active{% endif %}">
           <span class="mt-cart__tier-badge">{{ tier.reward_label }}</span>
           <span class="mt-cart__tier-ordinal">{{ tier_ordinal }}</span>
         </div>
       {%- endfor -%}
+      {%- if unlocked_count >= tier_total -%}
+        {%- assign trailing_pct = 100 -%}
+      {%- else -%}
+        {%- assign trailing_pct = 0 -%}
+      {%- endif -%}
+      <span class="mt-cart__tier-segment"><span class="mt-cart__tier-segment-fill" style="width: {{ trailing_pct }}%"></span></span>
     </div>
   </div>
 {%- endif -%}

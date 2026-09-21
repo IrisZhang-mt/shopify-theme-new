@@ -65,7 +65,7 @@
             {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
             {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
           {%- endif -%}
-          {%- for value in color_option.values limit: 4 -%}
+          {%- for value in color_option.values limit: 6 -%}
             {%- liquid
               assign swatch_handle = value | handleize
               assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
@@ -122,7 +122,7 @@
       {%- endcapture -%}
       {%- if swatches contains 'mt-card__swatch' -%}
         <div class="mt-card__swatches">{{ swatches }}</div>
-        <p class="mt-card__swatches-caption">{{ 'products.available_colors' | t: count: color_option.values.size }}</p>
+        {% comment %} <p class="mt-card__swatches-caption">{{ 'products.available_colors' | t: count: color_option.values.size }}</p> {% endcomment %}
       {%- elsif align -%}
         <div class="mt-card__swatches"></div>
       {%- endif -%}

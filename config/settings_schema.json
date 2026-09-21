@@ -56,6 +56,20 @@
         "label": "Free shipping threshold",
         "info": "Amount in your store's currency (e.g. 79) shown on the cart progress bar. This does not read your Settings > Shipping and delivery rate automatically — keep it in sync manually when that rate changes. Leave blank to hide the bar.",
         "default": 79
+      },
+      {
+        "type": "checkbox",
+        "id": "show_free_shipping_bar",
+        "label": "Show free shipping bar",
+        "info": "Hides the bar in both the cart drawer and the cart page when turned off, regardless of the threshold above.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tier_bar",
+        "label": "Show tiered discount bar",
+        "info": "Shows the multi-buy progress bar in both the cart drawer and the cart page. Also requires the tiered_discount shop metafield to be set and enabled — this is an extra on/off switch for campaigns, not a replacement for it.",
+        "default": false
       }
     ]
   },
