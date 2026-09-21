@@ -1,4 +1,4 @@
-{%- if settings.free_shipping_threshold > 0 -%}
+{%- if settings.show_free_shipping_bar and settings.free_shipping_threshold > 0 -%}
   {%- assign shipping_threshold_cents = settings.free_shipping_threshold | times: 100 -%}
   {%- assign shipping_remaining_cents = shipping_threshold_cents | minus: cart.total_price -%}
   {%- assign shipping_progress = cart.total_price | times: 100.0 | divided_by: shipping_threshold_cents | at_most: 100 -%}
