@@ -61,15 +61,6 @@
   letter-spacing: var(--mt-tracking-heading);
   text-align: left;
   color: var(--mt-ink);
-  transition: color 300ms var(--mt-ease);
-}
-.mt-contact-faq__item--open .mt-contact-faq__q {
-  color: var(--mt-accent);
-}
-@media (hover: hover) {
-  .mt-contact-faq__q:hover {
-    color: var(--mt-accent);
-  }
 }
 .mt-contact-faq__q:focus-visible {
   outline: 2px solid var(--mt-ink);
