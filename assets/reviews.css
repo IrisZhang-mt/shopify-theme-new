@@ -199,7 +199,7 @@
   border-top: 1px solid rgba(var(--mt-ink-rgb), 0.1);
 }
 .mt-revs__row:last-of-type {
-  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.1);
+  border-bottom: 1px solid #1D1D1D;
 }
 .mt-revs__who {
   display: flex;

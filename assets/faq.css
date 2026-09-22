@@ -63,7 +63,7 @@
 .mt-faqs__label {
   margin: 5rem 0 0;
   padding-bottom: 0.9375rem;
-  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.1);
+  border-bottom: 1px solid #1D1D1D;
   scroll-margin-top: 3.75rem;
   font-family: var(--mt-font-body);
   font-size: 1.25rem;
@@ -76,7 +76,7 @@
 }
 
 .mt-faqs__item {
-  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.1);
+  border-bottom: 1px solid #1D1D1D;
 }
 
 .mt-faqs__q {
