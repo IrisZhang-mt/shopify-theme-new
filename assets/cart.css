@@ -563,6 +563,24 @@
   .mt-cart-page {
     padding-top: 4.6875rem;
   }
+
+  .mt-cart__tier-text {
+    margin-bottom: 36.5px;
+    font-size: 16px;
+  }
+
+  .mt-cart__tier-node {
+    gap: 9px;
+  }
+
+  .mt-cart__tier-badge {
+    padding: 6px 26px;
+    font-size: 16px;
+  }
+
+  .mt-cart__tier-ordinal {
+    font-size: 16px;
+  }
 }
 
 @media screen and (max-width: 749.98px) {

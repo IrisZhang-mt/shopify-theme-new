@@ -167,6 +167,9 @@ html.mt-motion .mt-hero__media video {
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-cloud);
+  text-shadow:
+    0px 2px 6px #00000026,
+    0px 1px 2px #0000004d;
 }
 
 .mt-hero__sub,

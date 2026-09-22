@@ -1,11 +1,12 @@
 .mt-banner {
   position: relative;
-  background: #eee;
+  margin-bottom: 2.875rem;
 }
 
 @media screen and (max-width: 749.98px) {
   .mt-banner {
     display: block;
+    margin-bottom: 2.5rem;
   }
 
   .mt-banner__media {
@@ -95,10 +96,12 @@
 
 @media screen and (min-width: 750px) {
   .mt-banner {
+    background: #eee;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: 1fr auto;
-    min-height: clamp(31.25rem, 52vw, 47.5rem);
+    /* Right column is 50% of this width; matches the 720:760 design comp at any viewport width. */
+    aspect-ratio: 1440 / 760;
   }
 
   .mt-banner__mobile-overlay {

@@ -15,7 +15,9 @@
   data-hidden-stores="{{ settings.store_locator_hidden | escape }}"
 >
   <div class="mt-flagship__intro">
-    <h2 class="mt-flagship__heading" data-reveal>{{ 'store_flagship_carousel.heading' | t }}</h2>
+    {%- if section.settings.heading != blank -%}
+      <h2 class="mt-flagship__heading" data-reveal>{{ section.settings.heading }}</h2>
+    {%- endif -%}
   </div>
   <div class="mt-flagship__stage" data-row-stage>
     <div class="mt-flagship__row" data-autoplay="20" data-wheel-lock id="StoreFlagshipRow" aria-live="off"></div>
@@ -28,6 +30,14 @@
 {% schema %}
 {
   "name": "Store flagship carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our flagship stores."
+    }
+  ],
   "presets": [
     {
       "name": "Store flagship carousel"
