@@ -1,6 +1,7 @@
 .mt-card-grid {
   margin-block: 2.5rem;
   background: var(--mt-paper);
+  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
 .mt-card-grid__inner {
