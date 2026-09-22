@@ -316,11 +316,12 @@
   align-items: center;
 }
 .mt-pdp__promo-subtitle {
+  align-self: stretch;
   margin: 0 0 0.9375rem;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.4;
-  text-align: center;
+  text-align: left;
   color: var(--mt-moss);
 }
 .mt-pdp__promo-title {
