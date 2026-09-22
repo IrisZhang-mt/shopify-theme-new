@@ -218,12 +218,38 @@
           {%- endif -%}
 
           {%- assign promo_image = section.settings.promo_image -%}
+          {%- assign promo_image_mobile = section.settings.promo_image_mobile -%}
           {%- assign promo_title = section.settings.promo_title -%}
-          {%- if promo_image != blank or promo_title != blank -%}
+          {%- assign promo_collections = section.settings.promo_collections -%}
+          {%- assign promo_collection_handles = promo_collections | map: 'handle' -%}
+          {%- assign promo_text_visible = true -%}
+          {%- if promo_collections.size > 0 -%}
+            {%- assign promo_text_visible = false -%}
+            {%- for coll in product.collections -%}
+              {%- if promo_collection_handles contains coll.handle -%}
+                {%- assign promo_text_visible = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- assign show_promo = false -%}
+          {%- if promo_image != blank -%}
+            {%- assign show_promo = true -%}
+          {%- elsif promo_text_visible and promo_title != blank -%}
+            {%- assign show_promo = true -%}
+          {%- endif -%}
+          {%- if show_promo -%}
             <div class="mt-pdp__promo" data-reveal>
               {%- if promo_image != blank -%}
                 {%- assign promo_alt = promo_image.alt | default: product.title | escape -%}
-                {{ promo_image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 40vw, 92vw', alt: promo_alt, class: 'mt-pdp__promo-image' }}
+                {%- if promo_image_mobile != blank -%}
+                  <picture>
+                    <source media="(min-width: 750px)" srcset="{{ promo_image | image_url: width: 750 }} 750w, {{ promo_image | image_url: width: 1500 }} 1500w, {{ promo_image | image_url: width: 2200 }} 2200w">
+                    {{ promo_image_mobile | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '100vw', alt: promo_alt, class: 'mt-pdp__promo-image' }}
+                  </picture>
+                {%- else -%}
+                  {{ promo_image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 40vw, 92vw', alt: promo_alt, class: 'mt-pdp__promo-image' }}
+                {%- endif -%}
               {%- else -%}
                 <div class="mt-pdp__promo-text">
                   {%- if section.settings.promo_subtitle != blank -%}
@@ -395,6 +421,12 @@
       "info": "如果设置了图片，则不展示标题和副标题。"
     },
     {
+      "type": "image_picker",
+      "id": "promo_image_mobile",
+      "label": "Promo image (mobile)",
+      "info": "可选。留空则移动端使用上方的桌面图。"
+    },
+    {
       "type": "textarea",
       "id": "promo_title",
       "label": "Promo title",
@@ -405,6 +437,12 @@
       "id": "promo_subtitle",
       "label": "Promo subtitle",
       "info": "Shown above the promo title."
+    },
+    {
+      "type": "collection_list",
+      "id": "promo_collections",
+      "label": "Show promo text for collections",
+      "info": "只影响文案形式的 Promo（有图片时不受影响）。留空则所有商品都展示。"
     },
     {
       "type": "text",
