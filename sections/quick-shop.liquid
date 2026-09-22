@@ -10,7 +10,7 @@
     <div class="mt-qs__track" data-qs-track>
       {%- for media in product.media limit: 10 -%}
         {%- if media.media_type == 'image' -%}
-          <div class="mt-qs__slide">
+          <div class="mt-qs__slide" data-media-id="{{ media.id }}">
             {%- assign image_alt = media.alt | default: product.title | escape -%}
             {{ media | image_url: width: 950 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 463px, 275px', alt: image_alt }}
           </div>
@@ -129,7 +129,7 @@
     </div>
   </div>
   <script type="application/json" data-qs-variants>
-    [{%- for variant in product.variants -%}{%- capture v_ga4_variant -%}{% render 'item-variant-ga4', item: variant %}{%- endcapture -%}{%- assign v_ga4_variant = v_ga4_variant | strip -%}{"id":{{ variant.id }},"sku":{{ variant.sku | json }},"available":{{ variant.available }},"options":{{ variant.options | json }},"price":{{ variant.price | money_without_trailing_zeros | json }},"compare":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_trailing_zeros | json }}{% else %}""{% endif %},"priceValue":{{ variant.price | divided_by: 100.0 }},"discountValue":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | minus: variant.price | divided_by: 100.0 }}{% else %}0{% endif %},"itemVariant":{{ v_ga4_variant | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+    [{%- for variant in product.variants -%}{%- capture v_ga4_variant -%}{% render 'item-variant-ga4', item: variant %}{%- endcapture -%}{%- assign v_ga4_variant = v_ga4_variant | strip -%}{"id":{{ variant.id }},"sku":{{ variant.sku | json }},"available":{{ variant.available }},"options":{{ variant.options | json }},"price":{{ variant.price | money_without_trailing_zeros | json }},"compare":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_trailing_zeros | json }}{% else %}""{% endif %},"priceValue":{{ variant.price | divided_by: 100.0 }},"discountValue":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | minus: variant.price | divided_by: 100.0 }}{% else %}0{% endif %},"featuredMediaId":{{ variant.featured_image.id | default: 'null' }},"itemVariant":{{ v_ga4_variant | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
   </script>
 </div>
 
