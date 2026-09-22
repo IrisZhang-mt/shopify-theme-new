@@ -51,7 +51,7 @@
     border-color var(--mt-dur) var(--mt-ease),
     color var(--mt-dur) var(--mt-ease);
 }
-.mt-rev__tag[aria-pressed="true"] {
+.mt-rev__tag[aria-pressed='true'] {
   border-color: var(--mt-ink);
   color: var(--mt-ink);
 }
@@ -83,10 +83,10 @@
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas:
-    "who media"
-    "comment media";
+    'who media'
+    'comment media';
   gap: 1.25rem;
-  border-top: 1px solid rgba(var(--mt-ink-rgb));
+  border-top: 1px solid rgba(var(--mt-ink-rgb), 0.1);
   padding-top: 1.25rem;
 }
 .mt-rev__who {
@@ -162,10 +162,7 @@
   cursor: pointer;
   font-family: var(--mt-font-body);
   background-color: var(--mt-accent);
-  background-image: linear-gradient(
-    rgba(var(--mt-ink-rgb), 0.18),
-    rgba(var(--mt-ink-rgb), 0.18)
-  );
+  background-image: linear-gradient(rgba(var(--mt-ink-rgb), 0.18), rgba(var(--mt-ink-rgb), 0.18));
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;
@@ -218,7 +215,7 @@
 
   .mt-rev__item {
     grid-template-columns: 5.9375rem minmax(0, 19.5rem) 6.1875rem;
-    grid-template-areas: "who comment media";
+    grid-template-areas: 'who comment media';
     column-gap: clamp(1.875rem, 15vw, 13.125rem);
     justify-content: center;
   }
