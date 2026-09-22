@@ -11,6 +11,7 @@ if (!window.mtQuickShopInit) {
   const panel = () => modal()?.querySelector('[data-qs-panel]');
 
   const slides = () => [...(panel()?.querySelectorAll('.mt-qs__slide') || [])];
+  const visibleSlides = () => slides().filter((slide) => !slide.hidden);
 
   const gallery = () => panel()?.querySelector('[data-qs-track]');
 
@@ -19,7 +20,7 @@ if (!window.mtQuickShopInit) {
     const root = panel();
     if (!view || !root) return;
     const max = view.scrollWidth - view.clientWidth;
-    const items = slides();
+    const items = visibleSlides();
     const nearest = items.findIndex((item) => item.offsetLeft >= view.scrollLeft - 4);
     state.slide = nearest === -1 ? Math.max(items.length - 1, 0) : nearest;
     const prev = root.querySelector('[data-qs-prev]');
@@ -38,7 +39,7 @@ if (!window.mtQuickShopInit) {
   );
 
   const moveGallery = (index) => {
-    const items = slides();
+    const items = visibleSlides();
     const view = gallery();
     if (!items.length || !view) return;
     state.slide = Math.max(0, Math.min(index, items.length - 1));
