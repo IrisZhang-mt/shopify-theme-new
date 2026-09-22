@@ -222,21 +222,23 @@
           {%- assign promo_title = section.settings.promo_title -%}
           {%- assign promo_collections = section.settings.promo_collections -%}
           {%- assign promo_collection_handles = promo_collections | map: 'handle' -%}
-          {%- assign promo_text_visible = true -%}
+          {%- assign promo_in_collection = true -%}
           {%- if promo_collections.size > 0 -%}
-            {%- assign promo_text_visible = false -%}
+            {%- assign promo_in_collection = false -%}
             {%- for coll in product.collections -%}
               {%- if promo_collection_handles contains coll.handle -%}
-                {%- assign promo_text_visible = true -%}
+                {%- assign promo_in_collection = true -%}
                 {%- break -%}
               {%- endif -%}
             {%- endfor -%}
           {%- endif -%}
           {%- assign show_promo = false -%}
-          {%- if promo_image != blank -%}
-            {%- assign show_promo = true -%}
-          {%- elsif promo_text_visible and promo_title != blank -%}
-            {%- assign show_promo = true -%}
+          {%- if promo_in_collection -%}
+            {%- if promo_image != blank -%}
+              {%- assign show_promo = true -%}
+            {%- elsif promo_title != blank -%}
+              {%- assign show_promo = true -%}
+            {%- endif -%}
           {%- endif -%}
           {%- if show_promo -%}
             <div class="mt-pdp__promo" data-reveal>
@@ -412,37 +414,37 @@
     },
     {
       "type": "header",
-      "content": "Promo banner"
+      "content": "利益点展示"
     },
     {
       "type": "image_picker",
       "id": "promo_image",
-      "label": "Promo image",
+      "label": "利益点pc端图片",
       "info": "如果设置了图片，则不展示标题和副标题。"
     },
     {
       "type": "image_picker",
       "id": "promo_image_mobile",
-      "label": "Promo image (mobile)",
+      "label": "利益点移动端图片",
       "info": "可选。留空则移动端使用上方的桌面图。"
     },
     {
       "type": "textarea",
       "id": "promo_title",
-      "label": "Promo title",
-      "info": "Supports line breaks. Ignored when a promo image is set."
+      "label": "利益点标题",
+      "info": "支持换行。当设置了利益点图片时会被忽略。"
     },
     {
       "type": "textarea",
       "id": "promo_subtitle",
-      "label": "Promo subtitle",
-      "info": "Shown above the promo title."
+      "label": "利益点副标题",
+      "info": "当设置了利益点图片时会被忽略。"
     },
     {
       "type": "collection_list",
       "id": "promo_collections",
-      "label": "Show promo text for collections",
-      "info": "只影响文案形式的 Promo（有图片时不受影响）。留空则所有商品都展示。"
+      "label": "需要展示利益点的商品集合",
+      "info": "留空则所有商品都展示。"
     },
     {
       "type": "text",
