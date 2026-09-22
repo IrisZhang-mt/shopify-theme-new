@@ -1,6 +1,6 @@
 {%- assign current = product.selected_or_first_available_variant -%}
 {%- assign image_count = 0 -%}
-{%- for media in product.media limit: 10 -%}
+{%- for media in product.media -%}
   {%- if media.media_type == 'image' -%}
     {%- assign image_count = image_count | plus: 1 -%}
   {%- endif -%}
@@ -18,7 +18,7 @@
 <div class="mt-qs__panel" data-qs-panel>
   <div class="mt-qs__gallery">
     <div class="mt-qs__track" data-qs-track>
-      {%- for media in product.media limit: 10 -%}
+      {%- for media in product.media -%}
         {%- if media.media_type == 'image' -%}
           {%- assign media_color = '' -%}
           {%- assign alt_text = media.alt | default: '' -%}
