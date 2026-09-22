@@ -720,6 +720,50 @@
       "settings": {
         "heading": "Customer Reviews"
       }
+    },
+    "page_contact_faq_DkTnmA": {
+      "type": "page-contact-faq",
+      "blocks": {
+        "question_8MRdxi": {
+          "type": "question",
+          "settings": {
+            "question": "",
+            "answer": ""
+          }
+        },
+        "question_Ri6raj": {
+          "type": "question",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
+          }
+        },
+        "question_mPrJPT": {
+          "type": "question",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
+          }
+        },
+        "question_HhHygf": {
+          "type": "question",
+          "settings": {
+            "question": "What payment methods can I use?",
+            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_8MRdxi",
+        "question_Ri6raj",
+        "question_mPrJPT",
+        "question_HhHygf"
+      ],
+      "name": "Contact FAQ",
+      "settings": {
+        "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
+        "heading": "Contact Us"
+      }
     }
   },
   "order": [
@@ -739,6 +783,7 @@
     "product_reviews_tbibN7",
     "page_careers_roles_awehxq",
     "slideshow_gWbURe",
-    "product_reviews_CLkN4j"
+    "product_reviews_CLkN4j",
+    "page_contact_faq_DkTnmA"
   ]
 }
