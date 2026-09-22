@@ -1,6 +1,8 @@
 {{ 'product-related.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-related.js' | asset_url }}" type="module"></script>
 
+{%- assign filter_collections = section.settings.filter_collections -%}
+
 <section
   class="mt-pdp-rel{% unless recommendations.performed %} mt-pdp-rel--pending{% endunless %}"
   data-rel
@@ -15,6 +17,16 @@
     <div class="mt-pdp-rel__stage" data-row-stage>
       <div class="mt-pdp-rel__row" data-autoplay="30" data-wheel-lock>
         {%- for item in recommendations.products limit: 8 -%}
+          {%- if filter_collections.size > 0 -%}
+            {%- assign rel_matched = false -%}
+            {%- for fc in filter_collections -%}
+              {%- if item.collections contains fc -%}
+                {%- assign rel_matched = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless rel_matched -%}{%- continue -%}{%- endunless -%}
+          {%- endif -%}
           {% render 'product-card', product: item, quick: true, index: forloop.index0, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
         {%- endfor -%}
       </div>
@@ -32,6 +44,16 @@
         {%- assign rel_i = 0 -%}
         {%- for item in rel_source.products limit: 13 -%}
           {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+          {%- if filter_collections.size > 0 -%}
+            {%- assign rel_matched = false -%}
+            {%- for fc in filter_collections -%}
+              {%- if item.collections contains fc -%}
+                {%- assign rel_matched = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless rel_matched -%}{%- continue -%}{%- endunless -%}
+          {%- endif -%}
           {% render 'product-card', product: item, quick: true, index: rel_i, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
           {%- assign rel_i = rel_i | plus: 1 -%}
         {%- endfor -%}
