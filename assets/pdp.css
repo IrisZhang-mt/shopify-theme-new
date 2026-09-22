@@ -257,7 +257,7 @@
     transform: scale(1.06);
   }
 }
-.mt-pdp__tile[aria-pressed='true'] {
+.mt-pdp__tile[aria-pressed="true"] {
   border-color: var(--mt-ink);
 }
 
@@ -284,14 +284,14 @@
     border-color: rgba(var(--mt-ink-rgb), 0.6);
   }
 }
-.mt-pdp__pill[aria-pressed='true'] {
+.mt-pdp__pill[aria-pressed="true"] {
   border-color: var(--mt-ink);
 }
 .mt-pdp__pill--off {
   color: var(--mt-off-white);
 }
 .mt-pdp__pill--off::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -301,6 +301,39 @@
     var(--mt-off-white) calc(50% + 0.5px),
     transparent calc(50% + 0.5px)
   );
+}
+
+.mt-pdp__promo {
+  margin: 3.125rem 0;
+}
+.mt-pdp__promo-image {
+  width: 100%;
+  height: auto;
+}
+.mt-pdp__promo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mt-pdp__promo-subtitle {
+  align-self: stretch;
+  margin: 0 0 0.9375rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: left;
+  color: var(--mt-moss);
+}
+.mt-pdp__promo-title {
+  width: 100%;
+  margin: 0;
+  padding: 0.71875rem 1.375rem;
+  background: var(--mt-sand);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  color: #f37434;
 }
 
 .mt-pdp__perks {
@@ -351,7 +384,7 @@
 .mt-pdp__toggle img {
   transition: transform 300ms var(--mt-ease);
 }
-.mt-pdp__toggle[aria-expanded='true'] img {
+.mt-pdp__toggle[aria-expanded="true"] img {
   transform: rotate(45deg);
 }
 @media (hover: hover) {
@@ -506,7 +539,7 @@
 .mt-pdp__acc-head img {
   transition: transform 300ms var(--mt-ease);
 }
-.mt-pdp__acc-head[aria-expanded='true'] img {
+.mt-pdp__acc-head[aria-expanded="true"] img {
   transform: rotate(45deg);
 }
 @media (hover: hover) {
@@ -624,7 +657,7 @@
     transform: scale(1.12);
   }
 }
-.mt-pair__swatch[aria-pressed='true'] {
+.mt-pair__swatch[aria-pressed="true"] {
   box-shadow:
     0 0 0 1px var(--mt-paper),
     0 0 0 2px var(--mt-ink);
@@ -653,7 +686,7 @@
     border-color: rgba(var(--mt-ink-rgb), 0.6);
   }
 }
-.mt-pair__pill[aria-pressed='true'] {
+.mt-pair__pill[aria-pressed="true"] {
   border-color: var(--mt-ink);
 }
 .mt-pair__pill--off {
@@ -805,7 +838,7 @@
     padding: 0;
   }
   .mt-pdp__ctas {
-    margin-top: 1.25rem;
+    margin: 1.25rem;
     padding: 0;
   }
   .mt-pdp__qty {
