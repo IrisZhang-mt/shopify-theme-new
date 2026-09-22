@@ -96,7 +96,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 2.5rem;
-    padding: 2.5rem 1.25rem;
+    padding: 3.125rem 1.25rem;
   }
 
   .mt-referral__heading {
