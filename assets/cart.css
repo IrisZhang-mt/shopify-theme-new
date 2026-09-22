@@ -571,11 +571,15 @@
 
   .mt-cart__tier-node {
     gap: 9px;
-    font-size: 16px;
   }
 
   .mt-cart__tier-badge {
     padding: 6px 26px;
+    font-size: 16px;
+  }
+
+  .mt-cart__tier-ordinal {
+    font-size: 16px;
   }
 }
 
