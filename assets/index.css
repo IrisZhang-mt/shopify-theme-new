@@ -87,7 +87,7 @@
 
     --mt-tracking-heading: -0.035em;
     --mt-tracking-body: -0.035em;
-    --mt-header-h: 2.5625rem;
+    --mt-header-h: 3.1875rem;
     --mt-card-w: 18.53125rem;
     --mt-menu-size: 0.875rem;
   }
@@ -113,7 +113,7 @@
 
     --mt-tracking-heading: -0.03em;
     --mt-tracking-body: -0.03em;
-    --mt-header-h: 2.75rem;
+    --mt-header-h: 3.375rem;
     --mt-card-w: 20.9375rem;
   }
 }
