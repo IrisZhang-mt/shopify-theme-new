@@ -82,6 +82,7 @@
         "stat_xmAU9g",
         "stat_gbHeA9"
       ],
+      "disabled": true,
       "name": "Page banner",
       "settings": {
         "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg",
@@ -114,6 +115,7 @@
         "girls",
         "boys"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -286,6 +288,7 @@
       "blocks": {
         "item_ECCAUC": {
           "type": "item",
+          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
             "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
@@ -293,6 +296,7 @@
         },
         "item_DVWh4t": {
           "type": "item",
+          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
             "subtitle": "We take responsibility for our impact."
@@ -300,6 +304,7 @@
         },
         "item_RaNkxe": {
           "type": "item",
+          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
             "subtitle": ""
@@ -655,6 +660,7 @@
         "slide_hcKMjr",
         "slide_8E7PWL"
       ],
+      "disabled": true,
       "name": "Slideshow",
       "settings": {
         "autoplay": true,
