@@ -105,6 +105,13 @@ if (!window.mtPdpInit) {
             history.replaceState(history.state, '', url);
           } catch {}
           const grouped = syncGallery();
+          if (track) {
+            console.log(
+              '[DEBUG][PDP gallery] color=',
+              state.selected[colorOpt],
+              [...track.querySelectorAll('.mt-pdp__slide:not([hidden]) img')].map((img) => img.currentSrc || img.src)
+            );
+          }
           if (grouped && track && !deskMq.matches) {
             track.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
           } else if (!grouped && variant.media > 0 && track && !deskMq.matches) {

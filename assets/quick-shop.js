@@ -297,6 +297,32 @@ if (!window.mtQuickShopInit) {
       if (value.classList.contains('mt-qs__swatch')) {
         const name = panel().querySelector('[data-qs-color-name]');
         if (name) name.textContent = value.dataset.qsValue;
+        const color = value.dataset.qsValue.toLowerCase();
+        const items = slides();
+        const matched = items.some((slide) => slide.dataset.color && slide.dataset.color.toLowerCase() === color);
+        items.forEach((slide) => {
+          slide.hidden = matched && slide.dataset.color !== '' && slide.dataset.color.toLowerCase() !== color;
+        });
+        const view = gallery();
+        if (matched && view) {
+          view.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
+        } else if (!matched) {
+          const variantMatch = state.variants.find(
+            (variant) => variant.options[optIndex] === value.dataset.qsValue && variant.media
+          );
+          if (variantMatch) {
+            const index = items.findIndex((slide) => slide.dataset.media === String(variantMatch.media));
+            if (index !== -1) moveGallery(index);
+          }
+        }
+        console.log(
+          '[DEBUG][QuickShop gallery] color=',
+          value.dataset.qsValue,
+          items.filter((slide) => !slide.hidden).map((slide) => {
+            const img = slide.querySelector('img');
+            return img ? img.currentSrc || img.src : null;
+          })
+        );
       }
       syncSelection();
       return;
