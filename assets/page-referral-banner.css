@@ -102,7 +102,7 @@
   .mt-referral__heading {
     grid-column: 1;
     grid-row: 1;
-    margin-bottom: 1.40625rem;
+    margin-bottom: 2.875rem;
     font-size: var(--mt-h-xl-size);
   }
 
