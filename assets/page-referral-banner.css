@@ -70,6 +70,9 @@
   padding-block: 1.25rem;
   border-top: 1px solid #e7e3da;
 }
+.mt-referral__list-item:last-child {
+  padding-bottom: 0;
+}
 
 .mt-referral__list-title {
   display: flex;
