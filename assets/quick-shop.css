@@ -73,6 +73,9 @@
   height: 100%;
   scroll-snap-align: start;
 }
+.mt-qs__slide--shared {
+  order: 1;
+}
 .mt-qs__slide img {
   width: 100%;
   height: 100%;
