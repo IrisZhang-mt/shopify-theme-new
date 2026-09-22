@@ -70,9 +70,6 @@
   padding-block: 1.25rem;
   border-top: 1px solid #e7e3da;
 }
-.mt-referral__list-item:last-child {
-  padding-bottom: 0;
-}
 
 .mt-referral__list-title {
   display: flex;
@@ -93,6 +90,12 @@
   font-size: var(--mt-p-s-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-ink);
+}
+
+@media screen and (max-width: 749.98px) {
+  .mt-referral__list-item:last-child {
+    padding-bottom: 0;
+  }
 }
 
 @media screen and (min-width: 750px) {
