@@ -50,6 +50,7 @@
         "panel-1",
         "slide_bLWiD8"
       ],
+      "disabled": true,
       "settings": {
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
@@ -82,7 +83,6 @@
         "stat_xmAU9g",
         "stat_gbHeA9"
       ],
-      "disabled": true,
       "name": "Page banner",
       "settings": {
         "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg",
