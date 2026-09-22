@@ -1,5 +1,5 @@
 .mt-careers-roles {
-  margin-block: 3.125rem;
+  margin-block: 2.5rem;
   background: var(--mt-paper);
 }
 
@@ -97,6 +97,10 @@
 }
 
 @media screen and (min-width: 750px) {
+  .mt-careers-roles {
+    margin-block: 3.125rem;
+  }
+
   .mt-careers-roles__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
