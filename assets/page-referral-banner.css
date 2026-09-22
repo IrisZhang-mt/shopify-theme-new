@@ -95,12 +95,14 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 2.5rem;
+    row-gap: 0;
     padding: 3.125rem 1.25rem;
   }
 
   .mt-referral__heading {
     grid-column: 1;
     grid-row: 1;
+    margin-bottom: 1.40625rem;
     font-size: var(--mt-h-xl-size);
   }
 
