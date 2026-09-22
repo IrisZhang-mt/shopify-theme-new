@@ -23,7 +23,42 @@
     "page_contact_faq_fhxFey": {
       "type": "page-contact-faq",
       "blocks": {
+        "question_3KAfk9": {
+          "type": "question",
+          "settings": {
+            "question": "",
+            "answer": ""
+          }
+        },
+        "question_97Kkm7": {
+          "type": "question",
+          "settings": {
+            "question": "",
+            "answer": ""
+          }
+        },
         "question_6cVtrd": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_9BhE7b": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_H6T3yE": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_J7j7je": {
           "type": "question",
           "settings": {
             "question": "Customer Service",
@@ -32,7 +67,12 @@
         }
       },
       "block_order": [
-        "question_6cVtrd"
+        "question_3KAfk9",
+        "question_97Kkm7",
+        "question_6cVtrd",
+        "question_9BhE7b",
+        "question_H6T3yE",
+        "question_J7j7je"
       ],
       "name": "Contact FAQ",
       "settings": {
