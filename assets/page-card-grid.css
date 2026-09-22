@@ -1,12 +1,12 @@
 .mt-card-grid {
-  padding-block: 2.5rem;
   background: var(--mt-paper);
-  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
 .mt-card-grid__inner {
   width: min(100% - 1.875rem, 77.5rem);
   margin-inline: auto;
+  padding: 3.125rem 1.25rem;
+  border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
 .mt-card-grid__heading {
