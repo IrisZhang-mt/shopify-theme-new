@@ -303,6 +303,37 @@
   );
 }
 
+.mt-pdp__promo {
+  margin: 3.125rem 0;
+}
+.mt-pdp__promo-image {
+  width: 100%;
+  height: auto;
+}
+.mt-pdp__promo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mt-pdp__promo-subtitle {
+  margin: 0 0 0.9375rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--mt-moss);
+}
+.mt-pdp__promo-title {
+  width: 100%;
+  margin: 0;
+  padding: 0.71875rem 1.375rem;
+  background: var(--mt-sand);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}
+
 .mt-pdp__perks {
   display: flex;
   flex-direction: column;

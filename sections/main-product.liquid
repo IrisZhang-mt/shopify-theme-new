@@ -217,6 +217,24 @@
             </div>
           {%- endif -%}
 
+          {%- assign promo_image = section.settings.promo_image -%}
+          {%- assign promo_title = section.settings.promo_title -%}
+          {%- if promo_image != blank or promo_title != blank -%}
+            <div class="mt-pdp__promo" data-reveal>
+              {%- if promo_image != blank -%}
+                {%- assign promo_alt = promo_image.alt | default: product.title | escape -%}
+                {{ promo_image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 40vw, 92vw', alt: promo_alt, class: 'mt-pdp__promo-image' }}
+              {%- else -%}
+                <div class="mt-pdp__promo-text">
+                  {%- if section.settings.promo_subtitle != blank -%}
+                    <p class="mt-pdp__promo-subtitle">{{ section.settings.promo_subtitle | newline_to_br }}</p>
+                  {%- endif -%}
+                  <p class="mt-pdp__promo-title">{{ promo_title | newline_to_br }}</p>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
           <div class="mt-pdp__perks" data-reveal style="--mt-reveal-i: 2">
             {%- if section.settings.delivery_title != blank -%}
               {% render 'pdp-perk',
