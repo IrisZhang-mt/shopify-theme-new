@@ -37,7 +37,8 @@
   padding-block: 1.25rem;
   border-top: 1px solid #e7e3da;
 }
-.mt-careers-roles__list-item:last-child {
+
+.mt-careers-roles__list > :last-child {
   padding-bottom: 0;
   border: none;
 }
