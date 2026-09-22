@@ -1,13 +1,9 @@
 .mt-contact-faq {
-  max-width: var(--mt-container);
-  margin-inline: auto;
-  padding: 3.125rem 0.9375rem;
-  background: var(--mt-paper);
-}
-.mt-contact-faq__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1.5625rem;
+  padding: 0 0.9375rem 6.25rem;
+  background: var(--mt-paper);
 }
 .mt-contact-faq__media {
   position: relative;
@@ -19,12 +15,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.mt-contact-faq__body {
-  display: flex;
-}
-.mt-contact-faq__inner {
-  width: 100%;
 }
 
 .mt-contact-faq__heading {
@@ -113,12 +103,10 @@
 
 @media screen and (min-width: 750px) {
   .mt-contact-faq {
-    padding: 5rem 1.25rem;
-  }
-  .mt-contact-faq__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.1875rem;
     align-items: center;
+    padding: 0 1.25rem 1.25rem;
   }
   .mt-contact-faq__media {
     aspect-ratio: auto;
