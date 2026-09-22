@@ -5,7 +5,7 @@
 .mt-referral__inner {
   display: flex;
   flex-direction: column;
-  gap: 1.40625rem;
+  gap: 2.5rem;
   width: min(100% - 1.875rem, 77.5rem);
   margin-inline: auto;
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
