@@ -11,6 +11,7 @@ if (!window.mtQuickShopInit) {
   const panel = () => modal()?.querySelector('[data-qs-panel]');
 
   const slides = () => [...(panel()?.querySelectorAll('.mt-qs__slide') || [])];
+  const visibleSlides = () => slides().filter((slide) => !slide.hidden);
 
   const gallery = () => panel()?.querySelector('[data-qs-track]');
 
@@ -19,7 +20,7 @@ if (!window.mtQuickShopInit) {
     const root = panel();
     if (!view || !root) return;
     const max = view.scrollWidth - view.clientWidth;
-    const items = slides();
+    const items = visibleSlides();
     const nearest = items.findIndex((item) => item.offsetLeft >= view.scrollLeft - 4);
     state.slide = nearest === -1 ? Math.max(items.length - 1, 0) : nearest;
     const prev = root.querySelector('[data-qs-prev]');
@@ -38,7 +39,7 @@ if (!window.mtQuickShopInit) {
   );
 
   const moveGallery = (index) => {
-    const items = slides();
+    const items = visibleSlides();
     const view = gallery();
     if (!items.length || !view) return;
     state.slide = Math.max(0, Math.min(index, items.length - 1));
@@ -297,6 +298,25 @@ if (!window.mtQuickShopInit) {
       if (value.classList.contains('mt-qs__swatch')) {
         const name = panel().querySelector('[data-qs-color-name]');
         if (name) name.textContent = value.dataset.qsValue;
+        const color = value.dataset.qsValue.toLowerCase();
+        const items = slides();
+        const matched = items.some((slide) => slide.dataset.color && slide.dataset.color.toLowerCase() === color);
+        items.forEach((slide) => {
+          slide.hidden = matched && slide.dataset.color !== '' && slide.dataset.color.toLowerCase() !== color;
+        });
+        const view = gallery();
+        if (matched && view) {
+          view.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
+        } else if (!matched) {
+          const variantMatch = state.variants.find(
+            (variant) => variant.options[optIndex] === value.dataset.qsValue && variant.media
+          );
+          if (variantMatch) {
+            const index = items.findIndex((slide) => slide.dataset.media === String(variantMatch.media));
+            if (index !== -1) moveGallery(index);
+          }
+        }
+        syncArrows();
       }
       syncSelection();
       return;
