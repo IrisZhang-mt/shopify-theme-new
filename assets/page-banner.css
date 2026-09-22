@@ -100,7 +100,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: 1fr auto;
-    min-height: clamp(31.25rem, 52vw, 47.5rem);
+    /* Right column is 50% of this width; matches the 720:760 design comp at any viewport width. */
+    aspect-ratio: 1440 / 760;
   }
 
   .mt-banner__mobile-overlay {
