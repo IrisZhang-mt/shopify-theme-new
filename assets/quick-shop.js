@@ -316,14 +316,7 @@ if (!window.mtQuickShopInit) {
             if (index !== -1) moveGallery(index);
           }
         }
-        console.log(
-          '[DEBUG][QuickShop gallery] color=',
-          value.dataset.qsValue,
-          items.filter((slide) => !slide.hidden).map((slide) => {
-            const img = slide.querySelector('img');
-            return img ? img.currentSrc || img.src : null;
-          })
-        );
+        syncArrows();
       }
       syncSelection();
       return;
