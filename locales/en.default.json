@@ -192,9 +192,6 @@
     "miles_away": "__DISTANCE__ miles from your location",
     "stores_label": "Stores"
   },
-  "store_flagship_carousel": {
-    "heading": "Our flagship stores."
-  },
   "onboarding": {
     "product_title": "Product title",
     "product_price": "From $60"
