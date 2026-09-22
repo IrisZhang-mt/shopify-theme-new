@@ -1,6 +1,7 @@
 .mt-banner {
   position: relative;
   background: #eee;
+  margin-bottom: 2.875rem;
 }
 
 @media screen and (max-width: 749.98px) {
