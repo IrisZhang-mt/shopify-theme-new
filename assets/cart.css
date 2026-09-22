@@ -206,7 +206,7 @@
 .mt-cart__line + .mt-cart__line {
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(var(--mt-ink-rgb));
+  border-top: 1px solid rgba(var(--mt-ink-rgb), 0.1);
 }
 .mt-cart__media {
   flex-shrink: 0;
