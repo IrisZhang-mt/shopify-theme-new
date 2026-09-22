@@ -12,6 +12,10 @@
   border-bottom: 1px solid rgba(var(--mt-ink-rgb), 0.15);
 }
 
+.mt-referral__inner--no-border {
+  border-bottom: none;
+}
+
 .mt-referral__heading {
   margin: 0;
   font-size: 1.6875rem;
