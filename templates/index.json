@@ -326,6 +326,46 @@
         "show_icon": true
       }
     },
+    "page_referral_banner_q9TWGP": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_NPa6tj": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
+          }
+        },
+        "item_X8WPtk": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "We take responsibility for our impact."
+          }
+        },
+        "item_EEcfWm": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_NPa6tj",
+        "item_X8WPtk",
+        "item_EEcfWm"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Give 15%, Get 15%.\nGive 15%, Get 15%.",
+        "subtext": "We craft innovative,superior products for a safe and\ncomfortable active lifestyle, and we look after the\npeople who make that happen. See a role that excites you.\nWrite to us at us.career@moodytiger.com.",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true
+      }
+    },
     "page_card_grid_ygFVW9": {
       "type": "page-card-grid",
       "blocks": {
@@ -678,6 +718,7 @@
     "full_image_JRY9PH",
     "carousel",
     "page_referral_banner_BjA9gQ",
+    "page_referral_banner_q9TWGP",
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g",
