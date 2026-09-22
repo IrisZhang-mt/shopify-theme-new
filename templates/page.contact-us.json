@@ -1,13 +1,88 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-contact",
       "settings": {
-        "image": "shopify://shop_images/mt-contact-hero.jpg"
+        "heading": "We’re Here for Every Adventure.",
+        "image": "shopify://shop_images/1_2271e224-1bf8-430b-b045-7501870ce1c0.jpg",
+        "text": "<p>Have a question or need assistance? Fill out the form below or email us at <a href=\"mailto:order@moodytiger.com\">order@moodytiger.com</a>, our Customer Care team will be happy to help.</p>",
+        "button": "Send Message",
+        "hours": "<p><strong>Working Hours:</strong><br/>Monday – Friday 9:00 to 18:00 (GMT +8)<br/>Closed on weekends & Public Holidays</p>",
+        "success": "Thanks for reaching out. We will get back to you as soon as we can."
+      }
+    },
+    "page_contact_faq_fhxFey": {
+      "type": "page-contact-faq",
+      "blocks": {
+        "question_3KAfk9": {
+          "type": "question",
+          "settings": {
+            "question": "",
+            "answer": ""
+          }
+        },
+        "question_97Kkm7": {
+          "type": "question",
+          "settings": {
+            "question": "",
+            "answer": ""
+          }
+        },
+        "question_6cVtrd": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_9BhE7b": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_H6T3yE": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        },
+        "question_J7j7je": {
+          "type": "question",
+          "settings": {
+            "question": "Customer Service",
+            "answer": "<p><strong>Email</strong> — order@moodytiger.com<br/><strong>Phone</strong> — +852 6345 0496<br/><strong>Hours</strong> — Monday to Friday, 09:00–18:00 (GMT+8), excluding public holidaysWe reply to every email within one business day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_3KAfk9",
+        "question_97Kkm7",
+        "question_6cVtrd",
+        "question_9BhE7b",
+        "question_H6T3yE",
+        "question_J7j7je"
+      ],
+      "name": "Contact FAQ",
+      "settings": {
+        "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
+        "heading": "Contact Us"
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "page_contact_faq_fhxFey"
   ]
 }
