@@ -5,12 +5,38 @@
     {%- assign image_count = image_count | plus: 1 -%}
   {%- endif -%}
 {%- endfor -%}
+{%- assign color_index = -1 -%}
+{%- for option in product.options_with_values -%}
+  {%- if option.name == 'Color' or option.name == 'Colour' -%}
+    {%- assign color_index = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign current_color = '' -%}
+{%- if color_index >= 0 -%}
+  {%- assign current_color = current.options[color_index] -%}
+{%- endif -%}
 <div class="mt-qs__panel" data-qs-panel>
   <div class="mt-qs__gallery">
     <div class="mt-qs__track" data-qs-track>
       {%- for media in product.media limit: 10 -%}
         {%- if media.media_type == 'image' -%}
-          <div class="mt-qs__slide" data-media-id="{{ media.id }}">
+          {%- assign media_color = '' -%}
+          {%- assign alt_text = media.alt | default: '' -%}
+          {%- if color_index >= 0 and alt_text contains '**' -%}
+            {%- assign alt_marker_parts = alt_text | split: '**' -%}
+            {%- if alt_marker_parts.size >= 2 -%}
+              {%- assign media_color = alt_marker_parts[1] | strip -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- assign hide_slide = false -%}
+          {%- if media_color != blank and current_color != blank -%}
+            {%- assign media_color_cmp = media_color | downcase -%}
+            {%- assign current_color_cmp = current_color | downcase -%}
+            {%- if media_color_cmp != current_color_cmp -%}
+              {%- assign hide_slide = true -%}
+            {%- endif -%}
+          {%- endif -%}
+          <div class="mt-qs__slide{% if media_color == blank %} mt-qs__slide--shared{% endif %}" data-media="{{ media.position }}" data-color="{{ media_color | escape }}"{% if hide_slide %} hidden{% endif %}>
             {%- assign image_alt = media.alt | default: product.title | escape -%}
             {{ media | image_url: width: 950 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 463px, 275px', alt: image_alt }}
           </div>
