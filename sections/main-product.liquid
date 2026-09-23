@@ -157,27 +157,33 @@
                             {%- assign custom_color_value = custom_color_values[forloop.index0] -%}
                           {%- endif -%}
                         {%- endfor -%}
-                        <button class="mt-pdp__tile" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}">
-                          {%- if swatch_images[forloop.index0] -%}
-                            {{ swatch_images[forloop.index0] | image_url: width: 210 | image_tag: decoding: 'async', loading: 'lazy', widths: '70, 140, 210', sizes: '70px', alt: value | escape }}
-                          {%- elsif swatch_entry.image -%}
-                            {{ swatch_entry.image | image_url: width: 210 | image_tag: decoding: 'async', loading: 'lazy', widths: '70, 140, 210', sizes: '70px', alt: value | escape }}
-                          {%- elsif value.variant.featured_media -%}
-                            {{ value.variant.featured_media | image_url: width: 210 | image_tag: decoding: 'async', loading: 'lazy', widths: '70, 140, 210', sizes: '70px', alt: value | escape }}
-                          {%- elsif value.swatch.color -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
-                          {%- elsif value.swatch.image -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 140 }}')"></span>
-                          {%- elsif swatch_entry.color -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ swatch_entry.color }}"></span>
-                          {%- elsif swatch_colors[forloop.index0] -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"></span>
-                          {%- elsif custom_color_value contains '.' -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: url('{{ custom_color_value | file_url }}')"></span>
-                          {%- elsif custom_color_value != blank -%}
-                            <span class="mt-pdp__tile-fill" style="--mt-swatch: {{ custom_color_value }}"></span>
-                          {%- endif -%}
-                        </button>
+                        {%- assign swatch_value = '' -%}
+                        {%- if swatch_images[forloop.index0] -%}
+                          {%- assign swatch_value = swatch_images[forloop.index0] | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif swatch_entry.image -%}
+                          {%- assign swatch_value = swatch_entry.image | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif value.swatch.color -%}
+                          {%- assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')' -%}
+                        {%- elsif value.swatch.image -%}
+                          {%- assign swatch_value = value.swatch.image | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif swatch_entry.color -%}
+                          {%- assign swatch_value = swatch_entry.color -%}
+                        {%- elsif swatch_colors[forloop.index0] -%}
+                          {%- assign swatch_value = swatch_colors[forloop.index0] -%}
+                        {%- elsif custom_color_value contains '.' -%}
+                          {%- assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')" -%}
+                        {%- elsif custom_color_value != blank -%}
+                          {%- assign swatch_value = custom_color_value -%}
+                        {%- endif -%}
+                        <button
+                          class="mt-pdp__tile"
+                          type="button"
+                          style="--mt-swatch: {{ swatch_value }}"
+                          data-pdp-value="{{ value | escape }}"
+                          data-pdp-opt="{{ forloop.parentloop.index0 }}"
+                          aria-label="{{ option.name }} {{ value | escape }}"
+                          aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
+                        ></button>
                       {%- endfor -%}
                     </div>
                     <button class="mt-pdp__tiles-toggle" type="button" data-pdp-tiles-toggle hidden aria-expanded="false">
