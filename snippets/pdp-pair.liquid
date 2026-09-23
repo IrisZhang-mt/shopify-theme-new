@@ -43,6 +43,7 @@
               <p class="mt-pair__label">{{ option.name }}: <span data-pair-color-name>{{ option.selected_value }}</span></p>
               <div class="mt-pair__swatches">
                 {%- assign swatch_colors = item.metafields.custom.color_swatch.value | map: 'color' -%}
+                {%- assign swatch_images = item.metafields.custom.color_swatch.value | map: 'image' -%}
                 {%- assign custom_color_keys = '' -%}
                 {%- assign custom_color_values = '' -%}
                 {%- if settings.color_swatches != blank -%}
