@@ -119,6 +119,9 @@ if (!window.mtQuickShopInit) {
     root.querySelectorAll('[data-qs-value][aria-pressed="true"]').forEach((button) => {
       state.selected[Number(button.dataset.qsOpt)] = button.dataset.qsValue;
     });
+    const colorSwatch = root.querySelector('[data-qs-value].mt-qs__swatch');
+    state.colorOpt = colorSwatch ? Number(colorSwatch.dataset.qsOpt) : -1;
+    resolveColorFallback();
     state.slide = 0;
     const view = gallery();
     if (view) view.scrollLeft = 0;
@@ -312,6 +315,7 @@ if (!window.mtQuickShopInit) {
       const optIndex = Number(value.dataset.qsOpt);
       state.selected[optIndex] = value.dataset.qsValue;
       if (value.classList.contains('mt-qs__swatch')) {
+        resolveColorFallback();
         const name = panel().querySelector('[data-qs-color-name]');
         if (name) name.textContent = value.dataset.qsValue;
         const color = value.dataset.qsValue.toLowerCase();
