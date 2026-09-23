@@ -68,6 +68,32 @@ if (!window.mtPdpInit) {
       return matched;
     };
 
+    // When the newly picked color has no available variant for the currently
+    // selected size, jump to the first available variant for this color.
+    // If the whole color is sold out, leave the size selection as-is.
+    const resolveColorFallback = () => {
+      if (colorOpt < 0 || state.selected[colorOpt] == null) return;
+      const current = matchVariant(state.variants, state.selected);
+      if (current && current.available) return;
+      const colorValue = state.selected[colorOpt];
+      const candidates = state.variants.filter((variant) => variant.options[colorOpt] === colorValue);
+      const availableVariant = candidates.find((variant) => variant.available);
+      if (!availableVariant) return;
+      availableVariant.options.forEach((value, index) => {
+        if (index !== colorOpt) state.selected[index] = value;
+      });
+    };
+
+    const syncLabels = () => {
+      root.querySelectorAll('.mt-pdp__option').forEach((optionEl) => {
+        const button = optionEl.querySelector('[data-pdp-value]');
+        const label = optionEl.querySelector('.mt-pdp__label span');
+        if (!button || !label) return;
+        const optIndex = Number(button.dataset.pdpOpt);
+        if (state.selected[optIndex] != null) label.textContent = state.selected[optIndex];
+      });
+    };
+
     const sync = () => {
       root.querySelectorAll('[data-pdp-value]').forEach((button) => {
         const optIndex = Number(button.dataset.pdpOpt);
@@ -152,8 +178,8 @@ if (!window.mtPdpInit) {
         state.interacted = true;
         const optIndex = Number(value.dataset.pdpOpt);
         state.selected[optIndex] = value.dataset.pdpValue;
-        const name = value.closest('.mt-pdp__option')?.querySelector('.mt-pdp__label span');
-        if (name) name.textContent = value.dataset.pdpValue;
+        if (optIndex === colorOpt) resolveColorFallback();
+        syncLabels();
         sync();
         return;
       }
@@ -238,10 +264,10 @@ if (!window.mtPdpInit) {
       );
       if (match) {
         state.selected[Number(match.dataset.pdpOpt)] = defaultColor;
-        const name = match.closest('.mt-pdp__option')?.querySelector('.mt-pdp__label span');
-        if (name) name.textContent = defaultColor;
       }
     }
+    resolveColorFallback();
+    syncLabels();
 
     const tiles = root.querySelector('[data-pdp-tiles]');
     const tilesToggle = root.querySelector('[data-pdp-tiles-toggle]');
