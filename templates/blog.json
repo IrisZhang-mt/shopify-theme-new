@@ -15,7 +15,8 @@
         "blog": "",
         "heading": "Featured Articles",
         "show_tag_nav": true,
-        "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg"
+        "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg",
+        "image_mobile": "shopify://shop_images/hero.png"
       }
     }
   },
