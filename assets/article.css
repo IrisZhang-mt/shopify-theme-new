@@ -378,11 +378,11 @@ html.mt-motion .mt-art__full img {
   .mt-art__rte .mt-art__full,
   .mt-art__rte .mt-art__pair,
   .mt-art__rte .mt-art__gallery {
-    max-width: none;
+    max-width: 1240px;
+    padding: 0 0.9375rem;
     margin-top: 6.25rem;
     margin-bottom: 6.25rem;
     margin-inline: 0;
-    padding: 0 1.25rem;
   }
   .mt-art__rte .mt-art__stage {
     margin-top: 6.25rem;
