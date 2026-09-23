@@ -1,0 +1,31 @@
+{%- liquid
+  assign image_width = image_width | default: 30
+  assign swatch_handle = value | handleize
+  assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
+  assign custom_color_lookup = value | downcase | escape
+  assign custom_color_value = ''
+  for key in custom_color_keys
+    if key == custom_color_lookup
+      assign custom_color_value = custom_color_values[forloop.index0]
+    endif
+  endfor
+
+  assign swatch_value = ''
+  if swatch_images[index]
+    assign swatch_value = swatch_images[index] | image_url: width: image_width | prepend: "url('" | append: "')"
+  elsif swatch_entry.image
+    assign swatch_value = swatch_entry.image | image_url: width: image_width | prepend: "url('" | append: "')"
+  elsif value.swatch.color
+    assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
+  elsif value.swatch.image
+    assign swatch_value = value.swatch.image | image_url: width: image_width | prepend: "url('" | append: "')"
+  elsif swatch_entry.color
+    assign swatch_value = swatch_entry.color
+  elsif swatch_colors[index]
+    assign swatch_value = swatch_colors[index]
+  elsif custom_color_value contains '.'
+    assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
+  elsif custom_color_value != blank
+    assign swatch_value = custom_color_value
+  endif
+-%}{{- swatch_value -}}
