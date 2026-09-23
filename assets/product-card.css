@@ -75,12 +75,19 @@
   line-height: var(--mt-p-leading);
 }
 .mt-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem;
   margin: 0;
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-moss);
 }
 .mt-card__compare {
+  color: rgba(var(--mt-ink-rgb), 0.4);
+}
+.mt-card__discount {
   color: rgba(var(--mt-ink-rgb), 0.4);
 }
 
