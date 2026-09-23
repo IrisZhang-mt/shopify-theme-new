@@ -78,6 +78,22 @@ if (!window.mtQuickShopInit) {
     });
   };
 
+  // Mirrors the PDP gallery sync: hide slides tagged for a different color,
+  // but if none of the slides are tagged for the selected color at all
+  // (e.g. alt-text color marker doesn't match the option value), show every
+  // slide instead of leaving the gallery empty.
+  const syncGallery = () => {
+    const colorOpt = state.colorOpt;
+    if (colorOpt < 0 || state.selected[colorOpt] == null) return false;
+    const color = state.selected[colorOpt].toLowerCase();
+    const items = slides();
+    const matched = items.some((slide) => slide.dataset.color && slide.dataset.color.toLowerCase() === color);
+    items.forEach((slide) => {
+      slide.hidden = matched && slide.dataset.color !== '' && slide.dataset.color.toLowerCase() !== color;
+    });
+    return matched;
+  };
+
   const syncSelection = () => {
     const root = panel();
     root.querySelectorAll('[data-qs-value]').forEach((button) => {
@@ -122,6 +138,7 @@ if (!window.mtQuickShopInit) {
     const colorSwatch = root.querySelector('[data-qs-value].mt-qs__swatch');
     state.colorOpt = colorSwatch ? Number(colorSwatch.dataset.qsOpt) : -1;
     resolveColorFallback();
+    syncGallery();
     state.slide = 0;
     const view = gallery();
     if (view) view.scrollLeft = 0;
