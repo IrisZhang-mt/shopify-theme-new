@@ -132,6 +132,7 @@ html.mt-motion .mt-art__hero-media video {
   height: auto;
 }
 .mt-art__rte table {
+  width: 100%;
   border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
   border-collapse: collapse;
   font-size: 0.8125rem;
