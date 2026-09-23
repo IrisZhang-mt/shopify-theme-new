@@ -1,0 +1,12 @@
+{%- assign test_keys = 'rose quartz' | split: ',' -%}
+{%- assign test_values = 'rose-quartz.png' | split: ',' -%}
+<div>
+  {%- capture swatch_value -%}{%- render 'color-swatch', value: 'Rose Quartz', index: 0, swatch_colors: blank, swatch_images: blank, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
+  TESTOUT[{{ swatch_value }}]
+</div>
+{% schema %}
+{
+  "name": "zz debug test",
+  "settings": []
+}
+{% endschema %}
