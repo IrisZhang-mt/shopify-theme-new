@@ -8,7 +8,7 @@
 
 .mt-blog__hero {
   position: relative;
-  height: 31.25rem;
+  aspect-ratio: 375 / 500;
   overflow: hidden;
   background: var(--mt-surface);
 }
@@ -260,7 +260,6 @@
 
 @media screen and (min-width: 750px) {
   .mt-blog__hero {
-    height: auto;
     aspect-ratio: 1440 / 560;
   }
 
