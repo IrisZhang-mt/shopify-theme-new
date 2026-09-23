@@ -14,23 +14,20 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu_dBVXpQ": {
-          "type": "menu",
-          "settings": {
-            "menu": "footer"
-          }
-        },
         "menu-1": {
           "type": "menu",
           "settings": {
-            "menu": "footer"
+            "menu": "footer-1"
+          }
+        },
+        "menu_HFXPqR": {
+          "type": "menu",
+          "settings": {
+            "menu": "company-information"
           }
         }
       },
-      "block_order": [
-        "menu_dBVXpQ",
-        "menu-1"
-      ],
+      "block_order": ["menu-1", "menu_HFXPqR"],
       "settings": {
         "image": "shopify://shop_images/footer.png",
         "heading": "Join the Moody Miles Club",
@@ -43,6 +40,7 @@
     },
     "popup": {
       "type": "newsletter-popup",
+      "disabled": true,
       "settings": {
         "heading": "Unlock 10% Off Your First Order",
         "subheading": "Sign up to unlock member rewards, earn points, and get 10% instantly.",
@@ -55,8 +53,5 @@
       }
     }
   },
-  "order": [
-    "footer",
-    "popup"
-  ]
+  "order": ["footer", "popup"]
 }
