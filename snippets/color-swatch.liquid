@@ -10,10 +10,10 @@
   @param {string} value - The option value (an entry from option.values).
   @param {number} index - value's position in option.values (forloop.index0), used
     to read the parallel swatch_colors/swatch_images arrays.
-  @param {array} [swatch_colors] - product.metafields.custom.color_swatch mapped to 'color'.
-  @param {array} [swatch_images] - product.metafields.custom.color_swatch mapped to 'image'.
-  @param {array} [custom_color_keys] - Downcased keys parsed from settings.color_swatches.
-  @param {array} [custom_color_values] - Values parsed from settings.color_swatches, same order as custom_color_keys.
+  @param {object} [swatch_colors] - product.metafields.custom.color_swatch mapped to 'color'.
+  @param {object} [swatch_images] - product.metafields.custom.color_swatch mapped to 'image'.
+  @param {object} [custom_color_keys] - Downcased keys parsed from settings.color_swatches.
+  @param {object} [custom_color_values] - Values parsed from settings.color_swatches, same order as custom_color_keys.
   @param {number} [image_width] - Width to request for swatch images. Defaults to 30.
 
   @example
