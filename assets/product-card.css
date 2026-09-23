@@ -78,13 +78,13 @@
   margin: 0;
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
-  color: var(--mt-moss);
+  color: var(--mt-midnight);
 }
 .mt-card__compare {
   color: rgba(var(--mt-ink-rgb), 0.4);
 }
 .mt-card__discount {
-  color: var(--mt-moss);
+  color: var(--mt-midnight);
 }
 
 .mt-card__swatches {
