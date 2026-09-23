@@ -78,6 +78,22 @@ if (!window.mtQuickShopInit) {
     });
   };
 
+  // Mirrors the PDP gallery sync: hide slides tagged for a different color,
+  // but if none of the slides are tagged for the selected color at all
+  // (e.g. alt-text color marker doesn't match the option value), show every
+  // slide instead of leaving the gallery empty.
+  const syncGallery = () => {
+    const colorOpt = state.colorOpt;
+    if (colorOpt < 0 || state.selected[colorOpt] == null) return false;
+    const color = state.selected[colorOpt].toLowerCase();
+    const items = slides();
+    const matched = items.some((slide) => slide.dataset.color && slide.dataset.color.toLowerCase() === color);
+    items.forEach((slide) => {
+      slide.hidden = matched && slide.dataset.color !== '' && slide.dataset.color.toLowerCase() !== color;
+    });
+    return matched;
+  };
+
   const syncSelection = () => {
     const root = panel();
     root.querySelectorAll('[data-qs-value]').forEach((button) => {
@@ -122,6 +138,7 @@ if (!window.mtQuickShopInit) {
     const colorSwatch = root.querySelector('[data-qs-value].mt-qs__swatch');
     state.colorOpt = colorSwatch ? Number(colorSwatch.dataset.qsOpt) : -1;
     resolveColorFallback();
+    syncGallery();
     state.slide = 0;
     const view = gallery();
     if (view) view.scrollLeft = 0;
@@ -318,12 +335,7 @@ if (!window.mtQuickShopInit) {
         resolveColorFallback();
         const name = panel().querySelector('[data-qs-color-name]');
         if (name) name.textContent = value.dataset.qsValue;
-        const color = value.dataset.qsValue.toLowerCase();
-        const items = slides();
-        const matched = items.some((slide) => slide.dataset.color && slide.dataset.color.toLowerCase() === color);
-        items.forEach((slide) => {
-          slide.hidden = matched && slide.dataset.color !== '' && slide.dataset.color.toLowerCase() !== color;
-        });
+        const matched = syncGallery();
         const view = gallery();
         if (matched && view) {
           view.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
@@ -332,6 +344,7 @@ if (!window.mtQuickShopInit) {
             (variant) => variant.options[optIndex] === value.dataset.qsValue && variant.media
           );
           if (variantMatch) {
+            const items = slides();
             const index = items.findIndex((slide) => slide.dataset.media === String(variantMatch.media));
             if (index !== -1) moveGallery(index);
           }
