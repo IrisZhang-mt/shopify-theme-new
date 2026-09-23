@@ -4,7 +4,7 @@ if (!window.mtQuickShopInit) {
   const strings = window.mtStrings || {};
 
   const reducedMq = window.mtReducedMq;
-  const state = { variants: [], selected: [], slide: 0, trigger: null };
+  const state = { variants: [], selected: [], colorOpt: -1, slide: 0, trigger: null };
   const addTimers = new WeakMap();
 
   const modal = () => document.querySelector('[data-qs]');
@@ -61,6 +61,22 @@ if (!window.mtQuickShopInit) {
         variant.options[optIndex] === value &&
         state.selected.every((sel, i) => i === optIndex || sel == null || variant.options[i] === sel)
     );
+
+  // Same fallback as the PDP: if the current size has no available variant
+  // for the newly picked color, jump to the first available one for that color.
+  const resolveColorFallback = () => {
+    const colorOpt = state.colorOpt;
+    if (colorOpt < 0 || state.selected[colorOpt] == null) return;
+    const current = currentVariant();
+    if (current && current.available) return;
+    const colorValue = state.selected[colorOpt];
+    const candidates = state.variants.filter((variant) => variant.options[colorOpt] === colorValue);
+    const availableVariant = candidates.find((variant) => variant.available);
+    if (!availableVariant) return;
+    availableVariant.options.forEach((value, index) => {
+      if (index !== colorOpt) state.selected[index] = value;
+    });
+  };
 
   const syncSelection = () => {
     const root = panel();
