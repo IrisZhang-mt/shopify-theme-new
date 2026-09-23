@@ -151,6 +151,11 @@ html.mt-motion .mt-art__hero-media video {
   text-align: left;
   color: var(--mt-moss);
 }
+.mt-art__rte > div:has(> iframe),
+.mt-art__rte > div:has(> video) {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 .mt-art__rte blockquote {
   margin-top: 5rem;
   margin-bottom: 5rem;
