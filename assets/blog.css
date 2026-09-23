@@ -260,9 +260,7 @@
 
 @media screen and (min-width: 750px) {
   .mt-blog__hero {
-    height: calc(100vh - var(--mt-header-h));
-    height: calc(100svh - var(--mt-header-h));
-    min-height: 31.25rem;
+    height: 35rem;
   }
 
   .mt-blog__title {
