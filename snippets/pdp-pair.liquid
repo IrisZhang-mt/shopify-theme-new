@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {%- assign pick = item.selected_or_first_available_variant -%}
 {%- if item_list_id != blank -%}
   {%- capture pair_ga4_variant -%}{% render 'item-variant-ga4', item: pick %}{%- endcapture -%}
@@ -107,3 +108,114 @@
     [{%- for variant in item.variants -%}{%- capture v_ga4_variant -%}{% render 'item-variant-ga4', item: variant %}{%- endcapture -%}{%- assign v_ga4_variant = v_ga4_variant | strip -%}{"id":{{ variant.id }},"sku":{{ variant.sku | json }},"available":{{ variant.available }},"options":{{ variant.options | json }},"image":{% if variant.featured_media %}{{ variant.featured_media | image_url: width: 700 | json }}{% else %}null{% endif %},"priceValue":{{ variant.price | divided_by: 100.0 }},"discountValue":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | minus: variant.price | divided_by: 100.0 }}{% else %}0{% endif %},"itemVariant":{{ v_ga4_variant | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
   </script>
 </article>
+=======
+{%- assign pick = item.selected_or_first_available_variant -%}
+{%- if item_list_id != blank -%}
+  {%- capture pair_ga4_variant -%}{% render 'item-variant-ga4', item: pick %}{%- endcapture -%}
+  {%- assign pair_ga4_variant = pair_ga4_variant | strip -%}
+{%- endif -%}
+<article
+  class="mt-pair"
+  data-pair
+  data-reveal
+  {%- if item_list_id != blank %}
+    data-item-list-id="{{ item_list_id }}"
+    data-item-list-name="{{ item_list_name | escape }}"
+    data-item-id="{{ pick.sku }}"
+    data-item-name="{{ item.title | escape }}"
+    data-item-brand="{{ item.vendor | escape }}"
+    {% if item.type != blank %}data-item-category="{{ item.type | escape }}"{% endif %}
+    {% if pair_ga4_variant != blank %}data-item-variant="{{ pair_ga4_variant | escape }}"{% endif %}
+    data-item-price="{{ pick.price | divided_by: 100.0 }}"
+    data-item-discount="{% if pick.compare_at_price > pick.price %}{{ pick.compare_at_price | minus: pick.price | divided_by: 100.0 }}{% else %}0{% endif %}"
+    data-item-index="{{ index | default: 0 | plus: 1 }}"
+  {%- endif -%}
+>
+  <div class="mt-pair__content">
+    <div class="mt-pair__media">
+      {%- if item.featured_image -%}
+        {%- assign image_alt = item.featured_image.alt | default: item.title | escape -%}
+        {{ item.featured_image | image_url: width: 700 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 217px, 92vw', alt: image_alt }}
+      {%- endif -%}
+    </div>
+    <div class="mt-pair__info">
+      <div class="mt-pair__title">
+        <p>{{ item.title }}</p>
+        <p class="mt-pair__price">
+          {%- if item.price_varies %}{{ 'products.from' | t }} {% endif -%}
+          {{ item.price_min | money_without_trailing_zeros }}
+          {%- if item.compare_at_price_min > item.price_min %} <s class="mt-pair__compare">{{ item.compare_at_price_min | money_without_trailing_zeros }}</s>{% endif -%}
+        </p>
+      </div>
+      {%- if item.has_only_default_variant == false -%}
+        {%- for option in item.options_with_values -%}
+          {%- if option.name == 'Color' or option.name == 'Colour' -%}
+            <div class="mt-pair__option">
+              <p class="mt-pair__label">{{ option.name }}: <span data-pair-color-name>{{ option.selected_value }}</span></p>
+              <div class="mt-pair__swatches">
+                {%- assign swatch_colors = item.metafields.custom.color_swatch.value | map: 'color' -%}
+                {%- assign swatch_images = item.metafields.custom.color_swatch.value | map: 'image' -%}
+                {%- assign custom_color_keys = '' -%}
+                {%- assign custom_color_values = '' -%}
+                {%- if settings.color_swatches != blank -%}
+                  {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+                  {%- for line in custom_color_lines -%}
+                    {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+                    {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+                    {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+                    {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+                  {%- endfor -%}
+                  {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+                  {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
+                {%- endif -%}
+                {%- for value in option.values -%}
+                  {%- capture swatch_value -%}
+                    {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values, image_width: 40 -%}
+                  {%- endcapture -%}
+                  <button class="mt-pair__swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <div class="mt-pair__option">
+              <div class="mt-pair__option-head">
+                <p class="mt-pair__label">{{ option.name }}:</p>
+                {%- assign chart_meta = item.metafields.custom.size_chart -%}
+                {%- assign chart_page = chart_meta.value -%}
+                {%- if chart_page.content == blank -%}
+                  {%- assign chart_handle = settings.size_chart_url | split: '/pages/' | last | split: '/' | first | split: '?' | first -%}
+                  {%- assign chart_page = pages[chart_handle] | default: pages['size-chart'] | default: pages['size-guide'] -%}
+                {%- endif -%}
+                {%- assign chart_url = chart_page.url | default: chart_meta.value | default: settings.size_chart_url -%}
+                {%- if option.name == 'Size' and chart_url != blank -%}
+                  <a class="mt-pdp__chart" href="{{ chart_url | escape }}"{% if chart_page.content != blank %} data-chart-open="{{ item.id }}"{% endif %}>
+                    <img src="{{ 'ruler.svg' | asset_url }}" width="19" height="9" alt="">
+                    {{ 'products.size_chart' | t }}
+                  </a>
+                  {%- if chart_page.content != blank -%}
+                    {% render 'size-chart-modal', chart_page: chart_page, chart_id: item.id, chart_name: item.title %}
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+              <div class="mt-pair__pills">
+                {%- for value in option.values -%}
+                  <button class="mt-pair__pill" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}">{{ value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="mt-pair__ctas">
+    <button class="mt-pair__add" type="button" data-pair-add data-pair-variant="{{ pick.id }}"{% unless pick.available %} disabled{% endunless %}>
+      {%- if pick.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}
+    </button>
+    <a class="mt-pair__details" href="{{ item.url }}">{{ 'products.see_details' | t }}</a>
+  </div>
+  <script type="application/json" data-pair-variants>
+    [{%- for variant in item.variants -%}{%- capture v_ga4_variant -%}{% render 'item-variant-ga4', item: variant %}{%- endcapture -%}{%- assign v_ga4_variant = v_ga4_variant | strip -%}{"id":{{ variant.id }},"sku":{{ variant.sku | json }},"available":{{ variant.available }},"options":{{ variant.options | json }},"image":{% if variant.featured_media %}{{ variant.featured_media | image_url: width: 700 | json }}{% else %}null{% endif %},"priceValue":{{ variant.price | divided_by: 100.0 }},"discountValue":{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | minus: variant.price | divided_by: 100.0 }}{% else %}0{% endif %},"itemVariant":{{ v_ga4_variant | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+  </script>
+</article>
+>>>>>>> 6468cd1be7bc52968a7492626fda630e18a7726d
