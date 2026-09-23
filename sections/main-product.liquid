@@ -146,9 +146,6 @@
                   {%- endif -%}
                   {%- assign main_colors = product.metafields.custom.main_color_promotion.value -%}
                   {%- assign main_colors_title = product.metafields.custom.main_color_promotion_title.value -%}
-                  <!-- DEBUG3 keys0=[{{ custom_color_keys[0] }}] keys0size={{ custom_color_keys[0].size }} vals_join=[{{ custom_color_values | join: '||' | slice: 0, 200 }}] -->
-                  <!-- DEBUG4 direct=[{% render 'color-swatch', value: option.values[0], index: 0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values %}] -->
-                  <!-- DEBUG5 hardcoded=[url('{{ "rose-quartz.png" | file_url }}')] -->
                   <div class="mt-pdp__option">
                     {%- if main_colors != blank -%}
                       <p class="mt-pdp__label" aria-live="polite">{{ main_colors_title }}: <span>{{ option.selected_value }}</span></p>
@@ -159,11 +156,7 @@
                       {%- assign main_color_tiles = '' -%}
                       {%- assign other_color_tiles = '' -%}
                       {%- for value in option.values -%}
-                        {%- capture swatch_value -%}
-                          {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
-                        {%- endcapture -%}
-                        <!-- DEBUG value={{ value }} size={{ swatch_value.size }} raw=[{{ swatch_value }}] -->
-
+                        {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                         {%- capture tile -%}
                           <button
                             class="mt-pdp__tile"
