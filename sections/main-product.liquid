@@ -157,6 +157,11 @@
                       {%- assign other_color_tiles = '' -%}
                       {%- for value in option.values -%}
                         {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                        <!-- DEBUG value={{ value }} size={{ swatch_value.size }} raw=[{{ swatch_value }}] entryimg={{ swatch_entry.image }} entrycolor={{ swatch_entry.color }} swcolor={{ swatch_colors[forloop.index0] }} swimg={{ swatch_images[forloop.index0] }} nativecolor={{ value.swatch.color }} nativeimg={{ value.swatch.image }} -->
+                        {%- assign swatch_handle_dbg = value | handleize -%}
+                        {%- assign swatch_entry_dbg = shop.metaobjects.color_swatch[swatch_handle_dbg] -%}
+                        <!-- DEBUG2 handle={{ swatch_handle_dbg }} entrydbg_img={{ swatch_entry_dbg.image }} entrydbg_color={{ swatch_entry_dbg.color }} -->
+
                         {%- capture tile -%}
                           <button
                             class="mt-pdp__tile"
