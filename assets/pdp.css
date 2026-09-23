@@ -205,12 +205,6 @@
   align-items: center;
   gap: 0.9375rem;
 }
-.mt-pdp__group-label {
-  flex-basis: 100%;
-  margin: 0;
-  font-size: var(--mt-p-s-size);
-  color: rgba(var(--mt-ink-rgb), 0.6);
-}
 .mt-pdp__tiles--collapsed {
   max-height: 8.9375rem;
   overflow: hidden;

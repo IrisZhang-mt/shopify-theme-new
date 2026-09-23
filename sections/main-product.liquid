@@ -129,66 +129,62 @@
             <div class="mt-pdp__options" data-reveal style="--mt-reveal-i: 1">
               {%- for option in product.options_with_values -%}
                 {%- if option.name == 'Color' or option.name == 'Colour' -%}
-                  {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
-                  {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
-                  {%- assign custom_color_keys = '' -%}
-                  {%- assign custom_color_values = '' -%}
-                  {%- if settings.color_swatches != blank -%}
-                    {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
-                    {%- for line in custom_color_lines -%}
-                      {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
-                      {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
-                      {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
-                      {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
-                    {%- endfor -%}
-                    {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
-                    {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
-                  {%- endif -%}
-                  {%- assign main_colors = product.metafields.custom.main_color_promotion.value -%}
-                  {%- assign main_colors_title = product.metafields.custom.main_color_promotion_title.value -%}
                   <div class="mt-pdp__option">
-                    {%- if main_colors != blank -%}
-                      <p class="mt-pdp__label" aria-live="polite">{{ main_colors_title }}: <span>{{ option.selected_value }}</span></p>
-                    {%- else -%}
-                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
-                    {%- endif -%}
+                    <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
                     <div class="mt-pdp__tiles" data-pdp-tiles>
-                      {%- assign main_color_tiles = '' -%}
-                      {%- assign other_color_tiles = '' -%}
-                      {%- for value in option.values -%}
-                        {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
-                        {%- capture tile -%}
-                          <button
-                            class="mt-pdp__tile"
-                            type="button"
-                            style="--mt-swatch: {{ swatch_value | strip_newlines }}"
-                            data-pdp-value="{{ value | escape }}"
-                            data-pdp-opt="{{ forloop.parentloop.index0 }}"
-                            aria-label="{{ option.name }} {{ value | escape }}"
-                            aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
-                          ></button>
-                        {%- endcapture -%}
-                        {%- assign is_main_color = true -%}
-                        {%- if main_colors != blank -%}
-                          {%- assign is_main_color = false -%}
-                          {%- for item in main_colors -%}
-                            {%- if value == item or value contains item -%}
-                              {%- assign is_main_color = true -%}
-                              {%- break -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                        {%- endif -%}
-                        {%- if is_main_color -%}
-                          {%- assign main_color_tiles = main_color_tiles | append: tile -%}
-                        {%- else -%}
-                          {%- assign other_color_tiles = other_color_tiles | append: tile -%}
-                        {%- endif -%}
-                      {%- endfor -%}
-                      {{ main_color_tiles }}
-                      {%- if main_colors != blank -%}
-                        <p class="mt-pdp__group-label">{{ option.name }}</p>
-                        {{ other_color_tiles }}
+                      {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
+                      {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
+                      {%- assign custom_color_keys = '' -%}
+                      {%- assign custom_color_values = '' -%}
+                      {%- if settings.color_swatches != blank -%}
+                        {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+                        {%- for line in custom_color_lines -%}
+                          {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+                          {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+                          {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+                          {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+                        {%- endfor -%}
+                        {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+                        {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
                       {%- endif -%}
+                      {%- for value in option.values -%}
+                        {%- assign swatch_handle = value | handleize -%}
+                        {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
+                        {%- assign custom_color_lookup = value | downcase | escape -%}
+                        {%- assign custom_color_value = '' -%}
+                        {%- for key in custom_color_keys -%}
+                          {%- if key == custom_color_lookup -%}
+                            {%- assign custom_color_value = custom_color_values[forloop.index0] -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {%- assign swatch_value = '' -%}
+                        {%- if swatch_images[forloop.index0] -%}
+                          {%- assign swatch_value = swatch_images[forloop.index0] | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif swatch_entry.image -%}
+                          {%- assign swatch_value = swatch_entry.image | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif value.swatch.color -%}
+                          {%- assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')' -%}
+                        {%- elsif value.swatch.image -%}
+                          {%- assign swatch_value = value.swatch.image | image_url: width: 30 | prepend: "url('" | append: "')" -%}
+                        {%- elsif swatch_entry.color -%}
+                          {%- assign swatch_value = swatch_entry.color -%}
+                        {%- elsif swatch_colors[forloop.index0] -%}
+                          {%- assign swatch_value = swatch_colors[forloop.index0] -%}
+                        {%- elsif custom_color_value contains '.' -%}
+                          {%- assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')" -%}
+                        {%- elsif custom_color_value != blank -%}
+                          {%- assign swatch_value = custom_color_value -%}
+                        {%- endif -%}
+                        <button
+                          class="mt-pdp__tile"
+                          type="button"
+                          style="--mt-swatch: {{ swatch_value }}"
+                          data-pdp-value="{{ value | escape }}"
+                          data-pdp-opt="{{ forloop.parentloop.index0 }}"
+                          aria-label="{{ option.name }} {{ value | escape }}"
+                          aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
+                        ></button>
+                      {%- endfor -%}
                     </div>
                     <button class="mt-pdp__tiles-toggle" type="button" data-pdp-tiles-toggle hidden aria-expanded="false">
                       <span data-pdp-tiles-more>{{ 'products.show_all_colors' | t }}</span>

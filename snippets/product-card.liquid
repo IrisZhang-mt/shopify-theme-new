@@ -75,6 +75,8 @@
           {%- endif -%}
           {%- for value in color_option.values limit: 6 -%}
             {%- liquid
+              assign swatch_handle = value | handleize
+              assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
               assign swatch_active = false
               assign swatch_href = ''
               assign swatch_src = ''
@@ -90,11 +92,33 @@
                 endif
               endfor
 
+              assign custom_color_lookup = value | downcase | escape
+              assign custom_color_value = ''
+              for key in custom_color_keys
+                if key == custom_color_lookup
+                  assign custom_color_value = custom_color_values[forloop.index0]
+                endif
+              endfor
+
+              assign swatch_value = ''
+              if swatch_images[forloop.index0]
+                assign swatch_value = swatch_images[forloop.index0] | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif swatch_entry.image
+                assign swatch_value = swatch_entry.image | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif value.swatch.color
+                assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
+              elsif value.swatch.image
+                assign swatch_value = value.swatch.image | image_url: width: 30 | prepend: "url('" | append: "')"
+              elsif swatch_entry.color
+                assign swatch_value = swatch_entry.color
+              elsif swatch_colors[forloop.index0]
+                assign swatch_value = swatch_colors[forloop.index0]
+              elsif custom_color_value contains '.'
+                assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
+              elsif custom_color_value != blank
+                assign swatch_value = custom_color_value
+              endif
             -%}
-            {%- capture swatch_value -%}
-              {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
-            {%- endcapture -%}
-            {%- assign swatch_value = swatch_value | strip_newlines -%}
             <span
               class="mt-card__swatch{% if swatch_active %} is-active{% endif %}"
               style="--mt-swatch: {{ swatch_value }}"
