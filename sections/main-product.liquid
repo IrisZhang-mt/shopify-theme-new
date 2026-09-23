@@ -153,21 +153,7 @@
                       <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
                     {%- endif -%}
                     <div class="mt-pdp__tiles" data-pdp-tiles>
-                      {%- assign main_color_tiles = '' -%}
-                      {%- assign other_color_tiles = '' -%}
                       {%- for value in option.values -%}
-                        {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
-                        {%- capture tile -%}
-                          <button
-                            class="mt-pdp__tile"
-                            type="button"
-                            style="--mt-swatch: {{ swatch_value | strip_newlines }}"
-                            data-pdp-value="{{ value | escape }}"
-                            data-pdp-opt="{{ forloop.parentloop.index0 }}"
-                            aria-label="{{ option.name }} {{ value | escape }}"
-                            aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
-                          ></button>
-                        {%- endcapture -%}
                         {%- assign is_main_color = true -%}
                         {%- if main_colors != blank -%}
                           {%- assign is_main_color = false -%}
@@ -179,15 +165,41 @@
                           {%- endfor -%}
                         {%- endif -%}
                         {%- if is_main_color -%}
-                          {%- assign main_color_tiles = main_color_tiles | append: tile -%}
-                        {%- else -%}
-                          {%- assign other_color_tiles = other_color_tiles | append: tile -%}
+                          {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                          <button
+                            class="mt-pdp__tile"
+                            type="button"
+                            style="--mt-swatch: {{ swatch_value | strip_newlines }}"
+                            data-pdp-value="{{ value | escape }}"
+                            data-pdp-opt="{{ forloop.parentloop.index0 }}"
+                            aria-label="{{ option.name }} {{ value | escape }}"
+                            aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
+                          ></button>
                         {%- endif -%}
                       {%- endfor -%}
-                      {{ main_color_tiles }}
                       {%- if main_colors != blank -%}
                         <p class="mt-pdp__group-label">{{ option.name }}</p>
-                        {{ other_color_tiles }}
+                        {%- for value in option.values -%}
+                          {%- assign is_main_color = false -%}
+                          {%- for item in main_colors -%}
+                            {%- if value == item or value contains item -%}
+                              {%- assign is_main_color = true -%}
+                              {%- break -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- unless is_main_color -%}
+                            {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                            <button
+                              class="mt-pdp__tile"
+                              type="button"
+                              style="--mt-swatch: {{ swatch_value | strip_newlines }}"
+                              data-pdp-value="{{ value | escape }}"
+                              data-pdp-opt="{{ forloop.parentloop.index0 }}"
+                              aria-label="{{ option.name }} {{ value | escape }}"
+                              aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
+                            ></button>
+                          {%- endunless -%}
+                        {%- endfor -%}
                       {%- endif -%}
                     </div>
                     <button class="mt-pdp__tiles-toggle" type="button" data-pdp-tiles-toggle hidden aria-expanded="false">
