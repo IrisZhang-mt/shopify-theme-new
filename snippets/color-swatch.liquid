@@ -1,4 +1,4 @@
-{% comment %}
+{%- comment -%}
   Resolves the swatch color/image for a single color option value. Shared by every
   module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
   the fallback priority stays identical everywhere.
@@ -11,7 +11,7 @@
   forloop.index0), swatch_colors/swatch_images (product.metafields.custom.color_swatch
   mapped to 'color'/'image'), custom_color_keys/custom_color_values (parsed from
   settings.color_swatches), image_width (defaults to 30).
-{% endcomment %}
+{%- endcomment -%}
 {%- liquid
   assign image_width = image_width | default: 30
   assign swatch_handle = value | handleize

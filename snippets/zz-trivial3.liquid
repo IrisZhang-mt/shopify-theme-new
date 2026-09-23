@@ -1,9 +1,0 @@
-{%- liquid
-  assign custom_color_value = 'rose-quartz.png'
-  assign swatch_value = ''
-  if custom_color_value contains '.'
-    assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
-  elsif custom_color_value != blank
-    assign swatch_value = custom_color_value
-  endif
--%}{{- swatch_value -}}
