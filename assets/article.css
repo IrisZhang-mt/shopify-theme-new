@@ -67,8 +67,6 @@ html.mt-motion .mt-art__hero-media video {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 0;
-  border-top: 1px solid rgba(var(--mt-paper-rgb), 0.35);
-  font-family: var(--mt-font-mono);
   font-size: var(--mt-tag-s-size);
   font-weight: 500;
   line-height: 1;
@@ -138,7 +136,6 @@ html.mt-motion .mt-art__hero-media video {
   margin-bottom: 5rem;
   border: 0;
   text-align: center;
-  font-family: var(--mt-font-display);
   font-size: var(--mt-h-m-size);
   line-height: var(--mt-h-m-leading);
   letter-spacing: var(--mt-tracking-heading);
@@ -160,8 +157,6 @@ html.mt-motion .mt-art__w.mt-on {
 .mt-art__cite {
   margin-top: -1.875rem;
   margin-bottom: 5rem;
-  text-align: center;
-  font-family: var(--mt-font-mono);
   font-size: var(--mt-tag-s-size);
   font-weight: 400;
   line-height: 1.35;
@@ -274,8 +269,6 @@ html.mt-motion .mt-art__full img {
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;
-  text-decoration: none;
-  font-family: var(--mt-font-mono);
   font-size: var(--mt-tag-xs-size);
   font-weight: 500;
   line-height: 1;
