@@ -8,6 +8,9 @@
   B=[{{ swatch_value_b }}]
   {%- capture swatch_value_c -%}{{- 'rose-quartz.png' | file_url | prepend: "url('" | append: "')" -}}{%- endcapture -%}
   C=[{{ swatch_value_c }}]
+  {%- capture trivial_d -%}{%- render 'zz-trivial' -%}{%- endcapture -%}
+  D=[{{ trivial_d }}]
+  E=[{% render 'zz-trivial' %}]
 </div>
 {% schema %}
 {
