@@ -17,6 +17,8 @@
   G=[{{ trivial_g }}]
   {%- capture trivial_h -%}{%- render 'zz-trivial4', value: 'Rose Quartz', index: 0, swatch_colors: empty_arr, swatch_images: empty_arr, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
   H=[{{ trivial_h }}]
+  {%- capture trivial_i -%}{%- render 'zz-renamed-test', value: 'Rose Quartz', index: 0, swatch_colors: empty_arr, swatch_images: empty_arr, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
+  I=[{{ trivial_i }}]
 </div>
 {% schema %}
 {
