@@ -4,7 +4,7 @@ if (!window.mtQuickShopInit) {
   const strings = window.mtStrings || {};
 
   const reducedMq = window.mtReducedMq;
-  const state = { variants: [], selected: [], slide: 0, trigger: null };
+  const state = { variants: [], selected: [], colorOpt: -1, slide: 0, trigger: null };
   const addTimers = new WeakMap();
 
   const modal = () => document.querySelector('[data-qs]');
@@ -62,6 +62,22 @@ if (!window.mtQuickShopInit) {
         state.selected.every((sel, i) => i === optIndex || sel == null || variant.options[i] === sel)
     );
 
+  // Same fallback as the PDP: if the current size has no available variant
+  // for the newly picked color, jump to the first available one for that color.
+  const resolveColorFallback = () => {
+    const colorOpt = state.colorOpt;
+    if (colorOpt < 0 || state.selected[colorOpt] == null) return;
+    const current = currentVariant();
+    if (current && current.available) return;
+    const colorValue = state.selected[colorOpt];
+    const candidates = state.variants.filter((variant) => variant.options[colorOpt] === colorValue);
+    const availableVariant = candidates.find((variant) => variant.available);
+    if (!availableVariant) return;
+    availableVariant.options.forEach((value, index) => {
+      if (index !== colorOpt) state.selected[index] = value;
+    });
+  };
+
   const syncSelection = () => {
     const root = panel();
     root.querySelectorAll('[data-qs-value]').forEach((button) => {
@@ -103,6 +119,9 @@ if (!window.mtQuickShopInit) {
     root.querySelectorAll('[data-qs-value][aria-pressed="true"]').forEach((button) => {
       state.selected[Number(button.dataset.qsOpt)] = button.dataset.qsValue;
     });
+    const colorSwatch = root.querySelector('[data-qs-value].mt-qs__swatch');
+    state.colorOpt = colorSwatch ? Number(colorSwatch.dataset.qsOpt) : -1;
+    resolveColorFallback();
     state.slide = 0;
     const view = gallery();
     if (view) view.scrollLeft = 0;
@@ -296,6 +315,7 @@ if (!window.mtQuickShopInit) {
       const optIndex = Number(value.dataset.qsOpt);
       state.selected[optIndex] = value.dataset.qsValue;
       if (value.classList.contains('mt-qs__swatch')) {
+        resolveColorFallback();
         const name = panel().querySelector('[data-qs-color-name]');
         if (name) name.textContent = value.dataset.qsValue;
         const color = value.dataset.qsValue.toLowerCase();
