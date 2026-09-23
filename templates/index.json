@@ -116,7 +116,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Best Sellers"
       }
@@ -450,7 +449,6 @@
         "item_xF3tc9",
         "item_Ge43fy"
       ],
-      "disabled": true,
       "name": "Card grid",
       "settings": {
         "heading": "Rack up points.",
@@ -759,6 +757,7 @@
         "question_mPrJPT",
         "question_HhHygf"
       ],
+      "disabled": true,
       "name": "Contact FAQ",
       "settings": {
         "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
