@@ -93,11 +93,7 @@
   },
   "article": {
     "share": "Share Article",
-    "written_by": "Written by:",
-    "read_time_label": "Read Time:",
-    "minutes": "{{ count }} Min",
     "link_copied": "Link copied",
-    "published": "Published:",
     "share_post": "Share post",
     "featured": "Featured Articles"
   },
