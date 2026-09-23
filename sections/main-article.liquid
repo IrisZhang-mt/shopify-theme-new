@@ -2,9 +2,6 @@
 {{ 'article.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'article.js' | asset_url }}" type="module"></script>
 
-{%- assign words = article.content | strip_html | split: ' ' | size -%}
-{%- assign mins = words | divided_by: 200 | at_least: 1 -%}
-
 <article class="mt-art" data-art>
   <header class="mt-art__hero">
     <div class="mt-art__hero-media" data-mt-parallax>
@@ -31,15 +28,6 @@
   </header>
 
   <div class="mt-art__layout">
-    <aside class="mt-art__aside">
-      <dl class="mt-art__facts">
-        <div><dt>{{ 'article.written_by' | t }}</dt> <dd>{{ article.author }}</dd></div>
-        <div><dt>{{ 'article.read_time_label' | t }}</dt> <dd>{{ 'article.minutes' | t: count: mins }}</dd></div>
-        <div><dt class="visually-hidden">{{ 'article.published' | t }}</dt> <dd>{{ article.published_at | date: '%d/%m/%Y' }}</dd></div>
-      </dl>
-      <button class="mt-art__share mt-art__share--aside" type="button" data-art-share>{{ 'article.share' | t }}</button>
-    </aside>
-
     <div
       class="mt-art__rte"
       data-art-rte
