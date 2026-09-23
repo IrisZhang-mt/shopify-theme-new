@@ -292,6 +292,23 @@ if (!window.mtPdpInit) {
   const initPair = (pair) => {
     const variants = readVariants(pair, '[data-pair-variants]');
     const state = { variants, selected: readSelected(pair, '[data-pair-value]', 'pairOpt', 'pairValue') };
+    const colorSwatch = pair.querySelector('[data-pair-value].mt-pair__swatch');
+    const colorOpt = colorSwatch ? Number(colorSwatch.dataset.pairOpt) : -1;
+
+    // Same fallback as initProduct: if the current size has no available
+    // variant for the newly picked color, jump to the first available one.
+    const resolveColorFallback = () => {
+      if (colorOpt < 0 || state.selected[colorOpt] == null) return;
+      const current = matchVariant(state.variants, state.selected);
+      if (current && current.available) return;
+      const colorValue = state.selected[colorOpt];
+      const candidates = state.variants.filter((variant) => variant.options[colorOpt] === colorValue);
+      const availableVariant = candidates.find((variant) => variant.available);
+      if (!availableVariant) return;
+      availableVariant.options.forEach((value, index) => {
+        if (index !== colorOpt) state.selected[index] = value;
+      });
+    };
 
     const sync = () => {
       pair.querySelectorAll('[data-pair-value]').forEach((button) => {
@@ -349,6 +366,7 @@ if (!window.mtPdpInit) {
           const name = pair.querySelector('[data-pair-color-name]');
           if (name) name.textContent = value.dataset.pairValue;
         }
+        if (optIndex === colorOpt) resolveColorFallback();
         sync();
         return;
       }
