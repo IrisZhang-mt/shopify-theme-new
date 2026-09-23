@@ -29,7 +29,7 @@
   transition: transform 400ms var(--mt-ease);
 }
 .mt-card__media::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -84,7 +84,7 @@
   color: rgba(var(--mt-ink-rgb), 0.4);
 }
 .mt-card__discount {
-  color: rgba(var(--mt-ink-rgb), 0.4);
+  color: var(--mt-moss);
 }
 
 .mt-card__swatches {
