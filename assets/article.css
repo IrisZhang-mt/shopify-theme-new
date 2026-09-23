@@ -55,6 +55,7 @@ html.mt-motion .mt-art__hero-media video {
 
 .mt-art__title {
   max-width: 1240px;
+  padding: 0 0.9375rem;
   margin: 0 0 3rem;
   font-size: var(--mt-h-xxl-size);
   line-height: var(--mt-h-xxl-leading);
@@ -358,7 +359,7 @@ html.mt-motion .mt-art__full img {
     max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
-    padding: 0;
+    padding: 0 0.9375rem;
   }
   .mt-art__rte h2,
   .mt-art__rte h3,
@@ -415,7 +416,7 @@ html.mt-motion .mt-art__full img {
     max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
-    padding: 0;
+    padding: 0 0.9375rem;
   }
 
   .mt-art__more {
