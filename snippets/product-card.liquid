@@ -23,6 +23,10 @@
       data-item-index="{{ ga4_index | default: index | default: 0 | plus: 1 }}"
     {%- endif -%}
   >
+    {%- if product.compare_at_price_min > product.price_min -%}
+      {%- assign discount_percent = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round -%}
+      <span class="mt-card__discount">{{ discount_percent }}% OFF</span>
+    {%- endif -%}
     <a class="mt-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
     <div class="mt-card__media">
       {%- if product.featured_image -%}

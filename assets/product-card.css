@@ -53,6 +53,21 @@
   display: none;
 }
 
+.mt-card__discount {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  background: #fff;
+  color: #1d1d1d;
+  padding: 2px 5px;
+  font-family: var(--mt-font-mono);
+  font-size: 0.625rem;
+  line-height: 1;
+  letter-spacing: var(--mt-tracking-tag);
+  pointer-events: none;
+}
+
 @media (hover: none) {
   .mt-card:active .mt-card__media {
     transform: scale(0.98);

@@ -100,10 +100,6 @@
               {% render 'product-card', product: product, quick: true, align: true, index: card_index, ga4_index: forloop.index0, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw', item_list_id: plp_item_list_id, item_list_name: plp_item_list_name %}
             {%- endfor -%}
           </div>
-          {%- comment %} TEMP DEBUG: remove after checking discount fields in devtools console {%- endcomment %}
-          <script>
-            console.log('mt-plp__grid products', {{ collection.products | json }});
-          </script>
           {%- if paginate.next -%}
             <div class="mt-plp__more" data-plp-more data-next-url="{{ paginate.next.url }}"></div>
           {%- endif -%}
