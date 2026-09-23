@@ -536,7 +536,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   .mt-header__groups {
     display: flex;
     flex-wrap: wrap;
-    gap: 14.25rem;
+    gap: 2.25rem;
   }
   .mt-header__group {
     display: flex;
