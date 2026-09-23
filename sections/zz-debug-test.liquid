@@ -6,6 +6,8 @@
   A=[{{ swatch_value_a }}]
   {%- capture swatch_value_b -%}{%- render 'color-swatch', value: 'Rose Quartz', index: 0, swatch_colors: empty_arr, swatch_images: empty_arr, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
   B=[{{ swatch_value_b }}]
+  {%- capture swatch_value_c -%}{{- 'rose-quartz.png' | file_url | prepend: "url('" | append: "')" -}}{%- endcapture -%}
+  C=[{{ swatch_value_c }}]
 </div>
 {% schema %}
 {
