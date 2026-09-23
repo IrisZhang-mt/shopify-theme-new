@@ -146,6 +146,7 @@
                   {%- endif -%}
                   {%- assign main_colors = product.metafields.custom.main_color_promotion.value -%}
                   {%- assign main_colors_title = product.metafields.custom.main_color_promotion_title.value -%}
+                  <!-- DEBUG3 keys0=[{{ custom_color_keys[0] }}] keys0size={{ custom_color_keys[0].size }} vals_join=[{{ custom_color_values | join: '||' | slice: 0, 200 }}] -->
                   <div class="mt-pdp__option">
                     {%- if main_colors != blank -%}
                       <p class="mt-pdp__label" aria-live="polite">{{ main_colors_title }}: <span>{{ option.selected_value }}</span></p>
