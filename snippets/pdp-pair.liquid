@@ -58,23 +58,10 @@
                   {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
                 {%- endif -%}
                 {%- for value in option.values -%}
-                  {%- assign swatch_handle = value | handleize -%}
-                  {%- assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle] -%}
-                  {%- assign custom_color_lookup = value | downcase | escape -%}
-                  {%- assign custom_color_value = '' -%}
-                  {%- for key in custom_color_keys -%}
-                    {%- if key == custom_color_lookup -%}
-                      {%- assign custom_color_value = custom_color_values[forloop.index0] -%}
-                    {%- endif -%}
-                  {%- endfor -%}
-                  <button class="mt-pair__swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
-                    {%- if value.swatch.color %} style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"
-                    {%- elsif value.swatch.image %} style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 40 }}')"
-                    {%- elsif swatch_entry.color %} style="--mt-swatch: {{ swatch_entry.color }}"
-                    {%- elsif swatch_colors[forloop.index0] %} style="--mt-swatch: {{ swatch_colors[forloop.index0] }}"
-                    {%- elsif custom_color_value contains '.' %} style="--mt-swatch: url('{{ custom_color_value | file_url }}')"
-                    {%- elsif custom_color_value != blank %} style="--mt-swatch: {{ custom_color_value }}"
-                    {%- endif %}></button>
+                  {%- capture swatch_value -%}
+                    {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values, image_width: 40 -%}
+                  {%- endcapture -%}
+                  <button class="mt-pair__swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
                 {%- endfor -%}
               </div>
             </div>
