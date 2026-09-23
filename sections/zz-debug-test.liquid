@@ -1,8 +1,11 @@
 {%- assign test_keys = 'rose quartz' | split: ',' -%}
 {%- assign test_values = 'rose-quartz.png' | split: ',' -%}
+{%- assign empty_arr = '' | split: ',' -%}
 <div>
-  {%- capture swatch_value -%}{%- render 'color-swatch', value: 'Rose Quartz', index: 0, swatch_colors: blank, swatch_images: blank, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
-  TESTOUT[{{ swatch_value }}]
+  {%- capture swatch_value_a -%}{%- render 'color-swatch', value: 'Rose Quartz', index: 0, swatch_colors: blank, swatch_images: blank, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
+  A=[{{ swatch_value_a }}]
+  {%- capture swatch_value_b -%}{%- render 'color-swatch', value: 'Rose Quartz', index: 0, swatch_colors: empty_arr, swatch_images: empty_arr, custom_color_keys: test_keys, custom_color_values: test_values -%}{%- endcapture -%}
+  B=[{{ swatch_value_b }}]
 </div>
 {% schema %}
 {
