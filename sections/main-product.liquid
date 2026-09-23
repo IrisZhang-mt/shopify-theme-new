@@ -157,6 +157,7 @@
                       {%- assign other_color_tiles = '' -%}
                       {%- for value in option.values -%}
                         {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                        <!-- DBG1 clean_size={{ swatch_value.size }} after_strip_size={{ swatch_value | strip_newlines | size }} -->
                         {%- capture tile -%}
                           <button
                             class="mt-pdp__tile"
