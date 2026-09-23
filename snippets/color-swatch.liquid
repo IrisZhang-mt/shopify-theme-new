@@ -1,3 +1,17 @@
+{% comment %}
+  Resolves the swatch color/image for a single color option value. Shared by every
+  module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
+  the fallback priority stays identical everywhere.
+
+  Priority: product color_swatch metafield image, metaobject color_swatch image,
+  native Shopify swatch (color then image), metaobject color_swatch color, product
+  color_swatch metafield color, settings.color_swatches text mapping.
+
+  Params: value (the option value), index (its position in option.values, i.e.
+  forloop.index0), swatch_colors/swatch_images (product.metafields.custom.color_swatch
+  mapped to 'color'/'image'), custom_color_keys/custom_color_values (parsed from
+  settings.color_swatches), image_width (defaults to 30).
+{% endcomment %}
 {%- liquid
   assign image_width = image_width | default: 30
   assign swatch_handle = value | handleize
