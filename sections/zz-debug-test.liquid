@@ -11,6 +11,8 @@
   {%- capture trivial_d -%}{%- render 'zz-trivial' -%}{%- endcapture -%}
   D=[{{ trivial_d }}]
   E=[{% render 'zz-trivial' %}]
+  {%- capture trivial_f -%}{%- render 'zz-trivial2' -%}{%- endcapture -%}
+  F=[{{ trivial_f }}]
 </div>
 {% schema %}
 {
