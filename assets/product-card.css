@@ -29,7 +29,7 @@
   transition: transform 400ms var(--mt-ease);
 }
 .mt-card__media::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -53,21 +53,6 @@
   display: none;
 }
 
-.mt-card__discount {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 2;
-  background: #fff;
-  color: #1d1d1d;
-  padding: 2px 5px;
-  font-family: var(--mt-font-mono);
-  font-size: 0.625rem;
-  line-height: 1;
-  letter-spacing: var(--mt-tracking-tag);
-  pointer-events: none;
-}
-
 @media (hover: none) {
   .mt-card:active .mt-card__media {
     transform: scale(0.98);
@@ -86,13 +71,20 @@
   line-height: var(--mt-p-leading);
 }
 .mt-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem;
   margin: 0;
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
-  color: var(--mt-moss);
+  color: var(--mt-midnight);
 }
 .mt-card__compare {
   color: rgba(var(--mt-ink-rgb), 0.4);
+}
+.mt-card__discount {
+  color: var(--mt-midnight);
 }
 
 .mt-card__swatches {
