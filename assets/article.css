@@ -382,7 +382,7 @@ html.mt-motion .mt-art__full img {
     padding: 0 0.9375rem;
     margin-top: 6.25rem;
     margin-bottom: 6.25rem;
-    margin-inline: 0;
+    margin-inline: auto;
   }
   .mt-art__rte .mt-art__stage {
     margin-top: 6.25rem;
