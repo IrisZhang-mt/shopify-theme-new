@@ -131,6 +131,25 @@ html.mt-motion .mt-art__hero-media video {
   width: 100%;
   height: auto;
 }
+.mt-art__rte table {
+  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.mt-art__rte thead th {
+  font-family: var(--mt-font-mono);
+  font-weight: 500;
+  font-size: var(--mt-tag-xs-size);
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+}
+.mt-art__rte th,
+.mt-art__rte td {
+  padding: 0.625rem 0.9375rem;
+  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
+  text-align: left;
+  color: var(--mt-moss);
+}
 .mt-art__rte blockquote {
   margin-top: 5rem;
   margin-bottom: 5rem;
@@ -362,6 +381,10 @@ html.mt-motion .mt-art__full img {
   .mt-art__rte blockquote {
     margin-top: 6.25rem;
     margin-bottom: 6.25rem;
+  }
+  .mt-art__rte th,
+  .mt-art__rte td {
+    padding: 0.9375rem 1.5625rem;
   }
   .mt-art__cite {
     margin-top: -3.125rem;
