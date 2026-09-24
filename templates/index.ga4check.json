@@ -1,0 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "best-sellers": {
+      "type": "home-best-sellers",
+      "blocks": {
+        "girls": {
+          "type": "collection",
+          "settings": { "collection": "girls", "label": "Girls" }
+        },
+        "boys": {
+          "type": "collection",
+          "settings": { "collection": "boys", "label": "Boys" }
+        }
+      },
+      "block_order": ["girls", "boys"],
+      "settings": { "heading": "Most Loved" }
+    }
+  },
+  "order": ["best-sellers"]
+}
