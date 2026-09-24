@@ -142,6 +142,9 @@
   inset: auto !important;
   margin: 0 !important;
   z-index: auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
   font-size: inherit;
   color: inherit;
 }
