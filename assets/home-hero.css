@@ -134,6 +134,12 @@ html.mt-motion .mt-hero__media video {
   gap: 1.25rem;
 }
 
+.mt-hero__content-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
 .mt-hero__heading {
   font-size: var(--mt-h-xxl-size);
   line-height: var(--mt-h-xxl-leading);
@@ -196,6 +202,7 @@ html.mt-motion .mt-hero__media video {
 
 .mt-hero__cta {
   position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
