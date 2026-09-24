@@ -225,6 +225,7 @@ if (!window.mtCartInit) {
   document.addEventListener('click', (event) => {
     const checkout = event.target.closest?.('[data-checkout]');
     if (checkout) {
+      checkout.setAttribute('aria-busy', 'true');
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
       window.dataLayer.push({
@@ -357,6 +358,7 @@ if (!window.mtCartInit) {
 
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
+    document.querySelectorAll('[data-checkout][aria-busy="true"]').forEach((el) => el.removeAttribute('aria-busy'));
     clearTimeout(closeTimer);
     const cartEl = drawer();
     if (!cartEl) return;
