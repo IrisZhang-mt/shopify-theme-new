@@ -137,15 +137,11 @@
   color: var(--mt-ink);
 }
 
-.mt-header__utils .tl-switcher-container,
-.mt-header__utils .tl-switcher-container.top-right.tl-custom-position {
+.mt-header__utils .tl-switcher-container {
   position: static !important;
   inset: auto !important;
   margin: 0 !important;
   z-index: auto !important;
-  width: auto !important;
-  min-width: 0 !important;
-  max-width: none !important;
   font-size: inherit;
   color: inherit;
 }
