@@ -1,6 +1,3 @@
-{{ 'cart.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'cart.js' | asset_url }}" type="module"></script>
-
 <section class="mt-cart-page" data-cart-root data-url="{{ routes.cart_url }}?section_id={{ section.id }}" data-currency="{{ cart.currency.iso_code }}">
   <div data-cart-content>
     <h1 class="mt-cart-page__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h1>
