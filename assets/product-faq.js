@@ -21,7 +21,6 @@ if (!window.mtFaqInit) {
             event_parameters: {
               content_type: 'FAQ',
               content_name: toggle.dataset.contentName,
-              button_name: '',
             },
           });
         }

@@ -39,6 +39,9 @@
 
         {%- if forloop.first -%}
           <div class="mt-hero__content">
+            {%- if section.settings.cta_label != blank -%}
+              <a class="mt-hero__content-link" href="{{ section.settings.cta_url | default: '#' }}" aria-hidden="true" tabindex="-1"></a>
+            {%- endif -%}
             {%- if section.settings.heading != blank -%}
               <h1 class="mt-hero__heading">
                 {%- assign lines = section.settings.heading | newline_to_br | split: '<br />' -%}
@@ -93,6 +96,9 @@
           {%- endif -%}
         </div>
         <div class="mt-hero__content">
+          {%- if block.settings.cta_label != blank -%}
+            <a class="mt-hero__content-link" href="{{ block.settings.cta_url | default: '#' }}" aria-hidden="true" tabindex="-1"></a>
+          {%- endif -%}
           {%- if block.settings.heading != blank -%}
             <h2 class="mt-hero__heading">
               {%- assign lines = block.settings.heading | newline_to_br | split: '<br />' -%}

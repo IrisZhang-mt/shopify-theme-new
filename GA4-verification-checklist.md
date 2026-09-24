@@ -40,6 +40,7 @@
 - [You May Also Like 模块（No.50/51）](#验证清单you-may-also-like-模块no5051)
 - [搜索结果页（No.52-57）](#验证清单搜索结果页no52-57)
 - [结账/配送/支付/支付成功（No.58-61，Custom Pixel）](#验证清单结账配送支付支付成功no58-61custom-pixel)
+- [搜索框商品列表 Bug 修复（No.12/13）](#验证清单搜索框商品列表-bug-修复no1213)
 
 到这里 sheet3「代码部署详情」全部做完了。
 
@@ -140,27 +141,40 @@
 ## 验证清单：Best Sellers 产品列表（No.29/30）
 
 - [ ] 首页 Best Sellers 模块加载后，控制台应出现一条 `view_item_list`：
-  - `item_list_id: "best_sellers"`
-  - `item_list_name`：拼接成 `Best Sellers_` + 当前激活 tab 的标签，比如默认 Girls tab 是 `"Best Sellers_Girls"`
+  - `item_list_id`：当前模块 heading 设置的 handle 化结果，比如主题
+    编辑器里把标题改成了 "Most Loved"，这里就应该是 `"most_loved"`
+    （不是写死的 `"best_sellers"`）
+  - `item_list_name`：`当前 heading + "_" + 当前激活 tab 的标签`，比如
+    heading 是 "Most Loved"、Girls tab 激活时是 `"Most Loved_Girls"`
   - **确认没有** `item_list_label` 字段了（已删除，信息现在并入 `item_list_name`）
   - `currency` 正确
-  - `items[]` 字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`），每个商品的 `item_list_name` 也是 `"Best Sellers_Girls"` 这种格式
-- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，应该**再触发一次** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_name` 也应该跟着变成 `"Best Sellers_Boys"`
+  - `items[]` 字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`），每个商品的 `item_list_name` 也是 `"Most Loved_Girls"` 这种格式
+- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，应该**再触发一次** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_name` 也应该跟着变成 `"Most Loved_Boys"`
 - [ ] 切换回之前看过的同一个 tab，**不应该**重复触发（按商品 id 集合去重）
-- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`，`item_list_name` 同样是 `"Best Sellers_Girls"`/`"Best Sellers_Boys"` 这种格式，跟当前 tab 一致
+- [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`，`item_list_id`/`item_list_name` 同样跟着当前 heading + tab 走
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
+- [ ] 去主题编辑器把这个模块的 Heading 改成别的文案（比如改回 "Best Sellers"），刷新页面重新验证一遍，`item_list_id`/`item_list_name` 应该跟着新标题变，不需要改代码
 
 > **更新（2026-09-20）**：按反馈把 `item_list_label` 字段整个删掉了，
-> 原来单独传的 tab 标签信息现在直接拼进 `item_list_name` 里
-> （`Best Sellers_` + 标签，如 `Best Sellers_Girls`/`Best Sellers_Boys`），
+> 原来单独传的 tab 标签信息现在直接拼进 `item_list_name` 里，
 > `view_item_list`/`select_item` 里所有出现 `item_list_name` 的地方
-> （事件顶层 + `items[]` 里每一项）都是这个拼接后的值，不再是固定的
-> `"Best Sellers"`。
+> （事件顶层 + `items[]` 里每一项）都是这个拼接后的值。
+>
+> **更新（2026-09-24）**：反馈 `item_list_id`/`item_list_name` 的前缀
+> 是写死的 `best_sellers`/`Best Sellers`，商家把模块标题改成 "Most
+> Loved" 之后没有跟着变。已改成动态取 `section.settings.heading`：
+> `item_list_id` = heading 转成的 handle（空格转下划线的小写形式，如
+> "Most Loved" → `most_loved`），`item_list_name` = heading 原文 + "_" +
+> tab 标签（如 `Most Loved_Girls`，保留原文大小写）。heading 为空时
+> 兜底成 `best_sellers`/`Best Sellers`（跟 schema 默认值一致）。
 
-代码改动：`sections/home-best-sellers.liquid` 不再用 section 标题作为
-`item_list_name`，改成每个 tab 单独算 `'Best Sellers_' | append: block.settings.label`
-（Liquid 的 `render` 标签不支持在参数里直接用过滤器，所以先 `assign`
-算好再传）；撤销了 `item_list_label` 相关的改动——`snippets/product-card-list.liquid`、
+代码改动：`sections/home-best-sellers.liquid` 顶部新增
+`bs_heading = section.settings.heading | default: 'Best Sellers'`，
+`item_list_id` 改成 `bs_heading | handleize | replace: '-', '_'`，
+每个 tab 的 `item_list_name` 改成 `bs_heading | append: '_' | append:
+block.settings.label`（Liquid 的 `render` 标签不支持在参数里直接用
+过滤器，所以都先 `assign` 算好再传）。撤销了 `item_list_label` 相关的
+改动——`snippets/product-card-list.liquid`、
 `snippets/product-card.liquid`、`assets/home-best-sellers.js` 里新增的
 `item_list_label` 透传/属性/字段全部删除，恢复成只有
 `item_list_id`/`item_list_name` 两个可选参数。未新建文件。
@@ -354,12 +368,16 @@
   - `event_name: select_content`
   - `module_name: "Product Details"`
   - `content_name` 等于该条目的标题
-  - `button_name` 是空字符串 `""`
+  - **确认没有 `button_name` 这个字段**（这里没有独立于展开条目本身的按钮，没有值就不传，不是传空字符串）
 - [ ] 点击收起（再点一次已展开的条目）**不应该**触发这条事件
+
+> **更新（2026-09-24）**：反馈 `button_name` 没有值的时候应该整个不传
+> 这个参数，不是传空字符串 `""`。已把 `button_name: ''` 这一行删掉。
 
 代码改动：`sections/main-product.liquid` 给手风琴标题按钮加了
 `data-content-name`；`assets/pdp.js` 的 `[data-pdp-toggle]` 点击处理里，
-只在展开（`open === true`）时触发 `select_content`。未新建文件。
+只在展开（`open === true`）时触发 `select_content`，`event_parameters`
+里不再带 `button_name`。未新建文件。
 
 ---
 
@@ -405,12 +423,16 @@ fetch 用的那个 section）渲染 `pdp-pair` 时都传了
   - `event_name: select_content`
   - `content_type: "FAQ"`
   - `content_name` 等于该问题的文案
-  - `button_name` 是空字符串 `""`
+  - **确认没有 `button_name` 这个字段**（没有值就不传，不是传空字符串）
 - [ ] 点击收起**不应该**触发这条事件
+
+> **更新（2026-09-24）**：反馈 `button_name` 没有值的时候应该整个不传
+> 这个参数，不是传空字符串 `""`。已把 `button_name: ''` 这一行删掉。
 
 代码改动：`sections/product-faq.liquid` 给问题标题按钮加了
 `data-content-name`；`assets/product-faq.js` 的点击处理里，只在展开时
-触发 `select_content`。未新建文件。
+触发 `select_content`，`event_parameters` 里不再带 `button_name`。
+未新建文件。
 
 ---
 
@@ -527,3 +549,35 @@ DevTools 里对着 checkout 页面敲 `dataLayer` 大概率看不到东西，或
 文档核实（`checkout.currencyCode`/`totalPrice`/`totalTax`/`lineItems`/
 `transactions`/`delivery.selectedDeliveryOptions`/`order` 等），不是
 凭印象猜的。
+
+---
+
+## 验证清单：搜索框商品列表 Bug 修复（No.12/13）
+
+**反馈问题**：搜索框边输入边实时触发 `view_item_list`，输入过程中频繁
+上报（每次搜索建议结果一变就报一次），不是"用户看到结果后"才报。
+
+- [ ] 打开搜索框，连续快速输入一个词（如 "sleeve"），**只在停止打字后**
+      才应该出现 `view_item_list`，输入过程中间不应该逐字触发
+- [ ] 输入几个字符后停顿一下（比如打完"sl"就停），等一会儿应该能看到
+      `view_item_list` 用当前"sl"这个词的搜索结果触发；如果这时候又
+      接着打完整个词，之前"sl"那次不应该是唯一触发的一次——以**最终
+      停下来那个词**的结果为准触发，中间没停稳的状态不应该触发
+- [ ] 清空搜索框（比如全选删除），不应该在清空后又冒出一条空结果的
+      `view_item_list`
+- [ ] 点击搜索建议词（chip）后自动填入并搜索，这个照常应该只在结果
+      稳定后触发一次，不受这次改动影响
+- [ ] 关掉搜索框再重新打开，之前的计时器不应该遗留下来在背后触发
+
+代码改动：`assets/header.js` 的 `searchRender()` 里，原来是每次渲染
+新的搜索结果就直接判断"跟上次的商品 id 集合不一样"就立刻触发
+`view_item_list`——问题是搜索输入本身已经有 250ms 的防抖去发请求，
+但请求一返回就立刻上报，用户只要打字间隔略大于 250ms 就会在打字过程中
+反复触发。现在改成：每次渲染新结果时，先取消上一次排好的上报计时器，
+再重新排一个 600ms 后的计时器；只有真正等到用户停手不再触发新的搜索
+结果（没有新的 `searchRender` 调用进来清掉这个计时器）时，600ms 后
+才会真正执行上报判断和 `dataLayer.push`。相当于把"搜索建议展示"（快，
+保持 250ms 防抖不变，输入体验不受影响）和"埋点上报"（慢，等到用户
+停顿）两件事解耦开。同时在 `searchReset()`（关闭搜索框时调用）里也把
+这个新计时器一起清掉，避免关闭搜索框后计时器还在背景里跑、之后莫名
+其妙触发一次。未新建文件。

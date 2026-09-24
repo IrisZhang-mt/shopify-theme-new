@@ -137,6 +137,15 @@
   color: var(--mt-ink);
 }
 
+.mt-header__utils .tl-switcher-container {
+  position: static !important;
+  inset: auto !important;
+  margin: 0 !important;
+  z-index: auto !important;
+  font-size: inherit;
+  color: inherit;
+}
+
 .mt-header__signup {
   position: relative;
   padding: 0;
@@ -389,6 +398,19 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   line-height: var(--mt-h-m-leading);
   letter-spacing: var(--mt-tracking-heading);
   color: var(--mt-ink);
+}
+
+.mt-drawer .tl-switcher-container {
+  position: absolute !important;
+  top: 1.25rem !important;
+  right: var(--mt-header-pad) !important;
+  bottom: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  z-index: 1;
+  font-family: var(--mt-font-body);
+  font-size: var(--mt-p-s-size);
+  color: inherit;
 }
 
 .mt-drawer__sub {

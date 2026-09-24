@@ -50,6 +50,7 @@ if (!window.mtHeaderInit) {
 
   let searchCloseTimer = 0;
   let searchQueryTimer = 0;
+  let searchTrackTimer = 0;
   let searchSeq = 0;
   let lastViewedItemIds = '';
 
@@ -60,6 +61,7 @@ if (!window.mtHeaderInit) {
 
   const searchReset = (panel) => {
     clearTimeout(searchQueryTimer);
+    clearTimeout(searchTrackTimer);
     searchSeq += 1;
     lastViewedItemIds = '';
     const input = panel.querySelector('[data-search-input]');
@@ -160,30 +162,34 @@ if (!window.mtHeaderInit) {
     results.hidden = products.length === 0;
     empty.hidden = queries.length > 0 || products.length > 0;
 
+    clearTimeout(searchTrackTimer);
     const viewedIds = products.map((item) => item.id).join(',');
-    if (products.length > 0 && viewedIds !== lastViewedItemIds) {
-      lastViewedItemIds = viewedIds;
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event_parameters: null });
-      window.dataLayer.push({
-        event: 'ga4Event',
-        event_name: 'view_item_list',
-        event_parameters: {
-          item_list_name: 'Search Box',
-          item_list_id: 'search_box',
-          currency: panel.dataset.searchCurrency,
-          items: products.map((item, index) => ({
-            item_id: String(item.id),
-            item_name: item.title,
-            item_list_id: 'search_box',
+    if (products.length > 0) {
+      searchTrackTimer = setTimeout(() => {
+        if (viewedIds === lastViewedItemIds) return;
+        lastViewedItemIds = viewedIds;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'view_item_list',
+          event_parameters: {
             item_list_name: 'Search Box',
-            item_brand: item.vendor,
-            index: index + 1,
-            price: +item.price,
-            quantity: 1,
-          })),
-        },
-      });
+            item_list_id: 'search_box',
+            currency: panel.dataset.searchCurrency,
+            items: products.map((item, index) => ({
+              item_id: String(item.id),
+              item_name: item.title,
+              item_list_id: 'search_box',
+              item_list_name: 'Search Box',
+              item_brand: item.vendor,
+              index: index + 1,
+              price: +item.price,
+              quantity: 1,
+            })),
+          },
+        });
+      }, 600);
     }
   };
 
@@ -414,4 +420,26 @@ if (!window.mtHeaderInit) {
   document.addEventListener('shopify:section:unload', () => {
     if (!document.querySelector('.mt-header__drawer[open]')) closeAll();
   });
+
+  // 语言/货币切换器由第三方 App 异步注入到 <body>，且触发器上的语言名会被 App 持续重渲染，
+  // 所以用常驻 observer 而不是一次性处理：>=750px 挪进头部工具栏，<750px 挪进抽屉面板右上角，
+  // 并清空触发器上的语言名文案。.tl-selections 是收起状态的触发器（role="button"），点击后
+  // 弹出的下拉面板不在它内部，所以清空只影响触发器文案，不会动到下拉列表里的语言名选项。
+  const syncSwitcher = () => {
+    const switcher = document.querySelector('.tl-switcher-container');
+    if (switcher) {
+      if (widthMq.matches) {
+        const utils = document.querySelector('.mt-header__utils');
+        if (utils && !utils.contains(switcher)) utils.prepend(switcher);
+      } else {
+        const drawer = document.querySelector('.mt-drawer');
+        if (drawer && !drawer.contains(switcher)) drawer.prepend(switcher);
+      }
+    }
+    const label = document.querySelector('.tl-selections .tl-language .tl-name');
+    if (label && label.textContent !== '') label.textContent = '';
+  };
+  syncSwitcher();
+  new MutationObserver(syncSwitcher).observe(document.body, { childList: true, subtree: true });
+  widthMq.addEventListener('change', syncSwitcher);
 }
