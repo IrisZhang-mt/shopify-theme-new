@@ -416,7 +416,7 @@ if (!window.mtHeaderInit) {
   });
 
   // 语言/货币切换器由第三方 App 异步注入到 <body>，且触发器上的语言名会被 App 持续重渲染，
-  // 所以用常驻 observer 而不是一次性处理：>=750px 挪进头部工具栏，<750px 挪进抽屉导航列表末尾，
+  // 所以用常驻 observer 而不是一次性处理：>=750px 挪进头部工具栏，<750px 挪进抽屉面板右上角，
   // 并清空触发器上的语言名文案。.tl-selections 是收起状态的触发器（role="button"），点击后
   // 弹出的下拉面板不在它内部，所以清空只影响触发器文案，不会动到下拉列表里的语言名选项。
   const syncSwitcher = () => {
@@ -426,8 +426,8 @@ if (!window.mtHeaderInit) {
         const utils = document.querySelector('.mt-header__utils');
         if (utils && !utils.contains(switcher)) utils.prepend(switcher);
       } else {
-        const drawerLinks = document.querySelector('.mt-drawer__links');
-        if (drawerLinks && !drawerLinks.contains(switcher)) drawerLinks.append(switcher);
+        const drawer = document.querySelector('.mt-drawer');
+        if (drawer && !drawer.contains(switcher)) drawer.prepend(switcher);
       }
     }
     const label = document.querySelector('.tl-selections .tl-language .tl-name');
