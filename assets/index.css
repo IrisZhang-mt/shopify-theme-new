@@ -401,3 +401,7 @@ h6 {
     transition: none;
   }
 }
+
+.tl-selection .tl-language {
+  display: none;
+}
