@@ -400,6 +400,17 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   color: var(--mt-ink);
 }
 
+.mt-drawer__links .tl-switcher-container {
+  position: static !important;
+  inset: auto !important;
+  margin: 0 !important;
+  z-index: auto !important;
+  padding-inline: var(--mt-header-pad);
+  font-family: var(--mt-font-body);
+  font-size: var(--mt-p-m-size);
+  color: inherit;
+}
+
 .mt-drawer__sub {
   display: flex;
   flex-direction: column;
