@@ -315,6 +315,7 @@ a.mt-footer__club:focus-visible {
 .mt-footer__acc-links a,
 .mt-footer__col-links a {
   width: fit-content;
+  line-height: 180%;
 }
 @media (hover: hover) {
   .mt-footer__acc-links a:hover,
