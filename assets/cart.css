@@ -446,7 +446,7 @@
   justify-content: center;
   height: 3.75rem;
   background-color: var(--mt-ink);
-  background-image: linear-gradient(var(--mt-moss), var(--mt-moss));
+  background-image: linear-gradient(#000, #000);
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;

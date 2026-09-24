@@ -296,9 +296,6 @@
   );
 }
 
-.mt-pdp__promo {
-  margin: 3.125rem 0;
-}
 .mt-pdp__promo-image {
   width: 100%;
   height: auto;
@@ -467,7 +464,7 @@
   padding: 0 1.25rem;
   border: 0;
   background-color: var(--mt-ink);
-  background-image: linear-gradient(var(--mt-moss), var(--mt-moss));
+  background-image: linear-gradient(#000, #000);
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;
@@ -710,7 +707,7 @@
 }
 .mt-pair__add {
   background-color: var(--mt-ink);
-  background-image: linear-gradient(var(--mt-moss), var(--mt-moss));
+  background-image: linear-gradient(#000, #000);
   color: var(--mt-cloud);
 }
 .mt-pair__details {
