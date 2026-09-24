@@ -25,9 +25,6 @@
 .mt-hero__slide--layer .mt-hero__panel {
   min-height: 100%;
 }
-.mt-hero__slide--layer .mt-hero__content {
-  z-index: 2;
-}
 
 .mt-hero__slide-link {
   position: absolute;
@@ -130,6 +127,7 @@ html.mt-motion .mt-hero__media video {
 
 .mt-hero__content {
   position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
