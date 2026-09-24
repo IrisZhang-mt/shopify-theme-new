@@ -293,7 +293,7 @@ a.mt-footer__club:focus-visible {
   padding-block: 1.25rem;
   cursor: pointer;
   list-style: none;
-  font-size: var(--mt-p-m-size);
+  font-size: 18px;
   line-height: var(--mt-p-leading);
 }
 .mt-footer__acc > summary::-webkit-details-marker {
