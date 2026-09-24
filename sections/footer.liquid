@@ -85,10 +85,14 @@
                     <div class="mt-footer__col-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                          {%- assign link_tag = 'a' -%}
+                          {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                          <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
+                        {%- assign link_tag = 'a' -%}
+                        {%- if group.url == blank or group.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                        <{{ link_tag }} {% if link_tag == 'a' %}href="{{ group.url }}"{% endif %} data-fnav1="{{ group.title | escape }}">{{ group.title }}</{{ link_tag }}>
                       {%- endif -%}
                     </div>
                   </div>
@@ -99,7 +103,9 @@
                 <p class="mt-footer__col-title">{{ menu.title }}</p>
                 <div class="mt-footer__col-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                    {%- assign link_tag = 'a' -%}
+                    {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                    <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                   {%- endfor -%}
                 </div>
               </div>
@@ -128,10 +134,14 @@
                     <div class="mt-footer__acc-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                          {%- assign link_tag = 'a' -%}
+                          {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                          <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
+                        {%- assign link_tag = 'a' -%}
+                        {%- if group.url == blank or group.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                        <{{ link_tag }} {% if link_tag == 'a' %}href="{{ group.url }}"{% endif %} data-fnav1="{{ group.title | escape }}">{{ group.title }}</{{ link_tag }}>
                       {%- endif -%}
                     </div>
                   </details>
@@ -145,7 +155,9 @@
                 </summary>
                 <div class="mt-footer__acc-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                    {%- assign link_tag = 'a' -%}
+                    {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                    <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                   {%- endfor -%}
                 </div>
               </details>
