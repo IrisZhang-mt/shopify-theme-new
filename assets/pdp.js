@@ -208,7 +208,6 @@ if (!window.mtPdpInit) {
             event_parameters: {
               module_name: 'Product Details',
               content_name: toggle.dataset.contentName,
-              button_name: '',
             },
           });
         }
