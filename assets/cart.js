@@ -358,6 +358,7 @@ if (!window.mtCartInit) {
 
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
+    document.querySelectorAll('[data-checkout][aria-busy="true"]').forEach((el) => el.removeAttribute('aria-busy'));
     clearTimeout(closeTimer);
     const cartEl = drawer();
     if (!cartEl) return;
