@@ -34,6 +34,16 @@
     </div>
   </div>
   <div class="mt-cart__side">
+    <!-- DEBUG START: remove before commit -->
+    <p style="color:red;font-size:10px;line-height:1.4;text-align:right;">
+      variant.compare_at_price={{ item.variant.compare_at_price }}<br>
+      variant.price={{ item.variant.price }}<br>
+      original_price={{ item.original_price }}<br>
+      final_price={{ item.final_price }}<br>
+      original_line_price={{ item.original_line_price }}<br>
+      final_line_price={{ item.final_line_price }}
+    </p>
+    <!-- DEBUG END -->
     {%- if item.variant.compare_at_price > item.variant.price -%}
       <s class="mt-cart__compare">{{ item.variant.compare_at_price | times: item.quantity | money_without_trailing_zeros }}</s>
     {%- endif -%}
