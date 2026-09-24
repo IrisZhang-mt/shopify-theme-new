@@ -402,9 +402,9 @@ h6 {
   }
 }
 
-/* .tl-switcher-container .tl-language {
+.tl-switcher-container .tl-name {
   display: none !important;
-} */
+}
 
 .tl-switcher-container.tl-custom-position {
   border: none !important;
