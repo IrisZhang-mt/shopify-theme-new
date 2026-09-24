@@ -137,7 +137,8 @@
   color: var(--mt-ink);
 }
 
-.mt-header__utils .tl-switcher-container {
+.mt-header__utils .tl-switcher-container,
+.mt-header__utils .tl-switcher-container.top-right.tl-custom-position {
   position: static !important;
   inset: auto !important;
   margin: 0 !important;
