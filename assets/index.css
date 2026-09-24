@@ -405,3 +405,7 @@ h6 {
 .tl-selection .tl-language {
   display: none;
 }
+
+.tl-selection .tl-currency {
+  border: none;
+}
