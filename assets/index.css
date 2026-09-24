@@ -406,6 +406,11 @@ h6 {
   border: none !important;
 }
 
+.tl-custom-position {
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
 .tl-switcher-container .tl-currency::before {
   content: "";
   display: inline-block;
