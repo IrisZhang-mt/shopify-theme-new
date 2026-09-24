@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 .mt-footer__club::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
 }
@@ -126,7 +126,7 @@ a.mt-footer__club:focus-visible {
   border-bottom: 1px solid var(--mt-ink);
 }
 .mt-footer__field::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -211,7 +211,7 @@ a.mt-footer__club:focus-visible {
     background-color var(--mt-dur) var(--mt-ease);
 }
 .mt-check::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0.1875rem;
   left: 0.125rem;
@@ -293,7 +293,7 @@ a.mt-footer__club:focus-visible {
   padding-block: 1.25rem;
   cursor: pointer;
   list-style: none;
-  font-size: var(--mt-p-m-size);
+  font-size: 18px;
   line-height: var(--mt-p-leading);
 }
 .mt-footer__acc > summary::-webkit-details-marker {
@@ -309,12 +309,13 @@ a.mt-footer__club:focus-visible {
   flex-direction: column;
   gap: 0.125rem;
   padding-bottom: 1.25rem;
-  font-size: 0.75rem;
+  font-size: 14px;
   line-height: 1.2;
 }
 .mt-footer__acc-links a,
 .mt-footer__col-links a {
   width: fit-content;
+  line-height: 180%;
 }
 @media (hover: hover) {
   .mt-footer__acc-links a:hover,
@@ -435,7 +436,7 @@ a.mt-footer__club:focus-visible {
 
   .mt-footer__cols {
     display: flex;
-    gap: clamp(2.5rem, 7.85vw, 7.0625rem);
+    gap: clamp(2.5rem, 6.85vw, 7.0625rem);
   }
   .mt-footer__col {
     display: flex;
