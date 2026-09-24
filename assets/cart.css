@@ -380,11 +380,6 @@
     transform var(--mt-dur) var(--mt-ease),
     opacity var(--mt-dur) var(--mt-ease);
 }
-@media (hover: hover) {
-  .mt-cart__tile-add:hover {
-    transform: scale(1.15);
-  }
-}
 .mt-cart__progress {
   height: 2px;
   margin-top: 1.5625rem;
@@ -457,11 +452,6 @@
   transition:
     background-size 450ms var(--mt-ease),
     opacity var(--mt-dur) var(--mt-ease);
-}
-@media (hover: hover) {
-  .mt-cart__checkout:hover {
-    background-size: 100% 100%;
-  }
 }
 .mt-cart__checkout-compare {
   color: var(--mt-cloud);
