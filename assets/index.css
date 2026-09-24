@@ -402,10 +402,10 @@ h6 {
   }
 }
 
-.tl-language {
-  display: none;
+.tl-switcher-container .tl-language {
+  display: none !important;
 }
 
-.tl-currency {
-  border: none;
+.tl-switcher-container .tl-currency {
+  border: none !important;
 }
