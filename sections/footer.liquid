@@ -175,37 +175,6 @@
             {{ settings.logo | image_url: width: 500 | image_tag: decoding: 'async', widths: '125, 250, 375, 500', sizes: '125px', width: 125, height: 22, alt: shop.name }}
           {%- endif -%}
         </a>
-        <div class="mt-footer__ctas">
-          {%- if localization.available_languages.size > 1 -%}
-            {%- form 'localization', class: 'mt-footer__pill' -%}
-              <span>{{ localization.language.endonym_name | capitalize }}</span>
-              <select name="locale_code" aria-label="{{ 'footer.language' | t }}">
-                {%- for language in localization.available_languages -%}
-                  <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
-                    {{ language.endonym_name | capitalize }}
-                  </option>
-                {%- endfor -%}
-              </select>
-            {%- endform -%}
-          {%- else -%}
-            <div class="mt-footer__pill"><span>{{ localization.language.endonym_name | capitalize }}</span></div>
-          {%- endif -%}
-          {%- assign currency_label = localization.country.currency.iso_code | downcase | capitalize -%}
-          {%- if localization.available_countries.size > 1 -%}
-            {%- form 'localization', class: 'mt-footer__pill' -%}
-              <span>{{ currency_label }}</span>
-              <select name="country_code" aria-label="{{ 'footer.country' | t }}">
-                {%- for country in localization.available_countries -%}
-                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
-                    {{ country.name }} ({{ country.currency.iso_code }})
-                  </option>
-                {%- endfor -%}
-              </select>
-            {%- endform -%}
-          {%- else -%}
-            <div class="mt-footer__pill"><span>{{ currency_label }}</span></div>
-          {%- endif -%}
-        </div>
       </div>
     </div>
   </div>
