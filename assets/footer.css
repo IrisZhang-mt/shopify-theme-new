@@ -313,7 +313,9 @@ a.mt-footer__club:focus-visible {
   line-height: 1.2;
 }
 .mt-footer__acc-links a,
-.mt-footer__col-links a {
+.mt-footer__acc-links span,
+.mt-footer__col-links a,
+.mt-footer__col-links span {
   width: fit-content;
   line-height: 180%;
 }

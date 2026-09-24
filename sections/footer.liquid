@@ -85,10 +85,14 @@
                     <div class="mt-footer__col-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                          {%- assign link_tag = 'a' -%}
+                          {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                          <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
+                        {%- assign link_tag = 'a' -%}
+                        {%- if group.url == blank or group.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                        <{{ link_tag }} {% if link_tag == 'a' %}href="{{ group.url }}"{% endif %} data-fnav1="{{ group.title | escape }}">{{ group.title }}</{{ link_tag }}>
                       {%- endif -%}
                     </div>
                   </div>
@@ -99,7 +103,9 @@
                 <p class="mt-footer__col-title">{{ menu.title }}</p>
                 <div class="mt-footer__col-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                    {%- assign link_tag = 'a' -%}
+                    {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                    <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                   {%- endfor -%}
                 </div>
               </div>
@@ -128,10 +134,14 @@
                     <div class="mt-footer__acc-links">
                       {%- if group.links.size > 0 -%}
                         {%- for link in group.links -%}
-                          <a href="{{ link.url }}" data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                          {%- assign link_tag = 'a' -%}
+                          {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                          <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ group.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                         {%- endfor -%}
                       {%- else -%}
-                        <a href="{{ group.url }}" data-fnav1="{{ group.title | escape }}">{{ group.title }}</a>
+                        {%- assign link_tag = 'a' -%}
+                        {%- if group.url == blank or group.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                        <{{ link_tag }} {% if link_tag == 'a' %}href="{{ group.url }}"{% endif %} data-fnav1="{{ group.title | escape }}">{{ group.title }}</{{ link_tag }}>
                       {%- endif -%}
                     </div>
                   </details>
@@ -145,7 +155,9 @@
                 </summary>
                 <div class="mt-footer__acc-links">
                   {%- for link in menu.links -%}
-                    <a href="{{ link.url }}" data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</a>
+                    {%- assign link_tag = 'a' -%}
+                    {%- if link.url == blank or link.url == '#' -%}{%- assign link_tag = 'span' -%}{%- endif -%}
+                    <{{ link_tag }} {% if link_tag == 'a' %}href="{{ link.url }}"{% endif %} data-fnav1="{{ menu.title | escape }}" data-fnav2="{{ link.title | escape }}">{{ link.title }}</{{ link_tag }}>
                   {%- endfor -%}
                 </div>
               </details>
@@ -175,37 +187,6 @@
             {{ settings.logo | image_url: width: 500 | image_tag: decoding: 'async', widths: '125, 250, 375, 500', sizes: '125px', width: 125, height: 22, alt: shop.name }}
           {%- endif -%}
         </a>
-        <div class="mt-footer__ctas">
-          {%- if localization.available_languages.size > 1 -%}
-            {%- form 'localization', class: 'mt-footer__pill' -%}
-              <span>{{ localization.language.endonym_name | capitalize }}</span>
-              <select name="locale_code" aria-label="{{ 'footer.language' | t }}">
-                {%- for language in localization.available_languages -%}
-                  <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
-                    {{ language.endonym_name | capitalize }}
-                  </option>
-                {%- endfor -%}
-              </select>
-            {%- endform -%}
-          {%- else -%}
-            <div class="mt-footer__pill"><span>{{ localization.language.endonym_name | capitalize }}</span></div>
-          {%- endif -%}
-          {%- assign currency_label = localization.country.currency.iso_code | downcase | capitalize -%}
-          {%- if localization.available_countries.size > 1 -%}
-            {%- form 'localization', class: 'mt-footer__pill' -%}
-              <span>{{ currency_label }}</span>
-              <select name="country_code" aria-label="{{ 'footer.country' | t }}">
-                {%- for country in localization.available_countries -%}
-                  <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
-                    {{ country.name }} ({{ country.currency.iso_code }})
-                  </option>
-                {%- endfor -%}
-              </select>
-            {%- endform -%}
-          {%- else -%}
-            <div class="mt-footer__pill"><span>{{ currency_label }}</span></div>
-          {%- endif -%}
-        </div>
       </div>
     </div>
   </div>
