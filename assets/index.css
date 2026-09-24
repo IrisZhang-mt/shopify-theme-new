@@ -406,6 +406,6 @@ h6 {
   display: none !important;
 }
 
-.tl-switcher-container .tl-currency {
+.tl-switcher-container.tl-custom-position {
   border: none !important;
 }
