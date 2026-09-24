@@ -225,6 +225,7 @@ if (!window.mtCartInit) {
   document.addEventListener('click', (event) => {
     const checkout = event.target.closest?.('[data-checkout]');
     if (checkout) {
+      checkout.setAttribute('aria-busy', 'true');
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
       window.dataLayer.push({
