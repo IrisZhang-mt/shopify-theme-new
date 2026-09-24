@@ -275,6 +275,10 @@
   font-size: var(--mt-p-s-size);
   line-height: var(--mt-p-leading);
 }
+.mt-cart__compare {
+  font-size: 0.75em;
+  color: rgba(var(--mt-ink-rgb), 0.4);
+}
 .mt-cart__remove {
   padding: 0;
   border: 0;
