@@ -412,6 +412,7 @@ h6 {
 .tl-custom-position {
   box-shadow: none !important;
   background: transparent !important;
+  padding-right: 8px !important;
 }
 
 .tl-switcher-container .tl-currency::before {
