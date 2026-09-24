@@ -344,7 +344,6 @@
   color: var(--mt-ink);
 }
 @media (hover: hover) {
-  .mt-qs__add:hover,
   .mt-qs__details:hover {
     background-size: 100% 100%;
   }
