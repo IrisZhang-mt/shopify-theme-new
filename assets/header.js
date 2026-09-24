@@ -414,4 +414,19 @@ if (!window.mtHeaderInit) {
   document.addEventListener('shopify:section:unload', () => {
     if (!document.querySelector('.mt-header__drawer[open]')) closeAll();
   });
+
+  // 语言/货币切换器由第三方 App 异步注入到 <body>，等它出现后再挪进头部工具栏
+  const relocateSwitcher = () => {
+    const utils = document.querySelector('.mt-header__utils');
+    const switcher = document.querySelector('.tl-switcher-container');
+    if (!utils || !switcher) return false;
+    utils.prepend(switcher);
+    return true;
+  };
+  if (!relocateSwitcher()) {
+    const switcherObserver = new MutationObserver(() => {
+      if (relocateSwitcher()) switcherObserver.disconnect();
+    });
+    switcherObserver.observe(document.body, { childList: true, subtree: true });
+  }
 }

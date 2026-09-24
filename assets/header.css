@@ -137,6 +137,15 @@
   color: var(--mt-ink);
 }
 
+.mt-header__utils .tl-switcher-container {
+  position: static !important;
+  inset: auto !important;
+  margin: 0 !important;
+  z-index: auto !important;
+  font-size: inherit;
+  color: inherit;
+}
+
 .mt-header__signup {
   position: relative;
   padding: 0;
