@@ -425,8 +425,8 @@ a.mt-footer__club:focus-visible {
   }
 
   .mt-footer__signup {
-    width: 20.3125rem;
-    flex-shrink: 0;
+    flex: 1 1 20.3125rem;
+    min-width: 15rem;
   }
 
   .mt-footer__signup-heading {
