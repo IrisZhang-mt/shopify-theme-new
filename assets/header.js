@@ -415,18 +415,17 @@ if (!window.mtHeaderInit) {
     if (!document.querySelector('.mt-header__drawer[open]')) closeAll();
   });
 
-  // 语言/货币切换器由第三方 App 异步注入到 <body>，等它出现后再挪进头部工具栏
-  const relocateSwitcher = () => {
+  // 语言/货币切换器由第三方 App 异步注入到 <body>，且触发器上的语言名会被 App 持续重渲染，
+  // 所以用常驻 observer 而不是一次性处理：把容器挪进头部工具栏、清空触发器上的语言名文案。
+  // .tl-selections 是收起状态的触发器（role="button"），点击后弹出的下拉面板不在它内部，
+  // 所以这里的清空只影响触发器文案，不会动到下拉列表里的语言名选项。
+  const syncSwitcher = () => {
     const utils = document.querySelector('.mt-header__utils');
     const switcher = document.querySelector('.tl-switcher-container');
-    if (!utils || !switcher) return false;
-    utils.prepend(switcher);
-    return true;
+    if (utils && switcher && !utils.contains(switcher)) utils.prepend(switcher);
+    const label = document.querySelector('.tl-selections .tl-language .tl-name');
+    if (label && label.textContent !== '') label.textContent = '';
   };
-  if (!relocateSwitcher()) {
-    const switcherObserver = new MutationObserver(() => {
-      if (relocateSwitcher()) switcherObserver.disconnect();
-    });
-    switcherObserver.observe(document.body, { childList: true, subtree: true });
-  }
+  syncSwitcher();
+  new MutationObserver(syncSwitcher).observe(document.body, { childList: true, subtree: true });
 }
