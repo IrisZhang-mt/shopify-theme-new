@@ -405,6 +405,9 @@ h6 {
 .tl-switcher-container.tl-custom-position {
   border: none !important;
 }
+.tl-selection {
+  padding: 0 !important;
+}
 
 .tl-custom-position {
   box-shadow: none !important;
