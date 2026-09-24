@@ -309,7 +309,7 @@ a.mt-footer__club:focus-visible {
   flex-direction: column;
   gap: 0.125rem;
   padding-bottom: 1.25rem;
-  font-size: 0.75rem;
+  font-size: 14px;
   line-height: 1.2;
 }
 .mt-footer__acc-links a,
