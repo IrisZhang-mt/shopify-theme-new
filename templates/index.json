@@ -17,7 +17,7 @@
           "settings": {
             "pc_image": "shopify://shop_images/hero-pc-half.png",
             "mob_image": "shopify://shop_images/hero.jpg",
-            "link": "",
+            "link": "shopify://products/gift-card",
             "info_heading": "Worldwide Shipping",
             "info_text": "Fast delivery to families around the world."
           }
@@ -27,7 +27,7 @@
           "settings": {
             "pc_image": "shopify://shop_images/hero-pc-half.png",
             "mob_image": "shopify://shop_images/5-app_3fbfcc2b-7323-42d9-9d0f-51408e26b76c.jpg",
-            "link": "",
+            "link": "shopify://blogs/journal/kids-shoe-size-chart",
             "info_heading": "Made To Move",
             "info_text": "Breathable, durable, quick-drying fabrics"
           }
@@ -50,7 +50,6 @@
         "panel-1",
         "slide_bLWiD8"
       ],
-      "disabled": true,
       "settings": {
         "heading": "Stay in\nthe play.",
         "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
