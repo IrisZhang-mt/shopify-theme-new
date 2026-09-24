@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 .mt-footer__club::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
 }
@@ -126,7 +126,7 @@ a.mt-footer__club:focus-visible {
   border-bottom: 1px solid var(--mt-ink);
 }
 .mt-footer__field::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -211,7 +211,7 @@ a.mt-footer__club:focus-visible {
     background-color var(--mt-dur) var(--mt-ease);
 }
 .mt-check::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0.1875rem;
   left: 0.125rem;
@@ -435,7 +435,7 @@ a.mt-footer__club:focus-visible {
 
   .mt-footer__cols {
     display: flex;
-    gap: clamp(2.5rem, 7.85vw, 7.0625rem);
+    gap: clamp(2.5rem, 6.85vw, 7.0625rem);
   }
   .mt-footer__col {
     display: flex;
