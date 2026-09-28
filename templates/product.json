@@ -218,6 +218,61 @@
         "heading": "You May Also Like",
         "filter_collections": []
       }
+    },
+    "slideshow_z9QWbH": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_BKfhtE": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "Room to move",
+            "subtext": "Play clothes built for real movement.",
+            "content_position": "center",
+            "cta_label": "Shop new arrivals",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_AtWNQ3": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "Built for outside days",
+            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
+            "content_position": "center",
+            "cta_label": "Shop outdoor",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_LiGiNg": {
+          "type": "slide",
+          "settings": {
+            "subheading": "",
+            "heading": "Soft where it counts",
+            "subtext": "Tagless, chafe-free seams they won't even notice.",
+            "content_position": "center",
+            "cta_label": "Shop essentials",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_BKfhtE",
+        "slide_AtWNQ3",
+        "slide_LiGiNg"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "analytics_label": "Slideshow"
+      }
     }
   },
   "order": [
@@ -225,6 +280,7 @@
     "product_image_card_grid_EhkHgX",
     "reviews",
     "faq",
-    "related"
+    "related",
+    "slideshow_z9QWbH"
   ]
 }
