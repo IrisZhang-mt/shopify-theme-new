@@ -455,7 +455,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 .mt-drawer__acc-links {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 1.5625rem;
   padding-bottom: 1.25rem;
 }
 .mt-drawer__acc-links a {
