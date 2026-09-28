@@ -1,4 +1,5 @@
 {{- 'product-image-card-grid.css' | asset_url | stylesheet_tag -}}
+{{- 'rte.css' | asset_url | stylesheet_tag -}}
 <script src="{{ 'product-image-card-grid.js' | asset_url }}" defer="defer"></script>
 {%- liquid
   assign section_heading = section.settings.heading
@@ -74,21 +75,20 @@
 -%}
 
 <div
-  class="product-image-card-grid product-image-card-grid--{{ card_style }} product-image-card-grid--mobile-{{ mobile_layout }} product-image-card-grid--desktop-content-{{ content_position }} product-image-card-grid--mobile-content-{{ mobile_content_position }}{% if hover_reveal %} product-image-card-grid--hover-reveal product-image-card-grid--desktop-{{ desktop_layout }}{% endif %} section-spacing{% if disable_top_spacing %} section-spacing--disable-top{% endif %}{% if disable_bottom_spacing %} section-spacing--disable-bottom{% endif %}"
+  class="product-image-card-grid product-image-card-grid--{{ card_style }} product-image-card-grid--mobile-{{ mobile_layout }} product-image-card-grid--desktop-content-{{ content_position }} product-image-card-grid--mobile-content-{{ mobile_content_position }}{% if hover_reveal %} product-image-card-grid--hover-reveal product-image-card-grid--desktop-{{ desktop_layout }}{% endif %}{% unless full_width %} product-image-card-grid--boxed{% endunless %} section-spacing{% if disable_top_spacing %} section-spacing--disable-top{% endif %}{% if disable_bottom_spacing %} section-spacing--disable-bottom{% endif %}"
   data-video-playback="{{ video_playback }}"
   data-loop="{% if enable_loop %}true{% else %}false{% endif %}"
   style="--image-card-hover-scale: {{ hover_scale }}; --image-card-hover-grow: {{ hover_grow }}; --image-card-desktop-peek: {{ desktop_peek }}%; --image-card-min-scale: {{ side_min_scale }}; --image-card-side-height: {{ side_height_scale }}; --image-card-desktop-height: {{ desktop_image_height }}px; --image-card-count: {{ card_count }}; --image-card-desktop-ratio: {{ desktop_ratio_percent }}%; --image-card-mobile-ratio: {{ mobile_ratio_percent }}%; --image-card-mobile-width: {{ mobile_image_width }}px; --image-card-mobile-height: {{ mobile_image_height }}px; --image-card-desktop-side-spacing: {{ desktop_side_spacing }}px; --image-card-inset: {{ image_side_inset }}px; --image-card-gap: {{ column_gap }}px; --image-card-title-size: {{ image_card_title_size }}px; {%- if section.settings.title_color != blank -%} --image-card-desktop-title-color: {{ section.settings.title_color }};{%- endif -%} {%- if section.settings.description_color != blank -%} --image-card-desktop-description-color: {{ section.settings.description_color }};{%- endif -%} {%- if section.settings.mobile_title_color != blank -%} --image-card-mobile-title-color: {{ section.settings.mobile_title_color }};{%- endif -%} {%- if section.settings.mobile_description_color != blank -%} --image-card-mobile-description-color: {{ section.settings.mobile_description_color }};{%- endif -%} --image-card-desktop-content-left: {{ section.settings.content_left_spacing }}px; --image-card-desktop-content-bottom: {{ section.settings.content_bottom_spacing }}px; --image-card-mobile-content-left: {{ section.settings.mobile_content_left_spacing }}px; --image-card-mobile-content-bottom: {{ section.settings.mobile_content_bottom_spacing }}px; --image-card-heading-top-spacing: {{ heading_top_spacing }}px; --image-card-heading-bottom-spacing: {{ heading_bottom_spacing }}px;"
 >
-  <div class="row{% if full_width %} full-width-row-full{% endif %}">
-    <div class="small-12 columns">
+  <div class="product-image-card-grid__container">
       {%- if section_heading != blank or section_description != blank -%}
         <div class="section-header section-header-left--{{ section_heading_left }}">
           <div class="section-header--content">
             {%- if section_heading != blank -%}
-              <h2 class="h3">{{ section_heading }}</h2>
+              <h2>{{ section_heading }}</h2>
             {%- endif -%}
             {%- if section_description != blank -%}
-              <div class="rte">{{ section_description }}</div>
+              <div class="mt-rte">{{ section_description }}</div>
             {%- endif -%}
           </div>
         </div>
