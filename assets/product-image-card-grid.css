@@ -552,15 +552,20 @@
   }
 }
 
-/* Videos behave exactly like the card images (fill, cover, zoomable) */
+/* Videos behave exactly like the card images (fill, cover, zoomable).
+   A 1px bleed on every edge (not just left/width, like the image bleed above)
+   absorbs sub-pixel layout rounding — at some viewport widths the figure's
+   computed box is fractional, and an exact 100%/100% video would leave a
+   hairline gap on the right/bottom where the figure's overflow:hidden clip
+   falls a fraction of a device pixel short of the video's rasterised edge. */
 .product-image-card-grid__image video {
-  height: 100%;
-  left: -0.5px;
+  height: calc(100% + 2px);
+  left: -1px;
   max-width: none;
   object-fit: cover;
   position: absolute;
-  top: 0;
-  width: calc(100% + 1px);
+  top: -1px;
+  width: calc(100% + 2px);
   transform: scale(1);
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   /* Keeps the video surface on its own compositing layer, so the carousel's
