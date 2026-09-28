@@ -198,9 +198,9 @@
         <div class="product-image-card-grid__nav">
           <button class="flickity-nav flickity-prev is-disabled" type="button" aria-disabled="true" aria-label="Previous" data-image-card-grid-prev>
             {%- if hover_reveal -%}
-              {%- render 'svg-icons' with 'thb-caret-left' -%}
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 1L1 5L5 9" stroke="var(--color-body, #151515)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {%- else -%}
-              {%- render 'svg-icons' with 'carousel-prev' -%}
+              <svg width="16" height="16" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 5.5H2" stroke="var(--color-accent)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.30002 1L0.800018 5.5L5.30002 10" stroke="var(--color-accent)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {%- endif -%}
           </button>
           {%- if hover_reveal and show_counter -%}
@@ -208,9 +208,9 @@
           {%- endif -%}
           <button class="flickity-nav flickity-next" type="button" aria-disabled="false" aria-label="Next" data-image-card-grid-next>
             {%- if hover_reveal -%}
-              {%- render 'svg-icons' with 'thb-caret-right' -%}
+              <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L1 9" stroke="var(--color-body, #151515)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {%- else -%}
-              {%- render 'svg-icons' with 'carousel-next' -%}
+              <svg width="16" height="16" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5.5H13" stroke="var(--color-accent)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.69995 1L14.2 5.5L9.69995 10" stroke="var(--color-accent)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {%- endif -%}
           </button>
         </div>
