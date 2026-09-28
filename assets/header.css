@@ -416,13 +416,13 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 .mt-drawer__sub {
   display: flex;
   flex-direction: column;
-  gap: 1.5625rem;
   padding: 1.5625rem var(--mt-header-pad) 1.5625rem;
 }
 
 .mt-drawer__featured {
   display: flex;
   flex-direction: column;
+  gap: 1.5625rem;
 }
 .mt-drawer__featured a {
   font-family: var(--mt-font-display);
