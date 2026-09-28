@@ -722,11 +722,11 @@
    costs nothing visually — there is no reason to cut this close. */
 .product-image-card-grid__image video {
   height: calc(100% + 6px);
-  left: 1px;
+  left: -3px;
   max-width: none;
   object-fit: cover;
   position: absolute;
-  top: 1px;
+  top: -3px;
   width: calc(100% + 6px);
   transform: scale(1);
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
