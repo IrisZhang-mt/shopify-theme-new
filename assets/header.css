@@ -568,9 +568,13 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     gap: 0.875rem;
   }
   .mt-header__group-title {
-    font-size: var(--mt-menu-size);
     line-height: 1.5;
     letter-spacing: var(--mt-tracking-body);
+    color: var(--mt-ink);
+    font-family: var(--mt-font-display);
+    font-size: var(--mt-h-xs-size);
+    line-height: var(--mt-h-xs-leading);
+    letter-spacing: var(--mt-tracking-heading);
     color: var(--mt-ink);
   }
   .mt-header__group-links {
