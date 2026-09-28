@@ -448,10 +448,11 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   align-items: center;
   justify-content: space-between;
   padding-block: 1.25rem;
+  font-family: var(--mt-font-display);
   font-size: var(--mt-h-xs-size);
-  line-height: var(--mt-p-leading);
-  letter-spacing: var(--mt-tracking-body);
-  color: var(--mt-ink);
+  line-height: var(--mt-h-xs-leading);
+  letter-spacing: var(--mt-tracking-heading);
+  color: var(--mt-moss);
 }
 .mt-drawer__acc-links {
   display: flex;
