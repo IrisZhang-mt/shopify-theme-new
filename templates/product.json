@@ -56,6 +56,87 @@
         "show_pairs": true
       }
     },
+    "product_image_card_grid_EhkHgX": {
+      "type": "product-image-card-grid",
+      "blocks": {
+        "image_card_WTDc6D": {
+          "type": "image_card",
+          "settings": {
+            "video": "{{ product.metafields.custom.sell_pc_03.value }}",
+            "video_mobile": "{{ product.metafields.custom.sell_mb_03.value }}",
+            "title": "",
+            "text": "{{ product.metafields.custom.sell_point_03 | metafield_tag }}",
+            "link": ""
+          }
+        },
+        "image_card_zAzgYF": {
+          "type": "image_card",
+          "settings": {
+            "video": "{{ product.metafields.custom.sell_pc_02.value }}",
+            "video_mobile": "{{ product.metafields.custom.sell_mb_02.value }}",
+            "title": "",
+            "text": "{{ product.metafields.custom.sell_point_02 | metafield_tag }}",
+            "link": ""
+          }
+        },
+        "image_card_3BCRcN": {
+          "type": "image_card",
+          "settings": {
+            "video": "{{ product.metafields.custom.sell_pc_01.value }}",
+            "video_mobile": "{{ product.metafields.custom.sell_mb_01.value }}",
+            "title": "",
+            "text": "{{ product.metafields.custom.sell_point_01 | metafield_tag }}",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_card_WTDc6D",
+        "image_card_zAzgYF",
+        "image_card_3BCRcN"
+      ],
+      "name": "Image card grid",
+      "settings": {
+        "heading": "Image card grid",
+        "heading_left": true,
+        "description": "",
+        "full_width": true,
+        "card_style": "centered_title_inset",
+        "desktop_image_width": 276,
+        "desktop_image_height": 408,
+        "mobile_image_width": 304,
+        "mobile_image_height": 360,
+        "desktop_side_spacing": 0,
+        "image_side_inset": 40,
+        "column_gap": 0,
+        "image_card_title_size": 16,
+        "title_color": "",
+        "description_color": "",
+        "mobile_title_color": "",
+        "mobile_description_color": "",
+        "content_position": "below_image",
+        "mobile_content_position": "below_image",
+        "content_left_spacing": 20,
+        "content_bottom_spacing": 20,
+        "mobile_content_left_spacing": 20,
+        "mobile_content_bottom_spacing": 20,
+        "hover_reveal": false,
+        "hover_zoom": 106,
+        "desktop_layout": "carousel",
+        "desktop_peek": 70,
+        "side_shrink": 8,
+        "side_height": 100,
+        "show_counter": false,
+        "enable_loop": true,
+        "video_playback": "center",
+        "hover_expand": 180,
+        "mobile_layout": "swipe",
+        "heading_top_spacing": 72,
+        "heading_bottom_spacing": 48,
+        "disable_top_spacing": false,
+        "disable_bottom_spacing": false
+      }
+    },
     "reviews": {
       "type": "product-reviews",
       "settings": {
@@ -141,6 +222,7 @@
   },
   "order": [
     "main",
+    "product_image_card_grid_EhkHgX",
     "reviews",
     "faq",
     "related"
