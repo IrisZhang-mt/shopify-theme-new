@@ -58,8 +58,17 @@
     },
     "reviews": {
       "type": "product-reviews",
+      "disabled": true,
       "settings": {
         "heading": "Customer Reviews"
+      }
+    },
+    "custom_liquid_YjjWjn": {
+      "type": "custom-liquid",
+      "name": "Custom Liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mt-spacer\" aria-hidden=\"true\"></div>\n<style>\n  .mt-spacer{height:40px}\n  @media (min-width:750px){.mt-spacer{height:80px}}\n</style>",
+        "contain": true
       }
     },
     "179056727189c88fc4": {
@@ -160,6 +169,7 @@
   "order": [
     "main",
     "reviews",
+    "custom_liquid_YjjWjn",
     "179056727189c88fc4",
     "faq",
     "related"
