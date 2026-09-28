@@ -97,7 +97,7 @@
       ],
       "name": "Image card grid",
       "settings": {
-        "heading": "Image card grid",
+        "heading": "",
         "heading_left": true,
         "description": "",
         "full_width": true,
