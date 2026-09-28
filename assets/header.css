@@ -437,12 +437,12 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   display: flex;
   flex-direction: column;
 }
-.mt-drawer__acc {
+/* .mt-drawer__acc {
   border-bottom: 1px solid var(--mt-off-white);
 }
 .mt-drawer__acc:first-child {
   border-top: 1px solid var(--mt-off-white);
-}
+} */
 .mt-drawer__acc > summary {
   display: flex;
   align-items: center;
