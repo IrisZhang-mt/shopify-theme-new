@@ -51,43 +51,15 @@
         "returns_text": "<p>Anything not quite right can go back within 30 days of delivery, unworn and with its tags on. Reach out through the contact page and we will sort the rest.</p>",
         "promo_title": "BUY 6+30% off, \nBUY 6+30% off, eachBUY 8+a free",
         "promo_subtitle": "Sale: Automatic discount applied,Lowest price guaranteed",
-        "promo_collections": [],
         "pairs_heading": "Pairs well with",
         "show_pairs": true
       }
     },
     "reviews": {
       "type": "product-reviews",
-      "disabled": true,
       "settings": {
         "heading": "Customer Reviews"
       }
-    },
-    "custom_liquid_YjjWjn": {
-      "type": "custom-liquid",
-      "name": "Custom Liquid",
-      "settings": {
-        "custom_liquid": "<div class=\"mt-spacer\" aria-hidden=\"true\"></div>\n<style>\n  .mt-spacer{height:40px}\n  @media (min-width:750px){.mt-spacer{height:80px}}\n</style>",
-        "contain": true
-      }
-    },
-    "179056727189c88fc4": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_trtm7p": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "real_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_trtm7p"
-      ],
-      "settings": {}
     },
     "faq": {
       "type": "product-faq",
@@ -161,16 +133,13 @@
     "related": {
       "type": "product-related",
       "settings": {
-        "heading": "You May Also Like",
-        "filter_collections": []
+        "heading": "You May Also Like"
       }
     }
   },
   "order": [
     "main",
     "reviews",
-    "custom_liquid_YjjWjn",
-    "179056727189c88fc4",
     "faq",
     "related"
   ]

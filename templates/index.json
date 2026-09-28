@@ -762,16 +762,6 @@
         "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
         "heading": "Contact Us"
       }
-    },
-    "product_related_4jXKfY": {
-      "type": "product-related",
-      "name": "You may also like",
-      "settings": {
-        "heading": "You May Also Like",
-        "filter_collections": [
-          "best-sellers"
-        ]
-      }
     }
   },
   "order": [
@@ -792,7 +782,6 @@
     "page_careers_roles_awehxq",
     "slideshow_gWbURe",
     "product_reviews_CLkN4j",
-    "page_contact_faq_DkTnmA",
-    "product_related_4jXKfY"
+    "page_contact_faq_DkTnmA"
   ]
 }
