@@ -2,6 +2,8 @@
 <script src="{{ 'product-related.js' | asset_url }}" type="module"></script>
 
 {%- assign filter_collections = section.settings.filter_collections -%}
+{%- assign rel_min = 6 -%}
+{%- assign rel_max = 8 -%}
 
 <section
   class="mt-pdp-rel{% unless recommendations.performed %} mt-pdp-rel--pending{% endunless %}"
@@ -16,7 +18,10 @@
     <h2 class="mt-pdp-rel__title" data-reveal>{{ section.settings.heading }}</h2>
     <div class="mt-pdp-rel__stage" data-row-stage>
       <div class="mt-pdp-rel__row" data-autoplay="30" data-wheel-lock>
-        {%- for item in recommendations.products limit: 8 -%}
+        {%- assign rel_seen = '' -%}
+        {%- assign rel_count = 0 -%}
+        {%- for item in recommendations.products -%}
+          {%- if rel_count >= rel_max -%}{%- break -%}{%- endif -%}
           {%- if filter_collections.size > 0 -%}
             {%- assign rel_matched = false -%}
             {%- for fc in filter_collections -%}
@@ -27,8 +32,27 @@
             {%- endfor -%}
             {%- unless rel_matched -%}{%- continue -%}{%- endunless -%}
           {%- endif -%}
-          {% render 'product-card', product: item, quick: true, index: forloop.index0, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
+          {%- assign rel_key = item.id | append: ',' -%}
+          {%- if rel_seen contains rel_key -%}{%- continue -%}{%- endif -%}
+          {%- assign rel_seen = rel_seen | append: rel_key -%}
+          {% render 'product-card', product: item, quick: true, index: rel_count, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
+          {%- assign rel_count = rel_count | plus: 1 -%}
         {%- endfor -%}
+
+        {%- if rel_count < rel_min and filter_collections.size > 0 -%}
+          {%- for fc in filter_collections -%}
+            {%- if rel_count >= rel_max -%}{%- break -%}{%- endif -%}
+            {%- for item in fc.products -%}
+              {%- if rel_count >= rel_max -%}{%- break -%}{%- endif -%}
+              {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+              {%- assign rel_key = item.id | append: ',' -%}
+              {%- if rel_seen contains rel_key -%}{%- continue -%}{%- endif -%}
+              {%- assign rel_seen = rel_seen | append: rel_key -%}
+              {% render 'product-card', product: item, quick: true, index: rel_count, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
+              {%- assign rel_count = rel_count | plus: 1 -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
       <button class="mt-row-nav mt-row-nav--prev" type="button" data-row-arrow="prev" aria-label="{{ 'general.previous' | t }}">
         <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
@@ -38,26 +62,35 @@
       </button>
     </div>
   {%- else -%}
-    {%- assign rel_source = product.collections.first -%}
-    {%- if rel_source -%}
+    {%- if filter_collections.size > 0 -%}
       <div data-rel-fallback hidden>
-        {%- assign rel_i = 0 -%}
-        {%- for item in rel_source.products limit: 13 -%}
-          {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
-          {%- if filter_collections.size > 0 -%}
-            {%- assign rel_matched = false -%}
-            {%- for fc in filter_collections -%}
-              {%- if item.collections contains fc -%}
-                {%- assign rel_matched = true -%}
-                {%- break -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- unless rel_matched -%}{%- continue -%}{%- endunless -%}
-          {%- endif -%}
-          {% render 'product-card', product: item, quick: true, index: rel_i, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
-          {%- assign rel_i = rel_i | plus: 1 -%}
+        {%- assign rel_seen = '' -%}
+        {%- assign rel_count = 0 -%}
+        {%- for fc in filter_collections -%}
+          {%- if rel_count >= 13 -%}{%- break -%}{%- endif -%}
+          {%- for item in fc.products -%}
+            {%- if rel_count >= 13 -%}{%- break -%}{%- endif -%}
+            {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+            {%- assign rel_key = item.id | append: ',' -%}
+            {%- if rel_seen contains rel_key -%}{%- continue -%}{%- endif -%}
+            {%- assign rel_seen = rel_seen | append: rel_key -%}
+            {% render 'product-card', product: item, quick: true, index: rel_count, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
+            {%- assign rel_count = rel_count | plus: 1 -%}
+          {%- endfor -%}
         {%- endfor -%}
       </div>
+    {%- else -%}
+      {%- assign rel_source = product.collections.first -%}
+      {%- if rel_source -%}
+        <div data-rel-fallback hidden>
+          {%- assign rel_i = 0 -%}
+          {%- for item in rel_source.products limit: 13 -%}
+            {%- if item.id == product.id -%}{%- continue -%}{%- endif -%}
+            {% render 'product-card', product: item, quick: true, index: rel_i, sizes: '(min-width: 750px) 335px, 258px', item_list_id: 'you_may_also_like', item_list_name: section.settings.heading %}
+            {%- assign rel_i = rel_i | plus: 1 -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     {%- endif -%}
   {%- endif -%}
 </section>
