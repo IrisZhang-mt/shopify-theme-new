@@ -121,7 +121,7 @@
         "mobile_content_left_spacing": 20,
         "mobile_content_bottom_spacing": 20,
         "hover_reveal": true,
-        "hover_zoom": 101,
+        "hover_zoom": 100,
         "desktop_layout": "carousel",
         "desktop_peek": 70,
         "side_shrink": 8,
