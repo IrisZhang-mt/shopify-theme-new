@@ -25,6 +25,20 @@
   >
     <a class="mt-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
     <div class="mt-card__media">
+      {%- liquid
+        assign badge_1 = product.metafields.custom.product_badges
+        assign badge_2 = product.metafields.custom.product_badges2
+      -%}
+      {%- if badge_1 != blank or badge_2 != blank -%}
+        <div class="mt-card__badges">
+          {%- if badge_1 != blank -%}
+            <span class="mt-card__badge">{{ badge_1.value }}</span>
+          {%- endif -%}
+          {%- if badge_2 != blank -%}
+            <span class="mt-card__badge">{{ badge_2.value }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
       {%- if product.featured_image -%}
         {%- assign image_alt = product.featured_image.alt | default: product.title | escape -%}
         {%- if eager -%}

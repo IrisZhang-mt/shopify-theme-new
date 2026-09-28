@@ -416,13 +416,13 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 .mt-drawer__sub {
   display: flex;
   flex-direction: column;
-  gap: 1.5625rem;
   padding: 1.5625rem var(--mt-header-pad) 1.5625rem;
 }
 
 .mt-drawer__featured {
   display: flex;
   flex-direction: column;
+  gap: 1.5625rem;
 }
 .mt-drawer__featured a {
   font-family: var(--mt-font-display);
@@ -455,7 +455,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 .mt-drawer__acc-links {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 1.5625rem;
   padding-bottom: 1.25rem;
 }
 .mt-drawer__acc-links a {
@@ -474,7 +474,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 
   .mt-header__bar {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto 1fr auto;
     column-gap: var(--mt-header-gap);
     align-items: center;
   }
@@ -580,6 +580,12 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     line-height: 1.5;
     letter-spacing: var(--mt-tracking-body);
     color: var(--mt-moss);
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .mt-header__bar {
+    grid-template-columns: 1fr auto 1fr;
   }
 }
 
