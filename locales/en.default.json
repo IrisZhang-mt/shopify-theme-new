@@ -40,7 +40,7 @@
     "checkout": "Checkout",
     "remove": "Remove",
     "add_product": "Add {{ title }} to cart",
-    "free_shipping_remaining": "Spend {{ amount }} more for free shipping",
+    "free_shipping_remaining_html": "Spend <span data-cart-shipping-amount>{{ amount }}</span> more for free shipping",
     "free_shipping_unlocked": "FREE shipping unlocked !",
     "tier_progress_remaining": "Add {{ count }} more, save {{ reward }}!",
     "tier_progress_complete": "You've unlocked the best reward!"
