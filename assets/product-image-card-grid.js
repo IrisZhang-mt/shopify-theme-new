@@ -592,21 +592,39 @@
   // scaling on the item, so sizing the video from those (plus a small
   // integer overshoot the figure's overflow:hidden clips away) keeps the
   // video's own box on a device pixel boundary regardless of width.
+  const snapFigure = (figure) => {
+    const width = figure.offsetWidth;
+    const height = figure.offsetHeight;
+
+    if (!width || !height) {
+      return;
+    }
+
+    figure.querySelectorAll('video').forEach((video) => {
+      video.style.width = (width + 2) + 'px';
+      video.style.height = (height + 2) + 'px';
+      video.style.left = '-1px';
+      video.style.top = '-1px';
+    });
+  };
+
   const snapVideoBoxes = (section = document) => {
     section.querySelectorAll('.product-image-card-grid__image').forEach((figure) => {
-      const width = figure.offsetWidth;
-      const height = figure.offsetHeight;
+      snapFigure(figure);
 
-      if (!width || !height) {
-        return;
+      // Off-centre cards in the hover-reveal carousel get a shorter figure
+      // (--image-card-side-height) that transitions in over padding-bottom
+      // when a card gains or loses the centre spot. Re-snap once that
+      // transition lands, or the video stays sized for the height the
+      // figure had before — a hairline gap at whichever edge undershoots.
+      if (!figure.dataset.snapBound) {
+        figure.dataset.snapBound = 'true';
+        figure.addEventListener('transitionend', (event) => {
+          if (event.target === figure && event.propertyName === 'padding-bottom') {
+            snapFigure(figure);
+          }
+        });
       }
-
-      figure.querySelectorAll('video').forEach((video) => {
-        video.style.width = (width + 2) + 'px';
-        video.style.height = (height + 2) + 'px';
-        video.style.left = '-1px';
-        video.style.top = '-1px';
-      });
     });
   };
 
