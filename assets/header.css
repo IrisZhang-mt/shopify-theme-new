@@ -553,6 +553,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     line-height: var(--mt-h-xs-leading);
     letter-spacing: var(--mt-tracking-heading);
     color: var(--mt-ink);
+    padding-block: 1.25rem;
   }
 
   .mt-header__groups {
