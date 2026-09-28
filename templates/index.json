@@ -768,7 +768,9 @@
       "name": "You may also like",
       "settings": {
         "heading": "You May Also Like",
-        "filter_collections": []
+        "filter_collections": [
+          "best-sellers"
+        ]
       }
     }
   },
