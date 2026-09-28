@@ -24,6 +24,31 @@ if (!window.mtRevInit) {
     return holder.content.textContent.trim();
   };
 
+  const parseReviews = (html) => {
+    const holder = document.createElement('template');
+    holder.innerHTML = html || '';
+    return [...holder.content.querySelectorAll('.jdgm-rev')].map((el) => {
+      const rating = el.querySelector('.jdgm-rev__rating');
+      const author = el.querySelector('.jdgm-rev__author');
+      const title = el.querySelector('.jdgm-rev__title');
+      const body = el.querySelector('.jdgm-rev__body');
+      const pictures_urls = [...el.querySelectorAll('.jdgm-rev__pic-img')].map((img) => {
+        const link = img.closest('.jdgm-rev__pic-link');
+        return {
+          compact: img.getAttribute('data-src') || '',
+          original: (link && link.getAttribute('href')) || '',
+        };
+      });
+      return {
+        rating: Number(rating && rating.dataset.score) || 0,
+        reviewer_name: (author && author.textContent.trim()) || '',
+        title: (title && title.textContent.trim()) || '',
+        body_html: (body && body.innerHTML) || '',
+        pictures_urls,
+      };
+    });
+  };
+
   const card = (review, ratingLabel) => {
     const item = node('article', 'mt-rev__item');
     item.setAttribute('data-rev-item', '');
@@ -147,7 +172,7 @@ if (!window.mtRevInit) {
       if (token !== state.token || !list.isConnected) return;
       state.loading = false;
 
-      const reviews = data.reviews || [];
+      const reviews = parseReviews(data.html);
 
       const settledTimes = [];
       state.pending = state.pending.filter((waiting) => {
@@ -158,7 +183,8 @@ if (!window.mtRevInit) {
       if (settledTimes.length) window.mtReviewStore.drop(settledTimes);
 
       paint(reviews, replace);
-      if (more) more.hidden = state.page >= (data.pagination ? data.pagination.total_pages : 0);
+      const totalPages = Math.ceil((data.total_count || 0) / state.perPage);
+      if (more) more.hidden = state.page >= totalPages;
       list.classList.remove('mt-rev__list--swap');
     };
 
