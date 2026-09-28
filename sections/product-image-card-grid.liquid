@@ -97,7 +97,7 @@
       <div class="product-image-card-grid__items" data-wheel-lock>
         {%- for block in section.blocks -%}
           <div class="product-image-card-grid__item" {{ block.shopify_attributes }}>
-            <div name= "iris" class="product-image-card-grid__image-wrap">
+            <div class="product-image-card-grid__image-wrap">
               {%- liquid
                 assign video_desktop = block.settings.video
                 assign video_mobile = block.settings.video_mobile
@@ -216,7 +216,6 @@
         </div>
       {%- endif -%}
   </div>
-</div>
 </div>
 
 {% schema %}
