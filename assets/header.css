@@ -448,7 +448,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   align-items: center;
   justify-content: space-between;
   padding-block: 1.25rem;
-  font-size: var(--mt-p-m-size);
+  font-size: var(--mt-h-xs-size);
   line-height: var(--mt-p-leading);
   letter-spacing: var(--mt-tracking-body);
   color: var(--mt-ink);
