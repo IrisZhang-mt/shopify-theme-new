@@ -232,6 +232,21 @@
   line-height: var(--mt-p-leading);
   color: var(--mt-moss);
 }
+.mt-cart__discounts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mt-cart__discount {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--mt-p-s-size);
+  color: var(--mt-accent);
+}
 .mt-cart__qty {
   display: flex;
   align-items: center;

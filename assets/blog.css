@@ -229,7 +229,6 @@
 
 .mt-blog__name {
   margin: 0.9375rem 0 0;
-  max-width: 21.125rem;
   font-size: 1rem;
   line-height: var(--mt-p-leading);
   color: var(--mt-ink);
@@ -301,9 +300,6 @@
   }
   .mt-blog__extra {
     display: flex;
-  }
-  .mt-blog__name {
-    max-width: 18.75rem;
   }
   .mt-blog__empty {
     padding: 0 1.25rem 12.5rem;
