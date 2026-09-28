@@ -397,7 +397,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
   letter-spacing: var(--mt-tracking-heading);
-  color: var(--mt-ink);
+  color: var(--mt-moss);
 }
 
 .mt-drawer .tl-switcher-container {
