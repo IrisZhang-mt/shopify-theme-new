@@ -49,7 +49,8 @@
   width: 100%;
 }
 
-.product-image-card-grid--centered_title_inset .product-image-card-grid__image-wrap {
+.product-image-card-grid--centered_title_inset
+  .product-image-card-grid__image-wrap {
   padding-left: var(--image-card-inset);
   padding-right: var(--image-card-inset);
 }
@@ -85,7 +86,8 @@
   padding: 24px 40px 0;
 }
 
-.product-image-card-grid--centered_title_inset .product-image-card-grid__content {
+.product-image-card-grid--centered_title_inset
+  .product-image-card-grid__content {
   padding-top: 16px;
   padding-left: var(--image-card-inset);
   padding-right: var(--image-card-inset);
@@ -106,7 +108,9 @@
   margin: 0;
 }
 
-.product-image-card-grid--centered_title_inset .product-image-card-grid__content h3 {
+.product-image-card-grid--centered_title_inset
+  .product-image-card-grid__content
+  h3 {
   font-size: var(--image-card-title-size, 16px);
   font-weight: 600;
   line-height: calc(var(--image-card-title-size, 16px) * 1.4);
@@ -120,8 +124,13 @@
   line-height: 36.4px;
 }
 
-.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte,
-.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+.product-image-card-grid--left_text_full
+  .product-image-card-grid__content
+  .mt-rte,
+.product-image-card-grid--left_text_full
+  .product-image-card-grid__content
+  .mt-rte
+  p {
   color: #312e2e;
 }
 
@@ -155,7 +164,8 @@
 
 @media only screen and (min-width: 768px) {
   .section-product-image-card-grid .section-header {
-    padding: var(--image-card-heading-top-spacing) 40px var(--image-card-heading-bottom-spacing, 48px);
+    padding: var(--image-card-heading-top-spacing) 40px
+      var(--image-card-heading-bottom-spacing, 48px);
   }
 
   .section-product-image-card-grid .section-header h2 {
@@ -176,22 +186,33 @@
     color: var(--image-card-desktop-title-color, inherit);
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content h3 {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    h3 {
     color: var(--image-card-desktop-title-color, #140f0f);
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-desktop-description-color, #312e2e);
   }
 
-  .product-image-card-grid--desktop-content-image_bottom_left .product-image-card-grid__item {
+  .product-image-card-grid--desktop-content-image_bottom_left
+    .product-image-card-grid__item {
     overflow: hidden;
   }
 
-  .product-image-card-grid--desktop-content-image_bottom_left .product-image-card-grid__content,
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--centered_title_inset .product-image-card-grid__content,
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content {
+  .product-image-card-grid--desktop-content-image_bottom_left
+    .product-image-card-grid__content,
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--centered_title_inset
+    .product-image-card-grid__content,
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content {
     bottom: var(--image-card-desktop-content-bottom, 20px);
     color: #ffffff;
     left: var(--image-card-desktop-content-left, 20px);
@@ -202,20 +223,39 @@
     z-index: 2;
   }
 
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--centered_title_inset .product-image-card-grid__content {
-    left: calc(var(--image-card-inset) + var(--image-card-desktop-content-left, 20px));
-    right: calc(var(--image-card-inset) + var(--image-card-desktop-content-left, 20px));
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--centered_title_inset
+    .product-image-card-grid__content {
+    left: calc(
+      var(--image-card-inset) + var(--image-card-desktop-content-left, 20px)
+    );
+    right: calc(
+      var(--image-card-inset) + var(--image-card-desktop-content-left, 20px)
+    );
   }
 
-  .product-image-card-grid--desktop-content-image_bottom_left .product-image-card-grid__content h3,
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content h3 {
+  .product-image-card-grid--desktop-content-image_bottom_left
+    .product-image-card-grid__content
+    h3,
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    h3 {
     color: var(--image-card-desktop-title-color, #ffffff);
   }
 
-  .product-image-card-grid--desktop-content-image_bottom_left .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--desktop-content-image_bottom_left .product-image-card-grid__content .mt-rte p,
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--desktop-content-image_bottom_left
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--desktop-content-image_bottom_left
+    .product-image-card-grid__content
+    .mt-rte
+    p,
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--desktop-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-desktop-description-color, #ffffff);
   }
 }
@@ -248,7 +288,10 @@
     display: grid;
     /* C 静明边距去掉GDF */
     /* gap: max(var(--image-card-gap), 20px); */
-    grid-auto-columns: min(var(--image-card-mobile-width, 304px), calc(100vw - 40px));
+    grid-auto-columns: min(
+      var(--image-card-mobile-width, 304px),
+      calc(100vw - 40px)
+    );
     grid-auto-flow: column;
     grid-template-columns: none;
     box-sizing: border-box;
@@ -262,7 +305,8 @@
     width: 100%;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__items::-webkit-scrollbar {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__items::-webkit-scrollbar {
     display: none;
   }
 
@@ -280,7 +324,9 @@
     padding-right: 12px;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav {
     align-items: center;
     background: #fff;
     border: 1px solid #140f0f;
@@ -298,34 +344,64 @@
     --color-accent: #140f0f;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav svg {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav
+    svg {
     height: 16px;
     width: 16px;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav svg path {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav
+    svg
+    path {
     stroke: #140f0f;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav.is-disabled,
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav[aria-disabled="true"],
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav:disabled {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav.is-disabled,
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav[aria-disabled="true"],
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav:disabled {
     border-color: #686767;
     cursor: default;
     --color-accent: #686767;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav:disabled {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav:disabled {
     pointer-events: none;
   }
 
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav.is-disabled svg path,
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav[aria-disabled="true"] svg path,
-  .product-image-card-grid--mobile-swipe .product-image-card-grid__nav .flickity-nav:disabled svg path {
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav.is-disabled
+    svg
+    path,
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav[aria-disabled="true"]
+    svg
+    path,
+  .product-image-card-grid--mobile-swipe
+    .product-image-card-grid__nav
+    .flickity-nav:disabled
+    svg
+    path {
     stroke: #686767;
   }
 
-  .section-product-image-card-grid + .section-product-image-card-grid .product-image-card-grid--left_text_full .section-header {
+  .section-product-image-card-grid
+    + .section-product-image-card-grid
+    .product-image-card-grid--left_text_full
+    .section-header {
     padding-top: 48px;
   }
 
@@ -340,17 +416,20 @@
     width: 100%;
   }
 
-  .product-image-card-grid--left_text_full.product-image-card-grid--mobile-stack .product-image-card-grid__items {
+  .product-image-card-grid--left_text_full.product-image-card-grid--mobile-stack
+    .product-image-card-grid__items {
     gap: 20px;
   }
 
-  .product-image-card-grid--centered_title_inset .product-image-card-grid__image-wrap {
+  .product-image-card-grid--centered_title_inset
+    .product-image-card-grid__image-wrap {
     padding-left: 0;
     padding-right: 0;
   }
 
   .product-image-card-grid__content,
-  .product-image-card-grid--centered_title_inset .product-image-card-grid__content,
+  .product-image-card-grid--centered_title_inset
+    .product-image-card-grid__content,
   .product-image-card-grid--left_text_full .product-image-card-grid__content {
     padding: 20px 0 0;
   }
@@ -359,22 +438,33 @@
     color: var(--image-card-mobile-title-color, inherit);
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content h3 {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    h3 {
     color: var(--image-card-mobile-title-color, #140f0f);
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-mobile-description-color, #312e2e);
   }
 
-  .product-image-card-grid--mobile-content-image_bottom_left .product-image-card-grid__item {
+  .product-image-card-grid--mobile-content-image_bottom_left
+    .product-image-card-grid__item {
     overflow: hidden;
   }
 
-  .product-image-card-grid--mobile-content-image_bottom_left .product-image-card-grid__content,
-  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--centered_title_inset .product-image-card-grid__content,
-  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content {
+  .product-image-card-grid--mobile-content-image_bottom_left
+    .product-image-card-grid__content,
+  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--centered_title_inset
+    .product-image-card-grid__content,
+  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content {
     bottom: var(--image-card-mobile-content-bottom, 20px);
     color: #ffffff;
     left: var(--image-card-mobile-content-left, 20px);
@@ -385,15 +475,29 @@
     z-index: 2;
   }
 
-  .product-image-card-grid--mobile-content-image_bottom_left .product-image-card-grid__content h3,
-  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content h3 {
+  .product-image-card-grid--mobile-content-image_bottom_left
+    .product-image-card-grid__content
+    h3,
+  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    h3 {
     color: var(--image-card-mobile-title-color, #ffffff);
   }
 
-  .product-image-card-grid--mobile-content-image_bottom_left .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--mobile-content-image_bottom_left .product-image-card-grid__content .mt-rte p,
-  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--mobile-content-image_bottom_left
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--mobile-content-image_bottom_left
+    .product-image-card-grid__content
+    .mt-rte
+    p,
+  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--mobile-content-image_bottom_left.product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-mobile-description-color, #ffffff);
   }
 
@@ -406,21 +510,30 @@
     line-height: 32px;
   }
 
-  .product-image-card-grid--centered_title_inset .product-image-card-grid__content h3 {
+  .product-image-card-grid--centered_title_inset
+    .product-image-card-grid__content
+    h3 {
     font-size: var(--image-card-title-size, 16px);
     line-height: calc(var(--image-card-title-size, 16px) * 1.4);
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content h3 {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    h3 {
     font-size: 20px;
     line-height: 26.54px;
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte {
     margin-top: 11.67px;
   }
 
-  .product-image-card-grid--left_text_full .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--left_text_full
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     font-size: 14px;
     line-height: 16.33px;
   }
@@ -439,20 +552,33 @@
 /* ==== Hover reveal (VIVAIA style): stronger zoom + description slides/fades in on hover ==== */
 @media (hover: hover) {
   /* Stronger, operator-controlled zoom (overrides the base 1.045) */
-  .product-image-card-grid--hover-reveal .product-image-card-grid__item:hover .product-image-card-grid__image img,
-  .product-image-card-grid--hover-reveal .product-image-card-grid__item:hover .product-image-card-grid__image video {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__item:hover
+    .product-image-card-grid__image
+    img,
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__item:hover
+    .product-image-card-grid__image
+    video {
     transform: scale(var(--image-card-hover-scale, 1.06));
   }
 
   /* Accordion only: description hidden until hover (the carousel keeps it visible) */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__content .mt-rte {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__content
+    .mt-rte {
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__item:hover .product-image-card-grid__content .mt-rte {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__item:hover
+    .product-image-card-grid__content
+    .mt-rte {
     opacity: 1;
     transform: translateY(0);
   }
@@ -460,12 +586,14 @@
 
 /* Desktop accordion: hovered card widens, siblings narrow; fixed height keeps the row level */
 @media only screen and (min-width: 768px) and (hover: hover) {
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__items {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__items {
     display: flex;
     align-items: stretch;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__item {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__item {
     flex: 1 1 0;
     min-width: 0;
     overflow: hidden;
@@ -473,27 +601,38 @@
   }
 
   /* Fixed height so expanding a card changes only its width, not its height */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__image {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__image {
     height: var(--image-card-desktop-height, 408px);
     padding-bottom: 0;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__items:hover .product-image-card-grid__item:hover {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__items:hover
+    .product-image-card-grid__item:hover {
     flex-grow: var(--image-card-hover-grow, 1.8);
   }
 }
 
 /* While the carousel moves, cards slide under a stationary cursor and would
    otherwise strobe through the hover zoom. Freeze it until scrolling settles. */
-.product-image-card-grid--hover-reveal.is-scrolling .product-image-card-grid__item:hover .product-image-card-grid__image img,
-.product-image-card-grid--hover-reveal.is-scrolling .product-image-card-grid__item:hover .product-image-card-grid__image video {
+.product-image-card-grid--hover-reveal.is-scrolling
+  .product-image-card-grid__item:hover
+  .product-image-card-grid__image
+  img,
+.product-image-card-grid--hover-reveal.is-scrolling
+  .product-image-card-grid__item:hover
+  .product-image-card-grid__image
+  video {
   transform: scale(1);
   transition: none;
 }
 
 /* Nav arrows: bare chevrons — no circle, border, background or shadow.
    Doubled class beats the theme's own .flickity-nav button styling. */
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav {
   align-items: center;
   background: transparent;
   border: 0;
@@ -512,27 +651,49 @@
   --color-accent: #140f0f;
 }
 
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav svg {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav
+  svg {
   height: 14px;
   width: 9px;
 }
 
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav svg path {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav
+  svg
+  path {
   stroke: #140f0f;
 }
 
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav:hover svg {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav:hover
+  svg {
   transform: none;
 }
 
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav.is-disabled,
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav[aria-disabled='true'] {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav.is-disabled,
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav[aria-disabled="true"] {
   border: 0;
   cursor: default;
 }
 
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav.is-disabled svg path,
-.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav[aria-disabled='true'] svg path {
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav.is-disabled
+  svg
+  path,
+.product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+  .product-image-card-grid__nav
+  .flickity-nav[aria-disabled="true"]
+  svg
+  path {
   stroke: #686767;
 }
 
@@ -561,11 +722,11 @@
    costs nothing visually — there is no reason to cut this close. */
 .product-image-card-grid__image video {
   height: calc(100% + 6px);
-  left: -3px;
+  left: 1px;
   max-width: none;
   object-fit: cover;
   position: absolute;
-  top: -3px;
+  top: 1px;
   width: calc(100% + 6px);
   transform: scale(1);
   transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -591,7 +752,10 @@
   text-transform: none;
 }
 
-.product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte p {
+.product-image-card-grid--hover-reveal
+  .product-image-card-grid__content
+  .mt-rte
+  p {
   font-size: 14px;
   line-height: 20px;
   margin: 0;
@@ -599,12 +763,14 @@
 
 @media only screen and (min-width: 768px) {
   /* Loop clones only exist for carousels; the accordion always shows the real set */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__item[data-clone] {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__item[data-clone] {
     display: none;
   }
 
   /* Accordion: content sits inside the image, bottom-left (VIVAIA) */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion .product-image-card-grid__content {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-accordion
+    .product-image-card-grid__content {
     position: absolute;
     left: 24px;
     right: 24px;
@@ -616,7 +782,8 @@
   }
 
   /* Carousel: centre-peek track — middle card largest, neighbours peek either side */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__items {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__items {
     display: grid;
     grid-auto-flow: column;
     /* 100% of the content box, which the side padding below has already reduced to
@@ -629,34 +796,46 @@
     padding-left: calc((100% - var(--image-card-desktop-peek, 70%)) / 2);
     padding-right: calc((100% - var(--image-card-desktop-peek, 70%)) / 2);
     scroll-padding-left: calc((100% - var(--image-card-desktop-peek, 70%)) / 2);
-    scroll-padding-right: calc((100% - var(--image-card-desktop-peek, 70%)) / 2);
+    scroll-padding-right: calc(
+      (100% - var(--image-card-desktop-peek, 70%)) / 2
+    );
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__items::-webkit-scrollbar {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__items::-webkit-scrollbar {
     display: none;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__item {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__item {
     scroll-snap-align: center;
     transform-origin: center center;
   }
 
   /* Off-centre cards can be shorter than the centre one. This changes the media
      box height only, so object-fit crops the image instead of squashing it. */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__image {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__image {
     transition: padding-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__item:not(.is-centre) .product-image-card-grid__image {
-    padding-bottom: calc(var(--image-card-desktop-ratio) * var(--image-card-side-height, 1));
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__item:not(.is-centre)
+    .product-image-card-grid__image {
+    padding-bottom: calc(
+      var(--image-card-desktop-ratio) * var(--image-card-side-height, 1)
+    );
   }
 
   /* Caption below the image, centered — the default for every hover-reveal layout
      except the accordion (which overlays it). Written with :not() so a card never
      ends up with its text sitting invisibly on top of a photo or video. */
-  .product-image-card-grid--hover-reveal:not(.product-image-card-grid--desktop-accordion) .product-image-card-grid__content {
+  .product-image-card-grid--hover-reveal:not(
+      .product-image-card-grid--desktop-accordion
+    )
+    .product-image-card-grid__content {
     position: static;
     padding: 20px 12px 0;
     margin: 0;
@@ -668,18 +847,31 @@
   /* Text below the image always sits on the page background, so it is fixed dark
      rather than following the title/description colour settings — those exist for
      the accordion, where the text is overlaid on the photo. */
-  .product-image-card-grid--hover-reveal:not(.product-image-card-grid--desktop-accordion) .product-image-card-grid__content h3 {
+  .product-image-card-grid--hover-reveal:not(
+      .product-image-card-grid--desktop-accordion
+    )
+    .product-image-card-grid__content
+    h3 {
     color: #140f0f;
   }
 
-  .product-image-card-grid--hover-reveal:not(.product-image-card-grid--desktop-accordion) .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--hover-reveal:not(.product-image-card-grid--desktop-accordion) .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--hover-reveal:not(
+      .product-image-card-grid--desktop-accordion
+    )
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--hover-reveal:not(
+      .product-image-card-grid--desktop-accordion
+    )
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: #312e2e;
   }
 
-
   /* Carousel nav stays below the track, centered (the base rule hides nav on desktop) */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__nav {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__nav {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -688,7 +880,8 @@
     padding-right: 0;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel .product-image-card-grid__count {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--desktop-carousel
+    .product-image-card-grid__count {
     color: #140f0f;
     font-size: 14px;
     letter-spacing: 0.06em;
@@ -702,12 +895,19 @@
     color: var(--image-card-desktop-title-color, #140f0f);
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte {
     margin-top: 8px;
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-desktop-description-color, #312e2e);
   }
 
@@ -719,7 +919,10 @@
 
 @media only screen and (max-width: 767px) {
   /* Loop clones belong to the swipe carousel only — never show them in a stack */
-  .product-image-card-grid--hover-reveal:not(.product-image-card-grid--mobile-swipe) .product-image-card-grid__item[data-clone] {
+  .product-image-card-grid--hover-reveal:not(
+      .product-image-card-grid--mobile-swipe
+    )
+    .product-image-card-grid__item[data-clone] {
     display: none;
   }
 
@@ -738,35 +941,49 @@
 
   /* Same on mobile: caption is below the image, so keep it dark regardless of
      the colour settings left over from the overlaid design. */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__content h3 {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    h3 {
     color: #140f0f;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--hover-reveal.product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: #312e2e;
   }
-
 
   .product-image-card-grid--hover-reveal .product-image-card-grid__content h3 {
     color: var(--image-card-mobile-title-color, #140f0f);
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte {
     opacity: 1;
     transform: none;
     margin-top: 8px;
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte,
-  .product-image-card-grid--hover-reveal .product-image-card-grid__content .mt-rte p {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte,
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__content
+    .mt-rte
+    p {
     color: var(--image-card-mobile-description-color, #312e2e);
   }
 
   /* Center-peek carousel: the card at the middle is largest, neighbors shrink & peek in.
      Card widths are set here; the live scaling is applied by JS on scroll. */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe .product-image-card-grid__items {
-    grid-auto-columns: 100%;  /* padding below already reserves the 10% peeks */
+  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe
+    .product-image-card-grid__items {
+    grid-auto-columns: 100%; /* padding below already reserves the 10% peeks */
     gap: 12px;
     padding-left: 10%;
     padding-right: 10%;
@@ -774,19 +991,25 @@
     scroll-padding-right: 10%;
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe .product-image-card-grid__item {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe
+    .product-image-card-grid__item {
     scroll-snap-align: center;
     transform-origin: center center;
   }
 
   /* Off-centre cards can be shorter than the centre one (media box only, so the
      image is cropped rather than squashed). */
-  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe .product-image-card-grid__image {
+  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe
+    .product-image-card-grid__image {
     transition: padding-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe .product-image-card-grid__item:not(.is-centre) .product-image-card-grid__image {
-    padding-bottom: calc(var(--image-card-mobile-ratio) * var(--image-card-side-height, 1));
+  .product-image-card-grid--hover-reveal.product-image-card-grid--mobile-swipe
+    .product-image-card-grid__item:not(.is-centre)
+    .product-image-card-grid__image {
+    padding-bottom: calc(
+      var(--image-card-mobile-ratio) * var(--image-card-side-height, 1)
+    );
   }
 
   /* Nav below the images: centered, smaller, with a "current / total" counter */
@@ -804,12 +1027,17 @@
     padding-bottom: 32px;
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__nav
+    .flickity-nav {
     width: 32px;
     height: 32px;
   }
 
-  .product-image-card-grid--hover-reveal .product-image-card-grid__nav .flickity-nav svg {
+  .product-image-card-grid--hover-reveal
+    .product-image-card-grid__nav
+    .flickity-nav
+    svg {
     width: 13px;
     height: 13px;
   }
