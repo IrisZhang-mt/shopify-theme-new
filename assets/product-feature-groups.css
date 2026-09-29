@@ -1,0 +1,95 @@
+.mt-feature-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 3.75rem;
+  margin: 0 1.125rem;
+  padding: 3.75rem 0;
+}
+
+.mt-feature-groups__group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "image1 image2"
+    "points1 points2";
+  gap: 0.71125rem;
+}
+
+.mt-feature-groups__heading {
+  display: none;
+}
+
+.mt-feature-groups__points--1 {
+  grid-area: points1;
+}
+.mt-feature-groups__points--2 {
+  grid-area: points2;
+}
+.mt-feature-groups__image--1 {
+  grid-area: image1;
+}
+.mt-feature-groups__image--2 {
+  grid-area: image2;
+}
+
+.mt-feature-groups__image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 436 / 527;
+  object-fit: cover;
+}
+
+.mt-feature-groups__point-title {
+  margin: 0;
+  padding: 0.5625rem 0 0.3125rem;
+  font-size: 0.75rem;
+  color: #000;
+}
+.mt-feature-groups__point-subtitle {
+  margin: 0;
+  font-size: 0.5rem;
+  color: #000;
+}
+
+@media screen and (min-width: 750px) {
+  .mt-feature-groups {
+    max-width: var(--mt-container);
+    margin: 0 auto;
+  }
+
+  .mt-feature-groups__group {
+    grid-template-columns: 255 : 218 : 218;
+    grid-template-areas:
+      "heading image1 image2"
+      "points1 image1 image2"
+      "points2 image1 image2";
+    align-items: start;
+    gap: 1.8125rem;
+  }
+
+  .mt-feature-groups__heading {
+    display: block;
+    grid-area: heading;
+    padding-left: 3.375rem;
+    margin: 0 0 1.75rem;
+    font-family: var(--mt-font-display);
+    font-size: 2.8125rem;
+    line-height: 1.1;
+    letter-spacing: var(--mt-tracking-heading);
+    color: var(--mt-ink);
+  }
+
+  .mt-feature-groups__points--1,
+  .mt-feature-groups__points--2 {
+    padding-left: 3.375rem;
+  }
+
+  .mt-feature-groups__point-title {
+    padding: 0;
+    margin: 0 0 0.8125rem;
+    font-size: 1.5rem;
+  }
+  .mt-feature-groups__point-subtitle {
+    font-size: 0.875rem;
+  }
+}
