@@ -5,6 +5,8 @@
 -%}
 
 {%- if groups != blank -%}
+  {%- comment -%} TEMP DEBUG — remove before commit {%- endcomment -%}
+  <script type="application/json" id="mt-feature-groups-debug">{{ groups | json }}</script>
   <section class="mt-feature-groups">
     {%- for group in groups -%}
       {%- liquid
