@@ -45,7 +45,7 @@
       data-banner-name="{{ banner_name }}"
       {{ block.shopify_attributes }}
     >
-      <div class="mt-slideshow__media" data-mt-parallax>
+      <div class="mt-slideshow__media">
         {%- if video != blank -%}
           {%- if mobile_video != blank and mobile_video != video -%}
             {{ video | video_tag: class: 'mt-slideshow__video mt-slideshow__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
