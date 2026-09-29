@@ -99,6 +99,7 @@ if (!window.mtVideoGridInit) {
         return;
       }
       track.style.transition = 'none';
+      applyActive(position);
       center(stage, track, slides[position]);
       void track.offsetWidth; // flush the jump before re-enabling the transition
       track.style.transition = '';
