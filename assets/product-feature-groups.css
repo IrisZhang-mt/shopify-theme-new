@@ -53,11 +53,12 @@
 
 @media screen and (min-width: 750px) {
   .mt-feature-groups {
+    max-width: var(--mt-container);
     margin: 0 auto;
   }
 
   .mt-feature-groups__group {
-    grid-template-columns: 255fr 218fr 218fr;
+    grid-template-columns: 31.875rem 27.25rem 27.25rem;
     grid-template-areas:
       "heading image1 image2"
       "points1 image1 image2"
