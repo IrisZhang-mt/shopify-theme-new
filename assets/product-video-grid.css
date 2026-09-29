@@ -32,16 +32,10 @@
   overflow: hidden;
 }
 .mt-video-grid__video {
-  /* .mt-video-grid__media's height comes from aspect-ratio on a
-     percentage-based (flex-basis) width, so its pixel size is rounded
-     through two compounding layers. A fixed 1px overscan isn't reliably
-     bigger than that rounding error at wide viewports, so scale the video
-     up proportionally instead — .media's overflow: hidden clips the rest. */
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  transform: scale(1.02);
   object-fit: cover;
 }
 .mt-video-grid__video--pc {

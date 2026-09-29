@@ -31,7 +31,11 @@ if (!window.mtVideoGridInit) {
     const matrix = new DOMMatrixReadOnly(window.getComputedStyle(track).transform);
     const currentX = matrix.m41;
     const delta = (stageRect.left + stageRect.width / 2) - (slideRect.left + slideRect.width / 2);
-    track.style.transform = `translateX(${currentX + delta}px)`;
+    // Round to a whole pixel: a fractional translateX on this track leaves
+    // the <video> elements inside it off the pixel grid, which Chromium
+    // renders as a hairline seam along their composited edge (only visible
+    // live, never in a screenshot, since it's a compositor artifact).
+    track.style.transform = `translateX(${Math.round(currentX + delta)}px)`;
   };
 
   const setup = (root) => {
