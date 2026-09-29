@@ -58,7 +58,7 @@
 @media screen and (min-width: 750px) {
   .mt-feature-groups {
     gap: 1.81rem;
-    margin: 0 auto;
+    margin-top: 4.3rem;
   }
 
   .mt-feature-groups__group {
