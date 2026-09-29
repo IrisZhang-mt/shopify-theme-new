@@ -58,7 +58,7 @@
   }
 
   .mt-feature-groups__group {
-    grid-template-columns: 255 : 218 : 218;
+    grid-template-columns: 255 218 218;
     grid-template-areas:
       "heading image1 image2"
       "points1 image1 image2"
