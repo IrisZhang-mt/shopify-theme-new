@@ -59,12 +59,14 @@
 
   .mt-feature-groups__group {
     grid-template-columns: 31.875rem 27.25rem 27.25rem;
+    grid-template-rows: min-content min-content min-content;
     grid-template-areas:
       "heading image1 image2"
       "points1 image1 image2"
       "points2 image1 image2";
     align-items: start;
-    gap: 1.8125rem;
+    column-gap: 1.8125rem;
+    row-gap: 0;
   }
 
   .mt-feature-groups__heading {
