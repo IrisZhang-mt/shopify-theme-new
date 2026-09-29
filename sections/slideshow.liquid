@@ -10,8 +10,21 @@
   if slides.size > 1
     assign show_dots = true
   endif
+
+  assign target_collection = section.settings.collection
+  assign collection_match = true
+  if target_collection != blank and product != blank
+    assign collection_match = false
+    for collection in product.collections
+      if collection.id == target_collection.id
+        assign collection_match = true
+        break
+      endif
+    endfor
+  endif
 -%}
 
+{%- if collection_match -%}
 <section
   class="mt-slideshow"
   data-slideshow
@@ -45,7 +58,7 @@
       data-banner-name="{{ banner_name }}"
       {{ block.shopify_attributes }}
     >
-      <div class="mt-slideshow__media" data-mt-parallax>
+      <div class="mt-slideshow__media">
         {%- if video != blank -%}
           {%- if mobile_video != blank and mobile_video != video -%}
             {{ video | video_tag: class: 'mt-slideshow__video mt-slideshow__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
@@ -124,6 +137,7 @@
     </div>
   {%- endif -%}
 </section>
+{%- endif -%}
 
 {% schema %}
 {
@@ -153,6 +167,12 @@
       "label": "Analytics label",
       "info": "Identifies this slideshow in analytics reports if you use more than one on the site.",
       "default": "Slideshow"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "选择需要展示这个模块的集合",
+      "info": "在产品页面上，仅当产品属于此集合时才显示此幻灯片。留空则始终显示。添加此部分的多个实例，以在同一产品模板上定位不同的集合"
     }
   ],
   "blocks": [

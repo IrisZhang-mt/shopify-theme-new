@@ -1,0 +1,20 @@
+{%- comment -%}
+  Renders one product-video-grid card. Outputs nothing when neither pc_file
+  nor mb_file is set, so a group with text but no video stays hidden.
+{%- endcomment -%}
+{%- if pc_file != blank or mb_file != blank -%}
+  <div class="mt-video-grid__card" data-video-grid-card>
+    <div class="mt-video-grid__media">
+      {%- if pc_file != blank and mb_file != blank -%}
+        {{ pc_file | video_tag: class: 'mt-video-grid__video mt-video-grid__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+        {{ mb_file | video_tag: class: 'mt-video-grid__video mt-video-grid__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+      {%- else -%}
+        {%- assign fallback_file = pc_file | default: mb_file -%}
+        {{ fallback_file | video_tag: class: 'mt-video-grid__video', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+      {%- endif -%}
+    </div>
+    {%- if point_metafield.value != blank -%}
+      <div class="mt-video-grid__caption">{{ point_metafield | metafield_tag }}</div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

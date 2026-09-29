@@ -1,0 +1,39 @@
+{{ 'product-video-grid.css' | asset_url | stylesheet_tag }}
+
+{%- capture card_1 -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_01.value, mb_file: product.metafields.custom.sell_mb_01.value, point_metafield: product.metafields.custom.sell_point_01 -%}
+{%- endcapture -%}
+{%- capture card_2 -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_02.value, mb_file: product.metafields.custom.sell_mb_02.value, point_metafield: product.metafields.custom.sell_point_02 -%}
+{%- endcapture -%}
+{%- capture card_3 -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_03.value, mb_file: product.metafields.custom.sell_mb_03.value, point_metafield: product.metafields.custom.sell_point_03 -%}
+{%- endcapture -%}
+{%- assign has_cards = card_1 | append: card_2 | append: card_3 | strip -%}
+
+{%- if has_cards != blank -%}
+  <section class="mt-video-grid" data-video-grid>
+    <div class="mt-video-grid__stage" data-video-grid-stage>
+      <div class="mt-video-grid__track" data-video-grid-track>
+        {{ card_1 }}
+        {{ card_2 }}
+        {{ card_3 }}
+      </div>
+      <button class="mt-row-nav mt-row-nav--prev" type="button" data-video-grid-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+        <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+      </button>
+      <button class="mt-row-nav mt-row-nav--next" type="button" data-video-grid-arrow="next" aria-label="{{ 'general.next' | t }}">
+        <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+      </button>
+    </div>
+  </section>
+
+  <script src="{{ 'product-video-grid.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product video grid",
+  "settings": []
+}
+{% endschema %}

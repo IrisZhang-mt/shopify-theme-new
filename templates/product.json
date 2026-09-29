@@ -56,6 +56,10 @@
         "show_pairs": true
       }
     },
+    "video_grid": {
+      "type": "product-video-grid",
+      "settings": {}
+    },
     "reviews": {
       "type": "product-reviews",
       "settings": {
@@ -196,6 +200,7 @@
   },
   "order": [
     "main",
+    "video_grid",
     "reviews",
     "faq",
     "related",
