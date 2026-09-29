@@ -5,11 +5,11 @@
 -%}
 
 {%- if groups != blank -%}
-  {%- comment -%} TEMP DEBUG — remove before commit {%- endcomment -%}
-  <script type="application/json" id="mt-feature-groups-debug">{{ groups | json }}</script>
   <section class="mt-feature-groups">
     {%- for group in groups -%}
       {%- liquid
+        assign point_1 = group.points.value
+        assign point_2 = group.points_2.value
         assign image_1_alt = group.image_1.value.alt | default: group.heading.value | default: product.title
         assign image_2_alt = group.image_2.value.alt | default: group.heading.value | default: product.title
       -%}
@@ -19,29 +19,29 @@
         {%- endif -%}
 
         <div class="mt-feature-groups__points mt-feature-groups__points--1">
-          {%- for point in group.points_1.value -%}
+          {%- if point_1 != blank -%}
             <div class="mt-feature-groups__point">
-              {%- if point.title.value != blank -%}
-                <p class="mt-feature-groups__point-title">{{ point.title.value }}</p>
+              {%- if point_1.title.value != blank -%}
+                <p class="mt-feature-groups__point-title">{{ point_1.title.value }}</p>
               {%- endif -%}
-              {%- if point.subtitle.value != blank -%}
-                <p class="mt-feature-groups__point-subtitle">{{ point.subtitle.value }}</p>
+              {%- if point_1.subtitle.value != blank -%}
+                <p class="mt-feature-groups__point-subtitle">{{ point_1.subtitle.value }}</p>
               {%- endif -%}
             </div>
-          {%- endfor -%}
+          {%- endif -%}
         </div>
 
         <div class="mt-feature-groups__points mt-feature-groups__points--2">
-          {%- for point in group.points_2.value -%}
+          {%- if point_2 != blank -%}
             <div class="mt-feature-groups__point">
-              {%- if point.title.value != blank -%}
-                <p class="mt-feature-groups__point-title">{{ point.title.value }}</p>
+              {%- if point_2.title.value != blank -%}
+                <p class="mt-feature-groups__point-title">{{ point_2.title.value }}</p>
               {%- endif -%}
-              {%- if point.subtitle.value != blank -%}
-                <p class="mt-feature-groups__point-subtitle">{{ point.subtitle.value }}</p>
+              {%- if point_2.subtitle.value != blank -%}
+                <p class="mt-feature-groups__point-subtitle">{{ point_2.subtitle.value }}</p>
               {%- endif -%}
             </div>
-          {%- endfor -%}
+          {%- endif -%}
         </div>
 
         {%- if group.image_1.value != blank -%}
