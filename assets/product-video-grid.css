@@ -45,6 +45,7 @@
 .mt-video-grid__caption p {
   margin: 0;
   color: #000;
+  text-align: center;
 }
 .mt-video-grid__caption p:first-child {
   margin-top: 0.75rem;
