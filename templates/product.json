@@ -56,6 +56,10 @@
         "show_pairs": true
       }
     },
+    "feature_groups": {
+      "type": "product-feature-groups",
+      "settings": {}
+    },
     "video_grid": {
       "type": "product-video-grid",
       "settings": {}
@@ -204,6 +208,7 @@
   },
   "order": [
     "main",
+    "feature_groups",
     "slideshow_z9QWbH",
     "video_grid",
     "reviews",
