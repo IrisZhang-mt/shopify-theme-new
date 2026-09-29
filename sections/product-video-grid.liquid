@@ -1,5 +1,19 @@
 {{ 'product-video-grid.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign target_collection = section.settings.collection
+  assign collection_match = true
+  if target_collection != blank
+    assign collection_match = false
+    for collection in product.collections
+      if collection.id == target_collection.id
+        assign collection_match = true
+        break
+      endif
+    endfor
+  endif
+-%}
+
 {%- capture card_1 -%}
   {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_01.value, mb_file: product.metafields.custom.sell_mb_01.value, point_metafield: product.metafields.custom.sell_point_01 -%}
 {%- endcapture -%}
@@ -11,7 +25,7 @@
 {%- endcapture -%}
 {%- assign has_cards = card_1 | append: card_2 | append: card_3 | strip -%}
 
-{%- if has_cards != blank -%}
+{%- if has_cards != blank and collection_match -%}
   <section class="mt-video-grid" data-video-grid>
     <div class="mt-video-grid__stage" data-video-grid-stage>
       <div class="mt-video-grid__track" data-video-grid-track>
@@ -34,6 +48,13 @@
 {% schema %}
 {
   "name": "Product video grid",
-  "settings": []
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Show only for collection",
+      "info": "Only shows on product pages that belong to this collection. Leave empty to show on every product. Add multiple instances of this section to target different collections on the same product template."
+    }
+  ]
 }
 {% endschema %}
