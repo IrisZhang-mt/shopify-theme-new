@@ -1,13 +1,13 @@
 {{ 'product-video-grid.css' | asset_url | stylesheet_tag }}
 
 {%- capture card_1 -%}
-  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_01.value, mb_file: product.metafields.custom.sell_mb_01.value, text: product.metafields.custom.sell_point_01.value -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_01.value, mb_file: product.metafields.custom.sell_mb_01.value, point_metafield: product.metafields.custom.sell_point_01 -%}
 {%- endcapture -%}
 {%- capture card_2 -%}
-  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_02.value, mb_file: product.metafields.custom.sell_mb_02.value, text: product.metafields.custom.sell_point_02.value -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_02.value, mb_file: product.metafields.custom.sell_mb_02.value, point_metafield: product.metafields.custom.sell_point_02 -%}
 {%- endcapture -%}
 {%- capture card_3 -%}
-  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_03.value, mb_file: product.metafields.custom.sell_mb_03.value, text: product.metafields.custom.sell_point_03.value -%}
+  {%- render 'product-video-grid-card', pc_file: product.metafields.custom.sell_pc_03.value, mb_file: product.metafields.custom.sell_mb_03.value, point_metafield: product.metafields.custom.sell_point_03 -%}
 {%- endcapture -%}
 {%- assign has_cards = card_1 | append: card_2 | append: card_3 | strip -%}
 
