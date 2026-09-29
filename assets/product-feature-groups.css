@@ -53,6 +53,9 @@
 
 @media screen and (min-width: 750px) {
   .mt-feature-groups {
+    gap: 1.81rem;
+  }
+  .mt-feature-groups {
     max-width: var(--mt-container);
     margin: 0 auto;
   }
