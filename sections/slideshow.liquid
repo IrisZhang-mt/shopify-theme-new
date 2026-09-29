@@ -13,7 +13,7 @@
 
   assign target_collection = section.settings.collection
   assign collection_match = true
-  if target_collection != blank
+  if target_collection != blank and product != blank
     assign collection_match = false
     for collection in product.collections
       if collection.id == target_collection.id
@@ -172,7 +172,7 @@
       "type": "collection",
       "id": "collection",
       "label": "Show only for collection",
-      "info": "On product pages, only shows this slideshow when the product belongs to this collection. Leave empty to always show. Add multiple instances of this section to target different collections on the same product template."
+      "info": "On product pages, only shows this slideshow when the product belongs to this collection. Has no effect outside product pages. Leave empty to always show. Add multiple instances of this section to target different collections on the same product template."
     }
   ],
   "blocks": [
