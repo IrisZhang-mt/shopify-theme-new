@@ -3,7 +3,7 @@
   overflow: hidden;
   background: var(--mt-surface);
   aspect-ratio: 1200 / 459;
-  padding-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .mt-slideshow__slide {
@@ -170,6 +170,9 @@
 }
 
 @media screen and (min-width: 750px) {
+  .mt-slideshow {
+    margin-top: 4.3rem;
+  }
   .mt-slideshow__video--pc {
     display: block;
   }
