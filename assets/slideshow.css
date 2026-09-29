@@ -3,6 +3,7 @@
   overflow: hidden;
   background: var(--mt-surface);
   aspect-ratio: 1200 / 459;
+  padding-top: 2.5rem;
 }
 
 .mt-slideshow__slide {
@@ -147,14 +148,14 @@
   cursor: pointer;
 }
 .mt-slideshow__dot::before {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 1px solid var(--mt-cloud);
   border-radius: 50%;
   transition: background-color var(--mt-dur) var(--mt-ease);
 }
-.mt-slideshow__dot[aria-current='true']::before {
+.mt-slideshow__dot[aria-current="true"]::before {
   background: var(--mt-cloud);
 }
 .mt-slideshow__dot:focus-visible {
