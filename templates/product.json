@@ -148,11 +148,12 @@
         "slide_BKfhtE": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/20260814-155733_69bcfecd-fac4-4724-b953-6b012a9f3c91.jpg",
             "subheading": "",
-            "heading": "Room to move",
-            "subtext": "Play clothes built for real movement.",
+            "heading": "",
+            "subtext": "",
             "content_position": "center",
-            "cta_label": "Shop new arrivals",
+            "cta_label": "",
             "cta_url": "",
             "link": "",
             "overlay_opacity": 0
@@ -161,11 +162,12 @@
         "slide_AtWNQ3": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
             "subheading": "",
-            "heading": "Built for outside days",
-            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
+            "heading": "",
+            "subtext": "",
             "content_position": "center",
-            "cta_label": "Shop outdoor",
+            "cta_label": "",
             "cta_url": "",
             "link": "",
             "overlay_opacity": 0
@@ -174,11 +176,12 @@
         "slide_LiGiNg": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/20260814-155752_2bd0a156-f71d-4914-81ed-867bd2040d2d.jpg",
             "subheading": "",
-            "heading": "Soft where it counts",
-            "subtext": "Tagless, chafe-free seams they won't even notice.",
+            "heading": "",
+            "subtext": "",
             "content_position": "center",
-            "cta_label": "Shop essentials",
+            "cta_label": "",
             "cta_url": "",
             "link": "",
             "overlay_opacity": 0
@@ -194,16 +197,17 @@
       "settings": {
         "autoplay": true,
         "autoplay_interval": 5,
-        "analytics_label": "Slideshow"
+        "analytics_label": "Slideshow",
+        "collection": ""
       }
     }
   },
   "order": [
     "main",
+    "slideshow_z9QWbH",
     "video_grid",
     "reviews",
     "faq",
-    "related",
-    "slideshow_z9QWbH"
+    "related"
   ]
 }
