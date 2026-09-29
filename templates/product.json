@@ -56,6 +56,64 @@
         "show_pairs": true
       }
     },
+    "slideshow_tPf49L": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_h9BAca": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155752_2bd0a156-f71d-4914-81ed-867bd2040d2d.jpg",
+            "subheading": "",
+            "heading": "",
+            "subtext": "",
+            "content_position": "center",
+            "cta_label": "",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_LgTHK4": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155733_69bcfecd-fac4-4724-b953-6b012a9f3c91.jpg",
+            "subheading": "",
+            "heading": "",
+            "subtext": "",
+            "content_position": "center",
+            "cta_label": "",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_fehg7N": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
+            "subheading": "",
+            "heading": "",
+            "subtext": "",
+            "content_position": "center",
+            "cta_label": "",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_h9BAca",
+        "slide_LgTHK4",
+        "slide_fehg7N"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "analytics_label": "Slideshow"
+      }
+    },
     "video_grid": {
       "type": "product-video-grid",
       "settings": {}
@@ -200,6 +258,7 @@
   },
   "order": [
     "main",
+    "slideshow_tPf49L",
     "video_grid",
     "reviews",
     "faq",
