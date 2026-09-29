@@ -438,41 +438,67 @@ fetch 用的那个 section）渲染 `pdp-pair` 时都传了
 
 ## 验证清单：You May Also Like 模块（No.50/51）
 
-- [ ] PDP 下方 "You May Also Like" 模块加载后，控制台应出现一条 `view_item_list`：
+- [ ] PDP 下方 "You May Also Like" 模块，页面加载后**先不要滚动**，只看这个模块刚渲染出来、还没进入视口的那一刻：**不应该**出现 `view_item_list`
+- [ ] 滚动/横向滑动，让这个模块的商品卡片进入视口（露出一半以上），应该出现 `view_item_list`：
   - `item_list_id: "you_may_also_like"`
   - `item_list_name`：主题编辑器里配置的标题（默认 "You May Also Like"）
-  - `items[]` 字段跟前面几个商品列表模块一致
+  - `items[]` **只包含这次真正露出来的那几张卡片**，不是模块里全部商品
+- [ ] 如果模块横向支持自动轮播/手动拖动，继续往后滑出现新的卡片，应该**再触发一条** `view_item_list`，只包含这批新出现的卡片
+- [ ] 同一张卡片滑出去再滑回来，**不应该**重复触发（按商品 id 去重，去重范围是"这个模块自己"，不跨模块/跨页面）
 - [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
 
-代码改动：`sections/product-related.liquid`（含首次渲染的兜底池分支和
-异步 fetch 用的 `recommendations.performed` 分支）都给 `product-card`
-渲染传了 `item_list_id: 'you_may_also_like'`；`assets/product-related.js`
-新增 `view_item_list`（推荐商品渲染完成后触发一次）和 `select_item`
-（点击卡片，排除 Quick Shop 按钮）逻辑。未新建文件。
+> **更新（2026-09-29）**：反馈原来的实现是模块一渲染完就把全部商品
+> 一次性上报 `view_item_list`，用户实际还没滑出来看到的商品也被算进
+> 了曝光。改成用 `IntersectionObserver` 监听每张卡片，只有真正进入
+> 视口（≥50% 可见）才算"看到了"，短时间内（300ms）一起进入视口的
+> 卡片合并成一条 `view_item_list` 一起上报（"分批"），已经上报过的
+> 卡片不会因为再次滑入视口重复上报。
+
+代码改动：`assets/product-related.js` 整个重写了曝光上报逻辑——原来
+是推荐商品渲染完成后直接对全部卡片触发一次 `view_item_list`，现在改成
+渲染完成后用 `IntersectionObserver` 逐张观察卡片，卡片进入视口才收进
+一个"待上报"队列，300ms 内没有新卡片进来就把队列打包成一条
+`view_item_list` 发出去，已经上报过的商品 id 记在这个模块自己的
+去重集合里（不会跨模块共享）；`select_item` 的取值逻辑抽成了共用的
+`buildItem()` 函数，跟曝光上报共用同一套字段拼接，避免两处重复代码。
+`sections/product-related.liquid` 本身没有改动。未新建文件。
 
 ---
 
 ## 验证清单：搜索结果页（No.52-57）
 
-- [ ] 搜索出有结果的商品（如访问 `/search?q=jacket&type=product`），页面加载后控制台应出现一条 `view_item_list`：
+- [ ] 搜索出有结果的商品（如访问 `/search?q=jacket&type=product`），页面刚加载、还没滚动的那一刻：**不应该**出现 `view_item_list`
+- [ ] 首屏能看到的那几张商品卡片（不用滚动就露出一半以上的），应该出现 `view_item_list`：
   - `item_list_id: "search_results"`
   - `item_list_name: "Search Results"`（固定文案，不含搜索词）
-  - `items[]` 字段跟前面几个商品列表模块一致
+  - `items[]` **只包含首屏露出来的那几张**，不是这一页全部 24 个商品
+- [ ] 往下滚动，露出更多商品卡片，应该**再触发一条** `view_item_list`，只包含这批新露出来的卡片
+- [ ] 滚回顶部再滚下去，同一批已经报过的卡片**不应该**重复触发
 - [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
 - [ ] 点击卡片上的 Quick Shop 按钮，应该正常触发 `select_item`（`button_name: "QUICK SHOP"`）——这个是直接复用 Quick Shop 已有逻辑，不是本次新写的
 - [ ] Quick Shop 弹窗展示后应出现 `view_item`，点弹窗里的 "See Details"/"Add to Cart" 也应该分别触发 `select_item`/`add_to_cart`——这三个也是复用逻辑
-- [ ] 翻页（如果搜索结果超过 24 个）到第 2 页，应该**再触发一条** `view_item_list`（翻页是整页刷新，不是无限滚动，跟分类页的"加载更多"不一样，不需要担心 index 累加的问题）
+- [ ] 翻页（如果搜索结果超过 24 个）到第 2 页，是整页刷新，第 2 页重新按"滚动到哪露出到哪"上报，不需要担心 index 累加的问题（每页独立）
 
-代码改动：`sections/main-search.liquid` 给商品网格加了内联执行的
-`<script>` 触发 `view_item_list`（因为搜索结果页是纯服务端渲染、没有
-异步 fetch，直接在渲染时算好 `items[]` 输出），商品卡片渲染时传了
-`item_list_id: 'search_results'`；新建 `assets/search-results.js`
-处理点击卡片触发 `select_item`（排除 Quick Shop 按钮）——这是这个
-section 第一次有独立 JS 文件，遵循命名对称约定新建。Quick Shop 相关的
-三条（No.54/55/56/57，QUICK SHOP点击/预览/See Details/Add to Cart）
-完全复用 `assets/quick-shop.js` 里 No.38-41 时已经写好的逻辑，没有新增
-任何代码——只要商品卡片带了 `item_list_id`，Quick Shop 就自动能用。
+> **更新（2026-09-29）**：反馈原来是页面一加载就把这一页全部商品一次性
+> 上报 `view_item_list`，用户还没滚动看到的商品也被算进了曝光。改成
+> 跟 You May Also Like 模块同一套处理：`assets/search-results.js` 用
+> `IntersectionObserver` 监听每张卡片，只有真正进入视口（≥50% 可见）
+> 才算"看到了"，300ms 内一起进入视口的卡片合并成一条 `view_item_list`
+> 一起上报，已经上报过的商品不会因为再次滚入视口重复触发。原来
+> `sections/main-search.liquid` 里那段在服务端算好 `items[]`、页面
+> 加载就直接执行的内联 `<script>` 已经整个删掉——数据现在完全从
+> `product-card.liquid` 已经渲染好的 `data-item-*` 属性里读，不用在
+> 两个地方各算一遍。
+
+代码改动：`sections/main-search.liquid` 删掉了原来内联的、一次性触发
+全部商品曝光的 `<script>`；`assets/search-results.js` 新增跟
+`product-related.js`（You May Also Like）相同结构的
+`IntersectionObserver` 批量曝光上报逻辑，`select_item` 的字段拼接也
+抽成了共用的 `buildItem()` 函数。Quick Shop 相关的三条（No.54/55/56/57，
+QUICK SHOP点击/预览/See Details/Add to Cart）完全复用
+`assets/quick-shop.js` 里 No.38-41 时已经写好的逻辑，没有改动——只要
+商品卡片带了 `item_list_id`，Quick Shop 就自动能用。未新建文件。
 
 ---
 
