@@ -75,6 +75,7 @@
         },
         "slide_LgTHK4": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/20260814-155733_69bcfecd-fac4-4724-b953-6b012a9f3c91.jpg",
             "subheading": "",
@@ -89,6 +90,7 @@
         },
         "slide_fehg7N": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
             "subheading": "",
