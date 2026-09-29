@@ -10,8 +10,21 @@
   if slides.size > 1
     assign show_dots = true
   endif
+
+  assign target_collection = section.settings.collection
+  assign collection_match = true
+  if target_collection != blank
+    assign collection_match = false
+    for collection in product.collections
+      if collection.id == target_collection.id
+        assign collection_match = true
+        break
+      endif
+    endfor
+  endif
 -%}
 
+{%- if collection_match -%}
 <section
   class="mt-slideshow"
   data-slideshow
@@ -124,6 +137,7 @@
     </div>
   {%- endif -%}
 </section>
+{%- endif -%}
 
 {% schema %}
 {
@@ -153,6 +167,12 @@
       "label": "Analytics label",
       "info": "Identifies this slideshow in analytics reports if you use more than one on the site.",
       "default": "Slideshow"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Show only for collection",
+      "info": "On product pages, only shows this slideshow when the product belongs to this collection. Leave empty to always show. Add multiple instances of this section to target different collections on the same product template."
     }
   ],
   "blocks": [
