@@ -79,8 +79,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mt-video-grid__track,
-  .mt-video-grid__card {
+  .mt-video-grid__track {
     transition: none;
   }
 }
