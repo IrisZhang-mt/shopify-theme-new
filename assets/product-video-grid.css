@@ -21,7 +21,6 @@
 
 .mt-video-grid__card {
   flex: 0 0 51%;
-  transition: flex-basis 400ms var(--mt-ease);
 }
 .mt-video-grid__card[data-active] {
   flex: 0 0 66%;
