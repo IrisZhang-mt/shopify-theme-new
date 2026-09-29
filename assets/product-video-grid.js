@@ -104,13 +104,22 @@ if (!window.mtVideoGridInit) {
       track.style.transition = '';
     };
 
+    // Ignored while a transition is in flight so `position` only ever moves
+    // one slide at a time and never overruns the cloned ends of `slides`.
+    let busy = false;
+
     const goTo = (nextPosition) => {
+      if (busy) return;
+      busy = true;
       position = nextPosition;
       applyActive(position);
       center(stage, track, slides[position]);
       syncVideos(cards, cards[realIndexFor(position)]);
       clearTimeout(wrapTimer);
-      wrapTimer = setTimeout(settle, WRAP_MS);
+      wrapTimer = setTimeout(() => {
+        settle();
+        busy = false;
+      }, WRAP_MS);
     };
 
     prevBtn.addEventListener('click', () => goTo(position - 1));
