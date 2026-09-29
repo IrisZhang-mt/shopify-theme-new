@@ -71,7 +71,7 @@
 
 @media screen and (min-width: 750px) {
   .mt-video-grid {
-    padding: 5rem 0;
+    padding-top: 4.3rem;
   }
   .mt-video-grid__media {
     aspect-ratio: 2230 / 1080;
