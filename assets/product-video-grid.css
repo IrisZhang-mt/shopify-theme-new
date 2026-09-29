@@ -27,12 +27,10 @@
 }
 
 .mt-video-grid__media {
-  /* Promote to its own compositing layer. Without this, Chromium composites
-     the <video> as part of .mt-video-grid__track's transformed layer and
-     samples its decoded frame against that layer's (fractional) boundary,
-     leaving a hairline gap on the trailing/right-bottom edge — only visible
-     live, never in a screenshot, since it's a compositor sampling artifact,
-     not a layout gap. Giving it its own layer removes that dependency. */
+  /* Promote to its own compositing layer, isolated from
+     .mt-video-grid__track's transformed layer. Without this, the right-edge
+     hairline reappears when the track is translated (a Chromium compositor
+     sampling artifact — only visible live, never in a screenshot). */
   position: relative;
   aspect-ratio: 606 / 1080;
   overflow: hidden;
@@ -40,10 +38,17 @@
   will-change: transform;
 }
 .mt-video-grid__video {
+  /* Even with .media and the video reporting the exact same computed box
+     size, object-fit: cover's internal decode-to-box scaling still leaves a
+     sub-pixel gap on the bottom edge (present even with no transform
+     anywhere in the ancestor chain, so unrelated to the layer-promotion
+     issue above). Scaling the video up slightly overshoots that gap; the
+     overflow is clipped by .mt-video-grid__media's overflow: hidden. */
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  transform: scale(1.02);
   object-fit: cover;
 }
 .mt-video-grid__video--pc {
