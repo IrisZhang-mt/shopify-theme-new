@@ -32,7 +32,7 @@
      hairline reappears when the track is translated (a Chromium compositor
      sampling artifact — only visible live, never in a screenshot). */
   position: relative;
-  aspect-ratio: 606 / 1080;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   transform: translateZ(0);
   will-change: transform;
