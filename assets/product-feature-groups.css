@@ -56,6 +56,9 @@
 }
 
 @media screen and (min-width: 750px) {
+  .mt-feature-groups__point {
+    padding-bottom: 1.4374rem;
+  }
   .mt-feature-groups {
     gap: 1.81rem;
     margin-top: 4.3rem;
