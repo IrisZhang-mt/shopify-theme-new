@@ -487,12 +487,23 @@ if (!window.mtPdpInit) {
     apply();
   };
 
+  const initStickyCta = (root) => {
+    const ctas = root.querySelector('[data-pdp-ctas]');
+    const sticky = root.querySelector('[data-pdp-sticky-cta]');
+    if (!ctas || !sticky) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      sticky.classList.toggle('mt-is-visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+    });
+    observer.observe(ctas);
+  };
+
   const init = (scope) => {
     scope.querySelectorAll('[data-pdp]').forEach((root) => {
       if (root.dataset.mtReady) return;
       root.dataset.mtReady = 'true';
       initProduct(root);
       initSticky(root);
+      initStickyCta(root);
       initPairs(root);
     });
   };
