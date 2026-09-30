@@ -763,6 +763,63 @@
         "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
         "heading": "Contact Us"
       }
+    },
+    "home_carousel_VWeePp": {
+      "type": "home-carousel",
+      "blocks": {
+        "post_mQbJRB": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        },
+        "post_eVr8dB": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        },
+        "post_dkeQpB": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        },
+        "post_nMkGQg": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        },
+        "post_3qb8yH": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        },
+        "post_idtFpV": {
+          "type": "post",
+          "settings": {
+            "handle": "@Instagramaccount",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "post_mQbJRB",
+        "post_eVr8dB",
+        "post_dkeQpB",
+        "post_nMkGQg",
+        "post_3qb8yH",
+        "post_idtFpV"
+      ],
+      "name": "Social carousel",
+      "settings": {}
     }
   },
   "order": [
@@ -783,6 +840,7 @@
     "page_careers_roles_awehxq",
     "slideshow_gWbURe",
     "product_reviews_CLkN4j",
-    "page_contact_faq_DkTnmA"
+    "page_contact_faq_DkTnmA",
+    "home_carousel_VWeePp"
   ]
 }
