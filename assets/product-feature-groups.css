@@ -61,7 +61,7 @@
   }
   .mt-feature-groups {
     gap: 1.81rem;
-    margin-top: 4.3rem;
+    margin: 4.3rem auto 0 auto;
   }
 
   .mt-feature-groups__group {
