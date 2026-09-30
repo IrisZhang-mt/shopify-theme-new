@@ -87,9 +87,9 @@
 
     --mt-tracking-heading: -0.035em;
     --mt-tracking-body: -0.035em;
-    --mt-header-h: 2.75rem;
+    --mt-header-h: 1.875rem;
     --mt-card-w: 18.53125rem;
-    --mt-menu-size: 0.75rem;
+    --mt-menu-size: 0.5rem;
   }
 }
 
@@ -113,8 +113,14 @@
 
     --mt-tracking-heading: -0.03em;
     --mt-tracking-body: -0.03em;
-    --mt-header-h: 2.75rem;
     --mt-card-w: 20.9375rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  :root {
+    --mt-header-h: 2.75rem;
+    --mt-menu-size: 0.75rem;
   }
 }
 

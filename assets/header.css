@@ -471,7 +471,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   .mt-header {
     --mt-header-pad: 1.25rem;
     --mt-header-gap: clamp(0.9375rem, 2.1vw, 1.875rem);
-    --mt-logo-h: 1.8rem;
+    --mt-logo-h: 0.95375rem;
   }
 
   .mt-header__bar {
