@@ -66,10 +66,16 @@
   }
 
   .mt-feature-groups__group {
-    grid-template-columns: minmax(0, 1fr) 27.25rem 27.25rem;
+    grid-template-columns: 31.875fr 27.25fr 27.25fr;
     grid-template-areas: "text image1 image2";
     align-items: start;
     column-gap: 1.8125rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .mt-feature-groups__group {
+    grid-template-columns: 31.875rem 27.25rem 27.25rem;
   }
 
   .mt-feature-groups__text {
