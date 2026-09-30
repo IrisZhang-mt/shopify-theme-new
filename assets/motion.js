@@ -249,7 +249,7 @@ if (!window.mtMotionInit) {
       row.addEventListener('touchstart', onRowTouch, { passive: true });
       autoObserver.observe(row);
       autoResize.observe(row);
-      eagerObserver.observe(row);
+      if (!row.hasAttribute('data-eager-managed')) eagerObserver.observe(row);
     });
     schedule();
   };

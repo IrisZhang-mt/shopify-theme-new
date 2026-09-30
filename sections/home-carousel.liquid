@@ -3,11 +3,15 @@
 <section class="mt-ig">
   {%- if section.blocks.size > 0 -%}
     <div class="mt-ig__stage" data-row-stage>
-    <div class="mt-ig__row" data-autoplay="25" data-wheel-lock>
+    <div class="mt-ig__row" data-autoplay="25" data-wheel-lock data-eager-managed>
       {%- for block in section.blocks -%}
         {%- assign card_tag = 'div' -%}
         {%- if block.settings.url != blank -%}
           {%- assign card_tag = 'a' -%}
+        {%- endif -%}
+        {%- assign card_loading = 'lazy' -%}
+        {%- if forloop.index <= 5 -%}
+          {%- assign card_loading = 'eager' -%}
         {%- endif -%}
         <{{ card_tag }}
           class="mt-ig__card"
@@ -18,7 +22,7 @@
         >
           <div class="mt-ig__media">
             {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
+              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: card_loading, sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
             {%- endif -%}
           </div>
           {%- if block.settings.handle != blank -%}
