@@ -471,7 +471,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   .mt-header {
     --mt-header-pad: 1.25rem;
     --mt-header-gap: clamp(0.9375rem, 2.1vw, 1.875rem);
-    --mt-logo-h: 0.95375rem;
+    --mt-logo-h: clamp(0.95375rem, 2vw, 1.8rem);
   }
 
   .mt-header__bar {
@@ -586,13 +586,6 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     line-height: 1.5;
     letter-spacing: var(--mt-tracking-body);
     color: var(--mt-moss);
-  }
-}
-
-@media screen and (min-width: 1280px) {
-  .mt-header {
-    /* Fluid-scales 15.26px -> 1.8rem between 1280-1440px viewport width; clamp() saturates to 1.8rem at 1440px+. */
-    --mt-logo-h: clamp(0.95375rem, calc(-5.81625rem + 0.52890625vw), 1.8rem);
   }
 }
 
