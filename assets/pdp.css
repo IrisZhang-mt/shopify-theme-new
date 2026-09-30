@@ -489,9 +489,6 @@
   opacity: 0.5;
   cursor: default;
 }
-.mt-pdp__add-price {
-  opacity: 0.7;
-}
 
 .mt-pdp__lower {
   display: flex;
