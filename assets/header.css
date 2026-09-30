@@ -589,6 +589,12 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   }
 }
 
+@media screen and (min-width: 1340px) {
+  .mt-header {
+    --mt-logo-h: 1.8rem;
+  }
+}
+
 .mt-header__srch {
   position: absolute;
   top: 100%;
