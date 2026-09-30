@@ -98,8 +98,8 @@ if (!window.mtMotionInit) {
 
   document.documentElement.classList.add('mt-motion');
 
-  const navType = performance.getEntriesByType('navigation')[0]?.type;
-  if (!window.location.hash && navType !== 'back_forward') {
+  if (!window.location.hash) {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   }
 
@@ -528,7 +528,6 @@ if (!window.mtMotionInit) {
     let jumpTo = 0;
     let jumpStart = 0;
     let jumpDuration = 0;
-    let restoring = navType === 'back_forward';
 
     const setBodyHeight = () => {
       document.body.style.height = `${inner.offsetHeight}px`;
@@ -550,13 +549,6 @@ if (!window.mtMotionInit) {
         return jumping;
       }
       const target = window.scrollY;
-      if (restoring) {
-        current = target;
-        written = current;
-        wrapper.scrollTop = current;
-        scrollValue = current;
-        return true;
-      }
       if (Math.abs(target - current) < 0.5) {
         current = target;
         written = current;
@@ -668,14 +660,6 @@ if (!window.mtMotionInit) {
       parallaxMeasure();
       schedule();
     });
-    if (restoring) {
-      const stopRestoring = () => {
-        restoring = false;
-      };
-      window.addEventListener('wheel', stopRestoring, { once: true, passive: true });
-      window.addEventListener('touchstart', stopRestoring, { once: true, passive: true });
-      setTimeout(stopRestoring, 2000);
-    }
     update();
   }
 
