@@ -917,7 +917,9 @@
   }
   .mt-pdp__sticky-add {
     height: 2.625rem;
-    margin: 1.25rem auto;
+  }
+  .mt-pdp__sticky-cta.mt-is-visible {
+    margin: 0 auto;
     width: 17.5rem;
   }
 }
