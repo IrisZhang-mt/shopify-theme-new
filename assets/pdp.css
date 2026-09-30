@@ -510,6 +510,10 @@
   opacity: 1;
   pointer-events: auto;
 }
+.mt-pdp__sticky-cta--docked {
+  position: absolute;
+  bottom: auto;
+}
 button.mt-pdp__sticky-add {
   flex: none;
   width: 280px;
