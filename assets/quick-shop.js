@@ -283,10 +283,6 @@ if (!window.mtQuickShopInit) {
         body: JSON.stringify({ id, quantity }),
       });
       if (!res.ok) throw new Error(res.status);
-      try {
-        const cart = await (await fetch('/cart.js')).json();
-        window.mtCartCount(cart.item_count);
-      } catch {}
       button.textContent = strings.added;
       if (beforeNotify) beforeNotify();
       document.dispatchEvent(new CustomEvent('mt:cart-added'));

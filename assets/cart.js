@@ -117,7 +117,18 @@ if (!window.mtCartInit) {
     } catch {}
   };
 
-  const open = (opener) => {
+  const pushViewCart = (cartEl) => {
+    const viewCartData = cartEl.querySelector('[data-cart-view-cart]');
+    if (!viewCartData) return;
+    try {
+      const params = JSON.parse(viewCartData.textContent);
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({ event: 'ga4Event', event_name: 'view_cart', event_parameters: params });
+    } catch {}
+  };
+
+  const open = (opener, { trackView = true, loadRecs = true } = {}) => {
     const cartEl = drawer();
     if (!cartEl) return;
     if (!cartEl.hidden && cartEl.classList.contains('mt-cart--open')) return;
@@ -128,17 +139,9 @@ if (!window.mtCartInit) {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => cartEl.classList.add('mt-cart--open'));
     });
-    initRecs(cartEl);
+    if (loadRecs) initRecs(cartEl);
     cartEl.querySelector('[data-cart-close]:not(.mt-cart__backdrop)')?.focus({ preventScroll: true });
-    const viewCartData = cartEl.querySelector('[data-cart-view-cart]');
-    if (viewCartData) {
-      try {
-        const params = JSON.parse(viewCartData.textContent);
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event_parameters: null });
-        window.dataLayer.push({ event: 'ga4Event', event_name: 'view_cart', event_parameters: params });
-      } catch {}
-    }
+    if (trackView) pushViewCart(cartEl);
   };
 
   const close = () => {
