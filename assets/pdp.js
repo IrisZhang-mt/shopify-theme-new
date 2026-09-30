@@ -106,16 +106,24 @@ if (!window.mtPdpInit) {
         }
       });
       const variant = matchVariant(state.variants, state.selected);
-      const add = root.querySelector('[data-pdp-add]');
-      if (!add) return;
-      const addLabel = add.querySelector('[data-pdp-add-label]');
-      const addPrice = add.querySelector('[data-pdp-add-price]');
+      const adds = [...root.querySelectorAll('[data-pdp-add]')];
+      if (!adds.length) return;
+      adds.forEach((add) => {
+        const addLabel = add.querySelector('[data-pdp-add-label]');
+        const addPrice = add.querySelector('[data-pdp-add-price]');
+        if (variant) {
+          add.dataset.pdpVariant = variant.id;
+          add.disabled = !variant.available;
+          if (addLabel) addLabel.textContent = variant.available ? strings.addToCart : strings.soldOut;
+          else add.textContent = variant.available ? strings.addToCart : strings.soldOut;
+          if (addPrice) addPrice.innerHTML = variant.price;
+        } else {
+          add.disabled = true;
+          if (addLabel) addLabel.textContent = strings.unavailable;
+          else add.textContent = strings.unavailable;
+        }
+      });
       if (variant) {
-        add.dataset.pdpVariant = variant.id;
-        add.disabled = !variant.available;
-        if (addLabel) addLabel.textContent = variant.available ? strings.addToCart : strings.soldOut;
-        else add.textContent = variant.available ? strings.addToCart : strings.soldOut;
-        if (addPrice) addPrice.innerHTML = variant.price;
         const price = root.querySelector('[data-pdp-price]');
         if (price) price.innerHTML = variant.price;
         const compare = root.querySelector('[data-pdp-compare]');
@@ -145,10 +153,6 @@ if (!window.mtPdpInit) {
           }
           runUpdaters();
         }
-      } else {
-        add.disabled = true;
-        if (addLabel) addLabel.textContent = strings.unavailable;
-        else add.textContent = strings.unavailable;
       }
     };
 
