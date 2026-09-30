@@ -106,12 +106,24 @@ if (!window.mtPdpInit) {
         }
       });
       const variant = matchVariant(state.variants, state.selected);
-      const add = root.querySelector('[data-pdp-add]');
-      if (!add) return;
+      const adds = [...root.querySelectorAll('[data-pdp-add]')];
+      if (!adds.length) return;
+      adds.forEach((add) => {
+        const addLabel = add.querySelector('[data-pdp-add-label]');
+        const addPrice = add.querySelector('[data-pdp-add-price]');
+        if (variant) {
+          add.dataset.pdpVariant = variant.id;
+          add.disabled = !variant.available;
+          if (addLabel) addLabel.textContent = variant.available ? strings.addToCart : strings.soldOut;
+          else add.textContent = variant.available ? strings.addToCart : strings.soldOut;
+          if (addPrice) addPrice.innerHTML = variant.price;
+        } else {
+          add.disabled = true;
+          if (addLabel) addLabel.textContent = strings.unavailable;
+          else add.textContent = strings.unavailable;
+        }
+      });
       if (variant) {
-        add.dataset.pdpVariant = variant.id;
-        add.disabled = !variant.available;
-        add.textContent = variant.available ? strings.addToCart : strings.soldOut;
         const price = root.querySelector('[data-pdp-price]');
         if (price) price.innerHTML = variant.price;
         const compare = root.querySelector('[data-pdp-compare]');
@@ -141,9 +153,6 @@ if (!window.mtPdpInit) {
           }
           runUpdaters();
         }
-      } else {
-        add.disabled = true;
-        add.textContent = strings.unavailable;
       }
     };
 
@@ -478,12 +487,36 @@ if (!window.mtPdpInit) {
     apply();
   };
 
+  const initStickyCta = (root) => {
+    const ctas = root.querySelector('[data-pdp-ctas]');
+    const sticky = root.querySelector('[data-pdp-sticky-cta]');
+    if (!ctas || !sticky) return;
+    const footer = document.querySelector('.mt-footer');
+    const state = { pastCtas: false, atFooter: false };
+    const sync = () => {
+      sticky.classList.toggle('mt-is-visible', state.pastCtas && !state.atFooter);
+    };
+    const ctasObserver = new IntersectionObserver(([entry]) => {
+      state.pastCtas = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      sync();
+    });
+    ctasObserver.observe(ctas);
+    if (footer) {
+      const footerObserver = new IntersectionObserver(([entry]) => {
+        state.atFooter = entry.isIntersecting;
+        sync();
+      });
+      footerObserver.observe(footer);
+    }
+  };
+
   const init = (scope) => {
     scope.querySelectorAll('[data-pdp]').forEach((root) => {
       if (root.dataset.mtReady) return;
       root.dataset.mtReady = 'true';
       initProduct(root);
       initSticky(root);
+      initStickyCta(root);
       initPairs(root);
     });
   };
@@ -498,7 +531,9 @@ if (!window.mtPdpInit) {
     runUpdaters();
     document.querySelectorAll('[data-pdp-add], [data-pair-add]').forEach((button) => {
       if (button.textContent === strings.adding || button.textContent === strings.added) {
-        button.textContent = strings.addToCart;
+        const label = button.querySelector('[data-pdp-add-label]');
+        if (label) label.textContent = strings.addToCart;
+        else button.textContent = strings.addToCart;
         button.disabled = false;
       }
     });

@@ -459,6 +459,10 @@
   transform: scale(0.8);
 }
 .mt-pdp__add {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
   flex: 1;
   height: 3.4375rem;
   padding: 0 1.25rem;
@@ -484,6 +488,33 @@
 .mt-pdp__add:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.mt-pdp__sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  z-index: 8;
+  display: flex;
+  justify-content: center;
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 300ms var(--mt-ease),
+    opacity 300ms var(--mt-ease);
+}
+.mt-pdp__sticky-cta.mt-is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+button.mt-pdp__sticky-add {
+  flex: none;
+  width: 280px;
+  height: 44px;
+  font-weight: 500;
 }
 
 .mt-pdp__lower {
