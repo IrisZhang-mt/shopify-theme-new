@@ -510,7 +510,7 @@
   opacity: 1;
   pointer-events: auto;
 }
-.mt-pdp__sticky-add {
+button.mt-pdp__sticky-add {
   flex: none;
   width: 280px;
   height: 44px;
