@@ -28,7 +28,7 @@
                   <p class="mt-feature-groups__point-title">{{ point_1.title.value }}</p>
                 {%- endif -%}
                 {%- if point_1.subtitle.value != blank -%}
-                  <p class="mt-feature-groups__point-subtitle">{{ point_1.subtitle.value }}</p>
+                  <p class="mt-feature-groups__point-subtitle">{{ point_1.subtitle.value | newline_to_br }}</p>
                 {%- endif -%}
               </div>
             {%- endif -%}
@@ -41,7 +41,7 @@
                   <p class="mt-feature-groups__point-title">{{ point_2.title.value }}</p>
                 {%- endif -%}
                 {%- if point_2.subtitle.value != blank -%}
-                  <p class="mt-feature-groups__point-subtitle">{{ point_2.subtitle.value }}</p>
+                  <p class="mt-feature-groups__point-subtitle">{{ point_2.subtitle.value | newline_to_br }}</p>
                 {%- endif -%}
               </div>
             {%- endif -%}

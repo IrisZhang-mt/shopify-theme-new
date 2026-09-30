@@ -56,13 +56,17 @@
 }
 
 @media screen and (min-width: 750px) {
+  .mt-feature-groups__point {
+    padding-bottom: 1.4374rem;
+  }
   .mt-feature-groups {
+    max-width: 1440px;
     gap: 1.81rem;
-    margin-top: 4.3rem;
+    margin: 4.3rem auto 0 auto;
   }
 
   .mt-feature-groups__group {
-    grid-template-columns: 31.875rem 27.25rem 27.25rem;
+    grid-template-columns: 31.875fr 27.25fr 27.25fr;
     grid-template-areas: "text image1 image2";
     align-items: start;
     column-gap: 1.8125rem;
@@ -92,5 +96,11 @@
   }
   .mt-feature-groups__point-subtitle {
     font-size: 0.875rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .mt-feature-groups__group {
+    grid-template-columns: 31.875rem 27.25rem 27.25rem;
   }
 }
