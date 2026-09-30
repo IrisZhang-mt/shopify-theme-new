@@ -528,6 +528,7 @@ if (!window.mtMotionInit) {
     let jumpTo = 0;
     let jumpStart = 0;
     let jumpDuration = 0;
+    let restoring = navType === 'back_forward';
 
     const setBodyHeight = () => {
       document.body.style.height = `${inner.offsetHeight}px`;
@@ -549,6 +550,13 @@ if (!window.mtMotionInit) {
         return jumping;
       }
       const target = window.scrollY;
+      if (restoring) {
+        current = target;
+        written = current;
+        wrapper.scrollTop = current;
+        scrollValue = current;
+        return true;
+      }
       if (Math.abs(target - current) < 0.5) {
         current = target;
         written = current;
