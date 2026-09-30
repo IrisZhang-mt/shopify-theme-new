@@ -10,7 +10,6 @@
       {%- for block in section.blocks -%}
         {%- assign collection = block.settings.collection -%}
         {%- assign label = block.settings.label | default: collection.title -%}
-        {%- assign image = block.settings.image | default: collection.featured_image -%}
         <a
           class="mt-act__row"
           href="{{ collection.url | default: '#' }}"
@@ -19,14 +18,15 @@
         >
           <span class="mt-act__label">{{ label }}</span>
           {%- capture slides -%}
-            {%- if image -%}
-              {{ image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+            {%- else -%}
+              {%- for product in collection.products limit: 5 -%}
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+                {%- endif -%}
+              {%- endfor -%}
             {%- endif -%}
-            {%- for product in collection.products -%}
-              {%- if product.featured_image -%}
-                {{ product.featured_image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
-              {%- endif -%}
-            {%- endfor -%}
           {%- endcapture -%}
           {%- if slides contains '<img' -%}
             <span class="mt-act__media">{{ slides }}</span>
@@ -68,7 +68,8 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Preview image"
+          "label": "Preview image",
+          "info": "请上传217*88的尺寸"
         }
       ]
     }
