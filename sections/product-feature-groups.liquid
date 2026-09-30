@@ -1,0 +1,86 @@
+{{ 'product-feature-groups.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign groups = product.metafields.custom.feature_groups.value
+-%}
+
+{%- if groups != blank -%}
+  {%- comment -%} TEMP DEBUG — remove before commit {%- endcomment -%}
+  <script type="application/json" id="mt-feature-groups-debug">{{ groups | json }}</script>
+  <section class="mt-feature-groups">
+    {%- for group in groups -%}
+      {%- liquid
+        assign point_1 = group.points.value
+        assign point_2 = group.points_2.value
+        assign image_1_alt = group.image_1.value.alt | default: group.heading.value | default: product.title
+        assign image_2_alt = group.image_2.value.alt | default: group.heading.value | default: product.title
+      -%}
+      <div class="mt-feature-groups__group">
+        <div class="mt-feature-groups__text">
+          {%- if group.heading.value != blank -%}
+            <h2 class="mt-feature-groups__heading">{{ group.heading.value }}</h2>
+          {%- endif -%}
+
+          <div class="mt-feature-groups__points mt-feature-groups__points--1">
+            {%- if point_1 != blank -%}
+              <div class="mt-feature-groups__point">
+                {%- if point_1.title.value != blank -%}
+                  <p class="mt-feature-groups__point-title">{{ point_1.title.value }}</p>
+                {%- endif -%}
+                {%- if point_1.subtitle.value != blank -%}
+                  <p class="mt-feature-groups__point-subtitle">{{ point_1.subtitle.value }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="mt-feature-groups__points mt-feature-groups__points--2">
+            {%- if point_2 != blank -%}
+              <div class="mt-feature-groups__point">
+                {%- if point_2.title.value != blank -%}
+                  <p class="mt-feature-groups__point-title">{{ point_2.title.value }}</p>
+                {%- endif -%}
+                {%- if point_2.subtitle.value != blank -%}
+                  <p class="mt-feature-groups__point-subtitle">{{ point_2.subtitle.value }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- if group.image_1.value != blank -%}
+          <div class="mt-feature-groups__image mt-feature-groups__image--1">
+            {{ group.image_1.value | image_url: width: 872 | image_tag:
+              width: 436,
+              height: 527,
+              sizes: '(min-width: 750px) 436px, calc(50vw - 23.69px)',
+              loading: 'lazy',
+              decoding: 'async',
+              alt: image_1_alt
+            }}
+          </div>
+        {%- endif -%}
+
+        {%- if group.image_2.value != blank -%}
+          <div class="mt-feature-groups__image mt-feature-groups__image--2">
+            {{ group.image_2.value | image_url: width: 872 | image_tag:
+              width: 436,
+              height: 527,
+              sizes: '(min-width: 750px) 436px, calc(50vw - 23.69px)',
+              loading: 'lazy',
+              decoding: 'async',
+              alt: image_2_alt
+            }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product feature groups",
+  "settings": []
+}
+{% endschema %}
