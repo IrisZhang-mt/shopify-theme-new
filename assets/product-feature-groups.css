@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 1.68rem;
   margin: 0 1.125rem;
-  padding: 3.75rem 0;
+  padding-top: 1.68rem;
 }
 
 .mt-feature-groups__group {
