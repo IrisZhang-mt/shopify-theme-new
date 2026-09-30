@@ -589,9 +589,10 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   }
 }
 
-@media screen and (min-width: 1440px) {
+@media screen and (min-width: 1280px) {
   .mt-header {
-    --mt-logo-h: 1.8rem;
+    /* Fluid-scales 15.26px -> 1.8rem between 1280-1440px viewport width; clamp() saturates to 1.8rem at 1440px+. */
+    --mt-logo-h: clamp(0.95375rem, calc(-5.81625rem + 0.52890625vw), 1.8rem);
   }
 }
 
