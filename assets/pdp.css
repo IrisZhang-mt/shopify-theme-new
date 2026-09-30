@@ -497,6 +497,7 @@
   bottom: 24px;
   z-index: 8;
   display: flex;
+  justify-content: center;
   background: var(--mt-paper);
   box-shadow: 0 -0.5rem 1.5rem rgba(var(--mt-ink-rgb), 0.08);
   transform: translateY(100%);
@@ -512,8 +513,8 @@
   pointer-events: auto;
 }
 .mt-pdp__sticky-add {
-  height: 2.625rem;
-  width: 17.5rem;
+  width: 280px;
+  height: 44px;
 }
 
 .mt-pdp__lower {
@@ -912,12 +913,5 @@
   .mt-pair__add,
   .mt-pair__details {
     height: 3.125rem;
-  }
-  .mt-pdp__sticky-add {
-    height: 2.625rem;
-  }
-  .mt-pdp__sticky-cta.mt-is-visible {
-    margin: 0 auto;
-    width: 17.5rem;
   }
 }
