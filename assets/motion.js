@@ -651,7 +651,7 @@ if (!window.mtMotionInit) {
     pointerMq.addEventListener('change', update);
     reducedMq.addEventListener('change', update);
     window.addEventListener('pageshow', (event) => {
-      if (!active || (!event.persisted && navType !== 'back_forward')) return;
+      if (!event.persisted || !active) return;
       current = window.scrollY;
       written = current;
       scrollValue = current;
@@ -660,6 +660,17 @@ if (!window.mtMotionInit) {
       parallaxMeasure();
       schedule();
     });
+    if (navType === 'back_forward') {
+      const syncRestoredScroll = () => {
+        document.removeEventListener('scroll', syncRestoredScroll, true);
+        if (!active) return;
+        current = window.scrollY;
+        written = current;
+        scrollValue = current;
+        wrapper.scrollTop = current;
+      };
+      document.addEventListener('scroll', syncRestoredScroll, { capture: true, passive: true });
+    }
     update();
   }
 
