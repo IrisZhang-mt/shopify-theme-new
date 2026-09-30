@@ -272,7 +272,7 @@ if (!window.mtQuickShopInit) {
   window.mtAddToCart = async (button, quantity, beforeNotify) => {
     const id = Number(button.dataset.qsVariant || button.dataset.pdpVariant || button.dataset.pairVariant);
     if (!id || button.disabled) return;
-    const label = button.textContent;
+    const label = button.innerHTML;
     clearTimeout(addTimers.get(button));
     button.disabled = true;
     button.textContent = strings.adding;
@@ -298,7 +298,7 @@ if (!window.mtQuickShopInit) {
       button,
       setTimeout(() => {
         if (!button.isConnected || button.textContent !== settled) return;
-        button.textContent = label;
+        button.innerHTML = label;
         button.disabled = false;
       }, 1500)
     );
