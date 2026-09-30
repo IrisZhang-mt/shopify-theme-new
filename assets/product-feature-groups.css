@@ -71,12 +71,6 @@
     align-items: start;
     column-gap: 1.8125rem;
   }
-}
-
-@media screen and (min-width: 1280px) {
-  .mt-feature-groups__group {
-    grid-template-columns: 31.875rem 27.25rem 27.25rem;
-  }
 
   .mt-feature-groups__text {
     display: flex;
@@ -102,5 +96,11 @@
   }
   .mt-feature-groups__point-subtitle {
     font-size: 0.875rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .mt-feature-groups__group {
+    grid-template-columns: 31.875rem 27.25rem 27.25rem;
   }
 }
