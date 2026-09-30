@@ -513,6 +513,7 @@
   pointer-events: auto;
 }
 .mt-pdp__sticky-add {
+  flex: none;
   width: 280px;
   height: 44px;
 }
