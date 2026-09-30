@@ -117,7 +117,7 @@
   }
 }
 
-@media screen and (min-width: 1340px) {
+@media screen and (min-width: 1440px) {
   :root {
     --mt-header-h: 2.75rem;
     --mt-menu-size: 0.75rem;
