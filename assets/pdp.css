@@ -784,11 +784,6 @@
 }
 
 @media screen and (min-width: 750px) {
-  .mt-pdp__sticky-add {
-    height: 2.625rem;
-    margin: 1.25rem auto;
-    width: 17.5rem;
-  }
   .mt-pdp {
     --mt-pdp-pad: 1.25rem;
   }
@@ -919,5 +914,10 @@
   .mt-pair__add,
   .mt-pair__details {
     height: 3.125rem;
+  }
+  .mt-pdp__sticky-add {
+    height: 2.625rem;
+    margin: 1.25rem auto;
+    width: 17.5rem;
   }
 }
