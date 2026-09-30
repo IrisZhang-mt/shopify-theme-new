@@ -152,8 +152,9 @@
         "ice-skating": {
           "type": "activity",
           "settings": {
-            "collection": "ice-skating",
-            "label": "Ice-skating"
+            "collection": "100-gwp-tier",
+            "label": "Ice-skating",
+            "image": "shopify://shop_images/eae5510ca1c73ff34165571f5f0b2650.gif"
           }
         },
         "skiing": {
@@ -208,7 +209,6 @@
         "everyday",
         "activities"
       ],
-      "disabled": true,
       "settings": {
         "tag": "Shop by Activities"
       }
@@ -707,7 +707,8 @@
       "settings": {
         "autoplay": true,
         "autoplay_interval": 5,
-        "analytics_label": "Slideshow"
+        "analytics_label": "Slideshow",
+        "collection": ""
       }
     },
     "product_reviews_CLkN4j": {
