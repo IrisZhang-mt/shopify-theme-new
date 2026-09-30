@@ -491,10 +491,23 @@ if (!window.mtPdpInit) {
     const ctas = root.querySelector('[data-pdp-ctas]');
     const sticky = root.querySelector('[data-pdp-sticky-cta]');
     if (!ctas || !sticky) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      sticky.classList.toggle('mt-is-visible', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+    const footer = document.querySelector('.mt-footer');
+    const state = { pastCtas: false, atFooter: false };
+    const sync = () => {
+      sticky.classList.toggle('mt-is-visible', state.pastCtas && !state.atFooter);
+    };
+    const ctasObserver = new IntersectionObserver(([entry]) => {
+      state.pastCtas = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      sync();
     });
-    observer.observe(ctas);
+    ctasObserver.observe(ctas);
+    if (footer) {
+      const footerObserver = new IntersectionObserver(([entry]) => {
+        state.atFooter = entry.isIntersecting;
+        sync();
+      });
+      footerObserver.observe(footer);
+    }
   };
 
   const init = (scope) => {
