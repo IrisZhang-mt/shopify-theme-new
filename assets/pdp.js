@@ -147,7 +147,8 @@ if (!window.mtPdpInit) {
         }
       } else {
         add.disabled = true;
-        add.textContent = strings.unavailable;
+        if (addLabel) addLabel.textContent = strings.unavailable;
+        else add.textContent = strings.unavailable;
       }
     };
 
@@ -502,7 +503,9 @@ if (!window.mtPdpInit) {
     runUpdaters();
     document.querySelectorAll('[data-pdp-add], [data-pair-add]').forEach((button) => {
       if (button.textContent === strings.adding || button.textContent === strings.added) {
-        button.textContent = strings.addToCart;
+        const label = button.querySelector('[data-pdp-add-label]');
+        if (label) label.textContent = strings.addToCart;
+        else button.textContent = strings.addToCart;
         button.disabled = false;
       }
     });
