@@ -320,7 +320,7 @@
           <div class="mt-pdp__apps">{{ app_slot }}</div>
         {%- endif -%}
 
-        <div class="mt-pdp__ctas">
+        <div class="mt-pdp__ctas" data-pdp-ctas>
           <div class="mt-pdp__qty">
             <button class="mt-pdp__qty-btn" type="button" data-pdp-minus aria-label="{{ 'products.decrease_quantity' | t }}">&minus;</button>
             <span data-pdp-qty aria-live="polite">1</span>
@@ -388,6 +388,14 @@
         {%- endif -%}
       </div>
     </div>
+  </div>
+
+  <div class="mt-pdp__sticky-cta" data-pdp-sticky-cta>
+    <p class="mt-pdp__sticky-title">{{ product.title }}</p>
+    <button class="mt-pdp__add mt-pdp__sticky-add" type="button" data-pdp-add data-pdp-variant="{{ current.id }}"{% unless current.available %} disabled{% endunless %}>
+      <span data-pdp-add-label>{%- if current.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
+      <span class="mt-pdp__add-price" data-pdp-add-price>{{ current.price | money_without_trailing_zeros }}</span>
+    </button>
   </div>
 
   <script type="application/json" data-pdp-variants>
