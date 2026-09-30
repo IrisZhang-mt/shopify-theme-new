@@ -361,7 +361,8 @@ if (!window.mtPlpInit) {
     document.querySelectorAll('[data-plp]').forEach((plp) => setOverlay(plp, false));
   });
 
-  window.addEventListener('popstate', () => {
+  window.addEventListener('popstate', (event) => {
+    if (!event.state?.mtPlp) return;
     const plp = document.querySelector('[data-plp]');
     if (plp) refresh(plp, window.location.href, false);
   });
