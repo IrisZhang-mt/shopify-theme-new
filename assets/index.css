@@ -89,7 +89,7 @@
     --mt-tracking-body: -0.035em;
     --mt-header-h: clamp(1.875rem, 3.05556vw, 2.75rem);
     --mt-card-w: 18.53125rem;
-    --mt-menu-size: 0.65rem;
+    --mt-menu-size: 0.75rem;
   }
 }
 
@@ -114,7 +114,7 @@
     --mt-tracking-heading: -0.03em;
     --mt-tracking-body: -0.03em;
     --mt-card-w: 20.9375rem;
-    --mt-menu-size: 0.65rem;
+    --mt-menu-size: 0.75rem;
   }
 }
 
