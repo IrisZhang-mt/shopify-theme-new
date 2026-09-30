@@ -668,16 +668,13 @@ if (!window.mtMotionInit) {
       parallaxMeasure();
       schedule();
     });
-    if (navType === 'back_forward') {
-      const syncRestoredScroll = () => {
-        document.removeEventListener('scroll', syncRestoredScroll, true);
-        if (!active) return;
-        current = window.scrollY;
-        written = current;
-        scrollValue = current;
-        wrapper.scrollTop = current;
+    if (restoring) {
+      const stopRestoring = () => {
+        restoring = false;
       };
-      document.addEventListener('scroll', syncRestoredScroll, { capture: true, passive: true });
+      window.addEventListener('wheel', stopRestoring, { once: true, passive: true });
+      window.addEventListener('touchstart', stopRestoring, { once: true, passive: true });
+      setTimeout(stopRestoring, 2000);
     }
     update();
   }
