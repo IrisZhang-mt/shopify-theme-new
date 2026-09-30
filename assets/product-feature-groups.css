@@ -60,6 +60,7 @@
     padding-bottom: 1.4374rem;
   }
   .mt-feature-groups {
+    max-width: 1440px;
     gap: 1.81rem;
     margin: 4.3rem auto 0 auto;
   }
