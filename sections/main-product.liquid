@@ -327,7 +327,8 @@
             <button class="mt-pdp__qty-btn" type="button" data-pdp-plus aria-label="{{ 'products.increase_quantity' | t }}">+</button>
           </div>
           <button class="mt-pdp__add" type="button" data-pdp-add data-pdp-variant="{{ current.id }}"{% unless current.available %} disabled{% endunless %}>
-            {%- if current.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}
+            <span data-pdp-add-label>{%- if current.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
+            <span class="mt-pdp__add-price" data-pdp-add-price>{{ current.price | money_without_trailing_zeros }}</span>
           </button>
         </div>
       </div>

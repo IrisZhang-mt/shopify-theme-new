@@ -459,6 +459,10 @@
   transform: scale(0.8);
 }
 .mt-pdp__add {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
   flex: 1;
   height: 3.4375rem;
   padding: 0 1.25rem;
@@ -484,6 +488,9 @@
 .mt-pdp__add:disabled {
   opacity: 0.5;
   cursor: default;
+}
+.mt-pdp__add-price {
+  opacity: 0.7;
 }
 
 .mt-pdp__lower {
