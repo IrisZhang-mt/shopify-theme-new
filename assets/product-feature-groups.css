@@ -1,7 +1,7 @@
 .mt-feature-groups {
   display: flex;
   flex-direction: column;
-  gap: 3.75rem;
+  gap: 1.68rem;
   margin: 0 1.125rem;
   padding: 3.75rem 0;
 }
