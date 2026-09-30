@@ -100,7 +100,6 @@ if (!window.mtMotionInit) {
 
   const navType = performance.getEntriesByType('navigation')[0]?.type;
   if (!window.location.hash && navType !== 'back_forward') {
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   }
 
