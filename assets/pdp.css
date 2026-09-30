@@ -529,8 +529,8 @@
   width: 60%;
 }
 @media screen and (min-width: 750px) {
-  .mt-pdp__sticky-cta {
-    display: none;
+  .mt-pdp__sticky-add {
+    width: 15.625rem;
   }
 }
 
