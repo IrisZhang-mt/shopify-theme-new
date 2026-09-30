@@ -108,10 +108,14 @@ if (!window.mtPdpInit) {
       const variant = matchVariant(state.variants, state.selected);
       const add = root.querySelector('[data-pdp-add]');
       if (!add) return;
+      const addLabel = add.querySelector('[data-pdp-add-label]');
+      const addPrice = add.querySelector('[data-pdp-add-price]');
       if (variant) {
         add.dataset.pdpVariant = variant.id;
         add.disabled = !variant.available;
-        add.textContent = variant.available ? strings.addToCart : strings.soldOut;
+        if (addLabel) addLabel.textContent = variant.available ? strings.addToCart : strings.soldOut;
+        else add.textContent = variant.available ? strings.addToCart : strings.soldOut;
+        if (addPrice) addPrice.innerHTML = variant.price;
         const price = root.querySelector('[data-pdp-price]');
         if (price) price.innerHTML = variant.price;
         const compare = root.querySelector('[data-pdp-compare]');
