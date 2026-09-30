@@ -39,8 +39,7 @@
 .mt-feature-groups__image img {
   display: block;
   width: 100%;
-  aspect-ratio: 436 / 527;
-  object-fit: cover;
+  height: auto;
 }
 
 .mt-feature-groups__point-title {
