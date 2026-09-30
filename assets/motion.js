@@ -651,7 +651,7 @@ if (!window.mtMotionInit) {
     pointerMq.addEventListener('change', update);
     reducedMq.addEventListener('change', update);
     window.addEventListener('pageshow', (event) => {
-      if (!event.persisted || !active) return;
+      if (!active || (!event.persisted && navType !== 'back_forward')) return;
       current = window.scrollY;
       written = current;
       scrollValue = current;
