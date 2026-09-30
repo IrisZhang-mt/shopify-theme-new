@@ -514,6 +514,7 @@ button.mt-pdp__sticky-add {
   flex: none;
   width: 280px;
   height: 44px;
+  font-weight: 500;
 }
 
 .mt-pdp__lower {
