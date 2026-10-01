@@ -407,6 +407,7 @@ if (!window.mtPlpInit) {
           ],
         },
       });
+      if (plp) saveReturnState(plp, card);
     }
   });
 
