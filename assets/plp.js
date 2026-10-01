@@ -315,7 +315,11 @@ if (!window.mtPlpInit) {
   syncAll();
   applySwatches(document);
   queueAlign();
-  document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
+  document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
+    pageCount.set(grid, 1);
+    trackGrid(grid);
+  });
+  restoreReturnState();
   window.addEventListener('resize', queueAlign);
   document.addEventListener('transitionend', (event) => {
     if (event.propertyName === 'width' && event.target.matches('[data-plp-aside]')) queueAlign();
@@ -327,7 +331,10 @@ if (!window.mtPlpInit) {
     observeMore();
     syncAll();
     applySwatches(document);
-    document.querySelectorAll('[data-plp-grid]').forEach(trackGrid);
+    document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
+      pageCount.set(grid, 1);
+      trackGrid(grid);
+    });
   });
 
   document.addEventListener('click', (event) => {
