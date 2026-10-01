@@ -592,7 +592,7 @@ if (!window.mtMotionInit) {
 
     if (isBackForward) {
       window.addEventListener(
-        'load',
+        'scroll',
         () => {
           if (!active) return;
           current = window.scrollY;
@@ -601,7 +601,7 @@ if (!window.mtMotionInit) {
           wrapper.scrollTop = current;
           parallaxMeasure();
         },
-        { once: true }
+        { once: true, passive: true }
       );
     }
 
