@@ -66,33 +66,9 @@ if (!window.mtPlpInit) {
 
   const syncAll = () => document.querySelectorAll('[data-plp]').forEach(syncToggle);
 
-  // Called before the grid is replaced, while the (possibly much taller,
-  // multi-page) old content is still in the DOM. `.mt-plp__bar` sits above the
-  // grid, so its position doesn't depend on how many products are loaded below
-  // it — scrolling to it now means we're already near the top by the time the
-  // new, shorter content swaps in, so there's nothing left for the browser to
-  // clamp. Correcting the scroll position only after the swap is too late:
-  // native/engine scroll-clamping on the sudden shrink wins the race and the
-  // page is left stuck near the old (much taller) bottom regardless of what we
-  // then scroll to.
-  const scrollToBar = (plp) => {
-    const bar = plp.querySelector('.mt-plp__bar');
-    if (!bar) return;
-    const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
-    const top = Math.max(0, window.scrollY + bar.getBoundingClientRect().top - headerOffset);
-    console.debug('[plp-scroll-debug]', {
-      scrollY: window.scrollY,
-      top,
-      headerOffset,
-      lerpActive: document.documentElement.classList.contains('mt-smooth'),
-      hasMtScrollTo: typeof window.mtScrollTo === 'function',
-    });
-    if (window.scrollY <= top) return;
-    if (window.mtScrollTo) {
-      window.mtScrollTo(top);
-    } else {
-      window.scrollTo(0, top);
-    }
+  const resetScroll = (label) => {
+    window.scrollTo(0, 0);
+    console.log('[plp-scroll-debug]', label, 'scrollY after reset:', window.scrollY);
   };
 
   let swatchMap = null;
@@ -175,7 +151,7 @@ if (!window.mtPlpInit) {
     const controller = new AbortController();
     pending.set(plp, controller);
     plp.classList.add('mt-plp--loading');
-    scrollToBar(plp);
+    resetScroll('before fetch');
     let doc;
     try {
       const res = await fetch(sectionUrl(plp, url), { signal: controller.signal });
