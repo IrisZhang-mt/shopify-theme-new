@@ -209,30 +209,16 @@ if (!window.mtPlpInit) {
     const productHref = card.querySelector('.mt-card__link')?.getAttribute('href');
     if (!grid || !productHref) return;
     try {
-      const payload = {
-        collectionHref: window.location.pathname + window.location.search,
-        pages: pageCount.get(grid) || 1,
-        productHref,
-        scrollY: window.scrollY,
-      };
-      sessionStorage.setItem(RETURN_STATE_KEY, JSON.stringify(payload));
-      alert('[plp-debug] saved ' + JSON.stringify(payload));
-    } catch (e) {
-      alert('[plp-debug] save failed ' + e);
-    }
-  };
-
-  // alert() can be silently suppressed by the browser right after a
-  // back/forward navigation (WebKit in particular blocks dialogs here to stop
-  // alert-loop abuse), which would make a real "script didn't run" look the
-  // same as "script ran but the alert got eaten". An on-page banner can't be
-  // suppressed, so it tells the two apart.
-  const debugBanner = (text) => {
-    const el = document.createElement('div');
-    el.textContent = text;
-    el.style.cssText =
-      'position:fixed;top:0;left:0;right:0;z-index:999999;background:#f37434;color:#fff;font-size:11px;padding:6px;white-space:pre-wrap;word-break:break-all;';
-    document.body.appendChild(el);
+      sessionStorage.setItem(
+        RETURN_STATE_KEY,
+        JSON.stringify({
+          collectionHref: window.location.pathname + window.location.search,
+          pages: pageCount.get(grid) || 1,
+          productHref,
+          scrollY: window.scrollY,
+        })
+      );
+    } catch {}
   };
 
   const restoreReturnState = async () => {
