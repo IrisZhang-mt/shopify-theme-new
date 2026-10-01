@@ -66,32 +66,31 @@ if (!window.mtPlpInit) {
 
   const syncAll = () => document.querySelectorAll('[data-plp]').forEach(syncToggle);
 
+  // Called before the grid is replaced, while the (possibly much taller,
+  // multi-page) old content is still in the DOM. `.mt-plp__bar` sits above the
+  // grid, so its position doesn't depend on how many products are loaded below
+  // it — scrolling to it now means we're already near the top by the time the
+  // new, shorter content swaps in, so there's nothing left for the browser to
+  // clamp. Correcting the scroll position only after the swap is too late:
+  // native/engine scroll-clamping on the sudden shrink wins the race and the
+  // page is left stuck near the old (much taller) bottom regardless of what we
+  // then scroll to.
   const scrollToBar = (plp) => {
     const bar = plp.querySelector('.mt-plp__bar');
     if (!bar) return;
-    // Double-rAF: the grid shrinking (filter change collapsing several loaded
-    // pages back to one) resizes `.mt-scroll__inner`, which the lerp-scroll
-    // setup in motion.js observes via ResizeObserver and reacts to by shrinking
-    // document.body's height on its own next frame. Jumping before that settles
-    // races the native clamp-on-shrink and the page can end up stuck near the
-    // old (much taller) bottom; waiting two frames lets it resolve first.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
-        let top = -headerOffset;
-        let node = bar;
-        while (node) {
-          top += node.offsetTop;
-          node = node.offsetParent;
-        }
-        if (window.scrollY <= top) return;
-        if (window.mtScrollTo) {
-          window.mtScrollTo(top);
-        } else {
-          window.scrollTo(0, top);
-        }
-      });
-    });
+    const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
+    let top = -headerOffset;
+    let node = bar;
+    while (node) {
+      top += node.offsetTop;
+      node = node.offsetParent;
+    }
+    if (window.scrollY <= top) return;
+    if (window.mtScrollTo) {
+      window.mtScrollTo(top);
+    } else {
+      window.scrollTo(0, top);
+    }
   };
 
   let swatchMap = null;
@@ -174,6 +173,7 @@ if (!window.mtPlpInit) {
     const controller = new AbortController();
     pending.set(plp, controller);
     plp.classList.add('mt-plp--loading');
+    scrollToBar(plp);
     let doc;
     try {
       const res = await fetch(sectionUrl(plp, url), { signal: controller.signal });
