@@ -222,13 +222,26 @@ if (!window.mtPlpInit) {
     }
   };
 
+  // alert() can be silently suppressed by the browser right after a
+  // back/forward navigation (WebKit in particular blocks dialogs here to stop
+  // alert-loop abuse), which would make a real "script didn't run" look the
+  // same as "script ran but the alert got eaten". An on-page banner can't be
+  // suppressed, so it tells the two apart.
+  const debugBanner = (text) => {
+    const el = document.createElement('div');
+    el.textContent = text;
+    el.style.cssText =
+      'position:fixed;top:0;left:0;right:0;z-index:999999;background:#f37434;color:#fff;font-size:11px;padding:6px;white-space:pre-wrap;word-break:break-all;';
+    document.body.appendChild(el);
+  };
+
   const restoreReturnState = async () => {
     const navEntry = performance.getEntriesByType('navigation')[0];
     let raw = null;
     try {
       raw = sessionStorage.getItem(RETURN_STATE_KEY);
     } catch {}
-    alert(
+    debugBanner(
       '[plp-debug] navType=' +
         navEntry?.type +
         ' raw=' +
