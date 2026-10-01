@@ -69,20 +69,19 @@ if (!window.mtPlpInit) {
   const scrollToBar = (plp) => {
     const bar = plp.querySelector('.mt-plp__bar');
     if (!bar) return;
-    const rootStyle = getComputedStyle(document.documentElement);
-    const headerOffset =
-      parseFloat(rootStyle.getPropertyValue('--mt-header-h')) * parseFloat(rootStyle.fontSize) || 0;
-    let top = -headerOffset;
-    let node = bar;
-    while (node) {
-      top += node.offsetTop;
-      node = node.offsetParent;
-    }
-    if (window.mtScrollTo) {
-      window.mtScrollTo(top);
-    } else {
-      window.scrollTo(0, top);
-    }
+    // Deferred one frame so this runs after the browser's own clamp-on-shrink
+    // reflow settles; otherwise an animated/smooth scroll can race that native
+    // clamp and lose, leaving the page stuck near the (now much shorter) bottom.
+    requestAnimationFrame(() => {
+      const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
+      let top = -headerOffset;
+      let node = bar;
+      while (node) {
+        top += node.offsetTop;
+        node = node.offsetParent;
+      }
+      if (window.scrollY > top) window.scrollTo(0, top);
+    });
   };
 
   let swatchMap = null;
