@@ -69,18 +69,28 @@ if (!window.mtPlpInit) {
   const scrollToBar = (plp) => {
     const bar = plp.querySelector('.mt-plp__bar');
     if (!bar) return;
-    // Deferred one frame so this runs after the browser's own clamp-on-shrink
-    // reflow settles; otherwise an animated/smooth scroll can race that native
-    // clamp and lose, leaving the page stuck near the (now much shorter) bottom.
+    // Double-rAF: the grid shrinking (filter change collapsing several loaded
+    // pages back to one) resizes `.mt-scroll__inner`, which the lerp-scroll
+    // setup in motion.js observes via ResizeObserver and reacts to by shrinking
+    // document.body's height on its own next frame. Jumping before that settles
+    // races the native clamp-on-shrink and the page can end up stuck near the
+    // old (much taller) bottom; waiting two frames lets it resolve first.
     requestAnimationFrame(() => {
-      const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
-      let top = -headerOffset;
-      let node = bar;
-      while (node) {
-        top += node.offsetTop;
-        node = node.offsetParent;
-      }
-      if (window.scrollY > top) window.scrollTo(0, top);
+      requestAnimationFrame(() => {
+        const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
+        let top = -headerOffset;
+        let node = bar;
+        while (node) {
+          top += node.offsetTop;
+          node = node.offsetParent;
+        }
+        if (window.scrollY <= top) return;
+        if (window.mtScrollTo) {
+          window.mtScrollTo(top);
+        } else {
+          window.scrollTo(0, top);
+        }
+      });
     });
   };
 
