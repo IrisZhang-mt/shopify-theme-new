@@ -261,8 +261,12 @@ if (!window.mtPlpInit) {
     const grid = plp?.querySelector('[data-plp-grid]');
     if (!plp || !grid) return;
 
+    // Start from however many pages are already in the grid, not always 1:
+    // when this runs from the bfcache pageshow handler, the DOM (and
+    // pageCount) already reflect everything loaded before the user left the
+    // page, and re-fetching from page 1 would append duplicate cards.
     plp.querySelectorAll('[data-plp-more]').forEach((more) => moreObserver.unobserve(more));
-    for (let loaded = 1; loaded < state.pages; loaded += 1) {
+    for (let loaded = pageCount.get(grid) || 1; loaded < state.pages; loaded += 1) {
       const more = plp.querySelector('[data-plp-more]');
       if (!more) break;
       let doc;
