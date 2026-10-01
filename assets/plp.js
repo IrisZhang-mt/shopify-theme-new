@@ -6,6 +6,8 @@ if (!window.mtPlpInit) {
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
   const trackedCount = new WeakMap();
+  const pageCount = new WeakMap();
+  const RETURN_STATE_KEY = 'mt_plp_return_state';
 
   const trackGrid = (grid) => {
     if (!grid) return;
@@ -166,6 +168,8 @@ if (!window.mtPlpInit) {
     plp.querySelectorAll('[data-plp-more]').forEach((more) => moreObserver.unobserve(more));
     plp.innerHTML = next.innerHTML;
     document.documentElement.classList.remove('mt-plp-lock');
+    const freshGrid = plp.querySelector('[data-plp-grid]');
+    if (freshGrid) pageCount.set(freshGrid, 1);
     plp.querySelector('[data-plp-aside]').classList.toggle('mt-plp__aside--hidden', hidden);
     syncToggle(plp);
     plp.querySelectorAll('[data-plp-group]').forEach((group) => {
