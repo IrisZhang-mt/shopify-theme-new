@@ -9,10 +9,6 @@
         {%- if block.settings.url != blank -%}
           {%- assign card_tag = 'a' -%}
         {%- endif -%}
-        {%- assign card_loading = 'lazy' -%}
-        {%- if forloop.index <= 5 -%}
-          {%- assign card_loading = 'eager' -%}
-        {%- endif -%}
         <{{ card_tag }}
           class="mt-ig__card"
           {% if card_tag == 'a' %}href="{{ block.settings.url }}" target="_blank" rel="noopener"{% endif %}
@@ -22,7 +18,7 @@
         >
           <div class="mt-ig__media">
             {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: card_loading, sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
+              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
             {%- endif -%}
           </div>
           {%- if block.settings.handle != blank -%}
