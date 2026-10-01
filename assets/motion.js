@@ -98,15 +98,9 @@ if (!window.mtMotionInit) {
 
   document.documentElement.classList.add('mt-motion');
 
-  const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-  const isBackForward = navEntry
-    ? navEntry.type === 'back_forward'
-    : window.performance && window.performance.navigation && window.performance.navigation.type === 2;
-
-  if (!window.location.hash && !isBackForward) {
+  if (!window.location.hash) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
-    if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
   }
 
   window.mtStripParams = (keys) => {
@@ -589,21 +583,6 @@ if (!window.mtMotionInit) {
       parallaxMeasure();
       schedule();
     };
-
-    if (isBackForward) {
-      window.addEventListener(
-        'scroll',
-        () => {
-          if (!active) return;
-          current = window.scrollY;
-          written = current;
-          scrollValue = current;
-          wrapper.scrollTop = current;
-          parallaxMeasure();
-        },
-        { once: true, passive: true }
-      );
-    }
 
     const disable = () => {
       if (!active) return;
