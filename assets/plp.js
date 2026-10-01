@@ -236,25 +236,16 @@ if (!window.mtPlpInit) {
   };
 
   const restoreReturnState = async () => {
-    const navEntry = performance.getEntriesByType('navigation')[0];
+    // Not gated on performance.getEntriesByType('navigation')[0].type: iOS
+    // Safari reports 'reload' instead of 'back_forward' for an actual back
+    // navigation, so that check silently discarded a correctly-saved state on
+    // every real-device test. The href match below, plus consuming the stored
+    // state exactly once, are enough to avoid re-applying it on an unrelated
+    // visit to the same filtered URL.
     let raw = null;
     try {
       raw = sessionStorage.getItem(RETURN_STATE_KEY);
     } catch {}
-    debugBanner(
-      '[plp-debug] navType=' +
-        navEntry?.type +
-        ' raw=' +
-        raw +
-        ' currentHref=' +
-        (window.location.pathname + window.location.search)
-    );
-    if (navEntry && navEntry.type !== 'back_forward') {
-      try {
-        sessionStorage.removeItem(RETURN_STATE_KEY);
-      } catch {}
-      return;
-    }
     let state;
     try {
       if (!raw) return;
