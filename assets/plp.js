@@ -296,6 +296,7 @@ if (!window.mtPlpInit) {
     } else if (typeof state.scrollY === 'number') {
       window.scrollTo(0, state.scrollY);
     }
+    debugBanner('[plp-debug] restored pages=' + state.pages + ' foundTarget=' + !!target + ' scrollY=' + window.scrollY);
   };
 
   const moreObserver = new IntersectionObserver(
