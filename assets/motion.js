@@ -98,7 +98,12 @@ if (!window.mtMotionInit) {
 
   document.documentElement.classList.add('mt-motion');
 
-  if (!window.location.hash) {
+  const navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  const isBackForward = navEntry
+    ? navEntry.type === 'back_forward'
+    : window.performance && window.performance.navigation && window.performance.navigation.type === 2;
+
+  if (!window.location.hash && !isBackForward) {
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
   }
