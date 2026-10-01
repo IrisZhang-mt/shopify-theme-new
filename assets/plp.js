@@ -66,6 +66,25 @@ if (!window.mtPlpInit) {
 
   const syncAll = () => document.querySelectorAll('[data-plp]').forEach(syncToggle);
 
+  const scrollToBar = (plp) => {
+    const bar = plp.querySelector('.mt-plp__bar');
+    if (!bar) return;
+    const rootStyle = getComputedStyle(document.documentElement);
+    const headerOffset =
+      parseFloat(rootStyle.getPropertyValue('--mt-header-h')) * parseFloat(rootStyle.fontSize) || 0;
+    let top = -headerOffset;
+    let node = bar;
+    while (node) {
+      top += node.offsetTop;
+      node = node.offsetParent;
+    }
+    if (window.mtScrollTo) {
+      window.mtScrollTo(top);
+    } else {
+      window.scrollTo(0, top);
+    }
+  };
+
   let swatchMap = null;
 
   const applySwatches = (root) => {
