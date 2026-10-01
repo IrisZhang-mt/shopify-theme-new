@@ -209,20 +209,33 @@ if (!window.mtPlpInit) {
     const productHref = card.querySelector('.mt-card__link')?.getAttribute('href');
     if (!grid || !productHref) return;
     try {
-      sessionStorage.setItem(
-        RETURN_STATE_KEY,
-        JSON.stringify({
-          collectionHref: window.location.pathname + window.location.search,
-          pages: pageCount.get(grid) || 1,
-          productHref,
-          scrollY: window.scrollY,
-        })
-      );
-    } catch {}
+      const payload = {
+        collectionHref: window.location.pathname + window.location.search,
+        pages: pageCount.get(grid) || 1,
+        productHref,
+        scrollY: window.scrollY,
+      };
+      sessionStorage.setItem(RETURN_STATE_KEY, JSON.stringify(payload));
+      alert('[plp-debug] saved ' + JSON.stringify(payload));
+    } catch (e) {
+      alert('[plp-debug] save failed ' + e);
+    }
   };
 
   const restoreReturnState = async () => {
     const navEntry = performance.getEntriesByType('navigation')[0];
+    let raw = null;
+    try {
+      raw = sessionStorage.getItem(RETURN_STATE_KEY);
+    } catch {}
+    alert(
+      '[plp-debug] navType=' +
+        navEntry?.type +
+        ' raw=' +
+        raw +
+        ' currentHref=' +
+        (window.location.pathname + window.location.search)
+    );
     if (navEntry && navEntry.type !== 'back_forward') {
       try {
         sessionStorage.removeItem(RETURN_STATE_KEY);
@@ -231,7 +244,6 @@ if (!window.mtPlpInit) {
     }
     let state;
     try {
-      const raw = sessionStorage.getItem(RETURN_STATE_KEY);
       if (!raw) return;
       state = JSON.parse(raw);
     } catch {
