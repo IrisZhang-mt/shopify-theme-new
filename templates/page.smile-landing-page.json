@@ -1,0 +1,470 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_title": true
+      }
+    },
+    "page_banner_7eMPdV": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_j4YhXe": {
+          "type": "stat",
+          "settings": {
+            "label": "MEMBERSHIP",
+            "value": "Free to join",
+            "placement": "panel"
+          }
+        },
+        "stat_xxkP3b": {
+          "type": "stat",
+          "settings": {
+            "label": "EARN",
+            "value": "1 point per $1",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_j4YhXe",
+        "stat_xxkP3b"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/pc_8a49b7cb-8739-4bf0-a9ee-b239ac7b7de7.jpg",
+        "image_mobile": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg",
+        "heading": "Earn points.\nPlay forward.",
+        "text": "Our free rewards club. Earn reward points on every purchase, then redeem them for discounts on what's next.\nJoin now, or log in to start earning.",
+        "cta_label": "Join now",
+        "cta_url": "/account"
+      }
+    },
+    "page_referral_banner_L9b6iC": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_trFdHX": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_z6iYLQ": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_4rntaU": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_trFdHX",
+        "item_z6iYLQ",
+        "item_4rntaU"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Join. Earn.Redeem.",
+        "subtext": "Sign up or log in to start earning straight away.\nEarn points for every dollar spent, then redeem\nthem for discounts on your next purchase.",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true,
+        "show_border": true
+      }
+    },
+    "page_card_grid_Tqbgfh": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_XGMTNW": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pc-1_3a2091f3-c7c9-4c54-816b-60cc52223a66.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_F9tU6N": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pc-2_bc7e4d2e-8801-447c-a3d7-adbd7f2f9daf.jpg",
+            "image_mobile": "shopify://shop_images/app-2.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_LFdwq7": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pc-3_ac89a7b9-bd69-41bc-9e16-4b1e04455023.jpg",
+            "image_mobile": "shopify://shop_images/app-3.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_HTPTiE": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/pc-4_63bfe07e-6c90-49c3-b4f3-8e525bd83349.jpg",
+            "image_mobile": "shopify://shop_images/app-4.jpg",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_XGMTNW",
+        "item_F9tU6N",
+        "item_LFdwq7",
+        "item_HTPTiE"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "image"
+      }
+    },
+    "page_card_grid_BMQWbq": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_wJwWCJ": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/pandectes-banner-logo.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_RpTenA": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/3_d2c21bff-3ef9-4066-babf-d6e89ea2708c.png",
+            "title": "1 point",
+            "subtitle": "Spend every $1",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_f6cpYJ": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/4_fb841540-924c-4024-8513-4cfa5ad1c198.png",
+            "title": "50 points",
+            "subtitle": "Like on Facebook",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_MDhX7A": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/5_c701eb72-c621-45ac-a9aa-7dd93e0492b1.png",
+            "title": "100 points",
+            "subtitle": "Share on Facebook",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_FPfrR8": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/6_f18f8866-7ab1-46db-a56d-c5ad49d088d3.png",
+            "title": "50 points",
+            "subtitle": "Follow @moodytiger on Instagram",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_WjbmVD": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/1_faee63c8-05d4-4864-9047-31891f97ce42.png",
+            "title": "150 points",
+            "subtitle": "Leave a review",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_9xbPLG": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_FEn3kW": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_wJwWCJ",
+        "item_RpTenA",
+        "item_f6cpYJ",
+        "item_MDhX7A",
+        "item_FPfrR8",
+        "item_WjbmVD",
+        "item_9xbPLG",
+        "item_FEn3kW"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "card"
+      }
+    },
+    "page_card_grid_xGpBrF": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_kWzq9W": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_xEq4X4": {
+          "type": "item",
+          "settings": {
+            "title": "250 Points",
+            "subtitle": "$5 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_gTmc4j": {
+          "type": "item",
+          "settings": {
+            "title": "350 Points",
+            "subtitle": "$7 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_gTJFzU": {
+          "type": "item",
+          "settings": {
+            "title": "700 Points",
+            "subtitle": "$14 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_zHfW8H": {
+          "type": "item",
+          "settings": {
+            "title": "1,400 Points",
+            "subtitle": "$28 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_BtEUrD": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "5,000 Points",
+            "subtitle": "$100 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_PwRJJc": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "10,000 Points",
+            "subtitle": "$200 Off",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_tWQBjh": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "600 Points",
+            "subtitle": "Free Shipping",
+            "subtitle_color": "#f37434"
+          }
+        },
+        "item_JFC7iP": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_9iMf9K": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_kWzq9W",
+        "item_xEq4X4",
+        "item_gTmc4j",
+        "item_gTJFzU",
+        "item_zHfW8H",
+        "item_BtEUrD",
+        "item_PwRJJc",
+        "item_tWQBjh",
+        "item_JFC7iP",
+        "item_9iMf9K"
+      ],
+      "name": "Card grid",
+      "settings": {
+        "heading": "Redeem for money off.",
+        "display_mode": "card"
+      }
+    },
+    "page_referral_banner_bmm8JH": {
+      "type": "page-referral-banner",
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Give 15%, Get 15%.",
+        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral.",
+        "show_cta": true,
+        "cta_label": "Refer now",
+        "cta_url": "/account",
+        "show_icon": true,
+        "show_border": true
+      }
+    },
+    "product_faq_Mnbqbd": {
+      "type": "product-faq",
+      "blocks": {
+        "question_7JmaGm": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can <a href=\"/account\" title=\"moodytiger-account\">join at moodytiger.com</a>. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_YxJhXU": {
+          "type": "question",
+          "settings": {
+            "question": "How are tiers calculated?",
+            "answer": "<p>By the amount you actually spend within one calendar year (1 January to 31 December): $150 for Silver, $500 for Gold, $900 for Platinum.</p>"
+          }
+        },
+        "question_dikiiz": {
+          "type": "question",
+          "settings": {
+            "question": "Do tiers expire?",
+            "answer": "<p>General never expires. Once you reach a tier, you keep it for the rest of that calendar year plus the whole of the next one. Qualifying restarts every 1 January, so if the following year's spend does not reach the same threshold, your tier is adjusted at the year-end review.</p>"
+          }
+        },
+        "question_hWMmYd": {
+          "type": "question",
+          "settings": {
+            "question": "How do I earn points?",
+            "answer": "<p>1 point for every $1 you spend, based on the amount actually paid — an item listed at $198 and bought for $158 earns 158 points. You also earn 200 points for joining, 50 for following us on Instagram or liking us on Facebook, 100 for sharing on Facebook, and 150 for writing a product review.</p>"
+          }
+        },
+        "question_wBgDkf": {
+          "type": "question",
+          "settings": {
+            "question": "How do I redeem points?",
+            "answer": "<p>250 points for $5 off, 350 points for $7 off, 700 points for $14 off, 1,400 points for $28 off.</p>"
+          }
+        },
+        "question_iPPCqW": {
+          "type": "question",
+          "settings": {
+            "question": "Do points expire?",
+            "answer": "<p>Points are valid for one year. If there is no earning and no redemption for a whole year, the entire balance expires at once. Individual points do not have their own expiry dates.</p>"
+          }
+        },
+        "question_V3ytq8": {
+          "type": "question",
+          "settings": {
+            "question": "What do I get for referring a friend?",
+            "answer": "<p>Give 15% off, get 15% off. Your friend receives a 15% off coupon, and yours arrives once they place their first order.</p>"
+          }
+        },
+        "question_i7mhQQ": {
+          "type": "question",
+          "settings": {
+            "question": "What is the new member offer?",
+            "answer": "<p>Two 10% off coupons, valid for one month from the date you receive them, applicable to all products and stackable with other offers.</p>"
+          }
+        },
+        "question_bzRFjq": {
+          "type": "question",
+          "settings": {
+            "question": "How does the member discount work?",
+            "answer": "<p>Gold enjoys 5% off and Platinum 10% off, on full-price items only, applied automatically at checkout.</p>"
+          }
+        },
+        "question_cBYx8i": {
+          "type": "question",
+          "settings": {
+            "question": "Where can I check my tier, points and coupons?",
+            "answer": "<p><a href=\"/account\" title=\"moodytiger-account\">Sign in</a> to your account at moodytiger.com to see your current tier, points balance and available coupons.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_7JmaGm",
+        "question_YxJhXU",
+        "question_dikiiz",
+        "question_hWMmYd",
+        "question_wBgDkf",
+        "question_iPPCqW",
+        "question_V3ytq8",
+        "question_i7mhQQ",
+        "question_bzRFjq",
+        "question_cBYx8i"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "open_first": false,
+        "title_align": "left",
+        "big_title": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "page_banner_7eMPdV",
+    "page_referral_banner_L9b6iC",
+    "page_card_grid_Tqbgfh",
+    "page_card_grid_BMQWbq",
+    "page_card_grid_xGpBrF",
+    "page_referral_banner_bmm8JH",
+    "product_faq_Mnbqbd"
+  ]
+}

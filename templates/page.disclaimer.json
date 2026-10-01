@@ -9,8 +9,20 @@
  */
 {
   "sections": {
+    "rich_text_CKVMNM": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "Disclaimer",
+        "text": "<p><strong>Last updated: 21 September 2026</strong></p><h3>General information</h3><p>The information on this website is provided by Moodytiger America Inc. for general information purposes only. While we make every effort to keep the information accurate and up to date, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability or availability of the website or the information, products and services it contains.</p><h3>Products and intended use</h3><p>moodytiger designs and sells children's activewear and related accessories. Our garments are clothing items intended for everyday wear, sport and outdoor play. They are not protective equipment, safety equipment or personal protective equipment, and they should not be relied upon to prevent injury.</p><p>Children should be supervised by a responsible adult during sport and outdoor activity. Age and size designations on our products are provided as fitting guidance only, and are not a safety certification for any particular activity.</p><h3>Colours, sizes and product images</h3><p>Product images are intended to represent our products as accurately as possible. Actual colours may vary depending on your screen settings and on normal variation between fabric production batches. Measurements are taken by hand and may vary slightly between individual items.</p><h3>Performance and fabric claims</h3><p>Descriptions of fabric performance — including but not limited to UV protection, water repellency, insulation, breathability and quick-drying properties — are based on laboratory testing carried out under controlled conditions. Real-world performance may differ depending on use, laundering, wear and environmental conditions. Please follow the care instructions provided with each garment.</p><h3>Third-party certifications</h3><p>Certifications and partnerships referenced on this website, including the bluesign® system partnership, FSC® certified packaging and PrimaLoft® insulation, are held by the relevant certification bodies, our partners or our suppliers. References to these certifications describe our materials, supply chain or packaging, and do not constitute an independent warranty by moodytiger in respect of any individual finished item.</p><h3>External links</h3><p>This website may contain links to external websites that are not operated by us. We have no control over the content of those websites and accept no responsibility for them, or for any loss or damage arising from your use of them.</p><h3>Pricing and availability</h3><p>We make every effort to ensure that prices and stock availability shown on this website are correct. In the event of a pricing or availability error, we reserve the right to cancel the affected order and issue a full refund.</p><h3>Limitation of liability</h3><p>To the fullest extent permitted by law, moodytiger shall not be liable for any loss or damage arising from reliance on the information on this website. This disclaimer forms part of, and should be read together with, our <a href=\"https://moodytiger.com/policies/terms-of-service\">Terms of Service</a>, <a href=\"https://moodytiger.com/pages/privacy-policy02\">Privacy Policy</a> and <a href=\"https://moodytiger.com/pages/return-policy02\">Return & Refund Policy</a>.</p><h3>Contact</h3><p>Moodytiger America Inc.<br/>48400 Seminole Dr, Suite 430-B, Cabazon, CA 92230, United States<br/>order@moodytiger.com · +852 6345 0496</p>",
+        "align": "left",
+        "cta_label": "",
+        "cta_url": ""
+      }
+    },
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "show_title": true
       }
@@ -156,6 +168,7 @@
     }
   },
   "order": [
+    "rich_text_CKVMNM",
     "main",
     "page_card_grid_c7bq3N",
     "page_card_grid_PpMx3W"

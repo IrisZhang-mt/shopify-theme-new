@@ -1,0 +1,236 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero-story": {
+      "type": "about-hero",
+      "settings": {
+        "view": "story",
+        "image": "shopify://shop_images/1_6e0c6dce-8e82-4278-ab81-fe4283263218.jpg",
+        "line_1": "Move Freely",
+        "line_2": "Play Fully",
+        "story_label": "Our Story",
+        "materials_label": "Our Materials"
+      }
+    },
+    "intro-story": {
+      "type": "about-intro",
+      "settings": {
+        "view": "story",
+        "text": "Everything we make is designed to support the moments that matter most. Because childhood isn't something to rush through—it's something to experience fully.\nFamily founded in 2018, we create thoughtfully-designed activewear and footwear designed to move with the best parts of the day, so we can give more time back to play."
+      }
+    },
+    "image-story": {
+      "type": "about-image",
+      "settings": {
+        "view": "story",
+        "image": "shopify://shop_images/2_540e7901-6459-4c94-99ee-848181f65188.jpg"
+      }
+    },
+    "founders": {
+      "type": "about-founders",
+      "settings": {
+        "view": "story",
+        "eyebrow": "Meet Founders",
+        "heading": "Zoe and Donald",
+        "mission": "Our mission is to develop functional and stylish activewear tailored to the needs of children, empowering them to live an active lifestyle and explore a world of unlimited possibilities.",
+        "text_1": "<p>We are parents of three children. As a family, we love the outdoors: but we soon came to realise that activewear for children was limited to cotton t-shirts or oversized track pants. The so-called “quick dry” polyester garments were scratchy and uncomfortable – not what we want to put on the backs of our children as they embark on adventures that shape them into the people we adore.</p><p>As parents, we resonate deeply with the Montessori method by which our children were educated from a young age. We believe exploration and freedom of choice are key to teach kids to thrive on their own.</p><p></p>",
+        "text_2": "<p>These experiences together, fueled our decision to start moodytiger with the aim to empower children in self-exploration with multifunctional and stylish activewear. The Montessori principles were precisely what characterised moodytiger: “moody” – for our unpredictable and untamed children – and “tiger” for their confidence and hunger for adventure.</p><p>As parents, we believe it is important to respect these natural, wonderful qualities of our children. They are not as fragile as we think; instead, they are fierce and daring cubs finding their roar.</p><p><strong>About moodytiger</strong></p><p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; MOODYTIGER is a registered trademark in the United States (USPTO Reg. No. 7,441,454).<br/>Email — <a href=\"mailto:order@moodytiger.com\" target=\"_blank\">order@moodytiger.com , </a>Phone — +1 951 644 9997<br/><br/><br/></p>"
+      }
+    },
+    "values": {
+      "type": "about-values",
+      "blocks": {
+        "value-1": {
+          "type": "value",
+          "settings": {
+            "image": "shopify://shop_images/3_e0b18884-0539-4031-905e-1935c044fabe.jpg",
+            "heading": "Designed for Active Childhoods",
+            "text": "Every product starts with the way kids move, play, explore, and grow. We create apparel that supports active lifestyles without getting in the way."
+          }
+        },
+        "value-2": {
+          "type": "value",
+          "settings": {
+            "image": "shopify://shop_images/4_037f295d-7b22-49fa-a52a-d07513cc83a7.jpg",
+            "heading": "Innovation for Every Adventure",
+            "text": "From high-performance fabrics to sport-specific functionality, we combine technology and design to help kids stay comfortable across every activity and environment."
+          }
+        },
+        "value-3": {
+          "type": "value",
+          "settings": {
+            "image": "shopify://shop_images/5_afdf9aaf-cab7-4b93-a4a2-8d6c833afdfd.jpg",
+            "heading": "Comfort Without Compromise",
+            "text": "Lightweight, soft, breathable, and made for unrestricted movement, our products are engineered to let kids focus on having fun, not on what they're wearing."
+          }
+        },
+        "value-4": {
+          "type": "value",
+          "settings": {
+            "image": "shopify://shop_images/6_15ed2016-5518-4d78-bcc0-f71f1823c27d.jpg",
+            "heading": "Encouraging Exploration",
+            "text": "We believe movement builds confidence. By inspiring children to play, discover, and embrace new experiences, we help them explore the world with curiosity and joy."
+          }
+        }
+      },
+      "block_order": [
+        "value-1",
+        "value-2",
+        "value-3",
+        "value-4"
+      ],
+      "settings": {
+        "view": "story"
+      }
+    },
+    "hero-materials": {
+      "type": "about-hero",
+      "settings": {
+        "view": "materials",
+        "image": "shopify://shop_images/1_6b632efd-393e-4b40-853b-757324bdcd2b.jpg",
+        "line_1": "Play Without Limits",
+        "line_2": "Play Without Limits",
+        "story_label": "Our Story",
+        "materials_label": "Our Materials"
+      }
+    },
+    "intro-materials": {
+      "type": "about-intro",
+      "settings": {
+        "view": "materials",
+        "text": "Fabrics designed for kids on the move. From school to sports, morning to night, indoor play to outdoor discovery, anywhere, everywhere, all season."
+      }
+    },
+    "fabrics": {
+      "type": "about-fabrics",
+      "blocks": {
+        "fabric-1": {
+          "type": "fabric",
+          "settings": {
+            "image": "shopify://shop_images/2_Air_Supply_1.jpg",
+            "name": "Air Supply",
+            "tagline": "Beat the summer heat with Brizi®",
+            "cta_label": "",
+            "cta_url": "",
+            "tags": "TENNIS,PLAY,DAILY WEAR,SCHOOL",
+            "lead": "With 40,000 breathable mesh panels and a 0.5mm\nmicro-pores system, Air Supply® offers\nbreathable, airy coolness",
+            "feels": "Feels: Cooling & Slick",
+            "features": "Ultra Breathable\nSuper Lightweight\nMove-free\nLightning-Fast Dry Time",
+            "mini_label_1": "Cool-Feeling & Breathable",
+            "mini_image_1": "shopify://shop_images/2_Air_Supply_2.jpg",
+            "mini_label_2": "Super Lightweight",
+            "mini_image_2": "shopify://shop_images/2_Air_Supply_3.jpg",
+            "mini_label_3": "Move Free",
+            "mini_image_3": "shopify://shop_images/2_Air_Supply_4.jpg"
+          }
+        },
+        "fabric-2": {
+          "type": "fabric",
+          "settings": {
+            "image": "shopify://shop_images/3_Brizi_1.jpg",
+            "name": "Brizi®",
+            "tagline": "Stay cool and comfortable",
+            "cta_label": "",
+            "cta_url": "",
+            "tags": "SCHOOL,PRACTICE,PLAY,ALL SPORT",
+            "lead": "Cool when it's hot. Comfortable when it\ncounts. Ready for all-day play.",
+            "feels": "Feels: Light & Airy",
+            "features": "Cooling &Ultra-Breathable\nUPF50+, Ultimate Sun Protector\nThin, Light,and Airy\nCrazy Smooth & Super Soft\nUnique Stretch Sensation\nFast-drying and sweat-wicking\nSeamless stitching and 30% increased line density",
+            "mini_label_1": "Cool-Feeling & Breathable",
+            "mini_image_1": "shopify://shop_images/3_Brizi_2.jpg",
+            "mini_label_2": "UPF50+ Ultimate Sun Protector",
+            "mini_image_2": "shopify://shop_images/3_Brizi_3.jpg",
+            "mini_label_3": "Fast-Drying & Sweat-Wicking",
+            "mini_image_3": "shopify://shop_images/3_Brizi_4.jpg"
+          }
+        },
+        "fabric-3": {
+          "type": "fabric",
+          "settings": {
+            "image": "shopify://shop_images/4_lllucra_1.jpg",
+            "name": "Illucra®",
+            "tagline": "Experience unbeatable comfort and cooling with illucra®",
+            "cta_label": "",
+            "cta_url": "",
+            "tags": "Outdoor, Practice, Play, School",
+            "lead": "The ultimate choice for sporty kids seeking performance and comfort in the elements",
+            "feels": "Feels: Buttery Soft & Fresh Comfy",
+            "features": "Feeling Inherently Cool\nThin, Light, and Airy\nFast-Drying & Sweat Wicking\nUnique Stretch Sensation",
+            "mini_label_1": "Cool-Feeling & Breathable",
+            "mini_image_1": "shopify://shop_images/4_lllucra_2.jpg",
+            "mini_label_2": "Unique Yarn Texture",
+            "mini_image_2": "shopify://shop_images/4_lllucra_3.jpg",
+            "mini_label_3": "Buttery Soft",
+            "mini_image_3": "shopify://shop_images/4_lllucra_4.jpg"
+          }
+        },
+        "fabric-4": {
+          "type": "fabric",
+          "settings": {
+            "image": "shopify://shop_images/5_Blockmax_Lite_1.jpg",
+            "name": "Blockmax® Lite",
+            "tagline": "Experience rapid sweat evaporation with Blockmax® Lite",
+            "cta_label": "",
+            "cta_url": "",
+            "tags": "Outdoor, Practice, Play, School",
+            "lead": "Ensure that moisture is efficiently pulled away from your skin, keeping you dry and comfortable throughout your workout sessions.",
+            "feels": "Feels: Breathable & Lightweight",
+            "features": "Ultra-Breathable & Lightweight\nSoft & Smooth\nUnique Stretch Sensation\nLightning-Fast Dry Time\nWater Repellent",
+            "mini_label_1": "UPF 50+ Ultimate Sun Protector",
+            "mini_image_1": "shopify://shop_images/3_Brizi_3_3c45a6f0-6a9d-4dbe-ab44-ba8da5f7dc0c.jpg",
+            "mini_label_2": "Fast Drying & Sweat Wicking",
+            "mini_image_2": "shopify://shop_images/5_Blockmax_Lite_3.jpg",
+            "mini_label_3": "Water Repellent",
+            "mini_image_3": "shopify://shop_images/5_Blockmax_Lite_4.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "fabric-1",
+        "fabric-2",
+        "fabric-3",
+        "fabric-4"
+      ],
+      "settings": {
+        "view": "materials"
+      }
+    },
+    "full_image_w7JBnC": {
+      "type": "full-image",
+      "custom_css": [
+        ".mt-full-image {margin-bottom: 80px;}",
+        "@media (max-width: 749px) {.mt-full-image {margin-bottom: 24px; }}",
+        ".mt-full-image {margin-bottom: 80px;}",
+        ".mt-full-image h1,.mt-full-image h2,.mt-full-image h3 {font-family: \"FK Display\", \"FK Grotesk\", sans-serif !important; font-size: 35px !important; color: #1d1d1d !important; line-height: 1.2;}",
+        "@media (max-width: 749px) {.mt-full-image {margin-bottom: 24px; }}"
+      ],
+      "name": "Full image",
+      "settings": {
+        "heading": "Special Collection",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/Group_1184.jpg",
+        "mob_image": "shopify://shop_images/Group_1187.jpg",
+        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski"
+      }
+    }
+  },
+  "order": [
+    "hero-story",
+    "intro-story",
+    "image-story",
+    "founders",
+    "values",
+    "hero-materials",
+    "intro-materials",
+    "fabrics",
+    "full_image_w7JBnC"
+  ]
+}

@@ -9,59 +9,10 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "home-hero",
-      "blocks": {
-        "panel-2": {
-          "type": "panel",
-          "settings": {
-            "pc_image": "shopify://shop_images/hero-pc-half.png",
-            "mob_image": "shopify://shop_images/hero.jpg",
-            "link": "shopify://products/gift-card",
-            "info_heading": "Worldwide Shipping",
-            "info_text": "Fast delivery to families around the world."
-          }
-        },
-        "panel-1": {
-          "type": "panel",
-          "settings": {
-            "pc_image": "shopify://shop_images/hero-pc-half.png",
-            "mob_image": "shopify://shop_images/5-app_3fbfcc2b-7323-42d9-9d0f-51408e26b76c.jpg",
-            "link": "shopify://blogs/journal/kids-shoe-size-chart",
-            "info_heading": "Made To Move",
-            "info_text": "Breathable, durable, quick-drying fabrics"
-          }
-        },
-        "slide_bLWiD8": {
-          "type": "slide",
-          "settings": {
-            "pc_image": "shopify://shop_images/hero-pc-w.png",
-            "mob_image": "shopify://shop_images/5-app_3fbfcc2b-7323-42d9-9d0f-51408e26b76c.jpg",
-            "link": "",
-            "heading": "ji\nijjhh",
-            "subtext": "5555555555",
-            "cta_label": "55555555555555",
-            "cta_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "panel-2",
-        "panel-1",
-        "slide_bLWiD8"
-      ],
-      "settings": {
-        "heading": "Stay in\nthe play.",
-        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
-        "cta_label": "Shop New Arrivals",
-        "cta_url": "shopify://collections/best-sellers",
-        "slide_interval": 5
-      }
-    },
-    "page_banner_KPXCMC": {
+    "page_banner_RHNQRz": {
       "type": "page-banner",
       "blocks": {
-        "stat_xmAU9g": {
+        "stat_9Y8XXJ": {
           "type": "stat",
           "settings": {
             "label": "Open roles",
@@ -69,7 +20,7 @@
             "placement": "panel"
           }
         },
-        "stat_gbHeA9": {
+        "stat_z88cPe": {
           "type": "stat",
           "settings": {
             "label": "Locations",
@@ -79,18 +30,66 @@
         }
       },
       "block_order": [
-        "stat_xmAU9g",
-        "stat_gbHeA9"
+        "stat_9Y8XXJ",
+        "stat_z88cPe"
       ],
       "disabled": true,
       "name": "Page banner",
       "settings": {
-        "image": "shopify://shop_images/pc_2c9310f6-f5d4-48d8-91c3-d834027e16de.jpg",
-        "image_mobile": "shopify://shop_images/app_1fc76964-edd1-455d-bdda-bcedf42c6f5e.jpg",
+        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
+        "image_mobile": "shopify://shop_images/hero-m.png",
         "heading": "Join our team.",
         "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
         "cta_label": "See open roles",
         "cta_url": ""
+      }
+    },
+    "hero": {
+      "type": "home-hero",
+      "blocks": {
+        "panel-1": {
+          "type": "panel",
+          "settings": {
+            "pc_image": "shopify://shop_images/3-pc_dedb9207-fc6a-4c7d-af2e-24ddbb97f07e.jpg",
+            "mob_image": "shopify://shop_images/6-app_dddbbfde-b997-4482-95f6-dbe5118cf786.jpg",
+            "link": "shopify://collections/best-sellers",
+            "info_heading": "Cooler days. Same wild play.",
+            "info_text": "Best-loved pieces, made to layer."
+          }
+        },
+        "panel-2": {
+          "type": "panel",
+          "settings": {
+            "pc_image": "shopify://shop_images/4-pc_79e1d987-28f6-49b3-9a34-90961014696f.jpg",
+            "link": "shopify://collections/best-sellers",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world"
+          }
+        },
+        "slide_QzEdXb": {
+          "type": "slide",
+          "settings": {
+            "pc_image": "shopify://shop_images/img_v3_0215r_04f7ee71-1e4b-438b-b211-fc3af8d936bg.jpg",
+            "mob_image": "shopify://shop_images/sale-app_cf4dace0-aa79-46e6-924d-296734e56ced.jpg",
+            "link": "shopify://collections/flash-sale",
+            "heading": "Final \nSale",
+            "subtext": "Up to 35% off. Limited stock and sizes.",
+            "cta_label": "Shop Sales",
+            "cta_url": "shopify://collections/flash-sale"
+          }
+        }
+      },
+      "block_order": [
+        "panel-1",
+        "panel-2",
+        "slide_QzEdXb"
+      ],
+      "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop Best Sellers",
+        "cta_url": "shopify://collections/best-sellers",
+        "slide_interval": 5
       }
     },
     "best-sellers": {
@@ -116,7 +115,7 @@
         "boys"
       ],
       "settings": {
-        "heading": "Best Sellers"
+        "heading": "Most Loved"
       }
     },
     "split": {
@@ -133,7 +132,7 @@
         "boys": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/3_5ab16991-6056-4321-8f47-fd6b9e0514aa.jpg",
+            "image": "shopify://shop_images/boys-pc.jpg",
             "heading": "For Boys",
             "url": "shopify://collections/boys"
           }
@@ -143,7 +142,6 @@
         "girls",
         "boys"
       ],
-      "disabled": true,
       "settings": {}
     },
     "activities": {
@@ -152,23 +150,22 @@
         "ice-skating": {
           "type": "activity",
           "settings": {
-            "collection": "100-gwp-tier",
-            "label": "Ice-skating",
-            "image": "shopify://shop_images/eae5510ca1c73ff34165571f5f0b2650.gif"
+            "collection": "skating-outfits",
+            "label": "Ice Skating"
           }
         },
         "skiing": {
           "type": "activity",
           "settings": {
             "collection": "skiing",
-            "label": "Skiing"
+            "label": ""
           }
         },
         "golf": {
           "type": "activity",
           "settings": {
             "collection": "golf",
-            "label": "Golf"
+            "label": ""
           }
         },
         "tennis": {
@@ -181,21 +178,21 @@
         "swimming": {
           "type": "activity",
           "settings": {
-            "collection": "swimming",
-            "label": "Water Sports"
+            "collection": "water-sports",
+            "label": "Swimming"
           }
         },
         "everyday": {
           "type": "activity",
           "settings": {
-            "collection": "everyday",
+            "collection": "casual-everyday",
             "label": "Casual Everyday"
           }
         },
         "activities": {
           "type": "activity",
           "settings": {
-            "collection": "activities",
+            "collection": "outdoor-exploration",
             "label": "Outdoor Exploration"
           }
         }
@@ -213,73 +210,77 @@
         "tag": "Shop by Activities"
       }
     },
-    "full_image_JRY9PH": {
-      "type": "full-image",
-      "disabled": true,
-      "name": "Full image",
-      "settings": {
-        "heading": "",
-        "eager_load": false,
-        "pc_image": "shopify://shop_images/hero-pc-w.png",
-        "mob_image": "shopify://shop_images/app_8e6f0a93-e002-4a71-a06c-aa6d53068248.jpg",
-        "link": ""
-      }
-    },
     "carousel": {
       "type": "home-carousel",
       "blocks": {
+        "post-3": {
+          "type": "post",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/4_6_dcf708b7-c081-4ad7-bc65-73fee1a81015.jpg",
+            "handle": "@babychloemixedkids",
+            "url": ""
+          }
+        },
         "post-1": {
           "type": "post",
           "settings": {
-            "handle": "@moodytiger",
-            "url": ""
-          }
-        },
-        "post-2": {
-          "type": "post",
-          "settings": {
-            "handle": "@moodytiger",
-            "url": ""
-          }
-        },
-        "post-3": {
-          "type": "post",
-          "settings": {
-            "handle": "@moodytiger",
-            "url": ""
+            "image": "shopify://shop_images/4_2_6ed01c38-4a9f-4d4f-b27d-f00af9b1631d.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-swimsuit-waverider"
           }
         },
         "post-4": {
           "type": "post",
           "settings": {
-            "handle": "@moodytiger",
-            "url": ""
+            "image": "shopify://shop_images/4_3_bdd2c07f-1f37-4641-a4ef-80ace8852054.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-open-back-top-mesh"
+          }
+        },
+        "post-2": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_4_2e051e08-a90f-47de-b6cd-f5428f1f8e90.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-skirt-bubble-pleated"
           }
         },
         "post-5": {
           "type": "post",
           "settings": {
-            "handle": "@moodytiger",
-            "url": ""
+            "image": "shopify://shop_images/4_5.jpg",
+            "handle": "@babychloemixedkids",
+            "url": "shopify://products/kids-sherpa-jacket-fleece"
           }
         },
-        "post-6": {
+        "post_JBAGkY": {
           "type": "post",
           "settings": {
+            "image": "shopify://shop_images/4_7.jpg",
+            "handle": "@Tyneofficial",
+            "url": "shopify://products/kids-sherpa-jacket-fleece"
+          }
+        },
+        "post_3N3pFM": {
+          "type": "post",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/4_8.jpg",
             "handle": "@moodytiger",
             "url": ""
           }
         }
       },
       "block_order": [
-        "post-1",
-        "post-2",
         "post-3",
+        "post-1",
         "post-4",
+        "post-2",
         "post-5",
-        "post-6"
+        "post_JBAGkY",
+        "post_3N3pFM"
       ],
-      "disabled": true,
       "settings": {}
     },
     "page_referral_banner_BjA9gQ": {
@@ -287,23 +288,20 @@
       "blocks": {
         "item_ECCAUC": {
           "type": "item",
-          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
+            "subtitle": ""
           }
         },
         "item_DVWh4t": {
           "type": "item",
-          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
-            "subtitle": "We take responsibility for our impact."
+            "subtitle": ""
           }
         },
         "item_RaNkxe": {
           "type": "item",
-          "disabled": true,
           "settings": {
             "title": "We take responsibility for our impact.",
             "subtitle": ""
@@ -318,50 +316,8 @@
       "disabled": true,
       "name": "Referral banner",
       "settings": {
-        "heading": "Give 15%, Get 15%.\nGive 15%, Get 15%.",
-        "subtext": "We craft innovative,superior products for a safe and\ncomfortable active lifestyle, and we look after the\npeople who make that happen. See a role that excites you.\nWrite to us at us.career@moodytiger.com.",
-        "show_cta": true,
-        "cta_label": "ddd",
-        "cta_url": "",
-        "show_icon": true,
-        "show_border": false
-      }
-    },
-    "page_referral_banner_q9TWGP": {
-      "type": "page-referral-banner",
-      "blocks": {
-        "item_NPa6tj": {
-          "type": "item",
-          "settings": {
-            "title": "We take responsibility for our impact.",
-            "subtitle": "We take responsibility for our impact.\nWe take responsibility for our impact."
-          }
-        },
-        "item_X8WPtk": {
-          "type": "item",
-          "settings": {
-            "title": "We take responsibility for our impact.",
-            "subtitle": "We take responsibility for our impact."
-          }
-        },
-        "item_EEcfWm": {
-          "type": "item",
-          "settings": {
-            "title": "We take responsibility for our impact.",
-            "subtitle": ""
-          }
-        }
-      },
-      "block_order": [
-        "item_NPa6tj",
-        "item_X8WPtk",
-        "item_EEcfWm"
-      ],
-      "disabled": true,
-      "name": "Referral banner",
-      "settings": {
-        "heading": "Give 15%, Get 15%.\nGive 15%, Get 15%.",
-        "subtext": "We craft innovative,superior products for a safe and\ncomfortable active lifestyle, and we look after the\npeople who make that happen. See a role that excites you.\nWrite to us at us.career@moodytiger.com.",
+        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
+        "subtext": "",
         "show_cta": false,
         "cta_label": "ddd",
         "cta_url": "",
@@ -448,6 +404,7 @@
         "item_xF3tc9",
         "item_Ge43fy"
       ],
+      "disabled": true,
       "name": "Card grid",
       "settings": {
         "heading": "Rack up points.",
@@ -613,234 +570,36 @@
         "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
       }
     },
-    "product_reviews_tbibN7": {
-      "type": "product-reviews",
+    "full_image_VRa6gP": {
+      "type": "full-image",
       "disabled": true,
-      "name": "Product reviews",
-      "settings": {
-        "heading": "Customer Reviews"
-      }
-    },
-    "page_careers_roles_awehxq": {
-      "type": "page-careers-roles",
-      "blocks": {
-        "title_c3XRf8": {
-          "type": "title",
-          "settings": {
-            "country": "The United States",
-            "count": "6 roles"
-          }
-        },
-        "item_tPAFNt": {
-          "type": "item",
-          "settings": {
-            "job_title": "Store Manager",
-            "employment_type": "Full-time",
-            "location": "San Jose, CA",
-            "link": "shopify://pages/activity"
-          }
-        }
-      },
-      "block_order": [
-        "title_c3XRf8",
-        "item_tPAFNt"
+      "custom_css": [
+        ".mt-full-image {margin-bottom: 80px;}",
+        ".mt-full-image h1,.mt-full-image h2,.mt-full-image h3 {font-family: \"FK Display\", \"FK Grotesk\", sans-serif !important; font-size: 35px !important; color: #1d1d1d !important; line-height: 1.2;}",
+        "@media (max-width: 749px) {.mt-full-image {margin-bottom: 24px; }}"
       ],
-      "disabled": true,
-      "name": "Careers roles",
+      "name": "Full image",
       "settings": {
-        "heading": "Give 15%, Get 15%.",
-        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
+        "heading": "Special Collection",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/Group_1184.jpg",
+        "mob_image": "shopify://shop_images/Group_1187.jpg",
+        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski"
       }
-    },
-    "slideshow_gWbURe": {
-      "type": "slideshow",
-      "blocks": {
-        "slide_ALyEXn": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/1-flash_sale.jpg",
-            "subheading": "",
-            "heading": "Room to move",
-            "subtext": "Play clothes built for real movement.",
-            "content_position": "left",
-            "cta_label": "Shop new arrivals",
-            "cta_url": "",
-            "link": "",
-            "overlay_opacity": 10
-          }
-        },
-        "slide_hcKMjr": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/pc-2_7891f0b4-4dbe-4170-a37f-7c3ec5c0046c.jpg",
-            "subheading": "",
-            "heading": "Built for outside days",
-            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
-            "content_position": "right",
-            "cta_label": "Shop outdoor",
-            "cta_url": "",
-            "link": "",
-            "overlay_opacity": 0
-          }
-        },
-        "slide_8E7PWL": {
-          "type": "slide",
-          "settings": {
-            "subheading": "",
-            "heading": "Soft where it counts",
-            "subtext": "Tagless, chafe-free seams they won't even notice.",
-            "content_position": "center",
-            "cta_label": "Shop essentials",
-            "cta_url": "",
-            "link": "",
-            "overlay_opacity": 0
-          }
-        }
-      },
-      "block_order": [
-        "slide_ALyEXn",
-        "slide_hcKMjr",
-        "slide_8E7PWL"
-      ],
-      "disabled": true,
-      "name": "Slideshow",
-      "settings": {
-        "autoplay": true,
-        "autoplay_interval": 5,
-        "analytics_label": "Slideshow",
-        "collection": ""
-      }
-    },
-    "product_reviews_CLkN4j": {
-      "type": "product-reviews",
-      "disabled": true,
-      "name": "Product reviews",
-      "settings": {
-        "heading": "Customer Reviews"
-      }
-    },
-    "page_contact_faq_DkTnmA": {
-      "type": "page-contact-faq",
-      "blocks": {
-        "question_8MRdxi": {
-          "type": "question",
-          "settings": {
-            "question": "",
-            "answer": ""
-          }
-        },
-        "question_Ri6raj": {
-          "type": "question",
-          "settings": {
-            "question": "What payment methods can I use?",
-            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
-          }
-        },
-        "question_mPrJPT": {
-          "type": "question",
-          "settings": {
-            "question": "What payment methods can I use?",
-            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
-          }
-        },
-        "question_HhHygf": {
-          "type": "question",
-          "settings": {
-            "question": "What payment methods can I use?",
-            "answer": "<p>moodytiger is a global children's activewear brand. We specialise in the independent design, development and direct-to-consumer retailing of technical activewear for children aged 4–16.Our range covers leggings, tops, jackets and outerwear, swimwear, dresses and skirts, and footwear — designed for everyday movement and outdoor play. We sell through this official online store and through our own physical stores across Mainland China, Hong Kong, Singapore, the United Arab Emirates and the United States. Every store is directly operated; we do not franchise.We're here to help — with sizing, an order, a return, or anything else.<br/><br/></p>"
-          }
-        }
-      },
-      "block_order": [
-        "question_8MRdxi",
-        "question_Ri6raj",
-        "question_mPrJPT",
-        "question_HhHygf"
-      ],
-      "disabled": true,
-      "name": "Contact FAQ",
-      "settings": {
-        "image": "shopify://shop_images/2-pc_945299df-22cc-4ecf-b453-40b44e16e8a7.jpg",
-        "heading": "Contact Us"
-      }
-    },
-    "home_carousel_VWeePp": {
-      "type": "home-carousel",
-      "blocks": {
-        "post_mQbJRB": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        },
-        "post_eVr8dB": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        },
-        "post_dkeQpB": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        },
-        "post_nMkGQg": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        },
-        "post_3qb8yH": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        },
-        "post_idtFpV": {
-          "type": "post",
-          "settings": {
-            "handle": "@Instagramaccount",
-            "url": ""
-          }
-        }
-      },
-      "block_order": [
-        "post_mQbJRB",
-        "post_eVr8dB",
-        "post_dkeQpB",
-        "post_nMkGQg",
-        "post_3qb8yH",
-        "post_idtFpV"
-      ],
-      "name": "Social carousel",
-      "settings": {}
     }
   },
   "order": [
+    "page_banner_RHNQRz",
     "hero",
-    "page_banner_KPXCMC",
     "best-sellers",
     "split",
     "activities",
-    "full_image_JRY9PH",
     "carousel",
     "page_referral_banner_BjA9gQ",
-    "page_referral_banner_q9TWGP",
     "page_card_grid_ygFVW9",
     "page_card_grid_KiA8Qy",
     "product_faq_8L8K4g",
     "page_careers_roles_Wkqjnc",
-    "product_reviews_tbibN7",
-    "page_careers_roles_awehxq",
-    "slideshow_gWbURe",
-    "product_reviews_CLkN4j",
-    "page_contact_faq_DkTnmA",
-    "home_carousel_VWeePp"
+    "full_image_VRa6gP"
   ]
 }

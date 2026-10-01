@@ -1,0 +1,372 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_banner_jyUpBW": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_FikE4Q": {
+          "type": "stat",
+          "settings": {
+            "label": "PARTNER",
+            "value": "bluesign®SYSTEM",
+            "placement": "panel"
+          }
+        },
+        "stat_YT3K69": {
+          "type": "stat",
+          "settings": {
+            "label": "PROMISE",
+            "value": "Safe for children",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_FikE4Q",
+        "stat_YT3K69"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/pc_2c9310f6-f5d4-48d8-91c3-d834027e16de.jpg",
+        "image_mobile": "shopify://shop_images/app_32567f0b-6ddb-461a-88b6-0dd55d925061.jpg",
+        "heading": "Made to a higher standard",
+        "text": "We've partnered with bluesign®, an internationally\nacclaimed sustainability solution, so safety is designed\nin from the very first step of production.",
+        "cta_label": "Our fabric",
+        "cta_url": "https://moodytiger.com/pages/our-fabric"
+      }
+    },
+    "page_referral_banner_pJk97e": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_YQdHjU": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_FMjebL": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_V6r8TX": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_YQdHjU",
+        "item_FMjebL",
+        "item_V6r8TX"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "A promise, not a priority",
+        "subtext": "Our children's personal and environmental safety and\nwellbeing aren't just priorities for moodytiger - they're\nour promises, checked across every part of the supply chain.",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true,
+        "show_border": false
+      }
+    },
+    "full_image_GwkHzw": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/pc-2_aebbf3ec-3a1f-434d-ad94-5fd7c0345afb.jpg",
+        "mob_image": "shopify://shop_images/app-2_225e325d-ac55-4129-a34a-954a2a26ff2d.jpg",
+        "link": ""
+      }
+    },
+    "page_referral_banner_qtHLmn": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_yyXKJp": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_ytbjEK": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_MMGmWp": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_yyXKJp",
+        "item_ytbjEK",
+        "item_MMGmWp"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Clean from the start.",
+        "subtext": "The bluesign®SYSTEM focuses on resources, people and theenvironment\nThrough Input StreamManagement, approved chemicals andraw materials\nare provided and used across the entire valuechain, within strict ecologica\nand toxicological limits. Consequently, substances that poserisksto people\nand the environment are eliminated from the very beginning",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true,
+        "show_border": true
+      }
+    },
+    "page_referral_banner_wh8FML": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_L33mnd": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": "A responsibly acting party of the textile supply chain"
+          }
+        },
+        "item_JhTcpB": {
+          "type": "item",
+          "settings": {
+            "title": "We guarantee everything we make.",
+            "subtitle": "Substances posing risks to people and the planet are\neliminated"
+          }
+        },
+        "item_yd6RTa": {
+          "type": "item",
+          "settings": {
+            "title": "We keep your gear going.",
+            "subtitle": "We apply bluesign® standards across our entiresupply chain."
+          }
+        },
+        "item_PnKLbm": {
+          "type": "item",
+          "settings": {
+            "title": "We act for the planet.",
+            "subtitle": "Continuously improving performance, focused on a\nsustainable future."
+          }
+        }
+      },
+      "block_order": [
+        "item_L33mnd",
+        "item_JhTcpB",
+        "item_yd6RTa",
+        "item_PnKLbm"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "What we stand for.",
+        "subtext": "",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true,
+        "show_border": false
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_title": true
+      }
+    },
+    "page_card_grid_c7bq3N": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_9AeQNN": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/pandectes-banner-logo.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_f9frHc": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_UxM9xy": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_78aYMF": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_rmBWxU": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_NfkhLJ": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_bUnYpK": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_tnm6tq": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_9AeQNN",
+        "item_f9frHc",
+        "item_UxM9xy",
+        "item_78aYMF",
+        "item_rmBWxU",
+        "item_NfkhLJ",
+        "item_bUnYpK",
+        "item_tnm6tq"
+      ],
+      "disabled": true,
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "card"
+      }
+    },
+    "page_card_grid_PpMx3W": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_wbQrEF": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_QG8Ua8": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_Jd7EAQ": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_A9rr3G": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_wbQrEF",
+        "item_QG8Ua8",
+        "item_Jd7EAQ",
+        "item_A9rr3G"
+      ],
+      "disabled": true,
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "image"
+      }
+    },
+    "full_image_WLVaF7": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/pc-3_55760d8d-722d-46c6-829b-fd05f5f66242.jpg",
+        "mob_image": "shopify://shop_images/app-3_4cccfe72-d82f-4c68-ae82-64e530f1310f.jpg",
+        "link": ""
+      }
+    },
+    "custom_liquid_cc7Uyy": {
+      "type": "custom-liquid",
+      "name": "Custom Liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mt-spacer\" aria-hidden=\"true\"></div>\n<style>\n  .mt-spacer{height:20px}\n  @media (min-width:750px){.mt-spacer{height:50px}}\n</style>",
+        "contain": true
+      }
+    }
+  },
+  "order": [
+    "page_banner_jyUpBW",
+    "page_referral_banner_pJk97e",
+    "full_image_GwkHzw",
+    "page_referral_banner_qtHLmn",
+    "page_referral_banner_wh8FML",
+    "main",
+    "page_card_grid_c7bq3N",
+    "page_card_grid_PpMx3W",
+    "full_image_WLVaF7",
+    "custom_liquid_cc7Uyy"
+  ]
+}

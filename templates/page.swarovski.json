@@ -1,0 +1,151 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_title": true
+      }
+    },
+    "full_image_iBpTVc": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/img_v3_0215o_d0bd7904-4cc2-4af9-9671-32282d9736eg.jpg",
+        "mob_image": "shopify://shop_images/img_v3_0215o_9f134242-eee9-4225-a503-8388d761568g.jpg",
+        "link": ""
+      }
+    },
+    "full_image_AwNazF": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/2_e505371b-5f76-4d6a-b4bb-f4b3ed7aede0.jpg",
+        "mob_image": "shopify://shop_images/2_d7d0bbe6-9c86-4b32-b54a-b84491821604.jpg",
+        "link": ""
+      }
+    },
+    "full_image_kEHNHf": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/3_38c1dbf5-6c50-47e9-a150-ee042d921d8d.jpg",
+        "mob_image": "shopify://shop_images/3_35e58e46-73f0-4dc6-8eda-12e248f0f8f4.jpg",
+        "link": ""
+      }
+    },
+    "featured_collection_6gza8w": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection": "swarovski",
+        "heading": "",
+        "layout": "grid",
+        "count": 8,
+        "columns": 4,
+        "quick": true,
+        "autoplay": false,
+        "cta_label": "",
+        "cta_url": ""
+      }
+    },
+    "full_image_rPfhLN": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/5_8ee90dd6-0b13-4180-8b76-c76f8d48418b.jpg",
+        "mob_image": "shopify://shop_images/1_e4a9af87-03c4-48a5-8147-87f166b2bdd1.jpg",
+        "link": ""
+      }
+    },
+    "full_image_CKr76b": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/4_f77b8ef3-ef41-4acd-a025-55bd1559c91a.jpg",
+        "mob_image": "shopify://shop_images/4_9ebb94f8-0174-426c-ab35-0040f2e9108a.jpg",
+        "link": ""
+      }
+    },
+    "full_image_Yax9Tg": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/6_37c6373a-a8af-47e8-a79b-bae0f6a3e72d.jpg",
+        "mob_image": "shopify://shop_images/6_68b46096-7148-43fb-af69-d966b362abe2.jpg",
+        "link": "https://cdn.shopify.com/s/files/1/0475/6920/7457/files/IB_Certificate_EN_2025_69eb1a9e-e196-467d-969e-61c282540118.pdf?v=1790155155"
+      }
+    },
+    "rich_text_N6rWhH": {
+      "type": "rich-text",
+      "name": "Rich text",
+      "settings": {
+        "heading": "",
+        "text": "<p><a href=\"https://cdn.shopify.com/s/files/1/0475/6920/7457/files/IB_Certificate_EN_2025_69eb1a9e-e196-467d-969e-61c282540118.pdf?v=1790155155\">Crystals by Swarovski®, certified — view our Ingredient Branding certificate.</a></p>",
+        "align": "left",
+        "cta_label": "",
+        "cta_url": ""
+      }
+    },
+    "full_image_EqBg8N": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/img_v3_0215o_242be503-cdbc-445a-9c19-d9f1c8f4024g.jpg",
+        "mob_image": "shopify://shop_images/img_v3_0215o_e62ea0b2-960f-4fb3-8157-1796c0e83bfg.jpg",
+        "link": ""
+      }
+    },
+    "featured_collection_zRyY4Q": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection": "ice-skating-no-sw",
+        "heading": "THE ICE SKATING SALE",
+        "layout": "row",
+        "count": 10,
+        "columns": 4,
+        "quick": true,
+        "autoplay": true,
+        "cta_label": "",
+        "cta_url": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "full_image_iBpTVc",
+    "full_image_AwNazF",
+    "full_image_kEHNHf",
+    "featured_collection_6gza8w",
+    "full_image_rPfhLN",
+    "full_image_CKr76b",
+    "full_image_Yax9Tg",
+    "rich_text_N6rWhH",
+    "full_image_EqBg8N",
+    "featured_collection_zRyY4Q"
+  ]
+}

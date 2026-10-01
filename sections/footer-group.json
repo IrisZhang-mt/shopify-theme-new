@@ -27,7 +27,10 @@
           }
         }
       },
-      "block_order": ["menu-1", "menu_HFXPqR"],
+      "block_order": [
+        "menu-1",
+        "menu_HFXPqR"
+      ],
       "settings": {
         "image": "shopify://shop_images/footer.png",
         "heading": "Join the Moody Miles Club",
@@ -53,5 +56,8 @@
       }
     }
   },
-  "order": ["footer", "popup"]
+  "order": [
+    "footer",
+    "popup"
+  ]
 }

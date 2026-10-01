@@ -1,0 +1,294 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "home_hero_PW7hJi": {
+      "type": "home-hero",
+      "blocks": {
+        "panel_k6Ce3F": {
+          "type": "panel",
+          "settings": {
+            "link": "",
+            "info_heading": "Made To Move",
+            "info_text": "Breathable, durable, quick-drying fabrics"
+          }
+        },
+        "panel_qVgrqN": {
+          "type": "panel",
+          "settings": {
+            "link": "",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world."
+          }
+        },
+        "slide_wGBUdP": {
+          "type": "slide",
+          "settings": {
+            "link": "",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "panel_k6Ce3F",
+        "panel_qVgrqN",
+        "slide_wGBUdP"
+      ],
+      "disabled": true,
+      "name": "Hero",
+      "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop New Arrivals",
+        "cta_url": "",
+        "slide_interval": 5
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "show_title": true
+      }
+    },
+    "page_banner_JLpryy": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_nxgJbC": {
+          "type": "stat",
+          "settings": {
+            "label": "OPEN ROLES",
+            "value": "7 positions",
+            "placement": "panel"
+          }
+        },
+        "stat_A8Ak9w": {
+          "type": "stat",
+          "settings": {
+            "label": "LOCATIONS",
+            "value": "United States. Malaysia",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_nxgJbC",
+        "stat_A8Ak9w"
+      ],
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
+        "image_mobile": "shopify://shop_images/hero-m.png",
+        "heading": "Join ourteam.",
+        "text": "moodytiger is a global children's sports lifestyle brand,\ndedicated to products tailored to the needs of children -\ninspiring them to explore the world with freedom and joy.",
+        "cta_label": "See open roles",
+        "cta_url": "#shopify-section-template--22656040468726__page_careers_roles_JGUBmK"
+      }
+    },
+    "page_referral_banner_3TjeDP": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_pg7yCh": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_XwXa9L": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_xtneMB": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_pg7yCh",
+        "item_XwXa9L",
+        "item_xtneMB"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "We take play seriously.",
+        "subtext": "We craft innovative,superior products for a safe and\ncomfortable active lifestyle, and we look after the\npeople who make that happen. See a role that excites you.\nWrite to us at us.career@moodytiger.com.",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true
+      }
+    },
+    "page_referral_banner_GL8K86": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_JRwdR8": {
+          "type": "item",
+          "settings": {
+            "title": "Competitive compensation",
+            "subtitle": ""
+          }
+        },
+        "item_NErqhG": {
+          "type": "item",
+          "settings": {
+            "title": "Omnichannel bonus program",
+            "subtitle": ""
+          }
+        },
+        "item_LcCe7j": {
+          "type": "item",
+          "settings": {
+            "title": "Benefits package for those who qualify",
+            "subtitle": ""
+          }
+        },
+        "item_6a6F9q": {
+          "type": "item",
+          "settings": {
+            "title": "Product allowance & discounts",
+            "subtitle": ""
+          }
+        },
+        "item_mtX9Fw": {
+          "type": "item",
+          "settings": {
+            "title": "Wellness support",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_JRwdR8",
+        "item_NErqhG",
+        "item_LcCe7j",
+        "item_6a6F9q",
+        "item_mtX9Fw"
+      ],
+      "name": "Referral banner",
+      "settings": {
+        "heading": "We offer.",
+        "subtext": "",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true
+      }
+    },
+    "page_careers_roles_JGUBmK": {
+      "type": "page-careers-roles",
+      "blocks": {
+        "title_HErqD8": {
+          "type": "title",
+          "settings": {
+            "country": "The United States",
+            "count": "6 roles"
+          }
+        },
+        "item_MzriaF": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA",
+            "link": ""
+          }
+        },
+        "item_b9qjLE": {
+          "type": "item",
+          "settings": {
+            "job_title": "Supervisor",
+            "employment_type": "Full-time",
+            "location": "Los Angeles, CA",
+            "link": ""
+          }
+        },
+        "item_4HhqNe": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "Cabazon, CA·Desert Hills Premium",
+            "link": ""
+          }
+        },
+        "item_HzqHAP": {
+          "type": "item",
+          "settings": {
+            "job_title": "Supervisor",
+            "employment_type": "Full-time",
+            "location": "Cabazon, CA·Desert Hills Premium",
+            "link": ""
+          }
+        },
+        "item_yfaGgw": {
+          "type": "item",
+          "settings": {
+            "job_title": "Supervisor",
+            "employment_type": "Full-time",
+            "location": "Cabazon, CA - Desert Hills Premium",
+            "link": ""
+          }
+        },
+        "title_ENEzn9": {
+          "type": "title",
+          "settings": {
+            "country": "Malaysia",
+            "count": "1 roles"
+          }
+        },
+        "item_aknKtJ": {
+          "type": "item",
+          "settings": {
+            "job_title": "Sales Associate",
+            "employment_type": "Full-time",
+            "location": "Kuala Lumpur.TRX",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "title_HErqD8",
+        "item_MzriaF",
+        "item_b9qjLE",
+        "item_4HhqNe",
+        "item_HzqHAP",
+        "item_yfaGgw",
+        "title_ENEzn9",
+        "item_aknKtJ"
+      ],
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Find your place.",
+        "subtext": "See a position that excites you.\nConnect with us at us.career@moodytiger.com"
+      }
+    }
+  },
+  "order": [
+    "home_hero_PW7hJi",
+    "main",
+    "page_banner_JLpryy",
+    "page_referral_banner_3TjeDP",
+    "page_referral_banner_GL8K86",
+    "page_careers_roles_JGUBmK"
+  ]
+}

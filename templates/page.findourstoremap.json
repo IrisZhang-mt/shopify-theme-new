@@ -1,0 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "store_flagship_carousel_mRReaA": {
+      "type": "store-flagship-carousel",
+      "name": "Store flagship carousel",
+      "settings": {
+        "heading": "Our stores."
+      }
+    },
+    "main": {
+      "type": "main-store-locator",
+      "settings": {
+        "heading": "Find a moodytiger store.",
+        "subtext": "From flagship malls to premium outlets, find the moodytiger nearest you — and come stay in the play with the whole family."
+      }
+    },
+    "page_careers_roles_dxxGqM": {
+      "type": "page-careers-roles",
+      "disabled": true,
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Give 15%, Get 15%.",
+        "subtext": "Give friends 15% off their first order, and\nget a 15% off coupon for every referral."
+      }
+    },
+    "featured_collection_j64dVk": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection": "best-sellers",
+        "heading": "Most Loved",
+        "layout": "row",
+        "count": 8,
+        "columns": 4,
+        "quick": true,
+        "autoplay": true,
+        "cta_label": "",
+        "cta_url": ""
+      }
+    }
+  },
+  "order": [
+    "store_flagship_carousel_mRReaA",
+    "main",
+    "page_careers_roles_dxxGqM",
+    "featured_collection_j64dVk"
+  ]
+}

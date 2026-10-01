@@ -15,12 +15,28 @@
         "blog": "",
         "heading": "Featured Articles",
         "show_tag_nav": true,
-        "image": "shopify://shop_images/1_58646e8f-f6bf-4205-9dee-e92c7837bf19.jpg",
-        "image_mobile": "shopify://shop_images/hero.png"
+        "image": "shopify://shop_images/pc_9926a2c8-b634-45cf-8e8e-a4313c5a0edd.jpg",
+        "image_mobile": "shopify://shop_images/app_42339752-d312-47c6-aa30-85b592972593.jpg"
+      }
+    },
+    "featured_collection_ebAyRq": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection": "new-arrival",
+        "heading": "What‘s new",
+        "layout": "row",
+        "count": 8,
+        "columns": 4,
+        "quick": true,
+        "autoplay": true,
+        "cta_label": "",
+        "cta_url": ""
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "featured_collection_ebAyRq"
   ]
 }

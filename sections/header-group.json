@@ -13,8 +13,28 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
+      "blocks": {
+        "message_ydTEHw": {
+          "type": "message",
+          "settings": {
+            "text": "Cooler days. Same wild play:Up to 30%Off",
+            "link": "https://moodytiger.com/collections/best-sellers"
+          }
+        },
+        "message_azyUqx": {
+          "type": "message",
+          "settings": {
+            "text": "Free shipping on orders over $79",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_ydTEHw",
+        "message_azyUqx"
+      ],
       "settings": {
-        "scheme": "accent",
+        "scheme": "ink",
         "rotate": 5
       }
     },
@@ -31,9 +51,13 @@
       "type": "cart-drawer",
       "settings": {
         "miles_text": "Earn moody miles points on this order. Gift cards and promotional codes applied at checkout.",
-        "recs_heading": "We think you'll love"
+        "recs_heading": "Picked for you"
       }
     }
   },
-  "order": ["announcement-bar", "header", "cart-drawer"]
+  "order": [
+    "announcement-bar",
+    "header",
+    "cart-drawer"
+  ]
 }

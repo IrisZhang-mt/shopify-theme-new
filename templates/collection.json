@@ -9,60 +9,27 @@
  */
 {
   "sections": {
-    "full_image_nWYHtT": {
+    "full_image_bJAVKR": {
       "type": "full-image",
+      "disabled": true,
       "name": "Full image",
       "settings": {
         "heading": "",
-        "eager_load": false,
-        "pc_image": "shopify://shop_images/pc_8ecd7c81-df8d-44af-bcbc-fdb5b1d683e0.jpg",
-        "mob_image": "shopify://shop_images/m_c6c0060e-4f7e-4db4-b8cf-2afa1df76ea0.jpg",
+        "eager_load": true,
+        "pc_image": "shopify://shop_images/bestseller_-pc.jpg",
+        "mob_image": "shopify://shop_images/bestseller_-app.jpg",
         "link": ""
       }
     },
     "main": {
       "type": "main-collection",
-      "blocks": {
-        "tile_QWDjnt": {
-          "type": "tile",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
-            "label": "Cloudie Essential — Soft, easy all year.11111",
-            "link": ""
-          }
-        },
-        "tile_wqhHKp": {
-          "type": "tile",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
-            "label": "2222Cloudie Essential — Soft, easy all year.",
-            "link": "shopify://products/boys-hoodie-2-in-1-tee"
-          }
-        },
-        "tile_k7T9Q7": {
-          "type": "tile",
-          "disabled": true,
-          "settings": {
-            "image": "shopify://shop_images/4_1_67667fc3-e197-489f-ab2f-39bccdb93724.jpg",
-            "label": "333Cloudie Essential — Soft, easy all year.",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "tile_QWDjnt",
-        "tile_wqhHKp",
-        "tile_k7T9Q7"
-      ],
       "settings": {
-        "single_line_titles": true
+        "single_line_titles": false
       }
     }
   },
   "order": [
-    "full_image_nWYHtT",
+    "full_image_bJAVKR",
     "main"
   ]
 }
