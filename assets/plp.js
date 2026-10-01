@@ -208,6 +208,7 @@ if (!window.mtPlpInit) {
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     trackGrid(plp.querySelector('[data-plp-grid]'));
+    scrollToBar(plp);
   };
 
   const apply = (plp) => {
