@@ -194,8 +194,8 @@ if (!window.mtPlpInit) {
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     trackGrid(plp.querySelector('[data-plp-grid]'));
-    resetScroll('after swap');
-    requestAnimationFrame(() => resetScroll('next frame'));
+    resetScroll();
+    requestAnimationFrame(resetScroll);
   };
 
   const apply = (plp) => {
