@@ -197,6 +197,83 @@ if (!window.mtPlpInit) {
     refresh(plp, plp.dataset.url + (query ? `?${query}` : ''), true);
   };
 
+  const saveReturnState = (plp, card) => {
+    const grid = plp.querySelector('[data-plp-grid]');
+    const productHref = card.querySelector('.mt-card__link')?.getAttribute('href');
+    if (!grid || !productHref) return;
+    try {
+      sessionStorage.setItem(
+        RETURN_STATE_KEY,
+        JSON.stringify({
+          collectionHref: window.location.pathname + window.location.search,
+          pages: pageCount.get(grid) || 1,
+          productHref,
+          scrollY: window.scrollY,
+        })
+      );
+    } catch {}
+  };
+
+  const restoreReturnState = async () => {
+    const navEntry = performance.getEntriesByType('navigation')[0];
+    if (navEntry && navEntry.type !== 'back_forward') {
+      try {
+        sessionStorage.removeItem(RETURN_STATE_KEY);
+      } catch {}
+      return;
+    }
+    let state;
+    try {
+      const raw = sessionStorage.getItem(RETURN_STATE_KEY);
+      if (!raw) return;
+      state = JSON.parse(raw);
+    } catch {
+      return;
+    }
+    try {
+      sessionStorage.removeItem(RETURN_STATE_KEY);
+    } catch {}
+    if (!state || state.collectionHref !== window.location.pathname + window.location.search) return;
+    const plp = document.querySelector('[data-plp]');
+    const grid = plp?.querySelector('[data-plp-grid]');
+    if (!plp || !grid) return;
+
+    plp.querySelectorAll('[data-plp-more]').forEach((more) => moreObserver.unobserve(more));
+    for (let loaded = 1; loaded < state.pages; loaded += 1) {
+      const more = plp.querySelector('[data-plp-more]');
+      if (!more) break;
+      let doc;
+      try {
+        const res = await fetch(sectionUrl(plp, more.dataset.nextUrl));
+        if (!res.ok) break;
+        doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+      } catch {
+        break;
+      }
+      grid.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+      const nextMore = doc.querySelector('[data-plp-more]');
+      if (nextMore) {
+        more.dataset.nextUrl = nextMore.dataset.nextUrl;
+      } else {
+        more.remove();
+      }
+    }
+    pageCount.set(grid, state.pages);
+    observeMore();
+    queueAlign();
+    document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    trackGrid(grid);
+
+    const target = [...grid.querySelectorAll('.mt-card[data-item-id]')].find(
+      (card) => card.querySelector('.mt-card__link')?.getAttribute('href') === state.productHref
+    );
+    if (target) {
+      target.scrollIntoView({ block: 'center' });
+    } else if (typeof state.scrollY === 'number') {
+      window.scrollTo(0, state.scrollY);
+    }
+  };
+
   const moreObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach(async (entry) => {
@@ -215,7 +292,9 @@ if (!window.mtPlpInit) {
           return;
         }
         if (!more.isConnected) return;
-        plp.querySelector('[data-plp-grid]')?.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+        const grid = plp.querySelector('[data-plp-grid]');
+        grid?.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+        if (grid) pageCount.set(grid, (pageCount.get(grid) || 1) + 1);
         const nextMore = doc.querySelector('[data-plp-more]');
         if (nextMore) {
           more.dataset.nextUrl = nextMore.dataset.nextUrl;
