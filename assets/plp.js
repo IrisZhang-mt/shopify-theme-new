@@ -79,12 +79,14 @@ if (!window.mtPlpInit) {
     const bar = plp.querySelector('.mt-plp__bar');
     if (!bar) return;
     const headerOffset = document.querySelector('.section-header')?.offsetHeight || 0;
-    let top = -headerOffset;
-    let node = bar;
-    while (node) {
-      top += node.offsetTop;
-      node = node.offsetParent;
-    }
+    const top = Math.max(0, window.scrollY + bar.getBoundingClientRect().top - headerOffset);
+    console.debug('[plp-scroll-debug]', {
+      scrollY: window.scrollY,
+      top,
+      headerOffset,
+      lerpActive: document.documentElement.classList.contains('mt-smooth'),
+      hasMtScrollTo: typeof window.mtScrollTo === 'function',
+    });
     if (window.scrollY <= top) return;
     if (window.mtScrollTo) {
       window.mtScrollTo(top);
