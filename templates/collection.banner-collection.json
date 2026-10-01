@@ -1,0 +1,1 @@
+{"sections":{"full_image_bJAVKR":{"type":"full-image","name":"Full image","settings":{"heading":"","eager_load":true,"pc_image":"{{ collection.metafields.custom.banner_pc.value }}","mob_image":"{{ collection.metafields.custom.banner_mb.value }}","link":""}},"main":{"type":"main-collection","settings":{"single_line_titles":false}}},"order":["full_image_bJAVKR","main"]}

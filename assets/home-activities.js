@@ -6,22 +6,6 @@ if (!window.mtActivitiesInit) {
   const FLIP = 140;
   const flipAt = new WeakMap();
 
-  const preload =
-    'IntersectionObserver' in window
-      ? new IntersectionObserver(
-          (entries, observer) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              entry.target.querySelectorAll('.mt-act__slide').forEach((img) => {
-                img.loading = 'eager';
-              });
-              observer.unobserve(entry.target);
-            });
-          },
-          { rootMargin: '50% 0px' }
-        )
-      : null;
-
   let sections = [];
   const onScreen = new WeakMap();
 
@@ -70,7 +54,6 @@ if (!window.mtActivitiesInit) {
   const scan = () => {
     sections = [...document.querySelectorAll('.mt-act')];
     sections.forEach((section) => {
-      if (preload) preload.observe(section);
       viewObserver.observe(section);
       if (centerObserver && !hoverMq.matches) {
         section.querySelectorAll('.mt-act__row').forEach((row) => centerObserver.observe(row));

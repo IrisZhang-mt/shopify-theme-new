@@ -15,51 +15,65 @@
         "description": {
           "type": "item",
           "settings": {
-            "title": "Product Description",
-            "use_description": true,
-            "content": ""
+            "title": "Product Details",
+            "use_description": false,
+            "content": "<p>{{ product.metafields.custom.product_detail | metafield_tag }}</p>"
           }
         },
-        "material": {
+        "item_am9ppK": {
           "type": "item",
           "settings": {
-            "title": "Material & Care",
+            "title": "Material & care",
             "use_description": false,
-            "content": "<p>Machine wash cold with like colors. Do not bleach. Tumble dry low. Do not iron decoration.</p>"
+            "content": "{{ product.metafields.custom.materials_text | metafield_tag }}"
           }
         },
-        "sustainability": {
+        "item_gzxd6G": {
           "type": "item",
+          "settings": {
+            "title": "Size & fit",
+            "use_description": false,
+            "content": "{{ product.metafields.custom.size_fit | metafield_tag }}"
+          }
+        },
+        "item_JWAq3j": {
+          "type": "item",
+          "disabled": true,
           "settings": {
             "title": "Sustainability",
             "use_description": false,
-            "content": "<p>Made with recycled fibers and low-impact dyes in factories that meet our responsibility standards.</p>"
+            "content": "<p>@bluesign bluesign®</p><p>As a bluesign® system partner, we continuously improve our environmental performance and are focused on a sustainable future.Substances posing risks to people and the environment are eliminated from the very beginning. On-site inspections verify the proper application of such chemical products and raw materials in controlled processes and ensure the responsible use of resources.</p>"
           }
         }
       },
       "block_order": [
         "description",
-        "material",
-        "sustainability"
+        "item_am9ppK",
+        "item_gzxd6G",
+        "item_JWAq3j"
       ],
       "settings": {
-        "delivery_title": "Free & fast delivery",
-        "delivery_copy": "All orders are processed within 1-2 business days.",
+        "delivery_title": "Free shipping on $79+",
+        "delivery_copy": "Orders leave our warehouse in 1–2 business days.",
         "delivery_text": "<p>Orders are processed within 1-2 business days and shipped with tracking, so you can follow your parcel from our door to yours.</p>",
-        "returns_title": "30-day free returns",
-        "returns_copy": "Shop with confidence with our 30-day free returns policy.",
+        "returns_title": "30-day returns & exchanges",
+        "returns_copy": "Shop with confidence with our 30-day returns policy.",
         "returns_text": "<p>Anything not quite right can go back within 30 days of delivery, unworn and with its tags on. Reach out through the contact page and we will sort the rest.</p>",
-        "promo_title": "BUY 6+30% off, \nBUY 6+30% off, eachBUY 8+a free",
-        "promo_subtitle": "Sale: Automatic discount applied,Lowest price guaranteed",
-        "promo_collections": [],
+        "promo_image": "shopify://shop_images/pc_0912aecd-7b61-475e-9254-4aa40f13f886.jpg",
+        "promo_image_mobile": "shopify://shop_images/app_669f84e7-d343-4379-b74a-3faaced68a09.jpg",
+        "promo_title": "",
+        "promo_subtitle": "",
+        "promo_collections": [
+          "best-sellers"
+        ],
         "pairs_heading": "Pairs well with",
         "show_pairs": true
       }
     },
-    "slideshow_z9QWbH": {
+    "slideshow_wA86pK": {
       "type": "slideshow",
       "blocks": {
-        "slide_BKfhtE": {
+        "slide_QnVDwY": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/20260814-155733_69bcfecd-fac4-4724-b953-6b012a9f3c91.jpg",
@@ -73,21 +87,7 @@
             "overlay_opacity": 0
           }
         },
-        "slide_AtWNQ3": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
-            "subheading": "",
-            "heading": "",
-            "subtext": "",
-            "content_position": "center",
-            "cta_label": "",
-            "cta_url": "",
-            "link": "",
-            "overlay_opacity": 0
-          }
-        },
-        "slide_LiGiNg": {
+        "slide_zjQ7DF": {
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/20260814-155752_2bd0a156-f71d-4914-81ed-867bd2040d2d.jpg",
@@ -100,19 +100,92 @@
             "link": "",
             "overlay_opacity": 0
           }
+        },
+        "slide_nNnNkD": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
+            "subheading": "",
+            "heading": "",
+            "subtext": "",
+            "content_position": "center",
+            "cta_label": "",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
         }
       },
       "block_order": [
-        "slide_BKfhtE",
-        "slide_AtWNQ3",
-        "slide_LiGiNg"
+        "slide_QnVDwY",
+        "slide_zjQ7DF",
+        "slide_nNnNkD"
       ],
       "name": "Slideshow",
       "settings": {
         "autoplay": true,
         "autoplay_interval": 5,
         "analytics_label": "Slideshow",
-        "collection": ""
+        "collection": "slide-show_brizi"
+      }
+    },
+    "slideshow_CfnUBb": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_KYqB38": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Group_1150.jpg",
+            "subheading": "",
+            "heading": "Room to move",
+            "subtext": "Play clothes built for real movement.",
+            "content_position": "center",
+            "cta_label": "Shop new arrivals",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_wwLLtw": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155752_2bd0a156-f71d-4914-81ed-867bd2040d2d.jpg",
+            "subheading": "",
+            "heading": "Built for outside days",
+            "subtext": "Breathable layers that keep up with recess, hikes, and everything between.",
+            "content_position": "center",
+            "cta_label": "Shop outdoor",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        },
+        "slide_aXPVzC": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/20260814-155745_dc51d441-df9f-47d7-9e2a-c38be01b3edc.jpg",
+            "subheading": "",
+            "heading": "Soft where it counts",
+            "subtext": "Tagless, chafe-free seams they won't even notice.",
+            "content_position": "center",
+            "cta_label": "Shop essentials",
+            "cta_url": "",
+            "link": "",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_KYqB38",
+        "slide_wwLLtw",
+        "slide_aXPVzC"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "autoplay": true,
+        "autoplay_interval": 5,
+        "analytics_label": "Slideshow",
+        "collection": "slide-show_apply"
       }
     },
     "video_grid": {
@@ -128,6 +201,33 @@
       "settings": {
         "heading": "Customer Reviews"
       }
+    },
+    "custom_liquid_YjjWjn": {
+      "type": "custom-liquid",
+      "name": "Custom Liquid",
+      "settings": {
+        "custom_liquid": "<div class=\"mt-spacer\" aria-hidden=\"true\"></div>\n<style>\n  .mt-spacer{height:40px}\n  @media (min-width:750px){.mt-spacer{height:80px}}\n</style>",
+        "contain": true
+      }
+    },
+    "17901626772b5996bb": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_dMKMwb": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "disabled": true,
+          "settings": {
+            "review_data": "real_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_dMKMwb"
+      ],
+      "settings": {}
     },
     "faq": {
       "type": "product-faq",
@@ -201,17 +301,22 @@
     "related": {
       "type": "product-related",
       "settings": {
-        "heading": "You May Also Like",
-        "filter_collections": []
+        "heading": "More to love",
+        "filter_collections": [
+          "best-sellers"
+        ]
       }
     }
   },
   "order": [
     "main",
-    "slideshow_z9QWbH",
+    "slideshow_wA86pK",
+    "slideshow_CfnUBb",
     "video_grid",
     "feature_groups",
     "reviews",
+    "custom_liquid_YjjWjn",
+    "17901626772b5996bb",
     "faq",
     "related"
   ]
