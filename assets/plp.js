@@ -66,9 +66,8 @@ if (!window.mtPlpInit) {
 
   const syncAll = () => document.querySelectorAll('[data-plp]').forEach(syncToggle);
 
-  const resetScroll = (label) => {
+  const resetScroll = () => {
     window.scrollTo(0, 0);
-    console.log('[plp-scroll-debug]', label, 'scrollY after reset:', window.scrollY);
   };
 
   let swatchMap = null;
@@ -151,7 +150,7 @@ if (!window.mtPlpInit) {
     const controller = new AbortController();
     pending.set(plp, controller);
     plp.classList.add('mt-plp--loading');
-    resetScroll('before fetch');
+    resetScroll();
     let doc;
     try {
       const res = await fetch(sectionUrl(plp, url), { signal: controller.signal });
