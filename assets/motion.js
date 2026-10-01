@@ -590,6 +590,21 @@ if (!window.mtMotionInit) {
       schedule();
     };
 
+    if (isBackForward) {
+      window.addEventListener(
+        'load',
+        () => {
+          if (!active) return;
+          current = window.scrollY;
+          written = current;
+          scrollValue = current;
+          wrapper.scrollTop = current;
+          parallaxMeasure();
+        },
+        { once: true }
+      );
+    }
+
     const disable = () => {
       if (!active) return;
       active = false;
