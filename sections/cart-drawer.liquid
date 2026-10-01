@@ -51,7 +51,7 @@
                 <div data-cart-recs-fallback hidden>
                   <div data-fallback-tiles>
                     {%- assign tile_i = 0 -%}
-                    {%- for item in recs_source.products limit: 13 -%}
+                    {%- for item in recs_source.products limit: 9 -%}
                       {%- assign needle = item.handle | prepend: ',' | append: ',' -%}
                       {%- if cart_handles contains needle -%}{%- continue -%}{%- endif -%}
                       {% render 'cart-tile', item: item, index: tile_i, item_list_id: 'cart_recommendations', item_list_name: section.settings.recs_heading %}
@@ -60,7 +60,7 @@
                   </div>
                   <div data-fallback-cards>
                     {%- assign card_i = 0 -%}
-                    {%- for item in recs_source.products limit: 13 -%}
+                    {%- for item in recs_source.products limit: 9 -%}
                       {%- assign needle = item.handle | prepend: ',' | append: ',' -%}
                       {%- if cart_handles contains needle -%}{%- continue -%}{%- endif -%}
                       {% render 'product-card', product: item, quick: true, index: card_i, sizes: '170px', item_list_id: 'cart_recommendations', item_list_name: section.settings.recs_heading %}

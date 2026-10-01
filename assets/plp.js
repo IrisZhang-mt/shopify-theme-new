@@ -66,6 +66,10 @@ if (!window.mtPlpInit) {
 
   const syncAll = () => document.querySelectorAll('[data-plp]').forEach(syncToggle);
 
+  const resetScroll = () => {
+    window.scrollTo(0, 0);
+  };
+
   let swatchMap = null;
 
   const applySwatches = (root) => {
@@ -146,6 +150,7 @@ if (!window.mtPlpInit) {
     const controller = new AbortController();
     pending.set(plp, controller);
     plp.classList.add('mt-plp--loading');
+    resetScroll();
     let doc;
     try {
       const res = await fetch(sectionUrl(plp, url), { signal: controller.signal });
@@ -189,6 +194,8 @@ if (!window.mtPlpInit) {
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     trackGrid(plp.querySelector('[data-plp-grid]'));
+    resetScroll();
+    requestAnimationFrame(resetScroll);
   };
 
   const apply = (plp) => {
