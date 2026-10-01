@@ -219,6 +219,10 @@ if (!window.mtPlpInit) {
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     trackGrid(plp.querySelector('[data-plp-grid]'));
+    console.debug('[plp-scroll-debug] after swap', { scrollY: window.scrollY, bodyHeight: document.body.scrollHeight });
+    requestAnimationFrame(() => {
+      console.debug('[plp-scroll-debug] next frame', { scrollY: window.scrollY, bodyHeight: document.body.scrollHeight });
+    });
   };
 
   const apply = (plp) => {
