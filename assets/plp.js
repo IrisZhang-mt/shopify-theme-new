@@ -259,7 +259,8 @@ if (!window.mtPlpInit) {
       }
     }
     pageCount.set(grid, state.pages);
-    observeMore();
+    const finalMore = plp.querySelector('[data-plp-more]');
+    if (finalMore) moreObserver.observe(finalMore);
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     trackGrid(grid);
