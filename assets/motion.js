@@ -255,7 +255,7 @@ if (!window.mtMotionInit) {
   };
 
   const autoStep = (dt, now) => {
-    if (reducedMq.matches) return false;
+    if (reducedMq.matches || lockGuardOn) return false;
     let live = false;
     autoRows.forEach((row) => {
       const state = autoState.get(row);
@@ -383,6 +383,7 @@ if (!window.mtMotionInit) {
     } else {
       document.removeEventListener('touchmove', lockGuard);
       document.removeEventListener('wheel', lockWheel);
+      schedule();
     }
   };
   new MutationObserver(syncLockGuard).observe(document.documentElement, {
