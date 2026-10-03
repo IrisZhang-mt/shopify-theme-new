@@ -126,6 +126,11 @@ if (!window.mtHeroInit) {
         if (document.hidden) stop();
         else play();
       });
+      document.addEventListener('mt:lock-change', (event) => {
+        if (!hero.isConnected) return;
+        if (event.detail.locked) stop();
+        else play();
+      });
       reducedMq.addEventListener('change', () => {
         if (!hero.isConnected) return;
         if (reducedMq.matches) stop();

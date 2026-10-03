@@ -385,6 +385,7 @@ if (!window.mtMotionInit) {
       document.removeEventListener('wheel', lockWheel);
       schedule();
     }
+    document.dispatchEvent(new CustomEvent('mt:lock-change', { detail: { locked } }));
   };
   new MutationObserver(syncLockGuard).observe(document.documentElement, {
     attributes: true,
