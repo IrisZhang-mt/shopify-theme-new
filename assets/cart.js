@@ -229,6 +229,8 @@ if (!window.mtCartInit) {
     const checkout = event.target.closest?.('[data-checkout]');
     if (checkout) {
       checkout.setAttribute('aria-busy', 'true');
+      document.documentElement.classList.add('mt-checkout-lock');
+      document.querySelector('[data-checkout-loading]')?.removeAttribute('hidden');
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
       window.dataLayer.push({
@@ -369,6 +371,8 @@ if (!window.mtCartInit) {
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
     document.querySelectorAll('[data-checkout][aria-busy="true"]').forEach((el) => el.removeAttribute('aria-busy'));
+    document.documentElement.classList.remove('mt-checkout-lock');
+    document.querySelector('[data-checkout-loading]')?.setAttribute('hidden', '');
     clearTimeout(closeTimer);
     const cartEl = drawer();
     if (!cartEl) return;

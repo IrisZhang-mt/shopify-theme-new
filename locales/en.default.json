@@ -38,6 +38,7 @@
     "taxes_note": "Taxes and shipping calculated at checkout",
     "view": "View Cart",
     "checkout": "Checkout",
+    "checkout_loading": "Heading to checkout…",
     "remove": "Remove",
     "add_product": "Add {{ title }} to cart",
     "free_shipping_remaining_html": "Spend <span data-cart-shipping-amount>{{ amount }}</span> more for free shipping",
