@@ -238,15 +238,18 @@ if (!window.mtCartInit) {
   const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
     if (!lineEl || deltaQty <= 0) return;
     const price = +lineEl.dataset.itemPrice || 0;
-    // TEMP DEBUG — remove after verification: 确认这两个事件的取值来自 lineEl.dataset
-    // （即 cart-line.liquid 渲染时写入的 data-item-* 属性），而非 /cart/change.js 的响应。
-    console.log('[GA4 DEBUG] pushCartLineEvent', {
-      eventName,
-      buttonName,
-      deltaQty,
-      price,
-      lineElDataset: { ...lineEl.dataset },
-      builtItem: buildItem(lineEl, deltaQty),
+    // TEMP DEBUG — remove after verification: 全量转储 pushCartLineEvent 能摸到的一切，
+    // 证明这两个事件只读 lineEl 身上现有的属性（cart-line.liquid 渲染时写入的），
+    // 不涉及 /cart/change.js 的响应 —— 这条 console.log 执行时，change() 的 fetch 还没发出。
+    console.log('[GA4 DEBUG] pushCartLineEvent — 函数能拿到的全部输入', {
+      '参数 eventName': eventName,
+      '参数 buttonName': buttonName,
+      '参数 deltaQty': deltaQty,
+      '函数内部计算 price': price,
+      'lineEl 的完整 dataset（data-* 全部属性）': { ...lineEl.dataset },
+      'lineEl 的完整 outerHTML（看是否还有非 data- 属性）': lineEl.outerHTML,
+      '最近的 [data-cart-root] 的 dataset': { ...lineEl.closest('[data-cart-root]')?.dataset },
+      'buildItem(lineEl, deltaQty) 的结果': buildItem(lineEl, deltaQty),
     });
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
