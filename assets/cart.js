@@ -238,6 +238,16 @@ if (!window.mtCartInit) {
   const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
     if (!lineEl || deltaQty <= 0) return;
     const price = +lineEl.dataset.itemPrice || 0;
+    // TEMP DEBUG — remove after verification: 确认这两个事件的取值来自 lineEl.dataset
+    // （即 cart-line.liquid 渲染时写入的 data-item-* 属性），而非 /cart/change.js 的响应。
+    console.log('[GA4 DEBUG] pushCartLineEvent', {
+      eventName,
+      buttonName,
+      deltaQty,
+      price,
+      lineElDataset: { ...lineEl.dataset },
+      builtItem: buildItem(lineEl, deltaQty),
+    });
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
