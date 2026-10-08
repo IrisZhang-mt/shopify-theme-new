@@ -120,8 +120,13 @@ if (!window.mtCartInit) {
     root.querySelector('[data-cart-recs-title]')?.removeAttribute('hidden');
     bindProgress(wrap);
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    // Both renderings exist in the DOM at once — cart.css shows .mt-cart__tiles
+    // on desktop and .mt-cart__cards on mobile (hiding the other via
+    // display:none), so observing both is safe: whichever one is actually
+    // display:none for the current breakpoint never intersects, and only the
+    // visible set ever reports a real impression.
     wrap
-      .querySelectorAll('.mt-cart__cards .mt-card[data-item-id]')
+      .querySelectorAll('.mt-cart__cards .mt-card[data-item-id], .mt-cart__tiles .mt-cart__tile[data-item-id]')
       .forEach((card) => recsImpressionObserver.observe(card));
   };
 
