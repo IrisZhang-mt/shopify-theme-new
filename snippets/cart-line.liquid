@@ -10,6 +10,8 @@
   data-item-brand="{{ item.product.vendor | escape }}"
   {% if item.product.type != blank %}data-item-category="{{ item.product.type | escape }}"{% endif %}
   data-item-price="{{ item.final_price | divided_by: 100.0 }}"
+  data-item-line-discount="{{ item.total_discount | divided_by: 100.0 }}"
+  data-item-quantity="{{ item.quantity }}"
   {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
   data-item-index="{{ line }}"
 >

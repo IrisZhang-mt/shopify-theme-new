@@ -47,13 +47,15 @@
 ## 验证清单：We think you'll love 模块（No.23/24）
 
 - [ ] 在首页/任意页加购一件商品，打开侧边购物车（Side Cart）
-- [ ] 等 "We think you'll love" 推荐商品列表加载出来后，控制台查看 `dataLayer`，应出现一条 `view_item_list`：
+- [ ] "We think you'll love" 推荐商品列表刚加载出来、还没滑到看见它的那一刻：**不应该**出现 `view_item_list`
+- [ ] 把侧边购物车滚动到能看到推荐商品卡片（露出一半以上），控制台查看 `dataLayer`，应出现一条 `view_item_list`：
   - `module_name: "Side Cart"`
   - `item_list_id: "cart_recommendations"`
   - `item_list_name: "We think you'll love"`
   - `currency` 正确
-  - `items[]` 里每个商品带 `item_id`（sku）、`item_name`、`item_brand`、`item_variant`（颜色\_尺码）、`price`、`index`、`discount`（无折扣则为 0）
-  - 确认 `items[]` 里没有 `item_category`、`item_category2`（按约定暂不传，见下方更正说明）
+  - `items[]` **只包含这次真正露出来的那几张卡片**，不是推荐模块里全部商品；每个商品带 `item_id`（sku）、`item_name`、`item_brand`、`item_variant`（颜色\_尺码）、`price`、`index`、`discount`（无折扣则为 0）
+  - 确认 `items[]` 里没有 `item_category2`（`item_category` 现在是有的，见下方全局规则更新）
+- [ ] 如果推荐商品横向可以继续滑动，滑出更多卡片应该**再触发一条** `view_item_list`，只包含这批新出现的卡片；同一张卡片滑出去再滑回来**不应该**重复触发
 - [ ] 点击推荐商品列表里的某个商品卡片（点图片/标题区域，不要点右上角加号）跳转到 PDP，跳转前控制台应出现 `select_item`：
   - `button_name: "Product Card"`
   - `items[]` 里该商品字段与上面一致
@@ -63,13 +65,33 @@
   - `value` 等于该商品单价（quantity 固定是 1）
   - `items[]` 只有这一件被加购的商品，字段同上面 `view_item_list`
 - [ ] 如果卡片上有 Quick Shop 按钮，点击 Quick Shop 也应该**不**触发 `select_item`（Quick Shop 属于后续单独一条埋点，这里先排除避免冲突）
-- [ ] 关闭购物车再重新打开（购物车内容**没有变化**）：`view_item_list` 应该**不会**重复触发
-- [ ] 如果中途点了购物车内的 +/-/移除按钮（购物车内容**变了**）：`view_item_list` 会**重新触发一次**，这是预期行为，不是 bug（详见下方去重范围说明）
+- [ ] 关闭购物车再重新打开（购物车内容**没有变化**，且之前已经滑到看过推荐商品）：`view_item_list` 应该**不会**重复触发
+- [ ] 如果中途点了购物车内的 +/-/移除按钮（购物车内容**变了**，推荐区整个重新渲染）：重新滑到看见推荐商品后，`view_item_list` 会**重新触发一次**，这是预期行为，不是 bug（详见下方去重范围说明）
+
+> **更新（2026-10-08）**：反馈推荐商品原来是渲染完就把全部商品一次性
+> 上报曝光，用户还没滑出来看到的商品也被算进去了。已改成用
+> `IntersectionObserver` 监听每张卡片，只有真正进入视口（≥50% 可见）
+> 才算"看到了"，300ms 内一起进入视口的卡片合并成一条 `view_item_list`
+> 一起上报，已经报过的商品不会因为再次滑入视口重复触发。
+>
+> **Bug 修复（2026-10-08）**：上面这次改完之后反馈 PC 端打开购物车完全
+> 没有触发 `view_item_list`。根因：推荐商品在 DOM 里同时渲染了两套——
+> 桌面端用的 `.mt-cart__tiles`、移动端用的 `.mt-cart__cards`，`cart.css`
+> 按断点各自 `display:none` 掉另一套（宽屏隐藏 `.mt-cart__cards`、窄屏
+> 隐藏 `.mt-cart__tiles`）。之前只观察了 `.mt-cart__cards` 里的卡片——
+> 这套本来就只在移动端显示，在 PC 端永远是 `display:none`，自然永远
+> 不会进入视口，所以 PC 端一条都不会触发。已经改成同时观察
+> `.mt-cart__cards` 和 `.mt-cart__tiles` 两套卡片——这样做是安全的，
+> 因为 `display:none` 的元素在 `IntersectionObserver` 里永远不会判定
+> 为可见，当前断点实际显示的那一套会正常触发，隐藏的那一套不会有
+> 任何动作，不会重复上报。
 
 代码改动：新建 `sections/cart-recs.liquid` 用到的 `snippets/cart-tile.liquid`、
 `snippets/product-card.liquid` 加了 GA4 data 属性（复用 `item-variant-ga4`
-变体拼接逻辑）；`assets/cart.js` 的 `initRecs()` 里触发 `view_item_list`，
-新增点击监听触发 `select_item`（排除加购按钮和 Quick Shop 按钮）。
+变体拼接逻辑）；`assets/cart.js` 整个重写了曝光上报逻辑（`IntersectionObserver`
+批量曝光，见上面更新说明），`select_item`/`add_to_cart`/购物车行
+`add_to_cart`/`remove_from_cart` 的字段拼接也都抽成了共用的 `buildItem()`
+函数，减少重复代码。
 
 `item_category2`（二级分类）无可靠数据源，不传。`item_category`（一级分类）
 原本也无数据源，2026-09-20 起改用 `product.type` 传值（见文件最开头的
@@ -140,7 +162,8 @@
 
 ## 验证清单：Best Sellers 产品列表（No.29/30）
 
-- [ ] 首页 Best Sellers 模块加载后，控制台应出现一条 `view_item_list`：
+- [ ] 首页 Best Sellers 模块刚加载、还没滑到看见它的那一刻：**不应该**出现 `view_item_list`
+- [ ] 滚动到能看到商品卡片（露出一半以上），控制台应出现一条 `view_item_list`：
   - `item_list_id`：当前模块 heading 设置的 handle 化结果，比如主题
     编辑器里把标题改成了 "Most Loved"，这里就应该是 `"most_loved"`
     （不是写死的 `"best_sellers"`）
@@ -148,9 +171,10 @@
     heading 是 "Most Loved"、Girls tab 激活时是 `"Most Loved_Girls"`
   - **确认没有** `item_list_label` 字段了（已删除，信息现在并入 `item_list_name`）
   - `currency` 正确
-  - `items[]` 字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`），每个商品的 `item_list_name` 也是 `"Most Loved_Girls"` 这种格式
-- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，应该**再触发一次** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_name` 也应该跟着变成 `"Most Loved_Boys"`
-- [ ] 切换回之前看过的同一个 tab，**不应该**重复触发（按商品 id 集合去重）
+  - `items[]` **只包含这次真正露出来的那几张卡片**，不是模块里全部商品；字段同 We think you'll love 模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category2`），每个商品的 `item_list_name` 也是 `"Most Loved_Girls"` 这种格式
+- [ ] 如果横向还能继续滑出更多卡片，应该**再触发一条** `view_item_list`，只包含新出现的卡片；同一张卡片滑出去再滑回来**不应该**重复触发
+- [ ] 点击顶部 Girls/Boys（或其他）筛选按钮切换商品列表，新 tab 的卡片滑入视口后应该**再触发一条** `view_item_list`，`items[]` 变成新 tab 的商品，`item_list_name` 也应该跟着变成 `"Most Loved_Boys"`
+- [ ] 切换回之前看过的同一个 tab，已经报过的那些商品**不应该**重复触发（按"商品 id + 当前 item_list_name"去重，所以换了 tab 之后同一个商品会被当成新的曝光，这是故意的——不同 tab 对 GA4 来说是不同的列表）
 - [ ] 点击某个商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`，`item_list_id`/`item_list_name` 同样跟着当前 heading + tab 走
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
 - [ ] 去主题编辑器把这个模块的 Heading 改成别的文案（比如改回 "Best Sellers"），刷新页面重新验证一遍，`item_list_id`/`item_list_name` 应该跟着新标题变，不需要改代码
@@ -167,6 +191,15 @@
 > "Most Loved" → `most_loved`），`item_list_name` = heading 原文 + "_" +
 > tab 标签（如 `Most Loved_Girls`，保留原文大小写）。heading 为空时
 > 兜底成 `best_sellers`/`Best Sellers`（跟 schema 默认值一致）。
+>
+> **更新（2026-10-08）**：反馈原来是模块一渲染完/切换 tab 就把当前
+> tab 全部商品一次性上报，用户还没滑出来看到的商品也被算进了曝光。
+> 改成用 `IntersectionObserver` 监听每张卡片，只有真正进入视口（≥50%
+> 可见）才算"看到了"，300ms 内一起进入视口的卡片合并成一条
+> `view_item_list` 一起上报。因为切换 tab 只是换 `item_list_name`、
+> 同一个 `item_list_id` 不变，去重键用的是"商品 id + item_list_name"
+> 而不是单纯商品 id，避免同一个商品在 Girls/Boys 两个 tab 都出现时
+> 被误判成"已经报过"。
 
 代码改动：`sections/home-best-sellers.liquid` 顶部新增
 `bs_heading = section.settings.heading | default: 'Best Sellers'`，
@@ -177,7 +210,10 @@ block.settings.label`（Liquid 的 `render` 标签不支持在参数里直接用
 改动——`snippets/product-card-list.liquid`、
 `snippets/product-card.liquid`、`assets/home-best-sellers.js` 里新增的
 `item_list_label` 透传/属性/字段全部删除，恢复成只有
-`item_list_id`/`item_list_name` 两个可选参数。未新建文件。
+`item_list_id`/`item_list_name` 两个可选参数。`assets/home-best-sellers.js`
+整个重写了曝光上报逻辑（`IntersectionObserver` 批量曝光，见上面更新
+说明），切换 tab 时也会对新换进来的卡片重新 observe；`select_item`
+的字段拼接也抽成了共用的 `buildItem()` 函数。未新建文件。
 
 ---
 
@@ -232,15 +268,30 @@ block.settings.label`（Liquid 的 `render` 标签不支持在参数里直接用
 
 ## 验证清单：产品列表页 - 产品列表模块（No.35/36）
 
-- [ ] 打开任意分类页（如 `/collections/girls`），页面加载后控制台应出现一条 `view_item_list`：
+- [ ] 打开任意分类页（如 `/collections/girls`），页面刚加载、还没滚动的那一刻：**不应该**出现 `view_item_list`
+- [ ] 首屏能看到的那几张商品卡片（不用滚动就露出一半以上的），应该出现 `view_item_list`：
   - `item_list_id` 等于分类的 handle（如 `girls`）
   - `item_list_name` 等于分类标题（如 "Girls"）
   - `currency` 正确
-  - `items[]` 字段同前面几个模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category`/`item_category2`）
-- [ ] 往下滚动触发"加载更多"（无限滚动），应该**再触发一条** `view_item_list`，这次 `items[]` 里**只包含新加载出来的商品**，`index` 从上一批的最后一个数字往后接着算（不是从 1 重新开始）
-- [ ] 勾选左侧筛选条件后页面刷新出新的商品列表，应该**再触发一条** `view_item_list`（整批新商品），**并且 `items[]` 里每个商品的 `item_id` 都不应该是空字符串**（见下方 Bug 修复说明）
+  - `items[]` **只包含首屏露出来的那几张**，不是整页全部商品；字段同前面几个模块（`item_id`/`item_name`/`item_brand`/`item_variant`/`price`/`index`/`discount`，没有 `item_category2`）
+- [ ] 往下滚动露出更多商品卡片，应该**再触发一条** `view_item_list`，只包含这批新露出来的卡片，`index` 是在整页里的绝对位置（不是从 1 重新开始）
+- [ ] 滚到底触发"加载更多"（无限滚动）、新加载出来的商品卡片滑入视口后，应该**再触发一条** `view_item_list`，同样只包含新露出来的那些
+- [ ] 同一批已经报过的卡片滚上去再滚下来**不应该**重复触发
+- [ ] 勾选左侧筛选条件后页面刷新出新的商品列表，新列表里首屏能看到的商品滑入视口后应该**再触发一条** `view_item_list`（这是全新的一批商品，之前的去重记录在筛选刷新时会一起重置），**并且 `items[]` 里每个商品的 `item_id` 都不应该是空字符串**（见下方 Bug 修复说明）
 - [ ] 点击任意商品卡片跳转 PDP，跳转前应出现 `select_item`，`button_name: "Product Card"`
 - [ ] 点击卡片上的 Quick Shop 按钮**不应该**触发 `select_item`
+
+> **更新（2026-10-08）**：反馈原来是页面一加载/筛选刷新/加载更多就把
+> 当时能拿到的商品一次性上报曝光，用户还没滚动看到的商品也被算进去了。
+> 改成用 `IntersectionObserver` 监听每张卡片，只有真正进入视口（≥50%
+> 可见）才算"看到了"，300ms 内一起进入视口的卡片合并成一条
+> `view_item_list` 一起上报。原来靠"记录已经渲染了多少张卡片"来算
+> `index`、判断"新加载的是哪几张"的那套逻辑已经不需要了，改成每次有
+> 新卡片进入网格（首次渲染/加载更多/筛选刷新）就按网格里的真实 DOM
+> 顺序把所有卡片的 `index` 重新编号一遍（1 开始），这样不管卡片是因为
+> 滚动到了视口、还是滚动位置来回变化才触发上报，拿到的 `index` 永远
+> 是它在整页里的真实绝对位置——这也顺带延续了之前"翻页 index 不从 1
+> 重新开始"那个修复，没有走回头路。
 
 > **Bug 修复（2026-09-18）**：按 Size/Color 等变体选项筛选分类页后，
 > 部分商品的 `item_id` 会变成空字符串 `""`。根因：`product-card.liquid`
@@ -269,9 +320,11 @@ block.settings.label`（Liquid 的 `render` 标签不支持在参数里直接用
 代码改动：`sections/main-collection.liquid` 给商品网格的 `product-card`
 渲染传入 `item_list_id`/`item_list_name`/`ga4_index`；`snippets/product-card.liquid`
 新增 `ga4_index` 参数（跟原有用于交错动画的 `index` 参数分开，避免动画用的
-0-3 循环序号污染 GA4 的商品位置字段）；`assets/plp.js` 新增
-`view_item_list`（首次加载/加载更多/筛选刷新）和 `select_item`（点击卡片）
-逻辑。未新建文件。
+0-3 循环序号污染 GA4 的商品位置字段）；`assets/plp.js` 的曝光上报整个
+重写成 `IntersectionObserver` 批量曝光（见上面更新说明），原来靠"已经
+渲染了多少张卡片"做增量追踪的 `trackedCount`/`trackGrid()` 换成了
+"按 DOM 顺序重新编号 + 按需 observe"的 `observeGrid()`；`select_item`
+的字段拼接也抽成了共用的 `buildItem()` 函数。未新建文件。
 
 ---
 

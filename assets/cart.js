@@ -8,6 +8,69 @@ if (!window.mtCartInit) {
   let trigger = null;
   let closeTimer = 0;
 
+  const buildItem = (el, quantity = 1) => ({
+    item_id: el.dataset.itemId,
+    item_name: el.dataset.itemName,
+    discount: +el.dataset.itemDiscount || 0,
+    index: +el.dataset.itemIndex,
+    item_list_id: el.dataset.itemListId,
+    item_list_name: el.dataset.itemListName,
+    ...(el.dataset.itemCategory ? { item_category: el.dataset.itemCategory } : {}),
+    ...(el.dataset.itemVariant ? { item_variant: el.dataset.itemVariant } : {}),
+    item_brand: el.dataset.itemBrand,
+    price: +el.dataset.itemPrice,
+    quantity,
+  });
+
+  const recsTrackedIds = new WeakMap();
+  const recsPendingCards = new WeakMap();
+  const recsBatchTimers = new WeakMap();
+  const RECS_BATCH_DELAY = 300;
+
+  const flushRecsImpressions = (wrap) => {
+    const root = wrap.closest('[data-cart-root]');
+    const cards = recsPendingCards.get(wrap) || [];
+    recsPendingCards.set(wrap, []);
+    const tracked = recsTrackedIds.get(wrap);
+    const fresh = cards.filter((card) => !tracked.has(card.dataset.itemId));
+    if (!fresh.length) return;
+    fresh.forEach((card) => tracked.add(card.dataset.itemId));
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_item_list',
+      event_parameters: {
+        module_name: 'Side Cart',
+        item_list_id: fresh[0].dataset.itemListId,
+        item_list_name: fresh[0].dataset.itemListName,
+        currency: root?.dataset.currency,
+        items: fresh.map(buildItem),
+      },
+    });
+  };
+
+  // Only report a recommended product once it has actually scrolled into
+  // view inside the drawer (>=50% visible), batching cards that become
+  // visible together within a short window instead of firing everything as
+  // soon as the recs row finishes loading.
+  const recsImpressionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        recsImpressionObserver.unobserve(entry.target);
+        const wrap = entry.target.closest('[data-cart-recs]');
+        if (!wrap) return;
+        if (!recsTrackedIds.has(wrap)) recsTrackedIds.set(wrap, new Set());
+        if (!recsPendingCards.has(wrap)) recsPendingCards.set(wrap, []);
+        recsPendingCards.get(wrap).push(entry.target);
+        clearTimeout(recsBatchTimers.get(wrap));
+        recsBatchTimers.set(wrap, setTimeout(() => flushRecsImpressions(wrap), RECS_BATCH_DELAY));
+      });
+    },
+    { threshold: 0.5 }
+  );
+
   const bindProgress = (wrap) => {
     const row = wrap.querySelector('[data-cart-tiles]');
     const fill = wrap.querySelector('[data-cart-progress]');
@@ -57,34 +120,14 @@ if (!window.mtCartInit) {
     root.querySelector('[data-cart-recs-title]')?.removeAttribute('hidden');
     bindProgress(wrap);
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    const recCards = [...wrap.querySelectorAll('.mt-cart__cards .mt-card[data-item-id]')];
-    if (recCards.length) {
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event_parameters: null });
-      window.dataLayer.push({
-        event: 'ga4Event',
-        event_name: 'view_item_list',
-        event_parameters: {
-          module_name: 'Side Cart',
-          item_list_id: recCards[0].dataset.itemListId,
-          item_list_name: recCards[0].dataset.itemListName,
-          currency: root.dataset.currency,
-          items: recCards.map((card) => ({
-            item_id: card.dataset.itemId,
-            item_name: card.dataset.itemName,
-            discount: +card.dataset.itemDiscount || 0,
-            index: +card.dataset.itemIndex,
-            item_list_id: card.dataset.itemListId,
-            item_list_name: card.dataset.itemListName,
-            ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-            ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-            item_brand: card.dataset.itemBrand,
-            price: +card.dataset.itemPrice,
-            quantity: 1,
-          })),
-        },
-      });
-    }
+    // Both renderings exist in the DOM at once — cart.css shows .mt-cart__tiles
+    // on desktop and .mt-cart__cards on mobile (hiding the other via
+    // display:none), so observing both is safe: whichever one is actually
+    // display:none for the current breakpoint never intersects, and only the
+    // visible set ever reports a real impression.
+    wrap
+      .querySelectorAll('.mt-cart__cards .mt-card[data-item-id], .mt-cart__tiles .mt-cart__tile[data-item-id]')
+      .forEach((card) => recsImpressionObserver.observe(card));
   };
 
   let refreshId = 0;
@@ -195,6 +238,18 @@ if (!window.mtCartInit) {
   const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
     if (!lineEl || deltaQty <= 0) return;
     const price = +lineEl.dataset.itemPrice || 0;
+    const lineDiscount = +lineEl.dataset.itemLineDiscount || 0;
+    const lineQuantity = +lineEl.dataset.itemQuantity || 0;
+    // Remove 按钮一次性清空整行，折扣口径跟 view_cart 一致，直接用整行折扣；
+    // +/- 按钮每次只变动 1 件，按当前行折扣 / 行数量 折算出这次变动的份额，
+    // 使 discount 和同一事件里的 price/value 保持同一粒度（按本次变动的件数计）。
+    const discount =
+      buttonName === 'remove'
+        ? lineDiscount
+        : lineQuantity > 0
+          ? +((lineDiscount / lineQuantity) * deltaQty).toFixed(2)
+          : 0;
+    const item = { ...buildItem(lineEl, deltaQty), discount };
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
@@ -207,20 +262,7 @@ if (!window.mtCartInit) {
         value: +(price * deltaQty).toFixed(2),
         item_list_id: lineEl.dataset.itemListId,
         item_list_name: lineEl.dataset.itemListName,
-        items: [
-          {
-            item_list_id: lineEl.dataset.itemListId,
-            item_list_name: lineEl.dataset.itemListName,
-            item_id: lineEl.dataset.itemId,
-            item_name: lineEl.dataset.itemName,
-            index: +lineEl.dataset.itemIndex,
-            ...(lineEl.dataset.itemCategory ? { item_category: lineEl.dataset.itemCategory } : {}),
-            ...(lineEl.dataset.itemVariant ? { item_variant: lineEl.dataset.itemVariant } : {}),
-            item_brand: lineEl.dataset.itemBrand,
-            price,
-            quantity: deltaQty,
-          },
-        ],
+        items: [item],
       },
     });
   };
@@ -290,20 +332,7 @@ if (!window.mtCartInit) {
             value: price,
             item_list_id: card.dataset.itemListId,
             item_list_name: card.dataset.itemListName,
-            items: [
-              {
-                item_list_id: card.dataset.itemListId,
-                item_list_name: card.dataset.itemListName,
-                item_id: card.dataset.itemId,
-                item_name: card.dataset.itemName,
-                index: +card.dataset.itemIndex,
-                ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-                ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-                item_brand: card.dataset.itemBrand,
-                price,
-                quantity: 1,
-              },
-            ],
+            items: [buildItem(card)],
           },
         });
       }
@@ -326,21 +355,7 @@ if (!window.mtCartInit) {
           item_list_name: recsCard.dataset.itemListName,
           currency: recsRoot?.dataset.currency,
           button_name: 'Product Card',
-          items: [
-            {
-              item_id: recsCard.dataset.itemId,
-              item_name: recsCard.dataset.itemName,
-              discount: +recsCard.dataset.itemDiscount || 0,
-              index: +recsCard.dataset.itemIndex,
-              item_list_id: recsCard.dataset.itemListId,
-              item_list_name: recsCard.dataset.itemListName,
-              ...(recsCard.dataset.itemCategory ? { item_category: recsCard.dataset.itemCategory } : {}),
-              ...(recsCard.dataset.itemVariant ? { item_variant: recsCard.dataset.itemVariant } : {}),
-              item_brand: recsCard.dataset.itemBrand,
-              price: +recsCard.dataset.itemPrice,
-              quantity: 1,
-            },
-          ],
+          items: [buildItem(recsCard)],
         },
       });
     }

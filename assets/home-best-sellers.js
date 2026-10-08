@@ -2,38 +2,73 @@ if (!window.mtBestSellersInit) {
   window.mtBestSellersInit = true;
 
   const panelState = new WeakMap();
-  const lastTracked = new WeakMap();
+  const trackedKeys = new WeakMap();
+  const pendingCards = new WeakMap();
+  const batchTimers = new WeakMap();
+  const BATCH_DELAY = 300;
 
-  const trackList = (section, row) => {
-    const cards = [...row.querySelectorAll('.mt-card[data-item-id]')];
-    if (!cards.length) return;
-    const ids = cards.map((card) => card.dataset.itemId).join(',');
-    if (lastTracked.get(section) === ids) return;
-    lastTracked.set(section, ids);
+  const buildItem = (card) => ({
+    item_id: card.dataset.itemId,
+    item_name: card.dataset.itemName,
+    discount: +card.dataset.itemDiscount || 0,
+    index: +card.dataset.itemIndex,
+    item_list_id: card.dataset.itemListId,
+    item_list_name: card.dataset.itemListName,
+    ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
+    ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+    item_brand: card.dataset.itemBrand,
+    price: +card.dataset.itemPrice,
+    quantity: 1,
+  });
+
+  // Tabs share one item_list_id but switch item_list_name, so the same
+  // product id can legitimately need a fresh impression under a new tab —
+  // dedup on the pair, not the bare id.
+  const keyOf = (card) => `${card.dataset.itemId}|${card.dataset.itemListName}`;
+
+  const flushImpressions = (section) => {
+    const cards = pendingCards.get(section) || [];
+    pendingCards.set(section, []);
+    const tracked = trackedKeys.get(section);
+    const fresh = cards.filter((card) => !tracked.has(keyOf(card)));
+    if (!fresh.length) return;
+    fresh.forEach((card) => tracked.add(keyOf(card)));
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
       event: 'ga4Event',
       event_name: 'view_item_list',
       event_parameters: {
-        item_list_id: cards[0].dataset.itemListId,
-        item_list_name: cards[0].dataset.itemListName,
+        item_list_id: fresh[0].dataset.itemListId,
+        item_list_name: fresh[0].dataset.itemListName,
         currency: section.dataset.currency,
-        items: cards.map((card) => ({
-          item_id: card.dataset.itemId,
-          item_name: card.dataset.itemName,
-          discount: +card.dataset.itemDiscount || 0,
-          index: +card.dataset.itemIndex,
-          item_list_id: card.dataset.itemListId,
-          item_list_name: card.dataset.itemListName,
-          ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-          item_brand: card.dataset.itemBrand,
-          price: +card.dataset.itemPrice,
-          quantity: 1,
-        })),
+        items: fresh.map(buildItem),
       },
     });
+  };
+
+  // Only report a product once it has actually scrolled into view (>=50%
+  // visible), batching cards that become visible together within a short
+  // window instead of firing everything as soon as a tab/row renders.
+  const impressionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        impressionObserver.unobserve(entry.target);
+        const section = entry.target.closest('.mt-bs');
+        if (!section) return;
+        if (!trackedKeys.has(section)) trackedKeys.set(section, new Set());
+        if (!pendingCards.has(section)) pendingCards.set(section, []);
+        pendingCards.get(section).push(entry.target);
+        clearTimeout(batchTimers.get(section));
+        batchTimers.set(section, setTimeout(() => flushImpressions(section), BATCH_DELAY));
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  const observeRow = (row) => {
+    row.querySelectorAll('.mt-card[data-item-id]').forEach((card) => impressionObserver.observe(card));
   };
 
   const getPanels = (section) => {
@@ -82,7 +117,7 @@ if (!window.mtBestSellersInit) {
       if (text) text.textContent = (window.mtStrings?.shopCollection || 'Shop [label]').replace('[label]', button.dataset.bsLabel);
     }
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    trackList(section, row);
+    observeRow(row);
   });
 
   document.addEventListener('click', (event) => {
@@ -100,26 +135,10 @@ if (!window.mtBestSellersInit) {
         item_list_name: card.dataset.itemListName,
         currency: section?.dataset.currency,
         button_name: 'Product Card',
-        items: [
-          {
-            item_id: card.dataset.itemId,
-            item_name: card.dataset.itemName,
-            discount: +card.dataset.itemDiscount || 0,
-            index: +card.dataset.itemIndex,
-            item_list_id: card.dataset.itemListId,
-            item_list_name: card.dataset.itemListName,
-              ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-            item_brand: card.dataset.itemBrand,
-            price: +card.dataset.itemPrice,
-            quantity: 1,
-          },
-        ],
+        items: [buildItem(card)],
       },
     });
   });
 
-  document.querySelectorAll('.mt-bs [data-bs-row]').forEach((row) => {
-    trackList(row.closest('.mt-bs'), row);
-  });
+  document.querySelectorAll('.mt-bs [data-bs-row]').forEach(observeRow);
 }
