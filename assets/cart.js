@@ -238,19 +238,18 @@ if (!window.mtCartInit) {
   const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
     if (!lineEl || deltaQty <= 0) return;
     const price = +lineEl.dataset.itemPrice || 0;
-    // TEMP DEBUG — remove after verification: 全量转储 pushCartLineEvent 能摸到的一切，
-    // 证明这两个事件只读 lineEl 身上现有的属性（cart-line.liquid 渲染时写入的），
-    // 不涉及 /cart/change.js 的响应 —— 这条 console.log 执行时，change() 的 fetch 还没发出。
-    console.log('[GA4 DEBUG] pushCartLineEvent — 函数能拿到的全部输入', {
-      '参数 eventName': eventName,
-      '参数 buttonName': buttonName,
-      '参数 deltaQty': deltaQty,
-      '函数内部计算 price': price,
-      'lineEl 的完整 dataset（data-* 全部属性）': { ...lineEl.dataset },
-      'lineEl 的完整 outerHTML（看是否还有非 data- 属性）': lineEl.outerHTML,
-      '最近的 [data-cart-root] 的 dataset': { ...lineEl.closest('[data-cart-root]')?.dataset },
-      'buildItem(lineEl, deltaQty) 的结果': buildItem(lineEl, deltaQty),
-    });
+    const lineDiscount = +lineEl.dataset.itemLineDiscount || 0;
+    const lineQuantity = +lineEl.dataset.itemQuantity || 0;
+    // Remove 按钮一次性清空整行，折扣口径跟 view_cart 一致，直接用整行折扣；
+    // +/- 按钮每次只变动 1 件，按当前行折扣 / 行数量 折算出这次变动的份额，
+    // 使 discount 和同一事件里的 price/value 保持同一粒度（按本次变动的件数计）。
+    const discount =
+      buttonName === 'remove'
+        ? lineDiscount
+        : lineQuantity > 0
+          ? +((lineDiscount / lineQuantity) * deltaQty).toFixed(2)
+          : 0;
+    const item = { ...buildItem(lineEl, deltaQty), discount };
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
@@ -263,7 +262,7 @@ if (!window.mtCartInit) {
         value: +(price * deltaQty).toFixed(2),
         item_list_id: lineEl.dataset.itemListId,
         item_list_name: lineEl.dataset.itemListName,
-        items: [buildItem(lineEl, deltaQty)],
+        items: [item],
       },
     });
   };
