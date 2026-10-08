@@ -5,19 +5,37 @@ if (!window.mtPlpInit) {
 
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
-  const trackedCount = new WeakMap();
   const pageCount = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
 
-  const trackGrid = (grid) => {
-    if (!grid) return;
+  const trackedIds = new WeakMap();
+  const pendingCards = new WeakMap();
+  const batchTimers = new WeakMap();
+  const BATCH_DELAY = 300;
+
+  const buildItem = (card) => ({
+    item_id: card.dataset.itemId,
+    item_name: card.dataset.itemName,
+    discount: +card.dataset.itemDiscount || 0,
+    index: +card.dataset.itemIndex,
+    item_list_id: card.dataset.itemListId,
+    item_list_name: card.dataset.itemListName,
+    ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
+    ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
+    item_brand: card.dataset.itemBrand,
+    price: +card.dataset.itemPrice,
+    quantity: 1,
+  });
+
+  const flushImpressions = (grid) => {
     const plp = grid.closest('[data-plp]');
     if (!plp) return;
-    const cards = [...grid.querySelectorAll('.mt-card[data-item-id]')];
-    const already = trackedCount.get(grid) || 0;
-    const freshCards = cards.slice(already);
-    if (!freshCards.length) return;
-    trackedCount.set(grid, cards.length);
+    const cards = pendingCards.get(grid) || [];
+    pendingCards.set(grid, []);
+    const tracked = trackedIds.get(grid);
+    const fresh = cards.filter((card) => !tracked.has(card.dataset.itemId));
+    if (!fresh.length) return;
+    fresh.forEach((card) => tracked.add(card.dataset.itemId));
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
@@ -27,20 +45,40 @@ if (!window.mtPlpInit) {
         item_list_id: plp.dataset.itemListId,
         item_list_name: plp.dataset.itemListName,
         currency: plp.dataset.currency,
-        items: freshCards.map((card, i) => ({
-          item_id: card.dataset.itemId,
-          item_name: card.dataset.itemName,
-          discount: +card.dataset.itemDiscount || 0,
-          index: already + i + 1,
-          item_list_id: card.dataset.itemListId,
-          item_list_name: card.dataset.itemListName,
-          ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-          item_brand: card.dataset.itemBrand,
-          price: +card.dataset.itemPrice,
-          quantity: 1,
-        })),
+        items: fresh.map(buildItem),
       },
+    });
+  };
+
+  // Only report a product once it has actually scrolled into view (>=50%
+  // visible), batching cards that become visible together within a short
+  // window instead of firing everything as soon as the grid renders.
+  const impressionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        impressionObserver.unobserve(entry.target);
+        const grid = entry.target.closest('[data-plp-grid]');
+        if (!grid) return;
+        if (!trackedIds.has(grid)) trackedIds.set(grid, new Set());
+        if (!pendingCards.has(grid)) pendingCards.set(grid, []);
+        pendingCards.get(grid).push(entry.target);
+        clearTimeout(batchTimers.get(grid));
+        batchTimers.set(grid, setTimeout(() => flushImpressions(grid), BATCH_DELAY));
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  // Renumber on every call (DOM order, 1-based) rather than trusting the
+  // Liquid-rendered index: that index comes from a per-page `forloop` that
+  // restarts at 1 on every paginated fetch, so without this, loading page 2
+  // would report its cards as index 1-24 again instead of continuing 25-48.
+  const observeGrid = (grid) => {
+    if (!grid) return;
+    grid.querySelectorAll('.mt-card[data-item-id]').forEach((card, i) => {
+      card.dataset.itemIndex = i + 1;
+      impressionObserver.observe(card);
     });
   };
 
@@ -193,7 +231,7 @@ if (!window.mtPlpInit) {
     observeMore();
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    trackGrid(plp.querySelector('[data-plp-grid]'));
+    observeGrid(plp.querySelector('[data-plp-grid]'));
     resetScroll();
     requestAnimationFrame(resetScroll);
   };
@@ -276,7 +314,7 @@ if (!window.mtPlpInit) {
     if (finalMore) moreObserver.observe(finalMore);
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    trackGrid(grid);
+    observeGrid(grid);
 
     const target = [...grid.querySelectorAll('.mt-card[data-item-id]')].find(
       (card) => card.querySelector('.mt-card__link')?.getAttribute('href') === state.productHref
@@ -319,7 +357,7 @@ if (!window.mtPlpInit) {
         }
         queueAlign();
         document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-        trackGrid(plp.querySelector('[data-plp-grid]'));
+        observeGrid(plp.querySelector('[data-plp-grid]'));
       });
     },
     { rootMargin: '600px 0px' }
@@ -331,7 +369,7 @@ if (!window.mtPlpInit) {
   queueAlign();
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
-    trackGrid(grid);
+    observeGrid(grid);
   });
   restoreReturnState();
   window.addEventListener('resize', queueAlign);
@@ -347,7 +385,7 @@ if (!window.mtPlpInit) {
     applySwatches(document);
     document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
       pageCount.set(grid, 1);
-      trackGrid(grid);
+      observeGrid(grid);
     });
   });
 
@@ -404,21 +442,7 @@ if (!window.mtPlpInit) {
           item_list_name: card.dataset.itemListName,
           currency: plp?.dataset.currency,
           button_name: 'Product Card',
-          items: [
-            {
-              item_id: card.dataset.itemId,
-              item_name: card.dataset.itemName,
-              discount: +card.dataset.itemDiscount || 0,
-              index: +card.dataset.itemIndex,
-              item_list_id: card.dataset.itemListId,
-              item_list_name: card.dataset.itemListName,
-                  ...(card.dataset.itemCategory ? { item_category: card.dataset.itemCategory } : {}),
-          ...(card.dataset.itemVariant ? { item_variant: card.dataset.itemVariant } : {}),
-              item_brand: card.dataset.itemBrand,
-              price: +card.dataset.itemPrice,
-              quantity: 1,
-            },
-          ],
+          items: [buildItem(card)],
         },
       });
       if (plp) saveReturnState(plp, card);
