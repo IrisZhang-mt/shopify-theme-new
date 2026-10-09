@@ -39,7 +39,8 @@
         class="mt-full-image__link"
         href="{{ link }}"
         aria-label="{{ image_alt }}"
-        {%- if section.settings.track_community_entry %} data-ga4-click="community_entry" data-ga4-button-name="image"{% endif -%}
+        data-ga4-click="community_entry"
+        data-ga4-button-name="image"
       ></a>
     {%- endif -%}
   </div>
@@ -77,13 +78,6 @@
       "type": "url",
       "id": "link",
       "label": "Link (optional)"
-    },
-    {
-      "type": "checkbox",
-      "id": "track_community_entry",
-      "label": "Track link click as GA4 \"community_entry\" event",
-      "info": "仅用于 Join our Skate Community 这类社群入口横幅；其他用途的 Full image 不要勾选",
-      "default": false
     }
   ],
   "presets": [
