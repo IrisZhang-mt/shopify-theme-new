@@ -9,7 +9,6 @@
  */
 {
   "sections": {
-    "main": { "type": "main-page", "settings": { "show_title": false } },
     "fi_test": {
       "type": "full-image",
       "settings": {
@@ -20,5 +19,5 @@
       }
     }
   },
-  "order": ["main", "fi_test"]
+  "order": ["fi_test"]
 }
