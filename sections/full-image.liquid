@@ -1,4 +1,5 @@
 {{ 'full-image.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'full-image.js' | asset_url }}" type="module"></script>
 
 {%- assign pc_image = section.settings.pc_image -%}
 {%- assign mob_image = section.settings.mob_image | default: pc_image -%}
@@ -34,7 +35,12 @@
       {{ 'lifestyle-1' | placeholder_svg_tag }}
     {%- endif -%}
     {%- if link != blank -%}
-      <a class="mt-full-image__link" href="{{ link }}" aria-label="{{ image_alt }}"></a>
+      <a
+        class="mt-full-image__link"
+        href="{{ link }}"
+        aria-label="{{ image_alt }}"
+        {%- if section.settings.track_community_entry %} data-ga4-click="community_entry"{% endif -%}
+      ></a>
     {%- endif -%}
   </div>
 </section>
@@ -71,6 +77,13 @@
       "type": "url",
       "id": "link",
       "label": "Link (optional)"
+    },
+    {
+      "type": "checkbox",
+      "id": "track_community_entry",
+      "label": "Track link click as GA4 \"community_entry\" event",
+      "info": "仅用于 Join our Skate Community 这类社群入口横幅；其他用途的 Full image 不要勾选",
+      "default": false
     }
   ],
   "presets": [
