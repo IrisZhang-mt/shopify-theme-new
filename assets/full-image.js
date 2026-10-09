@@ -1,18 +1,18 @@
 if (!window.mtFullImageInit) {
   window.mtFullImageInit = true;
 
-  document.addEventListener('click', (event) => {
-    const link = event.target.closest('[data-ga4-click]');
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("[data-ga4-click]");
     if (!link) return;
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
-      event: 'ga4Event',
+      event: "ga4Event",
       event_name: link.dataset.ga4Click,
       event_parameters: {
         button_name: link.dataset.ga4ButtonName,
-        button_link: link.dataset.ga4ButtonLink,
+        link_url: link.dataset.ga4ButtonLink,
       },
     });
 
@@ -22,7 +22,8 @@ if (!window.mtFullImageInit) {
     // in a new tab (modifier keys, middle click) don't unload this page,
     // so they're left alone.
     if (event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
     if (!link.href) return;
     event.preventDefault();
     setTimeout(() => {
