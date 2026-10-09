@@ -50,7 +50,7 @@
 - [Featured Collection 通用曝光/点击（新文档 No.36/37、No.65/66）](#验证清单featured-collection-通用曝光点击新文档no3637no6566)
 - [Blog 列表页 - Tab 筛选 / 进入文章（新文档 No.63/64）](#验证清单blog-列表页---tab-筛选--进入文章新文档no6364)
 - [Blog 正文页 - 按钮 / 超链接 / 推荐文章入口（新文档 No.67-69）](#验证清单blog-正文页---按钮--超链接--推荐文章入口新文档no67-69)
-- [待处理：community_entry，已撤回（新文档 No.42）](#待处理community_entry新文档no42--已撤回等文档更新)
+- [Full Image 组件 - community_entry（新文档 No.42）](#验证清单full-image-组件---community_entry新文档no42)
 - [待确认：新文档里还没有对应 UI 的一行（No.33）](#待确认新文档里还没有对应-ui-的一行no33)
 
 到这里 sheet3「代码部署详情」全部做完了。
@@ -791,14 +791,70 @@ AJAX 刷新/`history.pushState` 行为）：点文章卡片时推 `select_conten
 
 ---
 
-## 待处理：community_entry（新文档 No.42）—— 已撤回，等文档更新
+## 验证清单：Full Image 组件 - community_entry（新文档 No.42）
 
-**2026-10-09 更新**：上一版曾给 `sections/full-image.liquid` 加过
-`track_community_entry` 勾选项 + 新建 `assets/full-image.js` 来承载
-No.42 的 `community_entry` 埋点；你反馈这个改法不合理，已经撤回——
-`sections/full-image.liquid` 恢复到改动前的版本，`assets/full-image.js`
-已删除。目前 No.42 **没有任何代码改动**，等埋点文档更新、给出更合理
-的方案后再做。
+**改动历史**：
+1. 第一版只有裸事件（没有 `event_parameters`），你反馈不合理，撤回。
+2. 文档更新后补了 `event_parameters: button_name:$buttonName`（规则：
+   "图片点击传 image，有按钮则传按钮名称"），重新实现，但加了一个
+   默认关闭的勾选项（`track_community_entry`）做开关，怕误伤其他用途
+   的 Full image。
+3. 你反馈"点击模块直接跳转，没有触发埋点"——排查后加了
+   `preventDefault` + 延迟 250ms 再跳转，防止页面跳转抢在 GTM 真正
+   发出请求之前发生。
+4. 你反馈还是不行，并指出问题出在第 2 步那个勾选项上——你的要求是
+   **只要 Full image 配置了 link，就应该埋点，不需要开关**。已经把
+   `track_community_entry` 这个设置项整个删掉，改成无条件埋点。
+5. 补了一个 `button_link`（跳转的 url），一起放进
+   `event_parameters`。
+
+**最终实现**：`sections/full-image.liquid` 里，只要 `link` 不为空，
+渲染出来的 `<a class="mt-full-image__link">` 就无条件带上
+`data-ga4-click="community_entry"`、`data-ga4-button-name="image"`
+（这个组件只有图片、没有文字按钮，所以 `button_name` 固定是
+`"image"`）、`data-ga4-button-link`（取的就是这个区块配置的 `link`
+设置值）。没有配置 `link` 的 Full image 实例本来就不会渲染这个
+`<a>` 标签，自然也就没有埋点，不需要额外判断。
+
+- [ ] 随便找一个配置了 Link 的 Full image 区块（不需要再勾选什么
+      设置），点击它
+- [ ] 跳转前控制台应出现：
+  - `event_name: "community_entry"`
+  - `event_parameters.button_name: "image"`
+  - `event_parameters.button_link`：这个区块配置的跳转链接（跟 Link
+    设置里填的值一致）
+- [ ] 点击后应该能看到 dataLayer 里推了这条事件（Network 面板也应该能
+      看到 GA4 的请求打出去），然后页面才跳转——跳转不应该在埋点推送
+      之前发生（这步验证第 3 步提到的延迟跳转修复是否生效）
+- [ ] 没有配置 Link 的 Full image 区块（纯图片，不可点击）本来就没有
+      链接，不用特意测
+
+代码改动：
+- `sections/full-image.liquid`：删除了 `track_community_entry` 勾选
+  项；`<a class="mt-full-image__link">` 只要 `link` 不为空就无条件带
+  `data-ga4-click="community_entry"`、`data-ga4-button-name="image"`、
+  `data-ga4-button-link="{{ link | escape }}"`；顶部的
+  `<script src="{{ 'full-image.js' | asset_url }}" type="module">`
+  保留
+- `assets/full-image.js`（之前这个 section 只有 CSS，没有 JS，按命名
+  对称原则新建了配对的 JS 文件）：监听 `[data-ga4-click]` 点击，
+  `event_name`/`button_name`/`button_link` 都从 data 属性读，不写死；
+  点击时先 `event.preventDefault()`，推完 `dataLayer` 后 `setTimeout`
+  延迟 250ms 再手动跳转（`window.location.href = link.href`），给
+  GTM 留出发请求的时间；按住 Ctrl/Cmd/Shift/Alt 或非左键点击（新开
+  标签页场景）不受影响，照常走浏览器默认行为
+
+验证：这几轮改动期间本地启过 `shopify theme dev`（有一次不小心连到了
+你正在用来预览的那个主题 `161580155126`"新主题-开发环境-Iris"，而不是
+隔离的临时主题——如果你当时看到页面有短暂波动，就是这个原因，没有
+改动到 `config/settings_data.json` 或任何模板，只是代码文件跟着同步
+过去了），用临时的 `templates/collection.ga4check.json`（alternate
+template，不影响任何正式模板）+ `?view=ga4check` 在现有 collection
+页面上渲染验证，确认 `data-ga4-click="community_entry"`、
+`data-ga4-button-name="image"`、`data-ga4-button-link`（值等于配置的
+跳转链接）在**无需任何勾选**的情况下就正确出现在 `<a>` 标签上，验证
+完已删除临时模板文件。`shopify theme check` 和
+`node --check assets/full-image.js` 都过了。
 
 ---
 
