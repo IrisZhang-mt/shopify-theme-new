@@ -59,8 +59,37 @@ if (!window.mtBlogInit) {
       root.addEventListener('click', (event) => {
         if (event.defaultPrevented || event.button !== 0) return;
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+        const card = event.target.closest('.mt-blog__card');
+        if (card) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'select_content',
+            event_parameters: {
+              module_name: 'Blog',
+              content_name: card.querySelector('.mt-blog__name')?.textContent.trim(),
+            },
+          });
+          return;
+        }
+
         const link = event.target.closest('a[href]');
-        if (!link || !link.closest('[data-blog-tags], [data-blog-pager]')) return;
+        if (!link) return;
+        if (link.closest('[data-blog-tags]')) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'select_content_category',
+            event_parameters: {
+              module_name: 'Blog',
+              button_name: link.textContent.trim(),
+            },
+          });
+        }
+        if (!link.closest('[data-blog-tags], [data-blog-pager]')) return;
         event.preventDefault();
         const href = link.getAttribute('href');
         history.pushState({ mtBlog: true }, '', href);

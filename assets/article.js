@@ -278,6 +278,51 @@ if (!window.mtArticleInit) {
   document.addEventListener('click', (event) => {
     const button = event.target.closest('[data-art-share]');
     if (button) share(button);
+
+    // Share / shop / story tags render as a button + two links but read as
+    // one row of CTA "buttons" — tracked together as Blog post button clicks.
+    const tag = event.target.closest('.mt-art__tag, [data-art-share]');
+    if (tag) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_content',
+        event_parameters: {
+          module_name: 'Blog Post',
+          button_name: tag.textContent.trim(),
+        },
+      });
+      return;
+    }
+
+    const more = event.target.closest('.mt-art__more .mt-blog__card');
+    if (more) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_content',
+        event_parameters: {
+          module_name: 'Blog Post',
+          content_name: more.querySelector('.mt-blog__name')?.textContent.trim(),
+        },
+      });
+      return;
+    }
+
+    const link = event.target.closest('[data-art-rte] a');
+    if (link) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'links_entry',
+        event_parameters: {
+          button_name: link.textContent.trim(),
+        },
+      });
+    }
   });
 
   document.addEventListener('scroll', queue, { capture: true, passive: true });

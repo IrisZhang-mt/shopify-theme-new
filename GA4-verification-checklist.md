@@ -42,6 +42,17 @@
 - [结账/配送/支付/支付成功（No.58-61，Custom Pixel）](#验证清单结账配送支付支付成功no58-61custom-pixel)
 - [搜索框商品列表 Bug 修复（No.12/13）](#验证清单搜索框商品列表-bug-修复no1213)
 
+> 以下几节对应 2026-10-08 新收到的更新版文档
+> `Moodytiger_GA4代码部署New.xlsx`，sheet3 里 O 列标了"新增"的行，
+> 编号是新文档里的编号（跟上面各节的旧编号不是同一套，新文档插入了
+> 几行，后面的编号整体往后挪了）。
+
+- [Featured Collection 通用曝光/点击（新文档 No.36/37、No.65/66）](#验证清单featured-collection-通用曝光点击新文档no3637no6566)
+- [Blog 列表页 - Tab 筛选 / 进入文章（新文档 No.63/64）](#验证清单blog-列表页---tab-筛选--进入文章新文档no6364)
+- [Blog 正文页 - 按钮 / 超链接 / 推荐文章入口（新文档 No.67-69）](#验证清单blog-正文页---按钮--超链接--推荐文章入口新文档no67-69)
+- [待处理：community_entry，已撤回（新文档 No.42）](#待处理community_entry新文档no42--已撤回等文档更新)
+- [待确认：新文档里还没有对应 UI 的一行（No.33）](#待确认新文档里还没有对应-ui-的一行no33)
+
 到这里 sheet3「代码部署详情」全部做完了。
 
 ## 验证清单：We think you'll love 模块（No.23/24）
@@ -660,3 +671,140 @@ DevTools 里对着 checkout 页面敲 `dataLayer` 大概率看不到东西，或
 停顿）两件事解耦开。同时在 `searchReset()`（关闭搜索框时调用）里也把
 这个新计时器一起清掉，避免关闭搜索框后计时器还在背景里跑、之后莫名
 其妙触发一次。未新建文件。
+
+---
+
+## 验证清单：Featured Collection 通用曝光/点击（新文档 No.36/37、No.65/66）
+
+**背景**：新文档里"THE ICE SKATING SALE 模块"（产品列表页，No.36/37）
+和"blog 底部模块 *What's new"（Blog 页，No.65/66）看起来是两个不同的
+模块，但实际在代码里是**同一个可复用 section**——`featured-collection`
+（Featured collection）。核实过：
+- `templates/page.swarovski.json` 里的 `featured_collection_zRyY4Q`
+  实例，`heading: "THE ICE SKATING SALE"`，对应 No.36/37
+- `templates/blog.json` 里的 `featured_collection_ebAyRq` 实例，
+  `heading: "What's new"`，且在 section 顺序里排在 `main`（文章列表）
+  **之后**，也就是真的在 Blog 页底部，对应 No.65/66
+
+所以这次只改了一处通用代码（`sections/featured-collection.liquid` +
+`assets/featured-collection.js`），两个位置的埋点是同一套逻辑，不是
+分别写了两遍。沿用之前 You May Also Like / Best Sellers / PLP 已经
+验收过的"只在产品卡片真正滑出可视区域时才上报，新滑出的分批再报"的
+IntersectionObserver 方案。
+
+- [ ] 打开一个有 Featured Collection 模块的页面（本地验证用的是
+      `/blogs/news` 页面底部的"What's new"模块；正式环境里
+      `page.swarovski.json`"THE ICE SKATING SALE"模块也是同一套代码）
+- [ ] 模块刚进入视口、卡片还没有露出一半以上时：**不应该**出现
+      `view_item_list`
+- [ ] 滚动/滑动到能看到卡片（露出一半以上），应出现一条 `view_item_list`：
+  - `item_list_id`：所选 Collection 的 handle（如 `new-arrival`）
+  - `item_list_name`：section 设置里的 Heading 文案（如 "What's new"、
+    "THE ICE SKATING SALE"）
+  - `currency` 正确
+  - `items[]` **只包含这次真正露出来的卡片**，每个商品带 `item_id`
+    （sku）、`item_name`、`item_brand`、`item_category`（product type）、
+    `item_variant`、`price`、`index`、`discount`
+- [ ] 如果是横向轮播（Carousel 布局）且可以继续滑动，滑出更多卡片应该
+      **再触发一条** `view_item_list`，只包含新出现的卡片；滑出去再
+      滑回来**不应该**重复触发
+- [ ] 点击某张商品卡片（不要点 Quick Shop 按钮）跳转到 PDP，跳转前
+      控制台应出现 `select_item`：`button_name: "Product Card"`，
+      `items[]` 只有这一个商品，`item_list_id`/`item_list_name` 同上
+- [ ] 点击 Quick Shop 按钮**不应该**触发 `select_item`
+
+代码改动：
+- `sections/featured-collection.liquid`：新增 `fc_item_list_id`（取
+  `featured.handle`）/`fc_item_list_name`（取 `section.settings.heading`，
+  没填则退回 `featured.title`），`<section>` 标签加
+  `data-currency="{{ cart.currency.iso_code }}"`，两处（Carousel/Grid
+  布局）`render 'product-card'` 调用都补上 `item_list_id`/
+  `item_list_name` 参数——之前完全没传，所以这个 section 渲染的商品卡片
+  一直都没有 `data-item-*` 属性，自然也就没有任何埋点
+- `assets/featured-collection.js`：在原有的卡片高度对齐逻辑后面，加了
+  跟 `home-best-sellers.js`/`assets/plp.js` 同款的 IntersectionObserver
+  批量曝光 + `select_item` 点击埋点逻辑
+
+未新建文件，因为 `featured-collection` 本来就是通用 section，按仓库
+"不要为营销活动新建专属模板"的原则直接在通用代码里补齐埋点，两个
+页面自动都生效。
+
+---
+
+## 验证清单：Blog 列表页 - Tab 筛选 / 进入文章（新文档 No.63/64）
+
+- [ ] 打开 `/blogs/news`（或任意 Blog 列表页），如果顶部有分类 Tab
+      （`show_tag_nav` 开启且文章带 tag 才会显示），点击某个 Tab，
+      控制台应出现 `select_content_category`：
+  - `module_name: "Blog"`
+  - `button_name`：点的那个 Tab 文案（比如 "All posts" 或具体分类名）
+- [ ] 点击某篇文章卡片进入文章详情页，跳转前控制台应出现
+      `select_content`：
+  - `module_name: "Blog"`
+  - `content_name`：这篇文章的标题
+- [ ] 点击分页（上一页/下一页）**不应该**触发 `select_content_category`
+      （只有 Tab 点击才触发，翻页不算）
+
+代码改动：`assets/blog.js` 原来的点击监听只负责拦截 Tab/分页链接做
+AJAX 局部刷新，这次在同一个监听器里加了两段埋点逻辑（不影响原有的
+AJAX 刷新/`history.pushState` 行为）：点文章卡片时推 `select_content`
+并直接放行默认跳转；点 Tab 链接时先推 `select_content_category`，再走
+原来的 AJAX 刷新逻辑。未新建文件。
+
+---
+
+## 验证清单：Blog 正文页 - 按钮 / 超链接 / 推荐文章入口（新文档 No.67-69）
+
+**先说一个判断**：新文档里"Blog正文模块"下有三行——超链接点击
+（No.67）、按钮点击（No.68）、blog 内容进入按钮点击（No.69）。文章
+详情页（`sections/main-article.liquid`）里能找到的、跟这三行对得上的
+实际 UI 元素是：
+- 正文富文本内容区（`.mt-art__rte`，也就是 `article.content`）里
+  如果编辑在正文中插了超链接 → 对应"超链接点击"（No.67）
+- 正文下方那一排"Share post / shop products / Learn about our
+  story"（`.mt-art__tags`，一个 `<button>` 两个 `<a>`，但看起来是一排
+  统一样式的"标签按钮"）→ 对应"按钮点击"（No.68）
+- 再往下"Featured Articles"推荐文章横条（`.mt-art__more`，复用的还是
+  Blog 列表页那个文章卡片组件）→ 对应"进入另一篇 blog 内容"（No.69）
+
+这个映射是我按现有 UI 结构推出来的，不是文档里直接写明的 DOM 对应
+关系，**建议先确认这个理解对不对，再按这个验收**。
+
+- [ ] 找一篇正文里有插入超链接的文章（本地示例文章正文都没有插入
+      超链接，需要找一篇有链接的，或者自己在后台文章里加一个测试
+      链接），点击该链接，控制台应出现 `links_entry`：
+      `button_name`：链接文案，**没有** `module_name`（文档里这条确实
+      没写 `module_name`）
+- [ ] 点击正文下方"Share post"按钮、"shop products"、
+      "Learn about our story"任意一个，控制台应出现 `select_content`：
+      `module_name: "Blog Post"`，`button_name`：按钮/链接的文案
+- [ ] 文章顶部（hero 区域）也有一个功能一样的"Share"按钮
+      （`data-art-share`），点击同样应该触发上面这条 `select_content`
+      （跟底部 Share post 按钮算同一种交互，没有分开统计）
+- [ ] 滚动到文章底部"Featured Articles"推荐文章区，点击某张推荐文章
+      卡片，跳转前控制台应出现 `select_content`：`module_name:
+      "Blog Post"`，`content_name`：被点的那篇文章标题
+
+代码改动：`assets/article.js` 原有的点击监听只处理 `[data-art-share]`
+的分享逻辑，这次在同一个监听器里加了三段埋点分支（互斥，不会同一次
+点击触发两条）。未新建文件。
+
+---
+
+## 待处理：community_entry（新文档 No.42）—— 已撤回，等文档更新
+
+**2026-10-09 更新**：上一版曾给 `sections/full-image.liquid` 加过
+`track_community_entry` 勾选项 + 新建 `assets/full-image.js` 来承载
+No.42 的 `community_entry` 埋点；你反馈这个改法不合理，已经撤回——
+`sections/full-image.liquid` 恢复到改动前的版本，`assets/full-image.js`
+已删除。目前 No.42 **没有任何代码改动**，等埋点文档更新、给出更合理
+的方案后再做。
+
+---
+
+## 待确认：新文档里还没有对应 UI 的一行（No.33）
+
+- **No.33**（产品列表页 - 产品列表模块，O 列标的是"*补充点位"，不是
+  "新增"）：内容跟已经验收过的 PLP 产品列表 `view_item_list` 完全一样
+  （字段、触发方式都没变），判断是文档补充说明，不是新增需求，**没有
+  改代码**。如果这条背后其实有别的变化，麻烦告诉我具体是哪里不一样。

@@ -8,9 +8,11 @@
 {%- if featured.products.size > 0 -%}
   {%- assign has_products = true -%}
 {%- endif -%}
+{%- assign fc_item_list_id = featured.handle -%}
+{%- assign fc_item_list_name = section.settings.heading | default: featured.title -%}
 
 {%- if has_products or featured == blank -%}
-<section class="mt-fc mt-fc--{{ section.settings.layout }}" style="--mt-fc-cols: {{ section.settings.columns }}">
+<section class="mt-fc mt-fc--{{ section.settings.layout }}" style="--mt-fc-cols: {{ section.settings.columns }}" data-currency="{{ cart.currency.iso_code }}">
   {%- if section.settings.heading != blank or section.settings.cta_label != blank -%}
     <div class="mt-fc__intro">
       {%- if section.settings.heading != blank -%}
@@ -30,7 +32,7 @@
       <div class="mt-fc__row"{% if section.settings.autoplay %} data-autoplay="30"{% endif %} data-wheel-lock>
         {%- if has_products -%}
           {%- for item in featured.products limit: limit -%}
-            {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick %}
+            {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick, item_list_id: fc_item_list_id, item_list_name: fc_item_list_name %}
           {%- endfor -%}
         {%- else -%}
           {%- for i in (1..4) -%}
@@ -49,7 +51,7 @@
     <div class="mt-fc__grid" data-fc-grid>
       {%- if has_products -%}
         {%- for item in featured.products limit: limit -%}
-          {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick, align: true %}
+          {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick, align: true, item_list_id: fc_item_list_id, item_list_name: fc_item_list_name %}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..4) -%}
