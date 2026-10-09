@@ -10,7 +10,14 @@ if (!window.mtFullImageInit) {
     window.dataLayer.push({
       event: 'ga4Event',
       event_name: link.dataset.ga4Click,
+<<<<<<< HEAD
+      event_parameters: {
+        button_name: link.dataset.ga4ButtonName,
+        button_link: link.dataset.ga4ButtonLink,
+      },
+=======
       event_parameters: { button_name: link.dataset.ga4ButtonName },
+>>>>>>> a5bcff8edcc2ad85dbbf8885f850ffd9db9c7dc4
     });
 
     // This link navigates immediately on click, often before GTM's
