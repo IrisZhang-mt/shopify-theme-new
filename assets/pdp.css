@@ -235,9 +235,9 @@
 }
 .mt-pdp__tile {
   display: block;
-  width: 1.125rem;
-  height: 1.125rem;
-  padding: 1px;
+  width: 1.13rem;
+  height: 1.13rem;
+  padding: 2px;
   border: 1px solid transparent;
   background: var(--mt-swatch, var(--mt-off-white));
   background-size: 100% 100%;
