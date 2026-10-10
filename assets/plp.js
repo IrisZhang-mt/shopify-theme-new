@@ -6,7 +6,24 @@ if (!window.mtPlpInit) {
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
   const pageCount = new WeakMap();
+  const renderedUrl = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
+
+  // Cards parsed by DOMParser come from an inert document. Re-setting srcset/src once
+  // they are in the live grid makes iOS Safari pick up the lazy images; without it a
+  // paginated image occasionally never loads.
+  const appendCards = (grid, doc) => {
+    const cards = [...doc.querySelectorAll('[data-plp-grid] > *')];
+    grid.append(...cards);
+    cards.forEach((card) =>
+      card.querySelectorAll('img').forEach((img) => {
+        const srcset = img.getAttribute('srcset');
+        const src = img.getAttribute('src');
+        if (srcset) img.setAttribute('srcset', srcset);
+        if (src) img.setAttribute('src', src);
+      })
+    );
+  };
 
   const trackedIds = new WeakMap();
   const pendingCards = new WeakMap();
@@ -156,6 +173,7 @@ if (!window.mtPlpInit) {
     pending.get(plp)?.abort();
     const controller = new AbortController();
     pending.set(plp, controller);
+    renderedUrl.set(plp, new URL(url, window.location.href).href);
     plp.classList.add('mt-plp--loading');
     resetScroll();
     let doc;
@@ -226,6 +244,33 @@ if (!window.mtPlpInit) {
         })
       );
     } catch {}
+    // motion.js sets scrollRestoration to 'manual' (so fresh loads start at the
+    // top), and that is what makes iOS put a back-forward-restored PLP at y=0.
+    // Hand this history entry back to the browser before leaving so Safari's
+    // own restore keeps the position; a full-load return still starts at the
+    // top via motion.js and is positioned by restoreReturnState() at boot.
+    try {
+      history.scrollRestoration = 'auto';
+    } catch {}
+    watchResume();
+  };
+
+  // Fallback for iOS returning to a frozen PLP with no pagehide / pageshow /
+  // visibilitychange at all: timers stop while the page is frozen, so a long
+  // gap between ticks means it was just resumed. Runs only between a
+  // product-card click and the next restore.
+  let resumeTimer = 0;
+  const watchResume = () => {
+    clearInterval(resumeTimer);
+    let last = performance.now();
+    resumeTimer = setInterval(() => {
+      const now = performance.now();
+      const gap = now - last;
+      last = now;
+      // Background tabs get throttled timers too; that isn't a resume.
+      if (gap < 1500 || document.visibilityState === 'hidden') return;
+      restoreReturnState();
+    }, 500);
   };
 
   const restoreReturnState = async () => {
@@ -235,6 +280,7 @@ if (!window.mtPlpInit) {
     // every real-device test. The href match below, plus consuming the stored
     // state exactly once, are enough to avoid re-applying it on an unrelated
     // visit to the same filtered URL.
+    clearInterval(resumeTimer);
     let raw = null;
     try {
       raw = sessionStorage.getItem(RETURN_STATE_KEY);
@@ -270,7 +316,7 @@ if (!window.mtPlpInit) {
       } catch {
         break;
       }
-      grid.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+      appendCards(grid, doc);
       const nextMore = doc.querySelector('[data-plp-more]');
       if (nextMore) {
         more.dataset.nextUrl = nextMore.dataset.nextUrl;
@@ -288,11 +334,36 @@ if (!window.mtPlpInit) {
     const target = [...grid.querySelectorAll('.mt-card[data-item-id]')].find(
       (card) => card.querySelector('.mt-card__link')?.getAttribute('href') === state.productHref
     );
-    if (target) {
-      target.scrollIntoView({ block: 'center' });
-    } else if (typeof state.scrollY === 'number') {
-      window.scrollTo(0, state.scrollY);
-    }
+    const place = () => {
+      if (target?.isConnected) {
+        target.scrollIntoView({ block: 'center' });
+      } else if (typeof state.scrollY === 'number') {
+        window.scrollTo(0, state.scrollY);
+      }
+    };
+    settleScroll(place);
+  };
+
+  // iOS Safari can apply its own scroll position after pageshow / after the
+  // initial render (e.g. jumping to the top on a back-forward restore), which
+  // silently undoes a single scrollIntoView. Re-apply for the first second,
+  // and stop as soon as the user touches the page so we never fight them.
+  const settleScroll = (place) => {
+    let cancelled = false;
+    const cancel = () => {
+      cancelled = true;
+    };
+    const events = ['touchstart', 'wheel', 'keydown'];
+    events.forEach((type) => window.addEventListener(type, cancel, { once: true, passive: true }));
+    const run = () => {
+      if (!cancelled) place();
+    };
+    run();
+    requestAnimationFrame(run);
+    [100, 300, 600, 1000].forEach((ms) => setTimeout(run, ms));
+    setTimeout(() => {
+      events.forEach((type) => window.removeEventListener(type, cancel));
+    }, 1100);
   };
 
   const moreObserver = new IntersectionObserver(
@@ -314,7 +385,7 @@ if (!window.mtPlpInit) {
         }
         if (!more.isConnected) return;
         const grid = plp.querySelector('[data-plp-grid]');
-        grid?.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+        if (grid) appendCards(grid, doc);
         if (grid) pageCount.set(grid, (pageCount.get(grid) || 1) + 1);
         const nextMore = doc.querySelector('[data-plp-more]');
         if (nextMore) {
@@ -335,6 +406,7 @@ if (!window.mtPlpInit) {
   observeMore();
   syncAll();
   applySwatches(document);
+  document.querySelectorAll('[data-plp]').forEach((plp) => renderedUrl.set(plp, window.location.href));
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
     observeGrid(grid);
@@ -461,9 +533,25 @@ if (!window.mtPlpInit) {
     restoreReturnState();
   });
 
+  // On iOS Safari, going PLP -> PDP -> back a second time from a page that was
+  // itself restored from the bfcache can fire neither pagehide nor pageshow:
+  // the page is just hidden, reset to the top, and shown again, so neither
+  // the boot nor the pageshow restore runs. Becoming visible again is the only
+  // signal left. Safe to call alongside pageshow: the saved state is consumed
+  // by whichever runs first, and is only written on a product-card click.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') restoreReturnState();
+  });
+
+  // iOS Safari can fire popstate on a back-forward restore of this page even
+  // though the URL hasn't changed; re-rendering then would drop the appended
+  // pages and scroll to the top, undoing restoreReturnState(). Only refresh
+  // when the URL differs from what the grid currently shows (filter back/forward).
   window.addEventListener('popstate', () => {
     const plp = document.querySelector('[data-plp]');
-    if (plp) refresh(plp, window.location.href, false);
+    if (!plp) return;
+    if ((renderedUrl.get(plp) || '') === window.location.href) return;
+    refresh(plp, window.location.href, false);
   });
 
   desktopMq.addEventListener('change', () => {
