@@ -10,10 +10,10 @@
     </h1>
     {%- if search.results_count > 0 -%}
       {%- paginate search.results by 24 -%}
-        <div class="mt-srp__grid">
+        <div class="mt-srp__grid" data-title-grid>
           {%- for item in search.results -%}
             {%- if item.object_type == 'product' -%}
-              {% render 'product-card', product: item, index: forloop.index0, quick: true, item_list_id: 'search_results', item_list_name: 'Search Results' %}
+              {% render 'product-card', product: item, index: forloop.index0, quick: true, align: true, item_list_id: 'search_results', item_list_name: 'Search Results' %}
             {%- else -%}
               <a class="mt-srp__row" href="{{ item.url }}" data-reveal>{{ item.title }}</a>
             {%- endif -%}
