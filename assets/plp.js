@@ -6,6 +6,7 @@ if (!window.mtPlpInit) {
   const desktopMq = window.matchMedia('(min-width: 750px)');
   const pending = new WeakMap();
   const pageCount = new WeakMap();
+  const renderedUrl = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
 
   // Cards parsed by DOMParser come from an inert document. Re-setting srcset/src once
@@ -172,6 +173,7 @@ if (!window.mtPlpInit) {
     pending.get(plp)?.abort();
     const controller = new AbortController();
     pending.set(plp, controller);
+    renderedUrl.set(plp, new URL(url, window.location.href).href);
     plp.classList.add('mt-plp--loading');
     resetScroll();
     let doc;
@@ -351,6 +353,7 @@ if (!window.mtPlpInit) {
   observeMore();
   syncAll();
   applySwatches(document);
+  document.querySelectorAll('[data-plp]').forEach((plp) => renderedUrl.set(plp, window.location.href));
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
     observeGrid(grid);
@@ -477,9 +480,15 @@ if (!window.mtPlpInit) {
     restoreReturnState();
   });
 
+  // iOS Safari can fire popstate on a back-forward restore of this page even
+  // though the URL hasn't changed; re-rendering then would drop the appended
+  // pages and scroll to the top, undoing restoreReturnState(). Only refresh
+  // when the URL differs from what the grid currently shows (filter back/forward).
   window.addEventListener('popstate', () => {
     const plp = document.querySelector('[data-plp]');
-    if (plp) refresh(plp, window.location.href, false);
+    if (!plp) return;
+    if ((renderedUrl.get(plp) || '') === window.location.href) return;
+    refresh(plp, window.location.href, false);
   });
 
   desktopMq.addEventListener('change', () => {
