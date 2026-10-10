@@ -438,3 +438,7 @@ h6 {
   mask-repeat: no-repeat;
   mask-size: contain;
 }
+
+#carthike-chat-button-container.right {
+  right: 16px !important;
+}
