@@ -571,6 +571,17 @@ if (!window.mtPlpInit) {
     restoreReturnState();
   });
 
+  // On iOS Safari, going PLP -> PDP -> back a second time from a page that was
+  // itself restored from the bfcache can fire neither pagehide nor pageshow:
+  // the page is just hidden, reset to the top, and shown again, so neither
+  // the boot nor the pageshow restore runs. Becoming visible again is the only
+  // signal left. Safe to call alongside pageshow: the saved state is consumed
+  // by whichever runs first, and is only written on a product-card click.
+  document.addEventListener('visibilitychange', () => {
+    plpDebug(`visibility=${document.visibilityState} y=${Math.round(window.scrollY)}`);
+    if (document.visibilityState === 'visible') restoreReturnState();
+  });
+
   // iOS Safari can fire popstate on a back-forward restore of this page even
   // though the URL hasn't changed; re-rendering then would drop the appended
   // pages and scroll to the top, undoing restoreReturnState(). Only refresh
