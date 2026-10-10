@@ -196,6 +196,53 @@
   }
 }
 
+.mt-header__signup-wrap {
+  display: contents;
+}
+.mt-header__signup-close {
+  display: none;
+}
+
+@media screen and (max-width: 749.98px) {
+  .mt-header__signup-wrap {
+    position: fixed;
+    right: 16px;
+    bottom: 50px;
+    display: block;
+  }
+  .mt-header__signup-wrap[data-closed] {
+    display: none;
+  }
+  .mt-header__signup-wrap .mt-header__signup {
+    display: block;
+    padding: 4.3px 16.5px;
+    border-radius: 999px;
+    background-color: #ff8300;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .mt-header__signup-glint,
+  .mt-header__signup::after {
+    display: none;
+  }
+  .mt-header__signup-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    padding: 5px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.5);
+    color: #ff8300;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    transform: translate(40%, -60%);
+  }
+}
+
 .mt-header__search {
   display: flex;
   align-items: center;
