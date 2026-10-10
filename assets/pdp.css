@@ -237,7 +237,7 @@
   display: block;
   width: 1.125rem;
   height: 1.125rem;
-  padding: 0;
+  padding: 1px;
   border: 1px solid transparent;
   background: var(--mt-swatch, var(--mt-off-white));
   background-size: 100% 100%;
@@ -250,10 +250,14 @@
 @media (hover: hover) {
   .mt-pdp__tile:hover {
     border-color: rgba(var(--mt-ink-rgb), 0.35);
+    background-clip: content-box;
+    background-origin: content-box;
   }
 }
 .mt-pdp__tile[aria-pressed="true"] {
   border-color: var(--mt-ink);
+  background-clip: content-box;
+  background-origin: content-box;
 }
 
 .mt-pdp__pills {
