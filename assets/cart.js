@@ -333,22 +333,38 @@ if (!window.mtCartInit) {
       const card = quickAdd.closest('.mt-card, .mt-cart__tile');
       if (card && card.dataset.itemId) {
         const quickAddRoot = card.closest('[data-cart-root]');
-        const price = +card.dataset.itemPrice || 0;
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event_parameters: null });
-        window.dataLayer.push({
-          event: 'ga4Event',
-          event_name: 'add_to_cart',
-          event_parameters: {
-            module_name: 'Side Cart',
-            button_name: 'plus',
-            currency: quickAddRoot?.dataset.currency,
-            value: price,
-            item_list_id: card.dataset.itemListId,
-            item_list_name: card.dataset.itemListName,
-            items: [buildItem(card)],
-          },
+        const itemId = card.dataset.itemId;
+        const itemListId = card.dataset.itemListId;
+        const itemListName = card.dataset.itemListName;
+        const currency = quickAddRoot?.dataset.currency;
+        // Wait for the add + drawer refresh before reading price/discount —
+        // tiered volume discounts mean the per-unit price can change once
+        // this item is actually merged into the cart (e.g. the same SKU is
+        // already in there), so the static recs card price isn't reliable.
+        add(Number(quickAdd.dataset.cartAdd)).then(() => {
+          const freshLine = quickAddRoot?.querySelector(`.mt-cart__line[data-item-id="${itemId}"]`);
+          if (!freshLine) return;
+          const lineDiscount = +freshLine.dataset.itemLineDiscount || 0;
+          const lineQuantity = +freshLine.dataset.itemQuantity || 0;
+          const discount = lineQuantity > 0 ? +(lineDiscount / lineQuantity).toFixed(2) : 0;
+          const item = { ...buildItem(freshLine, 1), discount };
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event_parameters: null });
+          window.dataLayer.push({
+            event: 'ga4Event',
+            event_name: 'add_to_cart',
+            event_parameters: {
+              module_name: 'Side Cart',
+              button_name: 'plus',
+              currency,
+              value: item.price,
+              item_list_id: itemListId,
+              item_list_name: itemListName,
+              items: [item],
+            },
+          });
         });
+        return;
       }
       add(Number(quickAdd.dataset.cartAdd));
       return;
