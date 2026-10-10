@@ -10,7 +10,7 @@
 .mt-cart {
   position: fixed;
   inset: 0;
-  top: var(--mt-header-h);
+  top: calc(var(--mt-header-h) + var(--mt-announce-offset, 0px));
   z-index: 9;
 }
 
