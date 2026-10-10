@@ -443,3 +443,7 @@ h6 {
   right: auto !important;
   left: 16px !important;
 }
+
+#carthike-chat-button-container .whatsappbutton.buttonWithIcon {
+  padding: 9px !important;
+}
