@@ -203,7 +203,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.9375rem;
+  gap: var(--mt-swatch-gap);
+  margin: calc(-1 * var(--mt-swatch-ring));
+  padding: var(--mt-swatch-ring);
 }
 .mt-pdp__group-label {
   flex-basis: 100%;
@@ -212,7 +214,7 @@
   color: rgba(var(--mt-ink-rgb), 0.6);
 }
 .mt-pdp__tiles--collapsed {
-  max-height: 8.9375rem;
+  max-height: calc(4 * var(--mt-swatch-size) + 3 * var(--mt-swatch-gap) + 2 * var(--mt-swatch-ring));
   overflow: hidden;
 }
 .mt-pdp__tiles-toggle {
@@ -234,26 +236,12 @@
   outline-offset: 2px;
 }
 .mt-pdp__tile {
-  display: block;
-  width: 1.13rem;
-  height: 1.13rem;
-  padding: 0;
-  border: 1px solid transparent;
-  background: var(--mt-swatch, var(--mt-off-white));
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  overflow: hidden;
-  border: 1px solid #888;
   transition: border-color var(--mt-dur) var(--mt-ease);
 }
 @media (hover: hover) {
   .mt-pdp__tile:hover {
     border-color: rgba(var(--mt-ink-rgb), 0.35);
   }
-}
-.mt-pdp__tile[aria-pressed="true"] {
-  border-color: var(--mt-ink);
 }
 
 .mt-pdp__pills {
@@ -661,29 +649,15 @@ button.mt-pdp__sticky-add {
 .mt-pair__swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9375rem;
+  gap: var(--mt-swatch-gap);
 }
 .mt-pair__swatch {
-  width: 1.125rem;
-  height: 1.125rem;
-  padding: 0;
-  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
-  background: var(--mt-swatch, var(--mt-off-white));
-  background-size: cover;
-  cursor: pointer;
-  transition:
-    transform var(--mt-dur) var(--mt-ease),
-    box-shadow var(--mt-dur) var(--mt-ease);
+  transition: transform var(--mt-dur) var(--mt-ease);
 }
 @media (hover: hover) {
   .mt-pair__swatch:hover {
     transform: scale(1.12);
   }
-}
-.mt-pair__swatch[aria-pressed="true"] {
-  box-shadow:
-    0 0 0 1px var(--mt-paper),
-    0 0 0 2px var(--mt-ink);
 }
 .mt-pair__pills {
   display: flex;
