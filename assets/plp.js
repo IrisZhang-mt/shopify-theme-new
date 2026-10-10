@@ -143,41 +143,7 @@ if (!window.mtPlpInit) {
     syncToggle(plp);
   };
 
-  const measureTitles = () => {
-    const updates = [];
-    document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
-      const rows = new Map();
-      grid.querySelectorAll('.mt-card').forEach((card) => {
-        const key = card.offsetTop;
-        if (!rows.has(key)) rows.set(key, []);
-        rows.get(key).push(card);
-      });
-      rows.forEach((row) => {
-        let tallest = 0;
-        row.forEach((card) => {
-          const title = card.querySelector('.mt-card__title');
-          if (title) tallest = Math.max(tallest, title.offsetHeight);
-        });
-        if (tallest) updates.push([row, tallest]);
-      });
-    });
-    updates.forEach(([row, tallest]) => {
-      row.forEach((card) => card.style.setProperty('--mt-plp-title-h', `${tallest}px`));
-    });
-  };
-
-  const alignTitles = () => {
-    document
-      .querySelectorAll('[data-plp-grid] .mt-card')
-      .forEach((card) => card.style.removeProperty('--mt-plp-title-h'));
-    requestAnimationFrame(measureTitles);
-  };
-
-  let alignFrame = 0;
-  const queueAlign = () => {
-    cancelAnimationFrame(alignFrame);
-    alignFrame = requestAnimationFrame(alignTitles);
-  };
+  const queueAlign = () => window.mtAlignTitles();
 
   const observeMore = () => {
     document.querySelectorAll('[data-plp-more]:not([data-observed])').forEach((el) => {
@@ -369,17 +335,14 @@ if (!window.mtPlpInit) {
   observeMore();
   syncAll();
   applySwatches(document);
-  queueAlign();
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
     observeGrid(grid);
   });
   restoreReturnState();
-  window.addEventListener('resize', queueAlign);
   document.addEventListener('transitionend', (event) => {
     if (event.propertyName === 'width' && event.target.matches('[data-plp-aside]')) queueAlign();
   });
-  if (document.fonts) document.fonts.ready.then(queueAlign);
   desktopMq.addEventListener('change', syncAll);
   document.addEventListener('shopify:section:load', () => {
     swatchMap = null;
