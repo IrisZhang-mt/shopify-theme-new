@@ -4,14 +4,7 @@
   --mt-header-gap: 1.875rem;
   --mt-logo-h: 1.125rem;
   --mt-signup-base: rgba(var(--mt-accent-rgb), 0.55);
-  --mt-signup-gradient: linear-gradient(
-    100deg,
-    var(--mt-signup-base) 0%,
-    var(--mt-signup-base) 38%,
-    var(--mt-tangerine) 50%,
-    var(--mt-signup-base) 62%,
-    var(--mt-signup-base) 100%
-  );
+  --mt-signup-band: linear-gradient(100deg, transparent 14%, #000 50%, transparent 86%);
   background: var(--mt-paper);
 }
 
@@ -154,20 +147,36 @@
   letter-spacing: inherit;
   cursor: pointer;
   background-color: transparent;
-  background-image: var(--mt-signup-gradient);
-  background-size: 300% 100%;
-  background-repeat: no-repeat;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--mt-signup-base);
+}
+.mt-header__signup-glint {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: var(--mt-signup-band);
+  mask-image: var(--mt-signup-band);
   animation: mt-signup-sweep 3200ms linear infinite;
+}
+.mt-header__signup-glint-text {
+  display: block;
+  color: var(--mt-tangerine);
+  animation: mt-signup-sweep-text 3200ms linear infinite;
 }
 @keyframes mt-signup-sweep {
   from {
-    background-position: 100% 0;
+    transform: translateX(-100%);
   }
   to {
-    background-position: 0% 0;
+    transform: translateX(100%);
+  }
+}
+@keyframes mt-signup-sweep-text {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
   }
 }
 .mt-header__signup::after {
@@ -353,8 +362,10 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
   }
 
   .mt-header__signup {
-    background-image: none;
     color: var(--mt-accent);
+  }
+  .mt-header__signup-glint {
+    display: none;
   }
 }
 
