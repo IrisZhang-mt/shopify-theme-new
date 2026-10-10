@@ -9,6 +9,62 @@ if (!window.mtPlpInit) {
   const renderedUrl = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
 
+  // TEMP DEBUG (remove once the iOS "every 2nd back lands at top" bug is
+  // confirmed fixed). Open the collection with ?plp_debug=1 to switch on an
+  // on-screen log that persists across PLP <-> PDP navigations; ?plp_debug=0
+  // switches it off. Does nothing for anyone who hasn't opted in.
+  const DEBUG_FLAG_KEY = 'mt_plp_debug';
+  const DEBUG_LOG_KEY = 'mt_plp_debug_log';
+  const debugParam = new URLSearchParams(window.location.search).get('plp_debug');
+  try {
+    if (debugParam === '1') localStorage.setItem(DEBUG_FLAG_KEY, '1');
+    if (debugParam === '0') {
+      localStorage.removeItem(DEBUG_FLAG_KEY);
+      sessionStorage.removeItem(DEBUG_LOG_KEY);
+    }
+  } catch {}
+  if (debugParam !== null) window.mtStripParams?.(['plp_debug']);
+  let debugOn = false;
+  try {
+    debugOn = localStorage.getItem(DEBUG_FLAG_KEY) === '1';
+  } catch {}
+  const debugT0 = performance.now();
+  let debugBox = null;
+  const plpDebug = (msg) => {
+    if (!debugOn) return;
+    let lines = [];
+    try {
+      lines = JSON.parse(sessionStorage.getItem(DEBUG_LOG_KEY) || '[]');
+    } catch {}
+    lines.push(`${Math.round(performance.now() - debugT0)}ms ${msg}`);
+    lines = lines.slice(-24);
+    try {
+      sessionStorage.setItem(DEBUG_LOG_KEY, JSON.stringify(lines));
+    } catch {}
+    if (!debugBox) {
+      debugBox = document.createElement('pre');
+      debugBox.style.cssText =
+        'position:fixed;left:4px;bottom:4px;z-index:2147483647;max-width:calc(100vw - 8px);max-height:45vh;overflow:auto;margin:0;padding:6px;background:rgba(0,0,0,.8);color:#7f7;font:10px/1.35 monospace;white-space:pre-wrap;pointer-events:none';
+      document.body.append(debugBox);
+    }
+    debugBox.textContent = lines.join('\n');
+  };
+  if (debugOn) {
+    const nav = performance.getEntriesByType('navigation')[0];
+    plpDebug(`---- boot nav=${nav?.type} y=${Math.round(window.scrollY)} sr=${history.scrollRestoration}`);
+    window.addEventListener('pagehide', (event) => plpDebug(`pagehide persisted=${event.persisted}`));
+    let lastY = window.scrollY;
+    window.addEventListener(
+      'scroll',
+      () => {
+        const y = window.scrollY;
+        if (y < 50 && lastY > 300) plpDebug(`JUMP TO TOP from ${Math.round(lastY)}`);
+        lastY = y;
+      },
+      { passive: true }
+    );
+  }
+
   // Cards parsed by DOMParser come from an inert document. Re-setting srcset/src once
   // they are in the live grid makes iOS Safari pick up the lazy images; without it a
   // paginated image occasionally never loads.
@@ -243,6 +299,7 @@ if (!window.mtPlpInit) {
           scrollY: window.scrollY,
         })
       );
+      plpDebug(`save: pages=${pageCount.get(grid) || 1} y=${Math.round(window.scrollY)} ${productHref}`);
     } catch {}
   };
 
@@ -504,6 +561,7 @@ if (!window.mtPlpInit) {
   });
 
   window.addEventListener('pageshow', (event) => {
+    plpDebug(`pageshow persisted=${event.persisted} y=${Math.round(window.scrollY)}`);
     if (!event.persisted) return;
     document.querySelectorAll('[data-plp]').forEach((plp) => setOverlay(plp, false));
     // A bfcache restore (this is what `persisted` means here) resumes the
@@ -520,7 +578,9 @@ if (!window.mtPlpInit) {
   window.addEventListener('popstate', () => {
     const plp = document.querySelector('[data-plp]');
     if (!plp) return;
-    if ((renderedUrl.get(plp) || '') === window.location.href) return;
+    const same = (renderedUrl.get(plp) || '') === window.location.href;
+    plpDebug(`popstate ${same ? 'skipped' : 'refresh'}`);
+    if (same) return;
     refresh(plp, window.location.href, false);
   });
 
