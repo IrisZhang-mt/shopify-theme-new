@@ -2,7 +2,7 @@
   position: relative;
   --mt-header-pad: 0.9375rem;
   --mt-header-gap: 1.875rem;
-  --mt-logo-h: 1.125rem;
+  --mt-logo-h: 1.5rem;
   --mt-signup-base: rgba(var(--mt-accent-rgb), 0.55);
   --mt-signup-band: linear-gradient(100deg, transparent 14%, #000 50%, transparent 86%);
   background: var(--mt-paper);
