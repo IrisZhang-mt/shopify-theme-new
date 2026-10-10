@@ -236,7 +236,20 @@ if (!window.mtPdpInit) {
       const add = event.target.closest('[data-pdp-add]');
       if (add) {
         const variant = matchVariant(state.variants, state.selected);
-        if (variant) {
+        const qty = state.qty;
+        window.mtAddToCart(add, qty).then((added) => {
+          if (!variant || !added) return;
+          const finalItem = window.mtPricedAddItem(
+            {
+              item_id: variant.sku,
+              item_name: root.dataset.itemName,
+              ...(root.dataset.itemCategory ? { item_category: root.dataset.itemCategory } : {}),
+              ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
+              item_brand: root.dataset.itemBrand,
+            },
+            added,
+            qty
+          );
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({ event_parameters: null });
           window.dataLayer.push({
@@ -245,23 +258,11 @@ if (!window.mtPdpInit) {
             event_parameters: {
               button_name: 'Add to Cart',
               currency: root.dataset.currency,
-              value: +(variant.priceValue * state.qty).toFixed(2),
-              items: [
-                {
-                  item_id: variant.sku,
-                  item_name: root.dataset.itemName,
-                  discount: variant.discountValue || 0,
-                  ...(root.dataset.itemCategory ? { item_category: root.dataset.itemCategory } : {}),
-                  ...(variant.itemVariant ? { item_variant: variant.itemVariant } : {}),
-                  item_brand: root.dataset.itemBrand,
-                  price: variant.priceValue,
-                  quantity: state.qty,
-                },
-              ],
+              value: +(finalItem.price * qty).toFixed(2),
+              items: [finalItem],
             },
           });
-        }
-        window.mtAddToCart(add, state.qty);
+        });
       }
     });
 
@@ -381,7 +382,10 @@ if (!window.mtPdpInit) {
       const add = event.target.closest('[data-pair-add]');
       if (add) {
         const item = pairGa4Item();
-        if (item) {
+        const currency = pair.closest('[data-currency]')?.dataset.currency;
+        window.mtAddToCart(add, 1).then((added) => {
+          if (!item || !added) return;
+          const finalItem = window.mtPricedAddItem(item, added, 1);
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({ event_parameters: null });
           window.dataLayer.push({
@@ -389,15 +393,14 @@ if (!window.mtPdpInit) {
             event_name: 'add_to_cart',
             event_parameters: {
               button_name: 'Add to Cart',
-              currency: pair.closest('[data-currency]')?.dataset.currency,
-              value: item.price,
-              item_list_id: item.item_list_id,
-              item_list_name: item.item_list_name,
-              items: [item],
+              currency,
+              value: finalItem.price,
+              item_list_id: finalItem.item_list_id,
+              item_list_name: finalItem.item_list_name,
+              items: [finalItem],
             },
           });
-        }
-        window.mtAddToCart(add, 1);
+        });
         return;
       }
       const details = event.target.closest('.mt-pair__details');

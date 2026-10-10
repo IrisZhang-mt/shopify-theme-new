@@ -41,6 +41,7 @@
 - [搜索结果页（No.52-57）](#验证清单搜索结果页no52-57)
 - [结账/配送/支付/支付成功（No.58-61，Custom Pixel）](#验证清单结账配送支付支付成功no58-61custom-pixel)
 - [搜索框商品列表 Bug 修复（No.12/13）](#验证清单搜索框商品列表-bug-修复no1213)
+- [add_to_cart/remove_from_cart 多件多折 Bug 修复](#验证清单add_to_cartremove_from_cart-多件多折-bug-修复)
 
 > 以下几节对应 2026-10-08 新收到的更新版文档
 > `Moodytiger_GA4代码部署New.xlsx`，sheet3 里 O 列标了"新增"的行，
@@ -864,3 +865,78 @@ template，不影响任何正式模板）+ `?view=ga4check` 在现有 collection
   "新增"）：内容跟已经验收过的 PLP 产品列表 `view_item_list` 完全一样
   （字段、触发方式都没变），判断是文档补充说明，不是新增需求，**没有
   改代码**。如果这条背后其实有别的变化，麻烦告诉我具体是哪里不一样。
+
+---
+
+## 验证清单：add_to_cart/remove_from_cart 多件多折 Bug 修复
+
+**反馈问题**：店铺有"多件多折"自动折扣（实测是 Shopify 原生自动折扣
+"BUY 2+ · 15% OFF"，数量到 2 件自动打 85 折）。`add_to_cart` 事件的
+`price`/`discount` 传的是点击那一刻、折扣生效前的旧值，而不是加购后
+真正生效的新值。
+
+用真实商品验证过（variant_id 51439066284278，原价 $55）：
+- 购物车从 1 件加到 2 件后，Shopify 返回的真实数据是
+  `final_price=46.75`、整行 `total_discount=16.5`（即每件折扣 $8.25）
+- 之前的代码在点击瞬间就用点击前的 DOM 旧值（`price=55`、
+  `discount=0`）推送了事件，没有等服务器真正算出折扣后的新值
+
+**影响范围**：不止购物车抽屉里的 `+`/`-` 按钮，所有会触发
+`add_to_cart` 的入口都有同样的问题：
+1. 购物车抽屉 `+`（`assets/cart.js`，已修复并验收通过）
+2. 购物车抽屉"We think you'll love"推荐卡片的加购按钮
+   （`assets/cart.js` 的 `quickAdd`）
+3. Quick Shop 弹窗的 Add to Cart（`assets/quick-shop.js`）
+4. PDP 主体 Add to Cart（`assets/pdp.js` 的 `[data-pdp-add]`）
+5. PDP "Pairs well with"模块的 Add to Cart（`assets/pdp.js` 的
+   `[data-pair-add]`）
+
+`remove_from_cart`（购物车 `-`/Remove）不受影响，不需要改——被移除的
+那一件，它的价格/折扣就应该是移除前那个档位的状态，而点击那一刻的
+DOM 本来就是"移除前"的状态，天然是对的。
+
+- [ ] 购物车抽屉：单件商品点 `+` 到跨过折扣门槛（比如从 1 件点到 2
+      件），确认 `add_to_cart` 的 `price`/`discount` 是加购后的新值，
+      不是加购前的旧值
+- [ ] 购物车抽屉"We think you'll love"推荐卡片：点卡片上的加购按钮，
+      如果加购后让某个商品行跨过折扣门槛，确认 `add_to_cart` 的
+      `price`/`discount` 也是加购后的新值
+- [ ] Quick Shop 弹窗：选好数量/规格点 Add to Cart，同上验证
+- [ ] PDP 主体：选好数量点 Add to Cart，同上验证（注意 PDP 上可以一次
+      选多件一起加购，这时候 `price` 应该是加购后那个数量对应的折后
+      单价，`discount` 是这次加购的这几件总共摊到的折扣）
+- [ ] PDP "Pairs well with"模块：点 Add to Cart，同上验证
+- [ ] 以上几个入口，正常情况（没有跨过折扣门槛，比如本来就没货/折扣
+      不涉及这个商品）下 `price`/`discount` 应该跟之前一样正常，不要
+      因为这次改动引入新的错误
+
+代码改动：
+- `assets/cart.js`：购物车行内 `+` 按钮（已验收）；新增对
+  `quickAdd`（推荐卡片加购）的同款修复——等 `add()` 这次请求和购物车
+  刷新完成后，按 `data-item-id` 重新找到这一行，读刷新后的
+  `data-item-price`/`data-item-line-discount`/`data-item-quantity`
+  再推送埋点，不再用点击瞬间的旧值
+- `assets/quick-shop.js`：
+  - `window.mtAddToCart` 现在会返回 `/cart/add.js` 的响应（这一行
+    post-merge 后的完整数据），之前这个函数不返回任何东西
+  - 新增 `window.mtPricedAddItem(item, added, qty)` 共享工具函数，用
+    `added`（`/cart/add.js` 的响应）重新计算 `price`/`discount`，按本次
+    实际加购的件数 `qty` 折算（响应里的 `quantity`/`total_discount`
+    是这一整行的，不是单单这次加购的部分，所以要折算）——这个函数
+    PDP 和 Pairs 两处也在用，避免同样的换算逻辑抄三遍
+  - Quick Shop 弹窗的 Add to Cart 点击：改成先等 `mtAddToCart` 真正
+    加购完成、拿到响应后，再用 `mtPricedAddItem` 算出新值并推送埋点
+- `assets/pdp.js`：PDP 主体 Add to Cart 和 Pairs well with 的 Add to
+  Cart，都改成同样的"先加购、等响应、再用响应里的真实价格/折扣推送"
+  的写法
+
+验证：
+- `node --check` 三个文件都过了，`shopify theme check` 全量跑了一遍，
+  没有新增报错/警告
+- 用 curl 直接调 Shopify 的 `/cart/add.js`/`/cart/change.js` 接口模拟了
+  真实折扣场景（1 件 → 2 件），确认接口返回和购物车区域刷新后页面上
+  渲染出的 `data-item-price`/`data-item-line-discount`/
+  `data-item-quantity` 跟代码里的换算逻辑完全对得上
+- 没有在真实浏览器里实际点击 Quick Shop/PDP/Pairs 的 Add to Cart 按钮
+  看 dataLayer 的实际结果（点击事件没法用 curl 模拟），麻烦你照着上面
+  的清单实测
