@@ -132,6 +132,7 @@
   margin: calc(-1 * var(--mt-swatch-bleed));
   padding: var(--mt-swatch-bleed);
   overflow: hidden;
+  margin-right: 30px;
 }
 [data-title-grid] .mt-card__swatches:empty,
 [data-title-row] .mt-card__swatches:empty {
