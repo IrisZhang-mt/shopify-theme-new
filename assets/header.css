@@ -215,7 +215,8 @@
   }
   .mt-header__signup-wrap .mt-header__signup {
     display: block;
-    padding: 4.3px 16.5px;
+    /* FK Grotesk 字形在行框内偏下约 0.065em，上下 padding 各挪 0.8px 做视觉居中，总高度不变 */
+    padding: 3.5px 16.5px 5.1px;
     border-radius: 999px;
     background-color: #ff8300;
     color: #fff;
