@@ -440,5 +440,6 @@ h6 {
 }
 
 #carthike-chat-button-container.right {
-  right: 16px !important;
+  right: auto !important;
+  left: 16px !important;
 }
