@@ -5,7 +5,8 @@ if (!window.mtMotionInit) {
 
   window.mtCartCount = (count) => {
     document.querySelectorAll('.mt-header__cart-count').forEach((el) => {
-      el.textContent = `(${count})`;
+      el.textContent = count;
+      el.hidden = !count;
     });
   };
 
