@@ -374,7 +374,10 @@ if (!window.mtQuickShopInit) {
     const add = event.target.closest('[data-qs-add]');
     if (add) {
       const item = qsCurrentItem();
-      if (item) {
+      const currency = state.card?.closest('[data-currency]')?.dataset.currency;
+      window.mtAddToCart(add, 1, close).then((added) => {
+        if (!item || !added) return;
+        const finalItem = window.mtPricedAddItem(item, added, 1);
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event_parameters: null });
         window.dataLayer.push({
@@ -382,15 +385,14 @@ if (!window.mtQuickShopInit) {
           event_name: 'add_to_cart',
           event_parameters: {
             button_name: 'Add to Cart',
-            currency: state.card?.closest('[data-currency]')?.dataset.currency,
-            value: item.price,
-            item_list_id: item.item_list_id,
-            item_list_name: item.item_list_name,
-            items: [item],
+            currency,
+            value: finalItem.price,
+            item_list_id: finalItem.item_list_id,
+            item_list_name: finalItem.item_list_name,
+            items: [finalItem],
           },
         });
-      }
-      window.mtAddToCart(add, 1, close);
+      });
       return;
     }
     const details = event.target.closest('.mt-qs__details');
