@@ -29,10 +29,10 @@
 
   {%- if section.settings.layout == 'row' -%}
     <div class="mt-fc__stage" data-row-stage>
-      <div class="mt-fc__row"{% if section.settings.autoplay %} data-autoplay="30"{% endif %} data-wheel-lock>
+      <div class="mt-fc__row" data-title-row{% if section.settings.autoplay %} data-autoplay="30"{% endif %} data-wheel-lock>
         {%- if has_products -%}
           {%- for item in featured.products limit: limit -%}
-            {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick, item_list_id: fc_item_list_id, item_list_name: fc_item_list_name %}
+            {% render 'product-card', product: item, index: forloop.index0, sizes: card_sizes, quick: section.settings.quick, align: true, item_list_id: fc_item_list_id, item_list_name: fc_item_list_name %}
           {%- endfor -%}
         {%- else -%}
           {%- for i in (1..4) -%}
