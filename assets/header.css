@@ -299,6 +299,15 @@
 .mt-header__cart-count[hidden] {
   display: none;
 }
+/* 把行框裁到数字的实际高度（大写字高顶 → 基线），再用上下等量 padding 居中，
+   不依赖 FK Grotesk 上下不对称的行高留白。不支持的浏览器保持上面的 line-height 居中。 */
+@supports (text-box: trim-both cap alphabetic) {
+  .mt-header__cart-count {
+    padding-block: calc((12px - 0.72em) / 2);
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
+  }
+}
 
 .mt-header__burger {
   display: flex;
