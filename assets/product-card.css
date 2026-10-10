@@ -128,7 +128,7 @@
 }
 /* One row only: swatches that wrap are clipped; padding keeps the selected ring visible. */
 .mt-card__swatches:not(:empty) {
-  height: calc(var(--mt-swatch-size) + 2 * var(--mt-swatch-bleed));
+  height: calc(var(--mt-swatch-size) + 3 * var(--mt-swatch-bleed));
   margin: calc(-1 * var(--mt-swatch-bleed));
   padding: var(--mt-swatch-bleed);
   overflow: hidden;
