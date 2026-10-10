@@ -4,7 +4,12 @@
   --mt-header-gap: 1.875rem;
   --mt-logo-h: 1.5rem;
   --mt-signup-base: rgba(var(--mt-accent-rgb), 0.55);
-  --mt-signup-band: linear-gradient(100deg, transparent 14%, #000 50%, transparent 86%);
+  --mt-signup-band: linear-gradient(
+    100deg,
+    transparent 14%,
+    #000 50%,
+    transparent 86%
+  );
   background: var(--mt-paper);
 }
 
@@ -221,7 +226,6 @@
     background-color: #ff8300;
     color: #fff;
     font-size: 12px;
-    line-height: 1.5;
   }
   .mt-header__signup-glint,
   .mt-header__signup::after {
