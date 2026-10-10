@@ -494,6 +494,45 @@ if (!window.mtMotionInit) {
     next();
   };
 
+  const TITLE_GRID = '[data-title-grid]';
+
+  const measureTitles = () => {
+    const updates = [];
+    document.querySelectorAll(TITLE_GRID).forEach((grid) => {
+      const rows = new Map();
+      grid.querySelectorAll('.mt-card').forEach((card) => {
+        const key = card.offsetTop;
+        if (!rows.has(key)) rows.set(key, []);
+        rows.get(key).push(card);
+      });
+      rows.forEach((row) => {
+        let tallest = 0;
+        row.forEach((card) => {
+          const title = card.querySelector('.mt-card__title');
+          if (title) tallest = Math.max(tallest, title.offsetHeight);
+        });
+        if (tallest) updates.push([row, tallest]);
+      });
+    });
+    updates.forEach(([row, tallest]) => {
+      row.forEach((card) => card.style.setProperty('--mt-card-title-h', `${tallest}px`));
+    });
+  };
+
+  const alignTitles = () => {
+    document
+      .querySelectorAll(`${TITLE_GRID} .mt-card`)
+      .forEach((card) => card.style.removeProperty('--mt-card-title-h'));
+    requestAnimationFrame(measureTitles);
+  };
+
+  let alignFrame = 0;
+  window.mtAlignTitles = () => {
+    if (!document.querySelector(TITLE_GRID)) return;
+    cancelAnimationFrame(alignFrame);
+    alignFrame = requestAnimationFrame(alignTitles);
+  };
+
   const rescan = () => {
     autoScan();
     parallaxScan();
@@ -502,11 +541,14 @@ if (!window.mtMotionInit) {
   };
 
   document.addEventListener('shopify:section:load', rescan);
+  document.addEventListener('shopify:section:load', window.mtAlignTitles);
   document.addEventListener('mt:reveal-scan', rescan);
   window.addEventListener('resize', () => {
     autoScan();
     parallaxMeasure();
+    window.mtAlignTitles();
   });
+  if (document.fonts) document.fonts.ready.then(window.mtAlignTitles);
   window.addEventListener('load', () => {
     parallaxMeasure();
     scrollDirty = true;
@@ -705,4 +747,5 @@ if (!window.mtMotionInit) {
   autoScan();
   parallaxScan();
   mediaScan();
+  window.mtAlignTitles();
 }
