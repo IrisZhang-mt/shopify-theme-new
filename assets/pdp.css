@@ -240,7 +240,8 @@
   padding: 0;
   border: 1px solid transparent;
   background: var(--mt-swatch, var(--mt-off-white));
-  background-size: cover;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   cursor: pointer;
   overflow: hidden;
   transition: border-color var(--mt-dur) var(--mt-ease);
