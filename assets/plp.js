@@ -144,6 +144,7 @@ if (!window.mtPlpInit) {
   };
 
   const measureTitles = () => {
+    const updates = [];
     document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
       const rows = new Map();
       grid.querySelectorAll('.mt-card').forEach((card) => {
@@ -157,9 +158,11 @@ if (!window.mtPlpInit) {
           const title = card.querySelector('.mt-card__title');
           if (title) tallest = Math.max(tallest, title.offsetHeight);
         });
-        if (!tallest) return;
-        row.forEach((card) => card.style.setProperty('--mt-plp-title-h', `${tallest}px`));
+        if (tallest) updates.push([row, tallest]);
       });
+    });
+    updates.forEach(([row, tallest]) => {
+      row.forEach((card) => card.style.setProperty('--mt-plp-title-h', `${tallest}px`));
     });
   };
 

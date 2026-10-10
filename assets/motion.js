@@ -92,9 +92,18 @@ if (!window.mtMotionInit) {
   const hoverMq = window.matchMedia('(hover: hover)');
   const clamp = (value) => Math.min(Math.max(value, 0), 1);
 
-  const rootStyle = getComputedStyle(document.documentElement);
-  const slackRem = parseFloat(rootStyle.getPropertyValue('--mt-parallax-slack')) || 9.375;
-  window.mtParallaxSlack = slackRem * parseFloat(rootStyle.fontSize);
+  let parallaxSlack = 0;
+  Object.defineProperty(window, 'mtParallaxSlack', {
+    configurable: true,
+    get: () => {
+      if (!parallaxSlack) {
+        const rootStyle = getComputedStyle(document.documentElement);
+        const slackRem = parseFloat(rootStyle.getPropertyValue('--mt-parallax-slack')) || 9.375;
+        parallaxSlack = slackRem * parseFloat(rootStyle.fontSize);
+      }
+      return parallaxSlack;
+    },
+  });
 
   document.documentElement.classList.add('mt-motion');
 
@@ -239,8 +248,9 @@ if (!window.mtMotionInit) {
   const autoScan = () => {
     autoRows = Array.from(document.querySelectorAll('[data-autoplay]'));
     autoRows.forEach((row) => {
-      const state = rowState(row);
-      state.max = row.scrollWidth - row.clientWidth;
+      rowState(row).max = row.scrollWidth - row.clientWidth;
+    });
+    autoRows.forEach((row) => {
       if (row.dataset.mtAuto) return;
       row.dataset.mtAuto = 'true';
       row.addEventListener('scroll', onRowScroll, { passive: true });
@@ -485,9 +495,9 @@ if (!window.mtMotionInit) {
   };
 
   const rescan = () => {
-    observeReveals();
     autoScan();
     parallaxScan();
+    observeReveals();
     mediaScan();
   };
 
