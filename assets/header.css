@@ -212,7 +212,7 @@
   .mt-header__signup-wrap {
     position: fixed;
     right: 34px;
-    bottom: 170px;
+    bottom: 109px;
     display: block;
   }
   .mt-header__signup-wrap[data-closed] {
