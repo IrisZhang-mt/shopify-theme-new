@@ -167,7 +167,7 @@
                         {%- if is_main_color -%}
                           {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                           <button
-                            class="mt-pdp__tile"
+                            class="mt-pdp__tile mt-swatch"
                             type="button"
                             style="--mt-swatch: {{ swatch_value | strip_newlines }}"
                             data-pdp-value="{{ value | escape }}"
@@ -190,7 +190,7 @@
                           {%- unless is_main_color -%}
                             {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                             <button
-                              class="mt-pdp__tile"
+                              class="mt-pdp__tile mt-swatch"
                               type="button"
                               style="--mt-swatch: {{ swatch_value | strip_newlines }}"
                               data-pdp-value="{{ value | escape }}"
