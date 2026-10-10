@@ -36,6 +36,28 @@ if (!window.__mtCardSwatchInit) {
     window.location.href = swatch.dataset.swatchHref;
   });
 
+  // A card image that fails (flaky mobile network) is never retried by the browser on
+  // its own; retry it twice with a short backoff. error doesn't bubble, so capture.
+  const MAX_IMAGE_RETRIES = 2;
+  document.addEventListener(
+    'error',
+    (event) => {
+      const img = event.target;
+      if (!(img instanceof HTMLImageElement) || !img.closest('.mt-card__media')) return;
+      const tries = Number(img.dataset.mtRetry || 0);
+      if (tries >= MAX_IMAGE_RETRIES) return;
+      img.dataset.mtRetry = tries + 1;
+      setTimeout(() => {
+        if (!img.isConnected) return;
+        const srcset = img.getAttribute('srcset');
+        const src = img.getAttribute('src');
+        if (srcset) img.setAttribute('srcset', srcset);
+        if (src) img.setAttribute('src', src);
+      }, 1000 * (tries + 1));
+    },
+    true
+  );
+
   // Back/forward restore: put cards back to their server-rendered state and retry
   // images whose load was aborted by the navigation.
   window.addEventListener('pageshow', (event) => {
@@ -56,6 +78,7 @@ if (!window.__mtCardSwatchInit) {
       if (src) img.setAttribute('src', src);
       delete img.dataset.mtSrc;
       delete img.dataset.mtSrcset;
+      delete img.dataset.mtRetry;
     });
   });
 }

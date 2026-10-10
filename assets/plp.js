@@ -8,6 +8,22 @@ if (!window.mtPlpInit) {
   const pageCount = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
 
+  // Cards parsed by DOMParser come from an inert document. Re-setting srcset/src once
+  // they are in the live grid makes iOS Safari pick up the lazy images; without it a
+  // paginated image occasionally never loads.
+  const appendCards = (grid, doc) => {
+    const cards = [...doc.querySelectorAll('[data-plp-grid] > *')];
+    grid.append(...cards);
+    cards.forEach((card) =>
+      card.querySelectorAll('img').forEach((img) => {
+        const srcset = img.getAttribute('srcset');
+        const src = img.getAttribute('src');
+        if (srcset) img.setAttribute('srcset', srcset);
+        if (src) img.setAttribute('src', src);
+      })
+    );
+  };
+
   const trackedIds = new WeakMap();
   const pendingCards = new WeakMap();
   const batchTimers = new WeakMap();
@@ -270,7 +286,7 @@ if (!window.mtPlpInit) {
       } catch {
         break;
       }
-      grid.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+      appendCards(grid, doc);
       const nextMore = doc.querySelector('[data-plp-more]');
       if (nextMore) {
         more.dataset.nextUrl = nextMore.dataset.nextUrl;
@@ -314,7 +330,7 @@ if (!window.mtPlpInit) {
         }
         if (!more.isConnected) return;
         const grid = plp.querySelector('[data-plp-grid]');
-        grid?.append(...doc.querySelectorAll('[data-plp-grid] > *'));
+        if (grid) appendCards(grid, doc);
         if (grid) pageCount.set(grid, (pageCount.get(grid) || 1) + 1);
         const nextMore = doc.querySelector('[data-plp-more]');
         if (nextMore) {
