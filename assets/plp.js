@@ -335,7 +335,6 @@ if (!window.mtPlpInit) {
   observeMore();
   syncAll();
   applySwatches(document);
-  queueAlign();
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
     observeGrid(grid);
