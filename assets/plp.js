@@ -242,7 +242,8 @@ if (!window.mtPlpInit) {
           productHref,
           scrollY: window.scrollY,
         })
-      );    } catch {}
+      );
+    } catch {}
     // motion.js sets scrollRestoration to 'manual' (so fresh loads start at the
     // top), and that is what makes iOS put a back-forward-restored PLP at y=0.
     // Hand this history entry back to the browser before leaving so Safari's
@@ -267,7 +268,8 @@ if (!window.mtPlpInit) {
       const gap = now - last;
       last = now;
       // Background tabs get throttled timers too; that isn't a resume.
-      if (gap < 1500 || document.visibilityState === 'hidden') return;      restoreReturnState();
+      if (gap < 1500 || document.visibilityState === 'hidden') return;
+      restoreReturnState();
     }, 500);
   };
 
@@ -331,7 +333,8 @@ if (!window.mtPlpInit) {
 
     const target = [...grid.querySelectorAll('.mt-card[data-item-id]')].find(
       (card) => card.querySelector('.mt-card__link')?.getAttribute('href') === state.productHref
-    );    const place = () => {
+    );
+    const place = () => {
       if (target?.isConnected) {
         target.scrollIntoView({ block: 'center' });
       } else if (typeof state.scrollY === 'number') {
@@ -520,7 +523,8 @@ if (!window.mtPlpInit) {
     window.mtFocusTrap(event, aside, 'button:not(:disabled), input:not(:disabled), a[href], summary');
   });
 
-  window.addEventListener('pageshow', (event) => {    if (!event.persisted) return;
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
     document.querySelectorAll('[data-plp]').forEach((plp) => setOverlay(plp, false));
     // A bfcache restore (this is what `persisted` means here) resumes the
     // page without re-running any top-level script, so the normal
@@ -535,7 +539,8 @@ if (!window.mtPlpInit) {
   // the boot nor the pageshow restore runs. Becoming visible again is the only
   // signal left. Safe to call alongside pageshow: the saved state is consumed
   // by whichever runs first, and is only written on a product-card click.
-  document.addEventListener('visibilitychange', () => {    if (document.visibilityState === 'visible') restoreReturnState();
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') restoreReturnState();
   });
 
   // iOS Safari can fire popstate on a back-forward restore of this page even
