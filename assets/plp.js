@@ -259,7 +259,10 @@ if (!window.mtPlpInit) {
     } catch {}
     let state;
     try {
-      if (!raw) return;
+      if (!raw) {
+        plpDebug('restore: no saved state');
+        return;
+      }
       state = JSON.parse(raw);
     } catch {
       return;
@@ -267,7 +270,10 @@ if (!window.mtPlpInit) {
     try {
       sessionStorage.removeItem(RETURN_STATE_KEY);
     } catch {}
-    if (!state || state.collectionHref !== window.location.pathname + window.location.search) return;
+    if (!state || state.collectionHref !== window.location.pathname + window.location.search) {
+      plpDebug(`restore: href mismatch ${state?.collectionHref} vs ${window.location.pathname + window.location.search}`);
+      return;
+    }
     const plp = document.querySelector('[data-plp]');
     const grid = plp?.querySelector('[data-plp-grid]');
     if (!plp || !grid) return;
@@ -306,11 +312,38 @@ if (!window.mtPlpInit) {
     const target = [...grid.querySelectorAll('.mt-card[data-item-id]')].find(
       (card) => card.querySelector('.mt-card__link')?.getAttribute('href') === state.productHref
     );
-    if (target) {
-      target.scrollIntoView({ block: 'center' });
-    } else if (typeof state.scrollY === 'number') {
-      window.scrollTo(0, state.scrollY);
-    }
+    plpDebug(`restore: pages=${state.pages} target=${target ? 'found' : 'missing'} y=${Math.round(window.scrollY)}`);
+    const place = () => {
+      if (target?.isConnected) {
+        target.scrollIntoView({ block: 'center' });
+      } else if (typeof state.scrollY === 'number') {
+        window.scrollTo(0, state.scrollY);
+      }
+    };
+    settleScroll(place);
+  };
+
+  // iOS Safari can apply its own scroll position after pageshow / after the
+  // initial render (e.g. jumping to the top on a back-forward restore), which
+  // silently undoes a single scrollIntoView. Re-apply for the first second,
+  // and stop as soon as the user touches the page so we never fight them.
+  const settleScroll = (place) => {
+    let cancelled = false;
+    const cancel = () => {
+      cancelled = true;
+    };
+    const events = ['touchstart', 'wheel', 'keydown'];
+    events.forEach((type) => window.addEventListener(type, cancel, { once: true, passive: true }));
+    const run = () => {
+      if (!cancelled) place();
+    };
+    run();
+    requestAnimationFrame(run);
+    [100, 300, 600, 1000].forEach((ms) => setTimeout(run, ms));
+    setTimeout(() => {
+      events.forEach((type) => window.removeEventListener(type, cancel));
+      plpDebug(`settled: y=${Math.round(window.scrollY)} cancelled=${cancelled}`);
+    }, 1100);
   };
 
   const moreObserver = new IntersectionObserver(
