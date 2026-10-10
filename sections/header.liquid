@@ -56,11 +56,6 @@
           {%- endif -%}
           <button class="mt-header__signup-close" type="button" data-signup-close aria-label="{{ 'general.close' | t }}">&times;</button>
         </div>
-        <script>
-          try {
-            if (sessionStorage.getItem('mt-signup-closed')) document.currentScript.previousElementSibling.dataset.closed = '';
-          } catch (e) {}
-        </script>
       {%- endif -%}
       <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open data-func="Search" aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
         <span class="mt-header__search-text">{{ 'header.search' | t }}</span>

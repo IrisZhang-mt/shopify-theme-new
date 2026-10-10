@@ -300,6 +300,12 @@ if (!window.mtHeaderInit) {
   });
 
   document.addEventListener('click', (event) => {
+    const close = event.target.closest('[data-signup-close]');
+    if (!close) return;
+    close.closest('[data-signup]').dataset.closed = '';
+  });
+
+  document.addEventListener('click', (event) => {
     const nav = event.target.closest('[data-nav1]');
     if (!nav) return;
     const params = { first_navigation: nav.dataset.nav1 };
