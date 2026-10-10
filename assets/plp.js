@@ -301,6 +301,34 @@ if (!window.mtPlpInit) {
       );
       plpDebug(`save: pages=${pageCount.get(grid) || 1} y=${Math.round(window.scrollY)} ${productHref}`);
     } catch {}
+    // motion.js sets scrollRestoration to 'manual' (so fresh loads start at the
+    // top), and that is what makes iOS put a back-forward-restored PLP at y=0.
+    // Hand this history entry back to the browser before leaving so Safari's
+    // own restore keeps the position; a full-load return still starts at the
+    // top via motion.js and is positioned by restoreReturnState() at boot.
+    try {
+      history.scrollRestoration = 'auto';
+    } catch {}
+    watchResume();
+  };
+
+  // Fallback for iOS returning to a frozen PLP with no pagehide / pageshow /
+  // visibilitychange at all: timers stop while the page is frozen, so a long
+  // gap between ticks means it was just resumed. Runs only between a
+  // product-card click and the next restore.
+  let resumeTimer = 0;
+  const watchResume = () => {
+    clearInterval(resumeTimer);
+    let last = performance.now();
+    resumeTimer = setInterval(() => {
+      const now = performance.now();
+      const gap = now - last;
+      last = now;
+      // Background tabs get throttled timers too; that isn't a resume.
+      if (gap < 1500 || document.visibilityState === 'hidden') return;
+      plpDebug(`resume gap=${Math.round(gap)}ms y=${Math.round(window.scrollY)} sr=${history.scrollRestoration}`);
+      restoreReturnState();
+    }, 500);
   };
 
   const restoreReturnState = async () => {
@@ -310,6 +338,7 @@ if (!window.mtPlpInit) {
     // every real-device test. The href match below, plus consuming the stored
     // state exactly once, are enough to avoid re-applying it on an unrelated
     // visit to the same filtered URL.
+    clearInterval(resumeTimer);
     let raw = null;
     try {
       raw = sessionStorage.getItem(RETURN_STATE_KEY);
