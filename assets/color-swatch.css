@@ -4,6 +4,8 @@
   --mt-swatch-line: 0.8px;
   --mt-swatch-ring-gap: 2.5px;
   --mt-swatch-ring: calc(var(--mt-swatch-line) + var(--mt-swatch-ring-gap));
+  /* Room kept around swatches inside clipping containers so the ring is never cut. */
+  --mt-swatch-bleed: calc(var(--mt-swatch-ring) + 2px);
 }
 
 .mt-swatch {

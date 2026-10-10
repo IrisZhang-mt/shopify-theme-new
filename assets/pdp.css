@@ -204,8 +204,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--mt-swatch-gap);
-  margin: calc(-1 * var(--mt-swatch-ring));
-  padding: var(--mt-swatch-ring);
+  margin: calc(-1 * var(--mt-swatch-bleed));
+  padding: var(--mt-swatch-bleed);
 }
 .mt-pdp__group-label {
   flex-basis: 100%;
@@ -214,7 +214,7 @@
   color: rgba(var(--mt-ink-rgb), 0.6);
 }
 .mt-pdp__tiles--collapsed {
-  max-height: calc(4 * var(--mt-swatch-size) + 3 * var(--mt-swatch-gap) + 2 * var(--mt-swatch-ring));
+  max-height: calc(4 * var(--mt-swatch-size) + 3 * var(--mt-swatch-gap) + 2 * var(--mt-swatch-bleed));
   overflow: hidden;
 }
 .mt-pdp__tiles-toggle {
