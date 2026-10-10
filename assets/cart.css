@@ -420,6 +420,9 @@
 .mt-cart__cards {
   display: flex;
   gap: 0.3125rem;
+  /* Room for the selected swatch ring on the first/last card; cards stay aligned with the title. */
+  margin-inline: calc(-1 * var(--mt-swatch-bleed));
+  padding-inline: var(--mt-swatch-bleed);
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
