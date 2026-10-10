@@ -269,13 +269,20 @@ if (!window.mtQuickShopInit) {
     state.trigger = null;
   };
 
+  // Returns the /cart/add.js response (the added line, post-merge) so
+  // callers can report GA4 add_to_cart with the actual resulting price/
+  // discount instead of the pre-add page price — tiered volume discounts
+  // mean the per-unit price can change once the item is really in the cart
+  // (e.g. merging into an existing line crosses a "buy 2+" threshold).
+  // Returns null on failure or if the add never happened.
   window.mtAddToCart = async (button, quantity, beforeNotify) => {
     const id = Number(button.dataset.qsVariant || button.dataset.pdpVariant || button.dataset.pairVariant);
-    if (!id || button.disabled) return;
+    if (!id || button.disabled) return null;
     const label = button.innerHTML;
     clearTimeout(addTimers.get(button));
     button.disabled = true;
     button.textContent = strings.adding;
+    let added = null;
     try {
       const res = await fetch('/cart/add.js', {
         method: 'POST',
@@ -283,6 +290,7 @@ if (!window.mtQuickShopInit) {
         body: JSON.stringify({ id, quantity }),
       });
       if (!res.ok) throw new Error(res.status);
+      added = await res.json();
       button.textContent = strings.added;
       if (beforeNotify) beforeNotify();
       document.dispatchEvent(new CustomEvent('mt:cart-added'));
@@ -298,6 +306,19 @@ if (!window.mtQuickShopInit) {
         button.disabled = false;
       }, 1500)
     );
+    return added;
+  };
+
+  // Shared by quick-shop/PDP/pairs add-to-cart: turns the static pre-add
+  // item (price/discount read from the page) into the real post-add values
+  // using the /cart/add.js response for this line, prorated by how many
+  // units this specific click added (the response's quantity/discount are
+  // for the whole line, which may already have had units in it).
+  window.mtPricedAddItem = (item, added, qty) => {
+    const lineQuantity = added.quantity || qty;
+    const price = +(added.final_price / 100).toFixed(2);
+    const discount = +(((added.total_discount || 0) / 100 / lineQuantity) * qty).toFixed(2);
+    return { ...item, price, discount, quantity: qty };
   };
 
   document.addEventListener('click', (event) => {
