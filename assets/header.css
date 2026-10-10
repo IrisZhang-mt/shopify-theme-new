@@ -211,8 +211,8 @@
 @media screen and (max-width: 749.98px) {
   .mt-header__signup-wrap {
     position: fixed;
-    right: 16px;
-    bottom: 70px;
+    right: 34px;
+    bottom: 170px;
     display: block;
   }
   .mt-header__signup-wrap[data-closed] {
