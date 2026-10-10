@@ -1,6 +1,5 @@
 .mt-plp {
   --mt-plp-pad: 0.9375rem;
-  --mt-plp-swatch: 0.625rem;
   --mt-plp-shift: cubic-bezier(0.65, 0, 0.35, 1);
   background: var(--mt-paper);
 }
@@ -377,7 +376,7 @@ a.mt-plp__tile:focus-visible {
   text-overflow: ellipsis;
 }
 .mt-plp .mt-card__swatches:empty {
-  min-height: var(--mt-plp-swatch);
+  min-height: var(--mt-swatch-size);
 }
 
 .mt-plp__empty {
@@ -540,16 +539,6 @@ a.mt-plp__tile:focus-visible {
   }
   .mt-plp--full .mt-card__media {
     aspect-ratio: 346 / 440;
-  }
-  .mt-plp .mt-card__swatches {
-    gap: 0.9375rem;
-  }
-  .mt-plp {
-    --mt-plp-swatch: 1.125rem;
-  }
-  .mt-plp .mt-card__swatches .mt-card__swatch {
-    width: var(--mt-plp-swatch);
-    height: var(--mt-plp-swatch);
   }
 }
 

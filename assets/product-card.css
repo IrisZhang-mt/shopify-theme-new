@@ -124,23 +124,18 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.625rem;
+  gap: var(--mt-swatch-gap);
 }
-.mt-card__swatches .mt-card__swatch {
-  display: block;
-  width: 0.9375rem;
-  height: 0.9375rem;
-  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
-  background: var(--mt-swatch);
-  background-size: cover;
-  cursor: pointer;
-}
-.mt-card__swatches .mt-card__swatch.is-active {
-  border-color: var(--mt-ink);
+/* One row only: swatches that wrap are clipped; padding keeps the selected ring visible. */
+.mt-card__swatches:not(:empty) {
+  height: calc(var(--mt-swatch-size) + 2 * var(--mt-swatch-ring));
+  margin: calc(-1 * var(--mt-swatch-ring));
+  padding: var(--mt-swatch-ring);
+  overflow: hidden;
 }
 [data-title-grid] .mt-card__swatches:empty,
 [data-title-row] .mt-card__swatches:empty {
-  min-height: 0.9375rem;
+  min-height: var(--mt-swatch-size);
 }
 .mt-card__swatches-caption {
   margin: 0;

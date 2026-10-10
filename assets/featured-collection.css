@@ -76,7 +76,7 @@
   min-height: var(--mt-fc-title-h, 0);
 }
 .mt-fc__grid .mt-card__swatches:empty {
-  min-height: 0.9375rem;
+  min-height: var(--mt-swatch-size);
 }
 
 @media (hover: hover) {
