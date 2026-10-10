@@ -590,7 +590,7 @@ if (!window.mtPlpInit) {
   });
 
   window.addEventListener('pageshow', (event) => {
-    plpDebug(`pageshow persisted=${event.persisted} y=${Math.round(window.scrollY)}`);
+    plpDebug(`pageshow persisted=${event.persisted} y=${Math.round(window.scrollY)} sr=${history.scrollRestoration}`);
     if (!event.persisted) return;
     document.querySelectorAll('[data-plp]').forEach((plp) => setOverlay(plp, false));
     // A bfcache restore (this is what `persisted` means here) resumes the
