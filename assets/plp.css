@@ -362,6 +362,12 @@ a.mt-plp__tile:focus-visible {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5625rem 0.3125rem;
 }
+@media screen and (max-width: 749.98px) {
+  .mt-plp__grid {
+    --mt-swatch-size: 1.75rem;
+    --mt-swatch-gap: 0.8125rem;
+  }
+}
 
 .mt-plp .mt-card {
   width: auto;

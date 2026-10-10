@@ -605,6 +605,10 @@
   .mt-cart__progress {
     display: none;
   }
+  .mt-cart__cards {
+    --mt-swatch-size: 1.75rem;
+    --mt-swatch-gap: 0.8125rem;
+  }
 }
 
 .mt-checkout-loading {
