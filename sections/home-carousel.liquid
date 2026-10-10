@@ -18,7 +18,7 @@
         >
           <div class="mt-ig__media">
             {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
+              {{ block.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', widths: '260, 360, 460, 540, 670, 750, 1000, 1500', sizes: '(min-width: 750px) max(335px, 19vw), 258px', alt: ''}}
             {%- endif -%}
           </div>
           {%- if block.settings.handle != blank -%}

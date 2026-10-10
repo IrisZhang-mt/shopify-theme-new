@@ -370,13 +370,6 @@ a.mt-plp__tile:focus-visible {
   flex: none;
   gap: 0.9375rem;
 }
-.mt-plp__grid .mt-card__title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  min-height: var(--mt-plp-title-h, 0);
-}
 .mt-plp__grid--one-line .mt-card__title {
   display: block;
   min-height: 0;

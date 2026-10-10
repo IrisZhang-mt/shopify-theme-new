@@ -41,10 +41,11 @@
       {%- endif -%}
       {%- if product.featured_image -%}
         {%- assign image_alt = product.featured_image.alt | default: product.title | escape -%}
+        {%- assign image_sizes = sizes | default: '(min-width: 750px) 335px, 258px' -%}
         {%- if eager -%}
-          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: sizes | default: '(min-width: 750px) 335px, 258px', alt: image_alt }}
+          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', widths: '180, 260, 360, 460, 540, 670, 750', sizes: image_sizes, alt: image_alt }}
         {%- else -%}
-          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'lazy', sizes: sizes | default: '(min-width: 750px) 335px, 258px', alt: image_alt }}
+          {{ product.featured_image | image_url: width: 750 | image_tag: decoding: 'async', loading: 'lazy', widths: '180, 260, 360, 460, 540, 670, 750', sizes: image_sizes, alt: image_alt }}
         {%- endif -%}
       {%- endif -%}
       {%- if quick -%}

@@ -483,6 +483,11 @@
     background-size: 100% 100%;
   }
 }
+.mt-cart__bar .mt-cart__checkout {
+  width: 58.6%;
+  height: 45px;
+  margin: 22px auto;
+}
 .mt-cart__checkout[aria-busy="true"] {
   opacity: 0.6;
   cursor: wait;

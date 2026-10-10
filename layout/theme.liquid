@@ -18,20 +18,24 @@
         when 'article'
           assign content_group = 'Blog Detail Page'
         when 'page'
-          case template.suffix
-            when 'about-us'
-              assign content_group = 'About Us Page'
-            when 'contact-us'
-              assign content_group = 'Contact Us Page'
-            when 'faq'
-              assign content_group = 'FAQs Page'
-            when 'reviews'
-              assign content_group = 'Reviews Page'
-            when 'blog'
-              assign content_group = 'Blog List Page'
-            else
-              assign content_group = 'Support & Info Page'
-          endcase
+          if page.handle == 'ice-skating-crystals-by-swarovski'
+            assign content_group = 'Product List Page'
+          else
+            case template.suffix
+              when 'about-us'
+                assign content_group = 'About Us Page'
+              when 'contact-us'
+                assign content_group = 'Contact Us Page'
+              when 'faq'
+                assign content_group = 'FAQs Page'
+              when 'reviews'
+                assign content_group = 'Reviews Page'
+              when 'blog'
+                assign content_group = 'Blog List Page'
+              else
+                assign content_group = 'Support & Info Page'
+            endcase
+          endif
         else
           if request.page_type contains 'customers'
             assign content_group = 'Account Page'
@@ -165,8 +169,8 @@
 
     {{ 'index.css' | asset_url | stylesheet_tag }}
     {{ 'product-card.css' | asset_url | stylesheet_tag }}
-    {{ 'quick-shop.css' | asset_url | stylesheet_tag }}
-    {{ 'size-chart.css' | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ 'quick-shop.css' | asset_url }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ 'size-chart.css' | asset_url }}" media="print" onload="this.media='all'">
     <script src="{{ 'motion.js' | asset_url }}" type="module"></script>
     <script src="{{ 'product-card.js' | asset_url }}" type="module"></script>
     <script src="{{ 'quick-shop.js' | asset_url }}" type="module"></script>

@@ -38,11 +38,11 @@
   </div>
 
   <div class="mt-bs__stage" data-row-stage>
-    <div class="mt-bs__row" data-bs-row data-autoplay="30" data-wheel-lock data-eager-managed>
+    <div class="mt-bs__row" data-bs-row data-title-row data-autoplay="30" data-wheel-lock data-eager-managed>
       {%- assign bs_first_list_name = bs_heading | append: '_' | append: first_block.settings.label -%}
       {%- if first_block.settings.collection.products.size > 0 -%}
         {%- for product in first_block.settings.collection.products limit: 8 -%}
-          {% render 'product-card', product: product, quick: true, index: forloop.index0, item_list_id: bs_item_list_id, item_list_name: bs_first_list_name %}
+          {% render 'product-card', product: product, quick: true, align: true, index: forloop.index0, item_list_id: bs_item_list_id, item_list_name: bs_first_list_name %}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (0..3) -%}
@@ -62,7 +62,7 @@
     <template data-bs-panel="{{ forloop.index }}">
       {%- if block.settings.collection.products.size > 0 -%}
         {%- for product in block.settings.collection.products limit: 8 -%}
-          {% render 'product-card', product: product, quick: true, index: forloop.index0, item_list_id: bs_item_list_id, item_list_name: bs_panel_list_name %}
+          {% render 'product-card', product: product, quick: true, align: true, index: forloop.index0, item_list_id: bs_item_list_id, item_list_name: bs_panel_list_name %}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (0..3) -%}

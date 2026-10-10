@@ -87,6 +87,20 @@
   font-size: var(--mt-p-m-size);
   line-height: var(--mt-p-leading);
 }
+[data-title-grid] .mt-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: var(--mt-card-title-h, 0);
+}
+[data-title-row] .mt-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(var(--mt-p-leading) * 2em);
+}
 .mt-card__price {
   display: flex;
   flex-wrap: wrap;
@@ -123,6 +137,10 @@
 }
 .mt-card__swatches .mt-card__swatch.is-active {
   border-color: var(--mt-ink);
+}
+[data-title-grid] .mt-card__swatches:empty,
+[data-title-row] .mt-card__swatches:empty {
+  min-height: 0.9375rem;
 }
 .mt-card__swatches-caption {
   margin: 0;

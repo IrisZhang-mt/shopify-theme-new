@@ -48,11 +48,14 @@
 
     <div class="mt-header__utils">
       {%- if section.settings.signup_text != blank -%}
-        {%- if section.settings.signup_url != blank -%}
-          <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}</a>
-        {%- else -%}
-          <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}</button>
-        {%- endif -%}
+        <div class="mt-header__signup-wrap" data-signup>
+          {%- if section.settings.signup_url != blank -%}
+            <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span></a>
+          {%- else -%}
+            <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span></button>
+          {%- endif -%}
+          <button class="mt-header__signup-close" type="button" data-signup-close aria-label="{{ 'general.close' | t }}">&times;</button>
+        </div>
       {%- endif -%}
       <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open data-func="Search" aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
         <span class="mt-header__search-text">{{ 'header.search' | t }}</span>
