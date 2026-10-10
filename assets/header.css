@@ -235,11 +235,16 @@
     position: absolute;
     top: 0;
     right: 0;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 22px;
+    height: 22px;
     font-weight: 800;
     padding: 5px;
     border: 0;
-    border-radius: 999px;
+    border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     color: #ff8300;
     font-size: 12px;
