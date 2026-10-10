@@ -220,11 +220,11 @@
   }
   .mt-header__signup-wrap .mt-header__signup {
     display: block;
-    padding: 3.5px 16.5px;
+    padding: 4px 18px;
     border-radius: 999px;
     background-color: #ff8300;
     color: #fff;
-    font-size: 12px;
+    font-size: 13px;
   }
   .mt-header__signup-glint,
   .mt-header__signup::after {
