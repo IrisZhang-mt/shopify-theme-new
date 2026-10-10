@@ -295,6 +295,10 @@ if (!window.mtCartInit) {
     const minus = event.target.closest?.('[data-cart-minus]');
     if (minus) {
       const qty = Number(minus.parentElement.querySelector('[data-cart-qty]').textContent);
+      // The unit being removed belongs to the pricing tier the line was in
+      // right before this click (e.g. still "buy 2+ save 15%" at the moment
+      // it's removed), so the pre-click DOM — not the post-removal state —
+      // is the correct price/discount to report here.
       pushCartLineEvent('remove_from_cart', 'minus', minus.closest('.mt-cart__line'), 1);
       change(Number(minus.dataset.line), Math.max(0, qty - 1));
       return;
@@ -302,8 +306,18 @@ if (!window.mtCartInit) {
     const plus = event.target.closest?.('[data-cart-plus]');
     if (plus) {
       const qty = Number(plus.parentElement.querySelector('[data-cart-qty]').textContent);
-      pushCartLineEvent('add_to_cart', 'plus', plus.closest('.mt-cart__line'), 1);
-      change(Number(plus.dataset.line), qty + 1);
+      const line = Number(plus.dataset.line);
+      const root = plus.closest('[data-cart-root]');
+      // Tiered/volume discounts mean the per-unit price can change the
+      // moment this item crosses a quantity threshold (e.g. "buy 2+ save
+      // 15%") — the pre-click DOM still shows the old price, so wait for
+      // the server to recompute the line and re-read the refreshed element
+      // before reporting add_to_cart, instead of pushing the stale
+      // pre-click price/discount.
+      change(line, qty + 1).then(() => {
+        const freshLine = root?.querySelector(`.mt-cart__line[data-item-index="${line}"]`);
+        pushCartLineEvent('add_to_cart', 'plus', freshLine, 1);
+      });
       return;
     }
     const remove = event.target.closest?.('[data-cart-remove]');
