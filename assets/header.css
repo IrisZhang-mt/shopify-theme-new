@@ -212,7 +212,7 @@
   .mt-header__signup-wrap {
     position: fixed;
     right: 34px;
-    bottom: 170px;
+    bottom: 109px;
     display: block;
   }
   .mt-header__signup-wrap[data-closed] {
@@ -220,12 +220,11 @@
   }
   .mt-header__signup-wrap .mt-header__signup {
     display: block;
-    /* FK Grotesk 字形在行框内偏下约 0.065em，上下 padding 各挪 0.8px 做视觉居中，总高度不变 */
-    padding: 3.5px 16.5px 5.1px;
+    padding: 4px 18px;
     border-radius: 999px;
     background-color: #ff8300;
     color: #fff;
-    font-size: 12px;
+    font-size: 13px;
   }
   .mt-header__signup-glint,
   .mt-header__signup::after {
@@ -239,8 +238,8 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     font-weight: 800;
     padding: 5px;
     border: 0;

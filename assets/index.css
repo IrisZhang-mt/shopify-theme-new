@@ -438,3 +438,12 @@ h6 {
   mask-repeat: no-repeat;
   mask-size: contain;
 }
+
+#carthike-chat-button-container.right {
+  right: auto !important;
+  left: 16px !important;
+}
+
+#carthike-chat-button-container .whatsappbutton.buttonWithIcon {
+  padding: 9px !important;
+}
