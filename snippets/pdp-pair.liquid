@@ -61,7 +61,7 @@
                   {%- capture swatch_value -%}
                     {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values, image_width: 40 -%}
                   {%- endcapture -%}
-                  <button class="mt-pair__swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
+                  <button class="mt-pair__swatch mt-swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
                 {%- endfor -%}
               </div>
             </div>

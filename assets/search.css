@@ -21,6 +21,12 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5625rem 0.3125rem;
 }
+@media screen and (max-width: 749.98px) {
+  .mt-srp__grid {
+    --mt-swatch-size: 1.75rem;
+    --mt-swatch-gap: 0.8125rem;
+  }
+}
 .mt-srp__grid .mt-card {
   width: 100%;
   flex: initial;

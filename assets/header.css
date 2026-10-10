@@ -127,7 +127,7 @@
 .mt-header__utils {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 19px;
   margin-left: auto;
   font-size: var(--mt-p-xs-size);
   line-height: 1.5;

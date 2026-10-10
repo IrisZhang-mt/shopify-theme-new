@@ -241,7 +241,8 @@
 
 .mt-qs__swatches {
   display: flex;
-  gap: 0.625rem;
+  flex-wrap: wrap;
+  gap: var(--mt-swatch-gap);
 }
 .mt-qs__option-name + .mt-qs__swatches,
 .mt-qs__option-head + .mt-qs__pills {
@@ -251,26 +252,12 @@
   margin-top: 0;
 }
 .mt-qs__swatch {
-  width: 0.75rem;
-  height: 0.75rem;
-  padding: 0;
-  border: 1px solid rgba(var(--mt-ink-rgb), 0.15);
-  background: var(--mt-swatch, var(--mt-off-white));
-  background-size: cover;
-  cursor: pointer;
-  transition:
-    transform var(--mt-dur) var(--mt-ease),
-    box-shadow var(--mt-dur) var(--mt-ease);
+  transition: transform var(--mt-dur) var(--mt-ease);
 }
 @media (hover: hover) {
   .mt-qs__swatch:hover {
     transform: scale(1.12);
   }
-}
-.mt-qs__swatch[aria-pressed="true"] {
-  box-shadow:
-    0 0 0 1px var(--mt-paper),
-    0 0 0 2px var(--mt-ink);
 }
 
 .mt-qs__pills {
@@ -466,13 +453,6 @@
   }
   .mt-qs__option--color .mt-qs__swatches {
     margin-top: 0.9375rem;
-  }
-  .mt-qs__swatches {
-    gap: 0.9375rem;
-  }
-  .mt-qs__swatch {
-    width: 1.125rem;
-    height: 1.125rem;
   }
   .mt-qs__option + .mt-qs__option {
     margin-top: 2.5rem;
