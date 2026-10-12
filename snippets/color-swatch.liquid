@@ -5,7 +5,8 @@
 
   Priority: product color_swatch metafield image, metaobject color_swatch image,
   native Shopify swatch (color then image), metaobject color_swatch color, product
-  color_swatch metafield color, settings.color_swatches text mapping.
+  color_swatch metafield color, settings.color_swatches text mapping, then a guessed
+  "<value | handleize>.png" from Settings > Files over an off-white fallback.
 
   Params: value (the option value), index (its position in option.values, i.e.
   forloop.index0), swatch_colors/swatch_images (product.metafields.custom.color_swatch
@@ -41,5 +42,8 @@
     assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
   elsif custom_color_value != blank
     assign swatch_value = custom_color_value
+  else
+    # Unmapped: guess "<handle>.png" in Settings > Files; off-white shows through if it 404s
+    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') var(--mt-off-white)"
   endif
 -%}{{- swatch_value -}}
