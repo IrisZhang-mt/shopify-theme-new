@@ -3,9 +3,9 @@
   module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
   the fallback priority stays identical everywhere.
 
-  Priority: native Shopify swatch color, metaobject color_swatch color,
-  settings.color_swatches text mapping, then a guessed "<value | handleize>.png"
-  from Settings > Files over an off-white fallback.
+  Priority: native Shopify swatch color, settings.color_swatches text mapping,
+  a guessed "<value | handleize>.png" from Settings > Files, then (as that image's
+  background when it 404s) the metaobject color_swatch color, then off-white.
 
   Params: value (the option value), custom_color_keys/custom_color_values (parsed
   from settings.color_swatches).
@@ -24,14 +24,13 @@
   assign swatch_value = ''
   if value.swatch.color
     assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
-  elsif swatch_entry.color
-    assign swatch_value = swatch_entry.color
   elsif custom_color_value contains '.'
     assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
   elsif custom_color_value != blank
     assign swatch_value = custom_color_value
   else
-    # Unmapped: guess "<handle>.png" in Settings > Files; off-white shows through if it 404s
-    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') var(--mt-off-white)"
+    # Guess "<handle>.png" in Settings > Files; if it 404s the metaobject color (or off-white) shows through
+    assign swatch_fallback = swatch_entry.color | default: 'var(--mt-off-white)'
+    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: swatch_fallback
   endif
 -%}{{- swatch_value -}}
