@@ -67,10 +67,9 @@
                       <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" data-filter-content="{{ value.label | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
                       {%- if value.swatch.color -%}
                         <span class="mt-plp__swatch" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
-                      {%- elsif value.swatch.image -%}
-                        <span class="mt-plp__swatch" style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 40 }}')"></span>
                       {%- elsif is_color -%}
-                        <span class="mt-plp__swatch" data-swatch="{{ value.label | handleize }}"></span>
+                        {%- assign filter_swatch_handle = value.label | handleize -%}
+                        <span class="mt-plp__swatch" data-swatch="{{ filter_swatch_handle }}" style="--mt-swatch: url('{{ filter_swatch_handle | append: '.png' | file_url }}') var(--mt-off-white)"></span>
                       {%- else -%}
                         <span class="mt-check"></span>
                       {%- endif -%}
@@ -137,16 +136,22 @@
     {%- assign custom_swatch_keys = custom_swatch_keys | remove_first: ',' | strip_newlines | split: ',' -%}
     {%- assign custom_swatch_values = custom_swatch_values | remove_first: ',' | split: ',' -%}
   {%- endif -%}
+  {%- comment -%}
+    Same priority as snippets/color-swatch.liquid. Metaobject pairs come first so the
+    settings pairs after them win on duplicate keys (JSON.parse keeps the last one);
+    metaobject colors only sit behind the guessed "<handle>.png".
+  {%- endcomment -%}
   {%- capture swatch_map_pairs -%}
+    {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
+      {%- for entry in shop.metaobjects.color_swatch.values -%}
+        {%- assign entry_color = entry.color.value | default: entry.color -%}
+        ~~PAIR~~{{ entry.system.handle | json }}: {{ entry.system.handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: entry_color | json }}
+      {%- endfor -%}
+    {%- endpaginate -%}
     {%- for key in custom_swatch_keys -%}
       {%- assign custom_swatch_value = custom_swatch_values[forloop.index0] -%}
       ~~PAIR~~{{ key | json }}: {% if custom_swatch_value contains '.' %}{{ custom_swatch_value | file_url | prepend: "url('" | append: "')" | json }}{% else %}{{ custom_swatch_value | json }}{% endif %}
     {%- endfor -%}
-    {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
-      {%- for entry in shop.metaobjects.color_swatch.values -%}
-        ~~PAIR~~{{ entry.system.handle | json }}: {{ entry.color.value | default: entry.color | json }}
-      {%- endfor -%}
-    {%- endpaginate -%}
   {%- endcapture -%}
   {%- assign swatch_map_list = swatch_map_pairs | remove_first: '~~PAIR~~' | split: '~~PAIR~~' -%}
   <script type="application/json" data-plp-swatch-map>{ {{ swatch_map_list | join: ',' }} }</script>
