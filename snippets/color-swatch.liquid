@@ -8,10 +8,9 @@
   from Settings > Files over an off-white fallback.
 
   Params: value (the option value), custom_color_keys/custom_color_values (parsed
-  from settings.color_swatches), image_width (defaults to 30).
+  from settings.color_swatches).
 {%- endcomment -%}
 {%- liquid
-  assign image_width = image_width | default: 30
   assign swatch_handle = value | handleize
   assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
   assign custom_color_lookup = value | downcase | escape
