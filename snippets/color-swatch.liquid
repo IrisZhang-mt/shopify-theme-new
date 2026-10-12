@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {%- comment -%}
   Resolves the swatch color/image for a single color option value. Shared by every
   module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
@@ -34,3 +35,41 @@
     assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: swatch_fallback
   endif
 -%}{{- swatch_value -}}
+=======
+{%- comment -%}
+  Resolves the swatch color/image for a single color option value. Shared by every
+  module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
+  the fallback priority stays identical everywhere.
+
+  Priority: native Shopify swatch color, settings.color_swatches text mapping,
+  a guessed "<value | handleize>.png" from Settings > Files, then (as that image's
+  background when it 404s) the metaobject color_swatch color, then off-white.
+
+  Params: value (the option value), custom_color_keys/custom_color_values (parsed
+  from settings.color_swatches).
+{%- endcomment -%}
+{%- liquid
+  assign swatch_handle = value | handleize
+  assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
+  assign custom_color_lookup = value | downcase | escape
+  assign custom_color_value = ''
+  for key in custom_color_keys
+    if key == custom_color_lookup
+      assign custom_color_value = custom_color_values[forloop.index0]
+    endif
+  endfor
+
+  assign swatch_value = ''
+  if value.swatch.color
+    assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
+  elsif custom_color_value contains '.'
+    assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
+  elsif custom_color_value != blank
+    assign swatch_value = custom_color_value
+  else
+    # Guess "<handle>.png" in Settings > Files; if it 404s the metaobject color (or off-white) shows through
+    assign swatch_fallback = swatch_entry.color | default: 'var(--mt-off-white)'
+    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: swatch_fallback
+  endif
+-%}{{- swatch_value -}}
+>>>>>>> e92c1f18490625591cdb6d9b1b1143f7bf89cd8a
