@@ -67,6 +67,8 @@
                       <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" data-filter-content="{{ value.label | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
                       {%- if value.swatch.color -%}
                         <span class="mt-plp__swatch" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
+                      {%- elsif value.swatch.image -%}
+                        <span class="mt-plp__swatch" style="--mt-swatch: url('{{ value.swatch.image | image_url: width: 40 }}')"></span>
                       {%- elsif is_color -%}
                         <span class="mt-plp__swatch" data-swatch="{{ value.label | handleize }}"></span>
                       {%- else -%}

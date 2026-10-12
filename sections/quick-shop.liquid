@@ -67,6 +67,7 @@
             <div class="mt-qs__option mt-qs__option--color">
               <p class="mt-qs__option-name">{{ option.name }}: <span data-qs-color-name>{{ option.selected_value }}</span></p>
               <div class="mt-qs__swatches">
+                {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
                 {%- assign custom_color_keys = '' -%}
                 {%- assign custom_color_values = '' -%}
                 {%- if settings.color_swatches != blank -%}
@@ -80,9 +81,10 @@
                   {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
                   {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
                 {%- endif -%}
+                {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
                 {%- for value in option.values -%}
                   {%- capture swatch_value -%}
-                    {%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
+                    {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values, image_width: 40 -%}
                   {%- endcapture -%}
                   <button class="mt-qs__swatch mt-swatch" type="button" data-qs-value="{{ value | escape }}" data-qs-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
                 {%- endfor -%}

@@ -129,6 +129,8 @@
             <div class="mt-pdp__options" data-reveal style="--mt-reveal-i: 1">
               {%- for option in product.options_with_values -%}
                 {%- if option.name == 'Color' or option.name == 'Colour' -%}
+                  {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
+                  {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
                   {%- assign custom_color_keys = '' -%}
                   {%- assign custom_color_values = '' -%}
                   {%- if settings.color_swatches != blank -%}
@@ -163,7 +165,7 @@
                           {%- endfor -%}
                         {%- endif -%}
                         {%- if is_main_color -%}
-                          {%- capture swatch_value -%}{%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                          {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                           <button
                             class="mt-pdp__tile mt-swatch"
                             type="button"
@@ -186,7 +188,7 @@
                             {%- endif -%}
                           {%- endfor -%}
                           {%- unless is_main_color -%}
-                            {%- capture swatch_value -%}{%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                            {%- capture swatch_value -%}{%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                             <button
                               class="mt-pdp__tile mt-swatch"
                               type="button"

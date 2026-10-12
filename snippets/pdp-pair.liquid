@@ -42,6 +42,8 @@
             <div class="mt-pair__option">
               <p class="mt-pair__label">{{ option.name }}: <span data-pair-color-name>{{ option.selected_value }}</span></p>
               <div class="mt-pair__swatches">
+                {%- assign swatch_colors = item.metafields.custom.color_swatch.value | map: 'color' -%}
+                {%- assign swatch_images = item.metafields.custom.color_swatch.value | map: 'image' -%}
                 {%- assign custom_color_keys = '' -%}
                 {%- assign custom_color_values = '' -%}
                 {%- if settings.color_swatches != blank -%}
@@ -57,7 +59,7 @@
                 {%- endif -%}
                 {%- for value in option.values -%}
                   {%- capture swatch_value -%}
-                    {%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
+                    {%- render 'color-swatch', value: value, index: forloop.index0, swatch_colors: swatch_colors, swatch_images: swatch_images, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values, image_width: 40 -%}
                   {%- endcapture -%}
                   <button class="mt-pair__swatch mt-swatch" type="button" data-pair-value="{{ value | escape }}" data-pair-opt="{{ forloop.parentloop.index0 }}" aria-label="{{ option.name }} {{ value | escape }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}" style="--mt-swatch: {{ swatch_value | strip_newlines }}"></button>
                 {%- endfor -%}
