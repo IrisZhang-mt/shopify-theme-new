@@ -1,0 +1,44 @@
+{%- comment -%}
+  Full-width product detail images stacked top to bottom, sourced from the
+  product metafields custom.product_img_pc / custom.product_img_mob (file
+  lists). The two lists are paired by position into one <picture> each, so
+  only one set ends up in the DOM and only one image per pair is fetched.
+  A missing mobile image falls back to its PC counterpart; with no PC list
+  the mobile list is shown on every breakpoint.
+{%- endcomment -%}
+{%- assign pc_images = product.metafields.custom.product_img_pc.value -%}
+{%- assign mob_images = product.metafields.custom.product_img_mob.value -%}
+
+{%- if pc_images != blank or mob_images != blank -%}
+  {{ 'product-detail-images.css' | asset_url | stylesheet_tag }}
+
+  <section class="mt-detail-images">
+    {%- if pc_images != blank -%}
+      {%- for pc_image in pc_images -%}
+        {%- assign mob_image = blank -%}
+        {%- if mob_images != blank -%}
+          {%- assign mob_image = mob_images[forloop.index0] -%}
+        {%- endif -%}
+        {%- if mob_image != blank -%}
+          <picture>
+            <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1100 }} 1100w, {{ pc_image | image_url: width: 1500 }} 1500w, {{ pc_image | image_url: width: 2000 }} 2000w, {{ pc_image | image_url: width: 2400 }} 2400w" sizes="100vw" width="{{ pc_image.width }}" height="{{ pc_image.height }}">
+            {{ mob_image | image_url: width: 1500 | image_tag: loading: 'lazy', sizes: '100vw', alt: pc_image.alt, class: 'mt-detail-images__image' }}
+          </picture>
+        {%- else -%}
+          {{ pc_image | image_url: width: 2400 | image_tag: loading: 'lazy', sizes: '100vw', alt: pc_image.alt, class: 'mt-detail-images__image' }}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- for mob_image in mob_images -%}
+        {{ mob_image | image_url: width: 1500 | image_tag: loading: 'lazy', sizes: '100vw', alt: mob_image.alt, class: 'mt-detail-images__image' }}
+      {%- endfor -%}
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product detail images",
+  "settings": []
+}
+{% endschema %}

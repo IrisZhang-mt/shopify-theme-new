@@ -1,0 +1,17 @@
+.mt-detail-images picture,
+.mt-detail-images__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Spacing sits on each image (the <picture> or a bare <img>), not on the section */
+.mt-detail-images > * {
+  margin-top: 2.5rem;
+}
+
+@media screen and (min-width: 750px) {
+  .mt-detail-images > * {
+    margin-top: 4.3rem;
+  }
+}

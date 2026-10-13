@@ -70,6 +70,10 @@
         "show_pairs": true
       }
     },
+    "detail_images": {
+      "type": "product-detail-images",
+      "settings": {}
+    },
     "slideshow_wA86pK": {
       "type": "slideshow",
       "blocks": {
@@ -310,6 +314,7 @@
   },
   "order": [
     "main",
+    "detail_images",
     "slideshow_wA86pK",
     "slideshow_CfnUBb",
     "video_grid",

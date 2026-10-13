@@ -3,9 +3,10 @@
   module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
   the fallback priority stays identical everywhere.
 
-  Priority: native Shopify swatch color, settings.color_swatches text mapping,
-  a guessed "<value | handleize>.png" from Settings > Files, then (as that image's
-  background when it 404s) the metaobject color_swatch color, then off-white.
+  Priority: settings.color_swatches text mapping, a guessed "<value | handleize>.png"
+  from Settings > Files, then (as that image's background when it 404s) the
+  metaobject color_swatch color, then off-white. Native Shopify swatches
+  (value.swatch) are deliberately ignored: the store's Color options are plain text.
 
   Params: value (the option value), custom_color_keys/custom_color_values (parsed
   from settings.color_swatches).
@@ -22,9 +23,7 @@
   endfor
 
   assign swatch_value = ''
-  if value.swatch.color
-    assign swatch_value = value.swatch.color.rgb | prepend: 'rgb(' | append: ')'
-  elsif custom_color_value contains '.'
+  if custom_color_value contains '.'
     assign swatch_value = custom_color_value | file_url | prepend: "url('" | append: "')"
   elsif custom_color_value != blank
     assign swatch_value = custom_color_value

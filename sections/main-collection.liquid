@@ -65,9 +65,7 @@
                   {%- for value in filter.values -%}
                     <label class="mt-plp__option{% if value.count == 0 and value.active == false %} mt-plp__option--off{% endif %}"{% if is_color %} title="{{ value.label | escape }}"{% endif %}>
                       <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" data-filter-content="{{ value.label | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
-                      {%- if value.swatch.color -%}
-                        <span class="mt-plp__swatch" style="--mt-swatch: rgb({{ value.swatch.color.rgb }})"></span>
-                      {%- elsif is_color -%}
+                      {%- if is_color -%}
                         {%- assign filter_swatch_handle = value.label | handleize -%}
                         <span class="mt-plp__swatch" data-swatch="{{ filter_swatch_handle }}" style="--mt-swatch: url('{{ filter_swatch_handle | append: '.png' | file_url }}') var(--mt-off-white)"></span>
                       {%- else -%}
