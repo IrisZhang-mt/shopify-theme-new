@@ -1,11 +1,11 @@
 {%- comment -%}
   Full-width product detail images stacked top to bottom, sourced from the
-  product metafields custom.product-img-pc / custom.product-img-mob (file
+  product metafields custom.product_img_pc / custom.product_img_mob (file
   lists). When only one list is filled it is used on both breakpoints; when
   both are empty the section outputs nothing.
 {%- endcomment -%}
-{%- assign pc_images = product.metafields.custom['product-img-pc'].value -%}
-{%- assign mob_images = product.metafields.custom['product-img-mob'].value -%}
+{%- assign pc_images = product.metafields.custom.product_img_pc.value -%}
+{%- assign mob_images = product.metafields.custom.product_img_mob.value -%}
 
 {%- if pc_images != blank or mob_images != blank -%}
   {{ 'product-detail-images.css' | asset_url | stylesheet_tag }}
