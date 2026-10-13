@@ -9,6 +9,7 @@
 {%- assign pc_images = product.metafields.custom.product_img_pc.value -%}
 {%- assign mob_images = product.metafields.custom.product_img_mob.value -%}
 
+<!-- DEBUG mob_size={{ mob_images.size }} mob0={{ mob_images[0] | image_url: width: 10 }} mobfirst={{ mob_images.first | image_url: width: 10 }} keys={% for m in product.metafields.custom %}{{ m[0] }},{% endfor %} -->
 {%- if pc_images != blank or mob_images != blank -%}
   {{ 'product-detail-images.css' | asset_url | stylesheet_tag }}
 
