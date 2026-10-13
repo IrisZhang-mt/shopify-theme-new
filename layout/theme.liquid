@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}" translate="no">
   <head>
+    <!-- Pandectes Rules Manual Setup -->
+    {% # theme-check-disable ParserBlockingScript %}
+    <script src="{{ 'pandectes-rules.js' | file_url }}"></script>
+    {% # theme-check-enable ParserBlockingScript %}
+
     {%- liquid
       case request.page_type
         when 'index'
