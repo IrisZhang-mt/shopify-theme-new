@@ -1,0 +1,41 @@
+{%- comment -%}
+  Full-width product detail images stacked top to bottom, sourced from the
+  product metafields custom.product-img-pc / custom.product-img-mob (file
+  lists). When only one list is filled it is used on both breakpoints; when
+  both are empty the section outputs nothing.
+{%- endcomment -%}
+{%- assign pc_images = product.metafields.custom['product-img-pc'].value -%}
+{%- assign mob_images = product.metafields.custom['product-img-mob'].value -%}
+
+{%- if pc_images != blank or mob_images != blank -%}
+  {{ 'product-detail-images.css' | asset_url | stylesheet_tag }}
+
+  <section class="mt-detail-images">
+    {%- if pc_images != blank and mob_images != blank -%}
+      <div class="mt-detail-images__list mt-detail-images__list--pc">
+        {%- for image in pc_images -%}
+          {{ image | image_url: width: 2400 | image_tag: loading: 'lazy', sizes: '100vw', alt: image.alt, class: 'mt-detail-images__image' }}
+        {%- endfor -%}
+      </div>
+      <div class="mt-detail-images__list mt-detail-images__list--mob">
+        {%- for image in mob_images -%}
+          {{ image | image_url: width: 1500 | image_tag: loading: 'lazy', sizes: '100vw', alt: image.alt, class: 'mt-detail-images__image' }}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- assign images = pc_images | default: mob_images -%}
+      <div class="mt-detail-images__list">
+        {%- for image in images -%}
+          {{ image | image_url: width: 2400 | image_tag: loading: 'lazy', sizes: '100vw', alt: image.alt, class: 'mt-detail-images__image' }}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product detail images",
+  "settings": []
+}
+{% endschema %}
