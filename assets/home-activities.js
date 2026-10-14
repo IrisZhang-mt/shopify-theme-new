@@ -68,10 +68,20 @@ if (!window.mtActivitiesInit) {
     if (media) flipAt.set(media, performance.now() + delay);
   };
 
+  const hydrate = (row) => {
+    row.querySelectorAll('.mt-act__slide[data-src]').forEach((img) => {
+      if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+      img.src = img.dataset.src;
+      img.removeAttribute('data-srcset');
+      img.removeAttribute('data-src');
+    });
+  };
+
   const setActive = (row) => {
     row.parentElement.querySelectorAll('.mt-act__row').forEach((item) => {
       const on = item === row;
       if (on && !item.classList.contains('mt-act__row--active')) {
+        hydrate(item);
         item.querySelectorAll('.mt-act__slide--on').forEach((slide) => {
           slide.classList.remove('mt-act__slide--on');
         });
