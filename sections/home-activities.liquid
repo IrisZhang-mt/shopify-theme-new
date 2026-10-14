@@ -21,9 +21,19 @@
             {%- if block.settings.image != blank -%}
               {{ block.settings.image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
             {%- else -%}
+              {%- assign has_slide = false -%}
               {%- for product in collection.products limit: 5 -%}
                 {%- if product.featured_image -%}
-                  {{ product.featured_image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+                  {%- capture slide -%}
+                    {{ product.featured_image | image_url: width: 434 | image_tag: decoding: 'async', class: 'mt-act__slide', loading: 'lazy', widths: '194, 291, 434', sizes: '(min-width: 750px) 217px, 97px', alt: '' }}
+                  {%- endcapture -%}
+                  {%- comment -%} Only the first slide loads up front; the rest load on first expand (home-activities.js) {%- endcomment -%}
+                  {%- if has_slide -%}
+                    {{ slide | replace: ' srcset=', ' data-srcset=' | replace: ' src=', ' data-src=' }}
+                  {%- else -%}
+                    {{ slide }}
+                    {%- assign has_slide = true -%}
+                  {%- endif -%}
                 {%- endif -%}
               {%- endfor -%}
             {%- endif -%}
