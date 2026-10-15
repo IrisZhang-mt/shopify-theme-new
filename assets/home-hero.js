@@ -61,6 +61,16 @@ if (!window.mtHeroInit) {
     });
   };
 
+  const loadSlide = (slide) => {
+    slide.querySelectorAll('[data-srcset]').forEach((el) => {
+      el.srcset = el.dataset.srcset;
+      el.removeAttribute('data-srcset');
+    });
+  };
+
+  const slideReady = (slide) =>
+    !slide.querySelector('[data-srcset]') && [...slide.querySelectorAll('img')].every((img) => img.complete);
+
   const setActiveDot = (hero, activeDot) => {
     hero.querySelectorAll('[data-hero-dot]').forEach((dot) => {
       dot.setAttribute('aria-current', String(dot === activeDot));
@@ -86,6 +96,7 @@ if (!window.mtHeroInit) {
       let timer = 0;
       const show = (next) => {
         index = (next + slides.length) % slides.length;
+        loadSlide(slides[index]);
         slides.forEach((slide, i) => {
           const active = i === index;
           slide.classList.toggle('mt-hero__slide--active', active);
@@ -106,9 +117,17 @@ if (!window.mtHeroInit) {
             stop();
             return;
           }
+          const upcoming = slides[(index + 1) % slides.length];
+          if (!slideReady(upcoming)) {
+            loadSlide(upcoming);
+            return;
+          }
           show(index + 1);
         }, interval);
       };
+      // Later slides start loading halfway through the first interval, after the
+      // first slide has had the bandwidth to itself.
+      setTimeout(() => slides.slice(1).forEach(loadSlide), (parseFloat(hero.dataset.heroInterval) || 5) * 500);
       hero.addEventListener('pointerenter', stop);
       hero.addEventListener('pointerleave', play);
       hero.addEventListener('focusin', stop);
