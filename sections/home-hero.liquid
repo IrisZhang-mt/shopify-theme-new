@@ -21,6 +21,9 @@
             {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif mob_image != blank -%}
             <picture>
+              {%- unless forloop.first -%}
+                <source media="(max-width: 749.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+              {%- endunless -%}
               {%- if pc_image != blank -%}
                 <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 2880 }}">
               {%- endif -%}
