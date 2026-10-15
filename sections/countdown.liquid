@@ -1,0 +1,49 @@
+{{ 'countdown.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'countdown.js' | asset_url }}" type="module"></script>
+
+{%- assign end_time = section.settings.end_time | strip -%}
+
+{%- if end_time != blank -%}
+  <section class="mt-countdown" data-countdown data-countdown-end="{{ end_time | escape }}">
+    <div class="mt-countdown__inner">
+      {%- if section.settings.label != blank -%}
+        <p class="mt-countdown__label">{{ section.settings.label | escape }}</p>
+      {%- endif -%}
+      <p class="mt-countdown__time" role="timer">
+        <span class="mt-countdown__unit mt-countdown__unit--days"><span data-countdown-days>0</span>d</span>
+        <span class="mt-countdown__unit" data-countdown-hours>00</span>
+        <span class="mt-countdown__sep" aria-hidden="true">:</span>
+        <span class="mt-countdown__unit" data-countdown-minutes>00</span>
+        <span class="mt-countdown__sep" aria-hidden="true">:</span>
+        <span class="mt-countdown__unit mt-countdown__unit--seconds" data-countdown-seconds>00</span>
+      </p>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Countdown",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Black Friday in",
+      "info": "留空时不展示"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "End time (US Pacific)",
+      "placeholder": "2026-11-27 00:00",
+      "info": "美西时间（自动处理夏令时），格式 YYYY-MM-DD HH:MM；留空时不展示；结束后停在 0d 00 : 00 : 00"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown"
+    }
+  ]
+}
+{% endschema %}
