@@ -15,6 +15,13 @@
   {%- assign img_loading = 'lazy' -%}
   {%- assign img_fetchpriority = 'auto' -%}
 {%- endif -%}
+{%- if pc_image != blank -%}
+  {%- capture pc_srcset -%}{% render 'image-srcset', image: pc_image, widths: '750,1100,1440,2200,2880' %}{%- endcapture -%}
+{%- endif -%}
+{%- if mob_image != blank -%}
+  {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100,1500', output: 'widths' %}{%- endcapture -%}
+  {%- capture mob_srcset -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100,1500' %}{%- endcapture -%}
+{%- endif -%}
 
 <section class="mt-full-image">
   {%- if heading != blank -%}
@@ -25,11 +32,19 @@
 
   <div class="mt-full-image__media" style="--mt-full-image-ratio: {{ ratio_mobile }}; --mt-full-image-ratio-desktop: {{ ratio_desktop }}">
     {%- if mob_image != blank -%}
+      {%- if section.settings.eager_load -%}
+        {%- if pc_image != blank -%}
+          {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', media: '(max-width: 749.98px)', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+          {{ pc_image | image_url: width: 1100 | preload_tag: as: 'image', media: '(min-width: 750px)', imagesrcset: pc_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+        {%- else -%}
+          {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+        {%- endif -%}
+      {%- endif -%}
       <picture>
         {%- if pc_image != blank -%}
-          <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w">
+          <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="100vw">
         {%- endif -%}
-        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, sizes: '100vw', alt: image_alt }}
+        {{ mob_image | image_url: width: mob_image.width | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
       </picture>
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}

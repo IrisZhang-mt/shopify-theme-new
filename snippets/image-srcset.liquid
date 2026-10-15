@@ -1,0 +1,31 @@
+{%- comment -%}
+  Outputs a srcset string for an image, keeping only the candidate widths narrower than the
+  original and always ending with the original width, so <img>/<source> and the matching
+  preload imagesrcset stay identical.
+  Params: image — image object; widths — comma-separated candidates, e.g. '750,1100,1440';
+  output — 'widths' returns the filtered width list instead (for image_tag's widths param).
+{%- endcomment -%}
+{%- liquid
+  assign srcset_widths = ''
+  assign srcset_candidates = widths | split: ','
+  for w in srcset_candidates
+    assign wn = w | strip | plus: 0
+    if wn < image.width
+      assign srcset_widths = srcset_widths | append: wn | append: ','
+    endif
+  endfor
+  assign srcset_widths = srcset_widths | append: image.width
+  if output == 'widths'
+    echo srcset_widths
+  else
+    assign srcset_list = srcset_widths | split: ','
+    for w in srcset_list
+      assign wn = w | plus: 0
+      echo image | image_url: width: wn
+      echo ' ' | append: wn | append: 'w'
+      unless forloop.last
+        echo ', '
+      endunless
+    endfor
+  endif
+-%}
