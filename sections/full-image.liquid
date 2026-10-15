@@ -63,7 +63,7 @@
         {%- if pc_image != blank -%}
           <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="100vw">
         {%- endif -%}
-        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
+        {{ mob_image | image_url: width: mob_image.width | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
       </picture>
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
