@@ -15,6 +15,32 @@
   {%- assign img_loading = 'lazy' -%}
   {%- assign img_fetchpriority = 'auto' -%}
 {%- endif -%}
+{%- if pc_image != blank -%}
+  {%- capture pc_srcset -%}{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w{%- endcapture -%}
+{%- endif -%}
+{%- if mob_image != blank -%}
+  {%- liquid
+    assign mob_widths = ''
+    assign mob_width_options = '375,550,750,1100,1500' | split: ','
+    for w in mob_width_options
+      assign wn = w | plus: 0
+      if wn < mob_image.width
+        assign mob_widths = mob_widths | append: wn | append: ','
+      endif
+    endfor
+    assign mob_widths = mob_widths | append: mob_image.width
+    assign mob_srcset = ''
+    assign mob_width_list = mob_widths | split: ','
+    for w in mob_width_list
+      assign wn = w | plus: 0
+      assign mob_url = mob_image | image_url: width: wn
+      assign mob_srcset = mob_srcset | append: mob_url | append: ' ' | append: wn | append: 'w'
+      unless forloop.last
+        assign mob_srcset = mob_srcset | append: ', '
+      endunless
+    endfor
+  -%}
+{%- endif -%}
 
 <section class="mt-full-image">
   {%- if heading != blank -%}
@@ -25,11 +51,19 @@
 
   <div class="mt-full-image__media" style="--mt-full-image-ratio: {{ ratio_mobile }}; --mt-full-image-ratio-desktop: {{ ratio_desktop }}">
     {%- if mob_image != blank -%}
+      {%- if section.settings.eager_load -%}
+        {%- if pc_image != blank -%}
+          {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', media: '(max-width: 749.98px)', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+          {{ pc_image | image_url: width: 1440 | preload_tag: as: 'image', media: '(min-width: 750px)', imagesrcset: pc_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+        {%- else -%}
+          {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+        {%- endif -%}
+      {%- endif -%}
       <picture>
         {%- if pc_image != blank -%}
-          <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 1440 }} 1440w, {{ pc_image | image_url: width: 2200 }} 2200w, {{ pc_image | image_url: width: 2880 }} 2880w">
+          <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="100vw">
         {%- endif -%}
-        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, sizes: '100vw', alt: image_alt }}
+        {{ mob_image | image_url: width: 1600 | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
       </picture>
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
