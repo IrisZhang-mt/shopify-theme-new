@@ -4,6 +4,8 @@
 {%- assign panels = section.blocks | where: 'type', 'panel' -%}
 {%- assign extra_slides = section.blocks | where: 'type', 'slide' -%}
 {%- assign hero_banner_name = section.settings.heading | strip_newlines | escape -%}
+{%- assign hero_mob_widths = '375,550,750,1100,1500' | split: ',' -%}
+{%- assign hero_mob_sizes = '(min-width: 750px) 50vw, 100vw' -%}
 
 <section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
   <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
@@ -20,6 +22,32 @@
           {%- elsif pc_video != blank or mob_video != blank -%}
             {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
           {%- elsif mob_image != blank -%}
+            {%- if forloop.first -%}
+              {%- liquid
+                assign mob_widths = ''
+                for w in hero_mob_widths
+                  assign wn = w | plus: 0
+                  if wn < mob_image.width
+                    assign mob_widths = mob_widths | append: wn | append: ','
+                  endif
+                endfor
+                assign mob_widths = mob_widths | append: mob_image.width
+                assign mob_srcset = ''
+                assign mob_width_list = mob_widths | split: ','
+                for w in mob_width_list
+                  assign wn = w | plus: 0
+                  assign mob_url = mob_image | image_url: width: wn
+                  assign mob_srcset = mob_srcset | append: mob_url | append: ' ' | append: wn | append: 'w'
+                  unless forloop.last
+                    assign mob_srcset = mob_srcset | append: ', '
+                  endunless
+                endfor
+              -%}
+              {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', media: '(max-width: 749.98px)', imagesrcset: mob_srcset, imagesizes: hero_mob_sizes, fetchpriority: 'high' }}
+            {%- endif -%}
+            {%- if pc_image != blank -%}
+              {{ pc_image | image_url: width: 2880 | preload_tag: as: 'image', media: '(min-width: 750px)', fetchpriority: 'high' }}
+            {%- endif -%}
             <picture>
               {%- unless forloop.first -%}
                 <source media="(max-width: 749.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
@@ -28,7 +56,7 @@
                 <source media="(min-width: 750px)" srcset="{{ pc_image | image_url: width: 2880 }}">
               {%- endif -%}
               {%- if forloop.first -%}
-                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', preload: true, sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
+                {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', widths: mob_widths, sizes: hero_mob_sizes, alt: '' }}
               {%- else -%}
                 {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
               {%- endif -%}
