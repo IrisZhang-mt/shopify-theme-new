@@ -17,6 +17,11 @@
         <span class="mt-countdown__sep" aria-hidden="true">:</span>
         <span class="mt-countdown__unit mt-countdown__unit--seconds" data-countdown-seconds>00</span>
       </p>
+      {%- if request.design_mode -%}
+        <p class="mt-countdown__error" data-countdown-error hidden>
+          End time 格式不正确：「{{ end_time | escape }}」。请填写美西时间，格式 YYYY-MM-DD HH:MM，例如 2026-11-27 00:00。线上店铺会隐藏此组件。
+        </p>
+      {%- endif -%}
     </div>
   </section>
 {%- endif -%}

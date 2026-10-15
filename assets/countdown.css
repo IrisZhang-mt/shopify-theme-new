@@ -56,6 +56,14 @@
   color: var(--mt-tangerine);
 }
 
+/* Theme editor only (rendered under request.design_mode). */
+.mt-countdown__error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--mt-tangerine);
+}
+
 @media (min-width: 750px) {
   .mt-countdown__inner {
     flex-direction: row;
