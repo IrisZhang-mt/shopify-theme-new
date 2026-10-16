@@ -1,5 +1,5 @@
 .mt-kol {
-  padding: 2.5rem 0.9375rem;
+  padding: 0;
   background: var(--mt-paper);
   /* Bottom-of-page section: let the browser skip layout/paint until it nears
      the viewport. `auto` remembers the real height after the first render. */
