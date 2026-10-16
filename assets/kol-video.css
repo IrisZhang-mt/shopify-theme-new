@@ -1,0 +1,237 @@
+.mt-kol {
+  max-width: var(--mt-container);
+  margin-inline: auto;
+  padding: 2.5rem 0.9375rem;
+  background: var(--mt-paper);
+  /* Bottom-of-page section: let the browser skip layout/paint until it nears
+     the viewport. `auto` remembers the real height after the first render. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56rem;
+}
+
+.mt-kol__stage {
+  position: relative;
+}
+
+/* Mobile: one card per view, native scroll-snap (no JS for the sliding). */
+.mt-kol__track {
+  display: flex;
+  gap: 0.875rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.mt-kol__track::-webkit-scrollbar {
+  display: none;
+}
+
+.mt-kol__card {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.mt-kol__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--mt-mist);
+}
+.mt-kol__poster,
+.mt-kol__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.mt-kol__video {
+  z-index: 1;
+  background: var(--mt-ink);
+}
+
+.mt-kol__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(var(--mt-ink-rgb), 0.45), rgba(var(--mt-ink-rgb), 0.15) 50%, rgba(var(--mt-ink-rgb), 0.1));
+  color: var(--mt-white);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-kol__card[data-playing] .mt-kol__overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mt-kol__play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: 0 0 0 0.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mt-white);
+  color: var(--mt-ink);
+  cursor: pointer;
+  transition: transform var(--mt-dur) var(--mt-ease);
+}
+.mt-kol__play svg {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.mt-kol__play:focus-visible {
+  outline: 2px solid var(--mt-white);
+  outline-offset: 3px;
+}
+/* Whole poster is clickable; the button stays the accessible control. */
+.mt-kol__play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.mt-kol__copy {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  pointer-events: none;
+}
+.mt-kol__heading {
+  margin: 0;
+  font-family: var(--mt-font-display);
+  font-size: var(--mt-h-xl-size);
+  font-weight: 400;
+  line-height: var(--mt-h-xl-leading);
+  letter-spacing: var(--mt-tracking-heading);
+}
+.mt-kol__text {
+  margin: 0.375rem 0 0;
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+  letter-spacing: var(--mt-tracking-body);
+}
+
+.mt-kol__products {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.375rem;
+  margin: 0.625rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.mt-kol__product-link {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+.mt-kol__product-media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--mt-mist);
+}
+.mt-kol__product-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mt-kol__product-title {
+  margin-top: 0.5rem;
+  overflow: hidden;
+  font-size: var(--mt-p-s-size);
+  line-height: var(--mt-p-leading);
+  letter-spacing: var(--mt-tracking-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mt-kol__product-price {
+  margin-top: 0.125rem;
+  font-size: var(--mt-p-xs-size);
+  line-height: var(--mt-p-leading);
+  opacity: 0.6;
+}
+
+.mt-kol__nav {
+  top: calc((100% - 0.625rem) * 0.5);
+}
+/* Arrows sit on the poster's vertical centre: poster height = card width * 4/3. */
+.mt-kol__stage .mt-kol__nav {
+  top: calc((100vw - 1.875rem) * 2 / 3);
+}
+.mt-kol__nav[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .mt-kol__play:hover {
+    transform: scale(1.06);
+  }
+  .mt-kol__product-link:hover .mt-kol__product-title {
+    text-decoration: underline;
+  }
+}
+
+/* Desktop: three cards side by side, no sliding. */
+@media screen and (min-width: 750px) {
+  .mt-kol {
+    padding: 5rem 1.25rem;
+  }
+  .mt-kol__track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+  .mt-kol__nav {
+    display: none;
+  }
+  .mt-kol__copy {
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+  .mt-kol__heading {
+    font-size: var(--mt-h-m-size);
+  }
+  .mt-kol__text {
+    font-size: var(--mt-p-s-size);
+  }
+  .mt-kol__play {
+    width: 4rem;
+    height: 4rem;
+  }
+  .mt-kol__play svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .mt-kol__heading {
+    font-size: var(--mt-h-xl-size);
+  }
+  .mt-kol__text {
+    font-size: var(--mt-p-m-size);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-kol__overlay,
+  .mt-kol__play {
+    transition: none;
+  }
+  .mt-kol__track {
+    scroll-behavior: auto;
+  }
+}
