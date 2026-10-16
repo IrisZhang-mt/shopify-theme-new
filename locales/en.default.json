@@ -17,7 +17,8 @@
     "next": "Next",
     "pagination": "Pagination",
     "slides": "Slides",
-    "slide_n": "Slide {{ number }}"
+    "slide_n": "Slide {{ number }}",
+    "play_video": "Play video"
   },
   "header": {
     "menu": "Menu",

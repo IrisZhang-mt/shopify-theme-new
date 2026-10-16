@@ -1,0 +1,262 @@
+.mt-kol {
+  padding-bottom: 6.25rem;
+  background: var(--mt-paper);
+  /* Bottom-of-page section: let the browser skip layout/paint until it nears
+     the viewport. `auto` remembers the real height after the first render. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 56rem;
+}
+
+.mt-kol__stage {
+  position: relative;
+}
+
+/* Mobile: one card per view, native scroll-snap (no JS for the sliding). */
+.mt-kol__track {
+  display: flex;
+  gap: 1.3125rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.mt-kol__track::-webkit-scrollbar {
+  display: none;
+}
+
+.mt-kol__card {
+  flex: 0 0 100%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.mt-kol__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--mt-mist);
+}
+.mt-kol__poster,
+.mt-kol__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.mt-kol__video {
+  z-index: 1;
+  background: var(--mt-ink);
+}
+
+.mt-kol__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    to top,
+    rgba(var(--mt-ink-rgb), 0.45),
+    rgba(var(--mt-ink-rgb), 0.15) 50%,
+    rgba(var(--mt-ink-rgb), 0.1)
+  );
+  color: var(--mt-white);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-kol__card[data-playing] .mt-kol__overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mt-kol__play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  padding: 0 0 0 0.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mt-white);
+  color: var(--mt-ink);
+  cursor: pointer;
+  transition: transform var(--mt-dur) var(--mt-ease);
+}
+.mt-kol__play svg {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+.mt-kol__play:focus-visible {
+  outline: 2px solid var(--mt-white);
+  outline-offset: 3px;
+}
+/* Whole poster is clickable; the button stays the accessible control. */
+.mt-kol__play::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.mt-kol__copy {
+  position: absolute;
+  right: 1.1875rem;
+  bottom: 1.9375rem;
+  left: 1.1875rem;
+  pointer-events: none;
+}
+.mt-kol__heading {
+  margin: 0;
+  font-family: var(--mt-font-display);
+  font-size: 2.6875rem;
+  font-weight: 400;
+  line-height: var(--mt-h-xl-leading);
+  letter-spacing: -0.03em;
+}
+.mt-kol__text {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  line-height: var(--mt-p-leading);
+  letter-spacing: var(--mt-tracking-body);
+}
+
+.mt-kol__products {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.375rem;
+  margin: 0.875rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.mt-kol__product-link {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+.mt-kol__product-media {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--mt-mist);
+}
+.mt-kol__product-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mt-kol__product-title {
+  margin-top: 0.5rem;
+  overflow: hidden;
+  font-size: var(--mt-p-s-size);
+  line-height: var(--mt-p-leading);
+  letter-spacing: var(--mt-tracking-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mt-kol__product-price {
+  margin-top: 0.125rem;
+  font-size: var(--mt-p-xs-size);
+  line-height: var(--mt-p-leading);
+  opacity: 0.6;
+}
+
+/* Arrows sit on the poster's vertical centre: poster height = card width * 4/3,
+   card width = full viewport (no side gutters). */
+.mt-kol__nav {
+  top: calc(100vw * 2 / 3);
+}
+.mt-kol__nav[disabled] {
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .mt-kol__play:hover {
+    transform: scale(1.06);
+  }
+  .mt-kol__product-link:hover .mt-kol__product-title {
+    text-decoration: underline;
+  }
+}
+
+/* Desktop: three cards side by side, no sliding. */
+@media screen and (min-width: 750px) {
+  .mt-kol {
+    /* One design-px of the 1440 artboard. The overlay copy scales with it from
+       750 up (the cards themselves are viewport-proportional), so it lands on
+       the design values exactly at 1440; redefined with a canvas cap below. */
+    --mt-kol-px: calc(100vw / 1440);
+  }
+  .mt-kol__track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+  .mt-kol__nav {
+    display: none;
+  }
+  .mt-kol__copy {
+    right: calc(24 * var(--mt-kol-px));
+    bottom: calc(38 * var(--mt-kol-px));
+    left: calc(24 * var(--mt-kol-px));
+  }
+  .mt-kol__heading {
+    font-size: calc(60 * var(--mt-kol-px));
+  }
+  .mt-kol__text {
+    margin-top: calc(4 * var(--mt-kol-px));
+    font-size: calc(20 * var(--mt-kol-px));
+  }
+  .mt-kol__play {
+    width: 4rem;
+    height: 4rem;
+  }
+  .mt-kol__play svg {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* Wide screens: no side gutters growing — the whole layout scales with the
+   viewport instead. --mt-kol-px is one design-px of the 1440 artboard, capped
+   at --mt-canvas like .mt-scroll__inner, so values below read as design px. */
+@media screen and (min-width: 1440px) {
+  .mt-kol {
+    --mt-kol-px: calc(min(100vw, var(--mt-canvas)) / 1440);
+  }
+  .mt-kol__track {
+    gap: calc(21 * var(--mt-kol-px));
+  }
+  .mt-kol__play {
+    width: calc(64 * var(--mt-kol-px));
+    height: calc(64 * var(--mt-kol-px));
+    padding-left: calc(4 * var(--mt-kol-px));
+  }
+  .mt-kol__play svg {
+    width: calc(32 * var(--mt-kol-px));
+    height: calc(32 * var(--mt-kol-px));
+  }
+  .mt-kol__products {
+    gap: calc(6 * var(--mt-kol-px));
+    margin-top: calc(14 * var(--mt-kol-px));
+  }
+  .mt-kol__product-title {
+    margin-top: calc(8 * var(--mt-kol-px));
+    font-size: calc(14 * var(--mt-kol-px));
+  }
+  .mt-kol__product-price {
+    margin-top: calc(2 * var(--mt-kol-px));
+    font-size: calc(12 * var(--mt-kol-px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-kol__overlay,
+  .mt-kol__play {
+    transition: none;
+  }
+}
