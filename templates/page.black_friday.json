@@ -25,10 +25,19 @@
         "pc_image": "shopify://shop_images/bestseller_pc_cdd01f53-fa1c-4d27-8671-710c74e6d6c3.jpg",
         "link": ""
       }
+    },
+    "countdown_NGaQX3": {
+      "type": "countdown",
+      "name": "Countdown",
+      "settings": {
+        "label": "Black Friday in",
+        "end_time": "2026-10-30 00:00"
+      }
     }
   },
   "order": [
     "main",
-    "full_image_bX7dfb"
+    "full_image_bX7dfb",
+    "countdown_NGaQX3"
   ]
 }
