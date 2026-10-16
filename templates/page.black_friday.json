@@ -60,12 +60,67 @@
       "settings": {
         "heading": "Best Sellers"
       }
+    },
+    "kol_video_eAFxaE": {
+      "type": "kol-video",
+      "blocks": {
+        "card_8C8dwg": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-fleece-jacket-3-in-1",
+              "boys-polo-shirt-2-in-1",
+              "boys-hoodie-2-in-1-tee"
+            ]
+          }
+        },
+        "card_Ritb3d": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-fleece-jacket-3-in-1",
+              "boys-polo-shirt-2-in-1",
+              "boys-hoodie-2-in-1-tee"
+            ]
+          }
+        },
+        "card_TdMqJ7": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-fleece-jacket-3-in-1",
+              "boys-polo-shirt-2-in-1",
+              "boys-hoodie-2-in-1-tee"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "card_8C8dwg",
+        "card_Ritb3d",
+        "card_TdMqJ7"
+      ],
+      "name": "KOL video",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "full_image_bX7dfb",
     "countdown_NGaQX3",
-    "home_best_sellers_WxhFzH"
+    "home_best_sellers_WxhFzH",
+    "kol_video_eAFxaE"
   ]
 }
