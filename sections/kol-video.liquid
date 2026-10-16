@@ -1,0 +1,178 @@
+{{ 'kol-video.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Up to three KOL cards: a poster (PC / mobile image) with a play button, plus
+  three products underneath. No <video> exists in the DOM until a click — the
+  sources sit in inert <template>s, so the section costs nothing but lazy
+  poster images until someone actually presses play.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <section class="mt-kol" data-kol>
+    <div class="mt-kol__stage">
+      <div class="mt-kol__track" data-kol-track>
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign video_pc = block.settings.video_pc | default: block.settings.video_mb
+            assign video_mb = block.settings.video_mb | default: block.settings.video_pc
+            assign image_pc = block.settings.image_pc | default: block.settings.image_mb | default: video_pc.preview_image
+            assign image_mb = block.settings.image_mb | default: block.settings.image_pc | default: video_mb.preview_image
+            assign card_alt = block.settings.heading | default: shop.name | escape
+          -%}
+          <div class="mt-kol__card" data-kol-card {{ block.shopify_attributes }}>
+            <div class="mt-kol__media" data-kol-media>
+              {%- if image_mb != blank -%}
+                <picture>
+                  {%- if image_pc != blank -%}
+                    <source
+                      media="(min-width: 750px)"
+                      srcset="{% render 'image-srcset', image: image_pc, widths: '360,480,640,800,960' %}"
+                      sizes="(min-width: 1440px) 460px, 31vw"
+                    >
+                  {%- endif -%}
+                  {%- capture mb_widths %}{% render 'image-srcset', image: image_mb, widths: '375,550,750,900,1100', output: 'widths' %}{% endcapture -%}
+                  {{ image_mb | image_url: width: 750 | image_tag: class: 'mt-kol__poster', loading: 'lazy', decoding: 'async', widths: mb_widths, sizes: 'calc(100vw - 1.875rem)', alt: card_alt }}
+                </picture>
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'mt-kol__poster' }}
+              {%- endif -%}
+
+              {%- if video_pc != blank -%}
+                <template data-kol-video="pc">{{ video_pc | video_tag: class: 'mt-kol__video', controls: true, playsinline: true, preload: 'auto' }}</template>
+                <template data-kol-video="mb">{{ video_mb | video_tag: class: 'mt-kol__video', controls: true, playsinline: true, preload: 'auto' }}</template>
+              {%- endif -%}
+
+              <div class="mt-kol__overlay" data-kol-overlay>
+                {%- if video_pc != blank -%}
+                  <button class="mt-kol__play" type="button" data-kol-play aria-label="{{ 'general.play_video' | t }}{% if block.settings.heading != blank %}: {{ block.settings.heading | escape }}{% endif %}">
+                    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>
+                  </button>
+                {%- endif -%}
+                {%- if block.settings.heading != blank or block.settings.text != blank -%}
+                  <div class="mt-kol__copy">
+                    {%- if block.settings.heading != blank -%}
+                      <h2 class="mt-kol__heading">{{ block.settings.heading }}</h2>
+                    {%- endif -%}
+                    {%- if block.settings.text != blank -%}
+                      <p class="mt-kol__text">{{ block.settings.text }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- if block.settings.products.size > 0 -%}
+              <ul class="mt-kol__products" role="list">
+                {%- for item in block.settings.products limit: 3 -%}
+                  <li class="mt-kol__product">
+                    <a class="mt-kol__product-link" href="{{ item.url }}">
+                      <span class="mt-kol__product-media">
+                        {%- if item.featured_image -%}
+                          {%- assign item_alt = item.featured_image.alt | default: item.title | escape -%}
+                          {{ item.featured_image | image_url: width: 360 | image_tag: loading: 'lazy', decoding: 'async', widths: '120, 180, 240, 360', sizes: '(min-width: 1440px) 150px, (min-width: 750px) 10vw, 30vw', alt: item_alt }}
+                        {%- endif -%}
+                      </span>
+                      <span class="mt-kol__product-title">{{ item.title }}</span>
+                      <span class="mt-kol__product-price">
+                        {%- if item.price_varies %}{{ 'products.from' | t }} {% endif -%}
+                        {{ item.price_min | money_without_trailing_zeros }}
+                      </span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size > 1 -%}
+        <button class="mt-row-nav mt-row-nav--prev mt-kol__nav" type="button" data-kol-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+          <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+        </button>
+        <button class="mt-row-nav mt-row-nav--next mt-kol__nav" type="button" data-kol-arrow="next" aria-label="{{ 'general.next' | t }}">
+          <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+        </button>
+      {%- endif -%}
+    </div>
+  </section>
+
+  <script src="{{ 'kol-video.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "KOL video",
+  "class": "section-kol-video",
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop the look"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "See how families wear it. Tap to shop."
+        },
+        {
+          "type": "header",
+          "content": "Video"
+        },
+        {
+          "type": "video",
+          "id": "video_pc",
+          "label": "Desktop video",
+          "info": "Plays only when clicked. If only one video is set, it is used on both desktop and mobile."
+        },
+        {
+          "type": "video",
+          "id": "video_mb",
+          "label": "Mobile video"
+        },
+        {
+          "type": "header",
+          "content": "Cover image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_pc",
+          "label": "Desktop image",
+          "info": "3:4 portrait recommended. Falls back to the mobile image, then the video's preview frame."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mb",
+          "label": "Mobile image"
+        },
+        {
+          "type": "header",
+          "content": "Products"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products",
+          "limit": 3
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "KOL video",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
