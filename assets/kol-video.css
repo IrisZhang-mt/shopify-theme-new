@@ -229,7 +229,4 @@
   .mt-kol__play {
     transition: none;
   }
-  .mt-kol__track {
-    scroll-behavior: auto;
-  }
 }
