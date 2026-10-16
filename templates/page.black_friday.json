@@ -21,7 +21,7 @@
       "name": "Full image",
       "settings": {
         "heading": "",
-        "eager_load": false,
+        "eager_load": true,
         "pc_image": "shopify://shop_images/bestseller_pc_cdd01f53-fa1c-4d27-8671-710c74e6d6c3.jpg",
         "link": ""
       }
@@ -33,7 +33,39 @@
         "label": "Black Friday in",
         "end_time": "2026-10-30 00:00"
       }
+    },
+    "home_best_sellers_WxhFzH": {
+      "type": "home-best-sellers",
+      "blocks": {
+        "collection_XjQgkn": {
+          "type": "collection",
+          "settings": {
+            "collection": "best-sellers",
+            "label": "Girls"
+          }
+        },
+        "collection_U366yf": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "label": "Boys"
+          }
+        }
+      },
+      "block_order": [
+        "collection_XjQgkn",
+        "collection_U366yf"
+      ],
+      "name": "Best sellers",
+      "settings": {
+        "heading": "Best Sellers"
+      }
     }
   },
-  "order": ["main", "full_image_bX7dfb", "countdown_NGaQX3"]
+  "order": [
+    "main",
+    "full_image_bX7dfb",
+    "countdown_NGaQX3",
+    "home_best_sellers_WxhFzH"
+  ]
 }
