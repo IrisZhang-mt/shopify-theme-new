@@ -14,7 +14,6 @@
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
   {%- assign tier_qty = 0 -%}
-  <!-- TIER-BAR DEBUG eligible_collection_raw="{{ eligible_collection_raw }}" eligible_collections=[{{ eligible_collections | join: ', ' }}] -->
   {%- for item in cart.items -%}
     {%- assign item_eligible = false -%}
     {%- if eligible_collections == blank -%}
@@ -29,9 +28,7 @@
     {%- if item_eligible -%}
       {%- assign tier_qty = tier_qty | plus: item.quantity -%}
     {%- endif -%}
-    <!-- TIER-BAR DEBUG item="{{ item.product.title }}" qty={{ item.quantity }} eligible={{ item_eligible }} tier_qty_so_far={{ tier_qty }} -->
   {%- endfor -%}
-  <!-- TIER-BAR DEBUG final_tier_qty={{ tier_qty }} -->
   {%- assign unlocked_count = 0 -%}
   {%- for tier in tiers -%}
     {%- if tier_qty >= tier.qty -%}
