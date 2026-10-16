@@ -162,11 +162,9 @@
   opacity: 0.6;
 }
 
+/* Arrows sit on the poster's vertical centre: poster height = card width * 4/3,
+   card width = viewport minus the 0.9375rem gutters. */
 .mt-kol__nav {
-  top: calc((100% - 0.625rem) * 0.5);
-}
-/* Arrows sit on the poster's vertical centre: poster height = card width * 4/3. */
-.mt-kol__stage .mt-kol__nav {
   top: calc((100vw - 1.875rem) * 2 / 3);
 }
 .mt-kol__nav[disabled] {
