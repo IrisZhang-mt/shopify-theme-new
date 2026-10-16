@@ -49,11 +49,10 @@
       {%- if section.settings.signup_text != blank -%}
         <div class="mt-header__signup-wrap" data-signup>
           {%- if section.settings.signup_url != blank -%}
-            <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span></a>
+            <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span><img class="mt-header__signup-icon" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/c3f7a87073b4d4dea19de386241912e5.png?v=1792144365" width="20" height="20" alt=""></a>
           {%- else -%}
-            <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span></button>
+            <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span><img class="mt-header__signup-icon" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/c3f7a87073b4d4dea19de386241912e5.png?v=1792144365" width="20" height="20" alt=""></button>
           {%- endif -%}
-          <button class="mt-header__signup-close" type="button" data-signup-close aria-label="{{ 'general.close' | t }}">&times;</button>
         </div>
       {%- endif -%}
       <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open data-func="Search" aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
