@@ -57,7 +57,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to top, rgba(var(--mt-ink-rgb), 0.45), rgba(var(--mt-ink-rgb), 0.15) 50%, rgba(var(--mt-ink-rgb), 0.1));
+  background: linear-gradient(
+    to top,
+    rgba(var(--mt-ink-rgb), 0.45),
+    rgba(var(--mt-ink-rgb), 0.15) 50%,
+    rgba(var(--mt-ink-rgb), 0.1)
+  );
   color: var(--mt-white);
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
@@ -133,7 +138,7 @@
 }
 .mt-kol__product-media {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2 / 3;
   overflow: hidden;
   background: var(--mt-mist);
 }
