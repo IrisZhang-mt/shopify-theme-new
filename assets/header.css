@@ -204,52 +204,30 @@
 .mt-header__signup-wrap {
   display: contents;
 }
-.mt-header__signup-close {
+.mt-header__signup-icon {
   display: none;
 }
 
+/* 移动端：文案隐藏（font-size: 0，读屏仍可读到），只显示图标，排在购物车与菜单之间 */
 @media screen and (max-width: 749.98px) {
-  .mt-header__signup-wrap {
-    position: fixed;
-    right: 34px;
-    bottom: 109px;
-    display: block;
+  .mt-header__signup {
+    order: 1;
+    display: flex;
+    align-items: center;
+    font-size: 0;
+    line-height: 0;
   }
-  .mt-header__signup-wrap[data-closed] {
-    display: none;
+  .mt-header__drawer {
+    order: 2;
   }
-  .mt-header__signup-wrap .mt-header__signup {
+  .mt-header__signup-icon {
     display: block;
-    padding: 4px 18px;
-    border-radius: 999px;
-    background-color: #ff8300;
-    color: #fff;
-    font-size: 13px;
+    width: 20px;
+    height: 20px;
   }
   .mt-header__signup-glint,
   .mt-header__signup::after {
     display: none;
-  }
-  .mt-header__signup-close {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    width: 18px;
-    height: 18px;
-    font-weight: 800;
-    padding: 5px;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
-    color: #ff8300;
-    font-size: 12px;
-    line-height: 1;
-    cursor: pointer;
-    transform: translate(40%, -60%);
   }
 }
 
