@@ -1,11 +1,31 @@
 {%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
 {%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
-  {%- assign eligible_tag = tier_config.eligible_tag -%}
+  {%- assign eligible_collection_raw = tier_config.eligible_collection -%}
+  {%- assign eligible_collections = blank -%}
+  {%- if eligible_collection_raw != blank -%}
+    {%- assign eligible_collections = '' -%}
+    {%- assign eligible_collection_handles = eligible_collection_raw | split: '|' -%}
+    {%- for handle in eligible_collection_handles -%}
+      {%- assign stripped_handle = handle | strip -%}
+      {%- assign eligible_collections = eligible_collections | append: stripped_handle | append: '|' -%}
+    {%- endfor -%}
+    {%- assign eligible_collections = eligible_collections | split: '|' -%}
+  {%- endif -%}
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
   {%- assign tier_qty = 0 -%}
   {%- for item in cart.items -%}
-    {%- if eligible_tag == blank or item.product.tags contains eligible_tag -%}
+    {%- assign item_eligible = false -%}
+    {%- if eligible_collections == blank -%}
+      {%- assign item_eligible = true -%}
+    {%- else -%}
+      {%- for collection in item.product.collections -%}
+        {%- if eligible_collections contains collection.handle -%}
+          {%- assign item_eligible = true -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- if item_eligible -%}
       {%- assign tier_qty = tier_qty | plus: item.quantity -%}
     {%- endif -%}
   {%- endfor -%}
