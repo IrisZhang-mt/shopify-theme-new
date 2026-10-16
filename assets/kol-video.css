@@ -190,7 +190,6 @@
        750 up (the cards themselves are viewport-proportional), so it lands on
        the design values exactly at 1440; redefined with a canvas cap below. */
     --mt-kol-px: calc(100vw / 1440);
-    padding: 0;
   }
   .mt-kol__track {
     display: grid;
