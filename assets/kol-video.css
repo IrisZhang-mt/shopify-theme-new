@@ -1,6 +1,4 @@
 .mt-kol {
-  max-width: var(--mt-container);
-  margin-inline: auto;
   padding: 2.5rem 0.9375rem;
   background: var(--mt-paper);
   /* Bottom-of-page section: let the browser skip layout/paint until it nears
@@ -221,6 +219,52 @@
   }
   .mt-kol__text {
     font-size: var(--mt-p-m-size);
+  }
+}
+
+/* Wide screens: no side gutters growing — the whole layout scales with the
+   viewport instead. --mt-kol-px is one design-px of the 1440 artboard, capped
+   at --mt-canvas like .mt-scroll__inner, so values below read as design px. */
+@media screen and (min-width: 1440px) {
+  .mt-kol {
+    --mt-kol-px: calc(min(100vw, var(--mt-canvas)) / 1440);
+    padding: calc(80 * var(--mt-kol-px)) calc(20 * var(--mt-kol-px));
+  }
+  .mt-kol__track {
+    gap: calc(14 * var(--mt-kol-px));
+  }
+  .mt-kol__copy {
+    right: calc(16 * var(--mt-kol-px));
+    bottom: calc(16 * var(--mt-kol-px));
+    left: calc(16 * var(--mt-kol-px));
+  }
+  .mt-kol__heading {
+    font-size: calc(52.5 * var(--mt-kol-px));
+  }
+  .mt-kol__text {
+    margin-top: calc(6 * var(--mt-kol-px));
+    font-size: calc(16 * var(--mt-kol-px));
+  }
+  .mt-kol__play {
+    width: calc(64 * var(--mt-kol-px));
+    height: calc(64 * var(--mt-kol-px));
+    padding-left: calc(4 * var(--mt-kol-px));
+  }
+  .mt-kol__play svg {
+    width: calc(32 * var(--mt-kol-px));
+    height: calc(32 * var(--mt-kol-px));
+  }
+  .mt-kol__products {
+    gap: calc(6 * var(--mt-kol-px));
+    margin-top: calc(10 * var(--mt-kol-px));
+  }
+  .mt-kol__product-title {
+    margin-top: calc(8 * var(--mt-kol-px));
+    font-size: calc(14 * var(--mt-kol-px));
+  }
+  .mt-kol__product-price {
+    margin-top: calc(2 * var(--mt-kol-px));
+    font-size: calc(12 * var(--mt-kol-px));
   }
 }
 
