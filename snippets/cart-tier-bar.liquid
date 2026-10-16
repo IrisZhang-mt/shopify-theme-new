@@ -14,7 +14,6 @@
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
   {%- assign tier_qty = 0 -%}
-  <!-- TIER-BAR DEBUG eligible_collections=[{{ eligible_collections | join: ', ' }}] -->
   {%- for item in cart.items -%}
     {%- assign item_eligible = false -%}
     {%- if eligible_collections == blank -%}
