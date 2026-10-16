@@ -25,8 +25,8 @@
                   {%- if image_pc != blank -%}
                     <source
                       media="(min-width: 750px)"
-                      srcset="{% render 'image-srcset', image: image_pc, widths: '360,480,640,800,960' %}"
-                      sizes="(min-width: 1440px) 460px, 31vw"
+                      srcset="{% render 'image-srcset', image: image_pc, widths: '360,480,640,800,960,1280,1600' %}"
+                      sizes="(min-width: 2560px) 800px, 31vw"
                     >
                   {%- endif -%}
                   {%- capture mb_widths %}{% render 'image-srcset', image: image_mb, widths: '375,550,750,900,1100', output: 'widths' %}{% endcapture -%}
@@ -68,7 +68,7 @@
                       <span class="mt-kol__product-media">
                         {%- if item.featured_image -%}
                           {%- assign item_alt = item.featured_image.alt | default: item.title | escape -%}
-                          {{ item.featured_image | image_url: width: 360 | image_tag: loading: 'lazy', decoding: 'async', widths: '120, 180, 240, 360', sizes: '(min-width: 1440px) 150px, (min-width: 750px) 10vw, 30vw', alt: item_alt }}
+                          {{ item.featured_image | image_url: width: 540 | image_tag: loading: 'lazy', decoding: 'async', widths: '120, 180, 240, 360, 540', sizes: '(min-width: 2560px) 260px, (min-width: 750px) 10vw, 30vw', alt: item_alt }}
                         {%- endif -%}
                       </span>
                       <span class="mt-kol__product-title">{{ item.title }}</span>
