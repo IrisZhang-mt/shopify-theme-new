@@ -30,7 +30,7 @@
                     >
                   {%- endif -%}
                   {%- capture mb_widths %}{% render 'image-srcset', image: image_mb, widths: '375,550,750,900,1100', output: 'widths' %}{% endcapture -%}
-                  {{ image_mb | image_url: width: 750 | image_tag: class: 'mt-kol__poster', loading: 'lazy', decoding: 'async', widths: mb_widths, sizes: 'calc(100vw - 1.875rem)', alt: card_alt }}
+                  {{ image_mb | image_url: width: 750 | image_tag: class: 'mt-kol__poster', loading: 'lazy', decoding: 'async', widths: mb_widths, sizes: '100vw', alt: card_alt }}
                 </picture>
               {%- else -%}
                 {{ 'lifestyle-1' | placeholder_svg_tag: 'mt-kol__poster' }}
