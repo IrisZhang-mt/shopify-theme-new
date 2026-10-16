@@ -28,7 +28,6 @@
     {%- if item_eligible -%}
       {%- assign tier_qty = tier_qty | plus: item.quantity -%}
     {%- endif -%}
-    <!-- TIER-BAR DEBUG item="{{ item.product.title }}" qty={{ item.quantity }} eligible={{ item_eligible }} collections=[{{ item.product.collections | map: 'handle' | join: ', ' }}] -->
   {%- endfor -%}
   {%- assign unlocked_count = 0 -%}
   {%- for tier in tiers -%}
