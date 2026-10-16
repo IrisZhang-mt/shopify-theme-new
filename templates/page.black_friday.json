@@ -35,9 +35,5 @@
       }
     }
   },
-  "order": [
-    "main",
-    "full_image_bX7dfb",
-    "countdown_NGaQX3"
-  ]
+  "order": ["main", "full_image_bX7dfb", "countdown_NGaQX3"]
 }
