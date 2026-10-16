@@ -227,7 +227,6 @@
 @media screen and (min-width: 1440px) {
   .mt-kol {
     --mt-kol-px: calc(min(100vw, var(--mt-canvas)) / 1440);
-    padding: calc(80 * var(--mt-kol-px)) calc(20 * var(--mt-kol-px));
   }
   .mt-kol__track {
     gap: calc(21 * var(--mt-kol-px));
