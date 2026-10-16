@@ -21,7 +21,7 @@
       "name": "Full image",
       "settings": {
         "heading": "",
-        "eager_load": false,
+        "eager_load": true,
         "pc_image": "shopify://shop_images/bestseller_pc_cdd01f53-fa1c-4d27-8671-710c74e6d6c3.jpg",
         "link": ""
       }
@@ -33,7 +33,94 @@
         "label": "Black Friday in",
         "end_time": "2026-10-30 00:00"
       }
+    },
+    "home_best_sellers_WxhFzH": {
+      "type": "home-best-sellers",
+      "blocks": {
+        "collection_XjQgkn": {
+          "type": "collection",
+          "settings": {
+            "collection": "best-sellers",
+            "label": "Girls"
+          }
+        },
+        "collection_U366yf": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "label": "Boys"
+          }
+        }
+      },
+      "block_order": [
+        "collection_XjQgkn",
+        "collection_U366yf"
+      ],
+      "name": "Best sellers",
+      "settings": {
+        "heading": "Best Sellers"
+      }
+    },
+    "kol_video_eAFxaE": {
+      "type": "kol-video",
+      "blocks": {
+        "card_8C8dwg": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-printed-skirt-fairy",
+              "kids-long-sleeve-summer-shirt-fairy",
+              "girls-long-sleeve-shirt-fairy"
+            ]
+          }
+        },
+        "card_Ritb3d": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-fleece-jacket-3-in-1",
+              "boys-polo-shirt-2-in-1",
+              "boys-hoodie-2-in-1-tee"
+            ]
+          }
+        },
+        "card_TdMqJ7": {
+          "type": "card",
+          "settings": {
+            "heading": "Shop the look",
+            "text": "See how families wear it. Tap to shop.",
+            "video_pc": "shopify://files/videos/Yoyo0916视频_ 网站首页视频.mp4",
+            "video_mb": "shopify://files/videos/m端.mp4",
+            "products": [
+              "kids-fleece-jacket-3-in-1",
+              "boys-polo-shirt-2-in-1",
+              "boys-hoodie-2-in-1-tee"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "card_8C8dwg",
+        "card_Ritb3d",
+        "card_TdMqJ7"
+      ],
+      "name": "KOL video",
+      "settings": {}
     }
   },
-  "order": ["main", "full_image_bX7dfb", "countdown_NGaQX3"]
+  "order": [
+    "main",
+    "full_image_bX7dfb",
+    "countdown_NGaQX3",
+    "home_best_sellers_WxhFzH",
+    "kol_video_eAFxaE"
+  ]
 }
