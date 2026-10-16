@@ -14,7 +14,7 @@
 /* Mobile: one card per view, native scroll-snap (no JS for the sliding). */
 .mt-kol__track {
   display: flex;
-  gap: 0.875rem;
+  gap: 1.3125rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -126,7 +126,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.375rem;
-  margin: 0.625rem 0 0;
+  margin: 0.875rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -236,7 +236,7 @@
     padding: calc(80 * var(--mt-kol-px)) calc(20 * var(--mt-kol-px));
   }
   .mt-kol__track {
-    gap: calc(14 * var(--mt-kol-px));
+    gap: calc(21 * var(--mt-kol-px));
   }
   .mt-kol__copy {
     right: calc(16 * var(--mt-kol-px));
@@ -261,7 +261,7 @@
   }
   .mt-kol__products {
     gap: calc(6 * var(--mt-kol-px));
-    margin-top: calc(10 * var(--mt-kol-px));
+    margin-top: calc(14 * var(--mt-kol-px));
   }
   .mt-kol__product-title {
     margin-top: calc(8 * var(--mt-kol-px));
