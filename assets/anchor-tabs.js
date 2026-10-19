@@ -106,8 +106,17 @@ if (!window.mtAnchorTabsInit) {
     });
   });
 
+  // The reserved in-page height depends on the breakpoint, so re-measure from scratch.
+  const reset = () => {
+    document.querySelectorAll('[data-atabs].is-stuck').forEach((nav) => {
+      nav.classList.remove('is-stuck');
+      nav.style.height = '';
+    });
+    queue();
+  };
+
   window.addEventListener('scroll', queue, { passive: true });
-  window.addEventListener('resize', queue);
+  window.addEventListener('resize', reset);
   window.addEventListener('pageshow', queue);
   document.addEventListener('shopify:section:load', queue);
   document.addEventListener('shopify:section:unload', queue);
