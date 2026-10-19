@@ -1,19 +1,31 @@
 {%- comment -%}
   Opt-in params (default off, so existing callers are unchanged):
-  sale_badge — after the metafield badges (e.g. NEW), add an automatic SALE badge
-    when any variant's compare-at price is above its price.
+  sale_badge — after the metafield badges (e.g. NEW), add a discount badge such as
+    "33% OFF" (it replaces the "(-33%)" next to the price). The percentage is the
+    same one the price line uses; if only some variants are discounted, the
+    largest variant discount is used instead.
   hide_swatches — skip rendering (and computing) the colour swatches.
 {%- endcomment -%}
 {%- if product != blank -%}
   {%- liquid
-    assign badge_sale = false
+    assign sale_percent = 0
     if sale_badge
-      for v in product.variants
-        if v.compare_at_price > v.price
-          assign badge_sale = true
-          break
-        endif
-      endfor
+      if product.compare_at_price_min > product.price_min
+        assign sale_percent = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round
+      else
+        for v in product.variants
+          if v.compare_at_price > v.price
+            assign v_percent = v.compare_at_price | minus: v.price | times: 100.0 | divided_by: v.compare_at_price | round
+            if v_percent > sale_percent
+              assign sale_percent = v_percent
+            endif
+          endif
+        endfor
+      endif
+    endif
+    assign badge_sale = false
+    if sale_percent > 0
+      assign badge_sale = true
     endif
   -%}
   {%- if item_list_id != blank -%}
@@ -55,7 +67,7 @@
             <span class="mt-card__badge">{{ badge_2.value }}</span>
           {%- endif -%}
           {%- if badge_sale -%}
-            <span class="mt-card__badge mt-card__badge--sale">{{ 'products.badge_sale' | t }}</span>
+            <span class="mt-card__badge mt-card__badge--sale">{{ 'products.badge_sale' | t: percent: sale_percent }}</span>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -82,7 +94,7 @@
           {%- if product.price_varies %}{{ 'products.from' | t }} {% endif -%}
           {{ product.price_min | money_without_trailing_zeros }}
         </span>
-        {%- if product.compare_at_price_min > product.price_min -%}
+        {%- if product.compare_at_price_min > product.price_min and sale_badge != true -%}
           {%- assign discount_percent = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round -%}
           <span class="mt-card__discount">(-{{ discount_percent }}%)</span>
         {%- endif -%}
