@@ -230,6 +230,10 @@
   .mt-benefits__done-text {
     font-size: 0.75rem;
   }
+  .mt-benefits__done-text,
+  .mt-benefits__done .mt-benefits__btn {
+    height: 3.5rem;
+  }
   .mt-benefits__btn {
     padding-inline: 1.25rem;
   }
