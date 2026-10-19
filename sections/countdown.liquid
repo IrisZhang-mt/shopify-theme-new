@@ -10,12 +10,25 @@
         <p class="mt-countdown__label">{{ section.settings.label | escape }}</p>
       {%- endif -%}
       <p class="mt-countdown__time" role="timer">
-        <span class="mt-countdown__unit mt-countdown__unit--days"><span data-countdown-days>0</span>d</span>
-        <span class="mt-countdown__unit" data-countdown-hours>00</span>
+        <span class="mt-countdown__unit">
+          <span class="mt-countdown__num" data-countdown-days>00</span>
+          <span class="mt-countdown__name">{{ 'countdown.days' | t }}</span>
+        </span>
         <span class="mt-countdown__sep" aria-hidden="true">:</span>
-        <span class="mt-countdown__unit" data-countdown-minutes>00</span>
+        <span class="mt-countdown__unit">
+          <span class="mt-countdown__num" data-countdown-hours>00</span>
+          <span class="mt-countdown__name">{{ 'countdown.hours' | t }}</span>
+        </span>
         <span class="mt-countdown__sep" aria-hidden="true">:</span>
-        <span class="mt-countdown__unit mt-countdown__unit--seconds" data-countdown-seconds>00</span>
+        <span class="mt-countdown__unit">
+          <span class="mt-countdown__num" data-countdown-minutes>00</span>
+          <span class="mt-countdown__name">{{ 'countdown.minutes' | t }}</span>
+        </span>
+        <span class="mt-countdown__sep" aria-hidden="true">:</span>
+        <span class="mt-countdown__unit mt-countdown__unit--seconds">
+          <span class="mt-countdown__num" data-countdown-seconds>00</span>
+          <span class="mt-countdown__name">{{ 'countdown.seconds' | t }}</span>
+        </span>
       </p>
       {%- if request.design_mode -%}
         <p class="mt-countdown__error" data-countdown-error hidden>
@@ -34,7 +47,7 @@
       "type": "text",
       "id": "label",
       "label": "Label",
-      "default": "Black Friday in",
+      "default": "Black Friday starts in",
       "info": "留空时不展示"
     },
     {
@@ -42,7 +55,7 @@
       "id": "end_time",
       "label": "End time (US Pacific)",
       "placeholder": "2026-11-27 00:00",
-      "info": "美西时间（自动处理夏令时），格式 YYYY-MM-DD HH:MM；留空时不展示；结束后停在 0d 00 : 00 : 00"
+      "info": "美西时间（自动处理夏令时），格式 YYYY-MM-DD HH:MM；留空时不展示；结束后停在 00 : 00 : 00 : 00"
     }
   ],
   "presets": [

@@ -1,0 +1,175 @@
+{{ 'benefits-signup.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'benefits-signup.js' | asset_url }}" type="module"></script>
+
+{%- liquid
+  assign pc_image = section.settings.benefits_image_pc
+  assign mob_image = section.settings.benefits_image_mob | default: pc_image
+  assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape
+  assign ratio_mobile = mob_image.aspect_ratio | default: 1
+  assign ratio_desktop = pc_image.aspect_ratio | default: ratio_mobile
+  if section.settings.eager_load
+    assign img_loading = 'eager'
+    assign img_fetchpriority = 'high'
+  else
+    assign img_loading = 'lazy'
+    assign img_fetchpriority = 'auto'
+  endif
+
+  assign form_id = 'MtBenefitsSignup-' | append: section.id
+  assign preview_done = false
+  if request.design_mode and section.settings.preview_success
+    assign preview_done = true
+  endif
+-%}
+
+<section
+  class="mt-benefits"
+  data-benefits
+  data-section-id="{{ section.id }}"
+  data-benefits-module="{{ section.settings.ga4_module_name | escape }}"
+>
+  <div class="mt-benefits__inner">
+    {%- if mob_image != blank -%}
+      {%- if pc_image != blank -%}
+        {%- capture pc_srcset -%}{% render 'image-srcset', image: pc_image, widths: '660,990,1320' %}{%- endcapture -%}
+      {%- endif -%}
+      {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100', output: 'widths' %}{%- endcapture -%}
+      <div class="mt-benefits__media" style="--mt-benefits-ratio: {{ ratio_mobile }}; --mt-benefits-ratio-desktop: {{ ratio_desktop }}">
+        <picture>
+          {%- if pc_image != blank -%}
+            <source media="(min-width: 990px)" srcset="{{ pc_srcset }}" sizes="660px">
+          {%- endif -%}
+          {{ mob_image | image_url: width: mob_image.width | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
+        </picture>
+      </div>
+    {%- endif -%}
+
+    {%- form 'customer', id: form_id, class: 'mt-benefits__form' -%}
+      <input type="hidden" name="contact[tags]" value="{{ section.settings.tags | escape }}">
+      <input type="hidden" name="return_to" value="{{ request.path | escape }}?mt-signup={{ section.id }}">
+
+      <div class="mt-benefits__field" data-benefits-field{% if preview_done %} hidden{% endif %}>
+        <label class="visually-hidden" for="{{ form_id }}-email">{{ 'footer.email_label' | t }}</label>
+        <input
+          id="{{ form_id }}-email"
+          class="mt-benefits__input"
+          type="email"
+          name="contact[email]"
+          value="{{ form.email }}"
+          placeholder="{{ section.settings.placeholder | escape }}"
+          required
+          autocomplete="email"
+        >
+        <button class="mt-benefits__btn" type="submit">{{ section.settings.button_label | escape }}</button>
+      </div>
+
+      <div class="mt-benefits__done" data-benefits-done{% unless preview_done %} hidden{% endunless %}>
+        <p class="mt-benefits__done-text" role="status">{{ section.settings.success_text | escape }}</p>
+        {%- comment -%} Same destination as the header "Sign up" link. {%- endcomment -%}
+        <a class="mt-benefits__btn" href="{{ routes.account_url }}">{{ 'general.sign_in' | t }}</a>
+      </div>
+
+      {%- if section.settings.consent_text != blank -%}
+        <label class="mt-benefits__consent">
+          <input type="checkbox" required data-benefits-consent{% if preview_done %} checked disabled{% endif %}>
+          <span class="mt-benefits__check"></span>
+          <span>{{ section.settings.consent_text }}</span>
+        </label>
+      {%- endif -%}
+
+      {%- if form.errors -%}
+        <p class="mt-benefits__msg" role="alert">{{ form.errors.messages.email }}</p>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Benefits signup",
+  "settings": [
+    {
+      "type": "header",
+      "content": "权益卡片图"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefits_image_pc",
+      "label": "Benefits image (PC)",
+      "info": "≥990px 时展示在左侧，最大显示宽度 660px，建议上传 1320px 宽"
+    },
+    {
+      "type": "image_picker",
+      "id": "benefits_image_mob",
+      "label": "Benefits image (mobile)",
+      "info": "留空时使用 PC 图片；建议上传 750px 宽"
+    },
+    {
+      "type": "checkbox",
+      "id": "eager_load",
+      "label": "Load eagerly",
+      "info": "在首屏的时候打开此开关；不是首屏时请保持关闭",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "订阅表单"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Join free"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "consent_text",
+      "label": "Consent text",
+      "default": "I agree to receiving marketing emails and special deals",
+      "info": "必须勾选才能提交；留空时不展示勾选框"
+    },
+    {
+      "type": "text",
+      "id": "tags",
+      "label": "Customer tags",
+      "default": "newsletter",
+      "info": "提交后写入客户标签，多个用英文逗号分隔，例如 newsletter, bf-early-access"
+    },
+    {
+      "type": "header",
+      "content": "订阅成功"
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Success message",
+      "default": "You're on the list. Sign in to unlock member perks."
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_success",
+      "label": "Preview subscribed state",
+      "info": "仅在主题编辑器中生效，用于预览订阅成功后的样式",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "ga4_module_name",
+      "label": "GA4 module name",
+      "default": "Early Access",
+      "info": "订阅成功时 subscribe 事件的 module_name"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Benefits signup"
+    }
+  ]
+}
+{% endschema %}

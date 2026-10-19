@@ -18,7 +18,8 @@
     "pagination": "Pagination",
     "slides": "Slides",
     "slide_n": "Slide {{ number }}",
-    "play_video": "Play video"
+    "play_video": "Play video",
+    "sign_in": "Sign in"
   },
   "header": {
     "menu": "Menu",
@@ -70,7 +71,8 @@
       "other": "Available in {{ count }} colors"
     },
     "show_all_colors": "Show all colors",
-    "show_fewer_colors": "Show fewer colors"
+    "show_fewer_colors": "Show fewer colors",
+    "badge_sale": "Sale"
   },
   "collection": {
     "products_count": {
@@ -148,6 +150,12 @@
   },
   "about": {
     "views_label": "About views"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hrs",
+    "minutes": "Min",
+    "seconds": "Sec"
   },
   "gift_card": {
     "title": "Here's your gift card",

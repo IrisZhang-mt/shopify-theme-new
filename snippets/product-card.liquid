@@ -1,4 +1,21 @@
+{%- comment -%}
+  Opt-in params (default off, so existing callers are unchanged):
+  sale_badge — after the metafield badges (e.g. NEW), add an automatic SALE badge
+    when any variant's compare-at price is above its price.
+  hide_swatches — skip rendering (and computing) the colour swatches.
+{%- endcomment -%}
 {%- if product != blank -%}
+  {%- liquid
+    assign badge_sale = false
+    if sale_badge
+      for v in product.variants
+        if v.compare_at_price > v.price
+          assign badge_sale = true
+          break
+        endif
+      endfor
+    endif
+  -%}
   {%- if item_list_id != blank -%}
     {%- assign ga4_pick = product.variants | where: 'available', true | first -%}
     {%- assign ga4_pick = ga4_pick | default: product.variants.first -%}
@@ -6,7 +23,7 @@
     {%- assign ga4_variant = ga4_variant | strip -%}
   {%- endif -%}
   <div
-    class="mt-card"
+    class="mt-card{% if badge_sale %} mt-card--sale{% endif %}"
     data-reveal
     style="--mt-reveal-i: {{ index | default: 0 }}"
     {%- if quick %} data-quick-url="{{ product.url }}"{% endif %}
@@ -29,13 +46,16 @@
         assign badge_1 = product.metafields.custom.product_badges
         assign badge_2 = product.metafields.custom.product_badges2
       -%}
-      {%- if badge_1 != blank or badge_2 != blank -%}
+      {%- if badge_1 != blank or badge_2 != blank or badge_sale -%}
         <div class="mt-card__badges">
           {%- if badge_1 != blank -%}
             <span class="mt-card__badge">{{ badge_1.value }}</span>
           {%- endif -%}
           {%- if badge_2 != blank -%}
             <span class="mt-card__badge">{{ badge_2.value }}</span>
+          {%- endif -%}
+          {%- if badge_sale -%}
+            <span class="mt-card__badge mt-card__badge--sale">{{ 'products.badge_sale' | t }}</span>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -72,7 +92,7 @@
         {%- assign color_option = product.options_with_values | where: 'name', 'Colour' | first -%}
       {%- endunless -%}
       {%- capture swatches -%}
-        {%- if color_option and settings.show_products_swatches -%}
+        {%- if color_option and settings.show_products_swatches and hide_swatches != true -%}
           {%- assign swatch_colors = product.metafields.custom.color_swatch.value | map: 'color' -%}
           {%- assign swatch_images = product.metafields.custom.color_swatch.value | map: 'image' -%}
           {%- assign custom_color_keys = '' -%}
