@@ -37,7 +37,7 @@
       <div class="mt-benefits__media" style="--mt-benefits-ratio: {{ ratio_mobile }}; --mt-benefits-ratio-desktop: {{ ratio_desktop }}">
         <picture>
           {%- if pc_image != blank -%}
-            <source media="(min-width: 990px)" srcset="{{ pc_srcset }}" sizes="660px">
+            <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="(min-width: 1200px) 660px, 55vw">
           {%- endif -%}
           {{ mob_image | image_url: width: mob_image.width | image_tag: decoding: 'async', loading: img_loading, fetchpriority: img_fetchpriority, widths: mob_widths, sizes: '100vw', alt: image_alt }}
         </picture>
@@ -96,7 +96,7 @@
       "type": "image_picker",
       "id": "benefits_image_pc",
       "label": "Benefits image (PC)",
-      "info": "≥990px 时展示在左侧，最大显示宽度 660px，建议上传 1320px 宽"
+      "info": "≥750px 时展示在左侧，最大显示宽度 660px，建议上传 1320px 宽"
     },
     {
       "type": "image_picker",
