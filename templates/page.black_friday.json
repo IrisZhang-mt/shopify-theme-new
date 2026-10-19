@@ -46,10 +46,19 @@
         "consent_text": "I agree to receiving marketing emails and special deals",
         "tags": "newsletter",
         "success_text": "You're on the list. Sign in to unlock member perks.",
-        "success_button_label": "Sign in",
-        "success_link": "",
         "preview_success": false,
         "ga4_module_name": "Early Access"
+      }
+    },
+    "product_grid_T7KaXf": {
+      "type": "product-grid",
+      "name": "Product grid",
+      "settings": {
+        "collection": "new-arrival",
+        "count": 4,
+        "heading": "New Arrivals",
+        "subheading": "10% OFF",
+        "cta_label": "Shop more"
       }
     },
     "kol_video_eAFxaE": {
@@ -112,6 +121,7 @@
     "full_image_bX7dfb",
     "countdown_NGaQX3",
     "benefits_signup_FErPeg",
+    "product_grid_T7KaXf",
     "kol_video_eAFxaE"
   ]
 }
