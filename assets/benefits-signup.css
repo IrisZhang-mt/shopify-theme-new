@@ -90,7 +90,10 @@
   text-decoration: none;
   color: var(--mt-cloud);
   background-color: var(--mt-midnight);
-  background-image: linear-gradient(rgba(var(--mt-white-rgb), 0.12), rgba(var(--mt-white-rgb), 0.12));
+  background-image: linear-gradient(
+    rgba(var(--mt-white-rgb), 0.12),
+    rgba(var(--mt-white-rgb), 0.12)
+  );
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 100% 0;
@@ -184,7 +187,7 @@
     justify-content: space-between;
     gap: 2.5rem;
     max-width: calc(97.5rem + 2 * 2.625rem);
-    padding: 2.5rem 2.625rem 1.5rem;
+    padding: 2.5rem 2.625rem;
   }
 
   .mt-benefits__media {
