@@ -1,0 +1,75 @@
+{{ 'anchor-tabs.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'anchor-tabs.js' | asset_url }}" type="module"></script>
+
+{%- if section.blocks.size > 0 -%}
+  <nav class="mt-atabs" data-atabs>
+    <div class="mt-atabs__bar" data-atabs-bar>
+      <div class="mt-atabs__inner">
+        {%- for block in section.blocks -%}
+          {%- assign target = block.settings.target_id | handleize -%}
+          <a
+            class="mt-atabs__tab{% if forloop.first %} is-active{% endif %}"
+            href="#{{ target }}"
+            data-atabs-target="{{ target }}"
+            {% if forloop.first %}aria-current="true"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <span class="mt-atabs__title">{{ block.settings.title | escape }}</span>
+            {%- if block.settings.subtitle != blank -%}
+              <span class="mt-atabs__sub">{{ block.settings.subtitle | escape }}</span>
+            {%- endif -%}
+            <svg class="mt-atabs__arrow" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
+              <path d="M6 0v13M1 8l5 5 5-5" stroke="currentColor"/>
+            </svg>
+          </a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </nav>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Anchor tabs",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "点击 tab 滚动到 Target ID 对应的 Full image（在 Full image 的 Anchor ID 中填写相同的值）。滚过 tab 后吸顶；滚过最后一个 tab 的区域（目标 Full image 及其下方紧跟的一个 section）后收起。"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Best Sellers"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Up to 40% off",
+          "info": "橙色小字，留空时不展示"
+        },
+        {
+          "type": "text",
+          "id": "target_id",
+          "label": "Target ID",
+          "info": "与目标 Full image 的 Anchor ID 一致，例如 best-sellers"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Anchor tabs",
+      "blocks": [{ "type": "tab" }, { "type": "tab" }, { "type": "tab" }]
+    }
+  ]
+}
+{% endschema %}
