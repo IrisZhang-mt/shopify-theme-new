@@ -23,7 +23,7 @@
   {%- capture mob_srcset -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100,1500' %}{%- endcapture -%}
 {%- endif -%}
 
-<section class="mt-full-image">
+<section class="mt-full-image"{% if section.settings.anchor_id != blank %} id="{{ section.settings.anchor_id | handleize }}"{% endif %}>
   {%- if heading != blank -%}
     <div class="mt-full-image__inner">
       <h2 class="mt-full-image__heading">{{ heading }}</h2>
@@ -94,6 +94,12 @@
       "type": "url",
       "id": "link",
       "label": "Link (optional)"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID (optional)",
+      "info": "供 Anchor tabs 跳转定位，例如 new-arrivals；需与 tab 的 Target ID 一致，同一页面内不要重复"
     }
   ],
   "presets": [
