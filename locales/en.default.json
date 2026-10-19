@@ -150,6 +150,12 @@
   "about": {
     "views_label": "About views"
   },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hrs",
+    "minutes": "Min",
+    "seconds": "Sec"
+  },
   "gift_card": {
     "title": "Here's your gift card",
     "expired": "This gift card has expired.",

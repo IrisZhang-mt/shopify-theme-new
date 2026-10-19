@@ -44,7 +44,7 @@ if (!window.mtCountdownInit) {
 
   const render = (el, end) => {
     const left = Math.max(0, Math.floor((end - Date.now()) / 1000));
-    el.querySelector('[data-countdown-days]').textContent = Math.floor(left / 86400);
+    el.querySelector('[data-countdown-days]').textContent = pad(Math.floor(left / 86400));
     el.querySelector('[data-countdown-hours]').textContent = pad(Math.floor((left % 86400) / 3600));
     el.querySelector('[data-countdown-minutes]').textContent = pad(Math.floor((left % 3600) / 60));
     el.querySelector('[data-countdown-seconds]').textContent = pad(left % 60);
