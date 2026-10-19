@@ -23,7 +23,8 @@
         "heading": "",
         "eager_load": true,
         "pc_image": "shopify://shop_images/bestseller_pc_cdd01f53-fa1c-4d27-8671-710c74e6d6c3.jpg",
-        "link": ""
+        "link": "",
+        "anchor_id": ""
       }
     },
     "countdown_NGaQX3": {
@@ -50,6 +51,42 @@
         "ga4_module_name": "Early Access"
       }
     },
+    "anchor_tabs_QNN9H8": {
+      "type": "anchor-tabs",
+      "blocks": {
+        "tab_8aFVbf": {
+          "type": "tab",
+          "settings": {
+            "title": "Best Sellers",
+            "subtitle": "Up to 40% off",
+            "target_id": "Best_Sellers"
+          }
+        },
+        "tab_qaHjDz": {
+          "type": "tab",
+          "settings": {
+            "title": "New Arrivals",
+            "subtitle": "Up to 40% off",
+            "target_id": "New_Arrivals"
+          }
+        },
+        "tab_XEgTMT": {
+          "type": "tab",
+          "settings": {
+            "title": "Sale",
+            "subtitle": "Up to 40% off",
+            "target_id": "Sale"
+          }
+        }
+      },
+      "block_order": [
+        "tab_8aFVbf",
+        "tab_qaHjDz",
+        "tab_XEgTMT"
+      ],
+      "name": "Anchor tabs",
+      "settings": {}
+    },
     "full_image_3dbDiA": {
       "type": "full-image",
       "name": "Full image",
@@ -58,7 +95,8 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
         "mob_image": "shopify://shop_images/Group_1312.jpg",
-        "link": ""
+        "link": "",
+        "anchor_id": "Best_Sellers"
       }
     },
     "product_grid_T7KaXf": {
@@ -80,7 +118,8 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
         "mob_image": "shopify://shop_images/Group_1312.jpg",
-        "link": ""
+        "link": "",
+        "anchor_id": "New_Arrivals"
       }
     },
     "product_grid_439aRD": {
@@ -102,7 +141,8 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
         "mob_image": "shopify://shop_images/Group_1312.jpg",
-        "link": ""
+        "link": "",
+        "anchor_id": "Sale"
       }
     },
     "product_grid_j9hWQD": {
@@ -176,6 +216,7 @@
     "full_image_bX7dfb",
     "countdown_NGaQX3",
     "benefits_signup_FErPeg",
+    "anchor_tabs_QNN9H8",
     "full_image_3dbDiA",
     "product_grid_T7KaXf",
     "full_image_eCCE9k",
