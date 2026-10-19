@@ -16,6 +16,12 @@
   endif
 
   assign form_id = 'MtBenefitsSignup-' | append: section.id
+  # request.path drops the query string, so carry ?view= back or an
+  # alternate template (e.g. ?view=black_friday) returns to the default one.
+  assign return_query = '?'
+  if template.suffix != blank
+    assign return_query = '?view=' | append: template.suffix | append: '&'
+  endif
   assign preview_done = false
   if request.design_mode and section.settings.preview_success
     assign preview_done = true
@@ -46,7 +52,7 @@
 
     {%- form 'customer', id: form_id, class: 'mt-benefits__form' -%}
       <input type="hidden" name="contact[tags]" value="{{ section.settings.tags | escape }}">
-      <input type="hidden" name="return_to" value="{{ request.path | escape }}?mt-signup={{ section.id }}">
+      <input type="hidden" name="return_to" value="{{ request.path | append: return_query | escape }}mt-signup={{ section.id }}">
 
       <div class="mt-benefits__field" data-benefits-field{% if preview_done %} hidden{% endif %}>
         <label class="visually-hidden" for="{{ form_id }}-email">{{ 'footer.email_label' | t }}</label>
