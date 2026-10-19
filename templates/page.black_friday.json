@@ -65,9 +65,9 @@
         "tab_qaHjDz": {
           "type": "tab",
           "settings": {
-            "title": "Best Sellers",
+            "title": "New Arrivals",
             "subtitle": "Up to 40% off",
-            "target_id": ""
+            "target_id": "New_Arrivals"
           }
         },
         "tab_XEgTMT": {
