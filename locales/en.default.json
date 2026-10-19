@@ -18,7 +18,8 @@
     "pagination": "Pagination",
     "slides": "Slides",
     "slide_n": "Slide {{ number }}",
-    "play_video": "Play video"
+    "play_video": "Play video",
+    "sign_in": "Sign in"
   },
   "header": {
     "menu": "Menu",

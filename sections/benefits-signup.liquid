@@ -16,14 +16,6 @@
   endif
 
   assign form_id = 'MtBenefitsSignup-' | append: section.id
-  assign success_url = section.settings.success_link
-  if success_url == blank
-    if customer
-      assign success_url = routes.account_url
-    else
-      assign success_url = routes.account_login_url
-    endif
-  endif
   assign preview_done = false
   if request.design_mode and section.settings.preview_success
     assign preview_done = true
@@ -73,9 +65,8 @@
 
       <div class="mt-benefits__done" data-benefits-done{% unless preview_done %} hidden{% endunless %}>
         <p class="mt-benefits__done-text" role="status">{{ section.settings.success_text | escape }}</p>
-        {%- if section.settings.success_button_label != blank -%}
-          <a class="mt-benefits__btn" href="{{ success_url }}">{{ section.settings.success_button_label | escape }}</a>
-        {%- endif -%}
+        {%- comment -%} Same destination as the header "Sign up" link. {%- endcomment -%}
+        <a class="mt-benefits__btn" href="{{ routes.account_url }}">{{ 'general.sign_in' | t }}</a>
       </div>
 
       {%- if section.settings.consent_text != blank -%}
@@ -159,19 +150,6 @@
       "id": "success_text",
       "label": "Success message",
       "default": "You're on the list. Sign in to unlock member perks."
-    },
-    {
-      "type": "text",
-      "id": "success_button_label",
-      "label": "Success button label",
-      "default": "Sign in",
-      "info": "留空时不展示按钮"
-    },
-    {
-      "type": "url",
-      "id": "success_link",
-      "label": "Success button link",
-      "info": "留空时：未登录跳转登录页，已登录跳转账户页"
     },
     {
       "type": "checkbox",
