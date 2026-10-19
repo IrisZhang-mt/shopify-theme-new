@@ -13,7 +13,12 @@
 -%}
 
 {%- if has_products or pg_collection == blank -%}
-  <section class="mt-pgrid" data-pgrid data-currency="{{ cart.currency.iso_code }}">
+  <section
+    class="mt-pgrid"
+    {% if section.settings.anchor_id != blank %}id="{{ section.settings.anchor_id | handleize }}"{% endif %}
+    data-pgrid
+    data-currency="{{ cart.currency.iso_code }}"
+  >
     <div class="mt-pgrid__inner">
       {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
         <div class="mt-pgrid__intro">
@@ -91,6 +96,12 @@
       "label": "Button label",
       "default": "Shop more",
       "info": "留空时不展示按钮"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID (optional)",
+      "info": "供 Anchor tabs 跳转定位，例如 new-arrivals；需与 tab 的 Target ID 一致，同一页面内不要重复"
     }
   ],
   "presets": [

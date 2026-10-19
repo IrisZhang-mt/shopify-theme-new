@@ -14,13 +14,15 @@ if (!window.mtAnchorTabsInit) {
   const tabsOf = (nav) => [...nav.querySelectorAll('[data-atabs-target]')];
   const targetOf = (tab) => (tab.dataset.atabsTarget ? document.getElementById(tab.dataset.atabsTarget) : null);
 
-  // The last tab's region is its target plus the section right after it
-  // (on the campaign page: the banner and its product grid).
+  // The last tab's region: a Full image target covers itself plus the section
+  // right after it (the banner and its product grid); any other target (e.g. a
+  // Product grid) covers just its own section.
   const regionEnd = (nav) => {
     const last = tabsOf(nav).map(targetOf).filter(Boolean).at(-1);
     if (!last) return Infinity;
     const section = last.closest('.shopify-section') || last;
-    return (section.nextElementSibling || section).getBoundingClientRect().bottom;
+    const end = last.matches('.mt-full-image') ? section.nextElementSibling || section : section;
+    return end.getBoundingClientRect().bottom;
   };
 
   const setActive = (nav, index) => {
