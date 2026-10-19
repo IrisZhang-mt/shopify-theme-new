@@ -3,7 +3,6 @@
 
 {%- liquid
   assign pg_collection = section.settings.collection
-  assign pg_new_handle = section.settings.new_collection.handle
   assign pg_item_list_id = pg_collection.handle
   assign pg_item_list_name = section.settings.heading | default: pg_collection.title
   assign pg_sizes = '(min-width: 1644px) 383px, (min-width: 750px) calc((100vw - 111px) / 4), calc((100vw - 37px) / 2)'
@@ -35,8 +34,7 @@
               index: forloop.index0,
               sizes: pg_sizes,
               quick: true,
-              auto_badges: true,
-              new_handle: pg_new_handle,
+              sale_badge: true,
               hide_swatches: true,
               item_list_id: pg_item_list_id,
               item_list_name: pg_item_list_name
@@ -93,12 +91,6 @@
       "label": "Button label",
       "default": "Shop more",
       "info": "留空时不展示按钮"
-    },
-    {
-      "type": "collection",
-      "id": "new_collection",
-      "label": "NEW badge collection",
-      "info": "属于该系列的商品显示 NEW 角标，例如 New Arrivals；有划线价的商品自动显示 SALE 角标"
     }
   ],
   "presets": [
