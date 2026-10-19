@@ -1,3 +1,4 @@
+<<<<<<< HEAD
  <script type="text/javascript">
 			!function(w,o,s,r,p,k,e){if(w.mkq){return}p=w.mkq=function(){p.invokeFunc?p.invokeFunc.apply(p,arguments):p.qu.push(arguments)};if(!w._mkq){w._mkq=p}p.push=p;p.qu=[];k=o.createElement(s);k.async=!0;k.src=r;e=o.getElementsByTagName(s)[0];e.parentNode.insertBefore(k,e)}(window,document,"script","//pixeltrack.clientgear.com/mkq.min.js");
 			mkq('init', '12076420804289');
@@ -104,3 +105,111 @@
  </script>
 {% endif %}
 
+=======
+ <script type="text/javascript">
+			!function(w,o,s,r,p,k,e){if(w.mkq){return}p=w.mkq=function(){p.invokeFunc?p.invokeFunc.apply(p,arguments):p.qu.push(arguments)};if(!w._mkq){w._mkq=p}p.push=p;p.qu=[];k=o.createElement(s);k.async=!0;k.src=r;e=o.getElementsByTagName(s)[0];e.parentNode.insertBefore(k,e)}(window,document,"script","//pixeltrack.clientgear.com/mkq.min.js");
+			mkq('init', '12076420804289');
+			mkq('track', "PageView", {
+		title: document.title
+		});
+</script>
+
+{% if template.name == 'collection' %}
+	<script type="text/javascript">
+		mkq('track', 'ViewCategory', {
+			content_name: '{{ collection.title | escape }}',
+			content_category: '{{ collection.title }}',
+			content_ids: [{% for line in collection.products %}'{{ line.id }}'{% unless forloop.last == true %}, {% endunless %}{% endfor %}]
+		});
+	</script>
+{% endif %}
+
+
+{% if template.name == 'product' and product %}
+<script type="text/javascript">
+  mkq('track', 'ViewContent', {
+	  value: '{{ product.price | money_without_currency | remove: '.' | remove: ','  | divided_by: 100.0 }}',
+	  currency: '{{ shop.currency }}',
+	  content_name: '{{ product.title | escape }}',
+	  content_ids: ['{{ product.id }}'],
+	  image_link:'{{product.featured_image | product_img_url: "large" | replace: "//", "https://"}}'
+  });
+  var intervalIdYM = setInterval(function() {
+  var mainAddToCartBtn = document.querySelector('.mt-pdp__ctas .mt-pdp__add');
+  var stickyAddToCartBtn = document.querySelector('.mt-pdp__sticky-add');
+  if (mainAddToCartBtn || stickyAddToCartBtn) {
+    clearInterval(intervalIdYM);
+    const trackAddToCart = () => {
+      mkq('track', 'AddToCart', {
+        value: '{{ product.price | money_without_currency | remove: '.' | remove: ',' | divided_by: 100.0 }}',
+        currency: '{{ shop.currency }}',
+        content_name: '{{ product.title | escape }}',
+        content_ids: ['{{ product.id }}']
+      });
+    };
+    if (mainAddToCartBtn) {
+    mainAddToCartBtn.addEventListener('click', trackAddToCart);
+  }
+  if (stickyAddToCartBtn) {
+    stickyAddToCartBtn.addEventListener('click', trackAddToCart);
+  }
+  }
+}, 500);
+</script>
+{% endif %}
+
+
+{% if template.name == 'cart' and cart and cart.items %}
+<script type="text/javascript">
+  mkq('track', 'viewcart', {
+	value: '{{ cart.total_price | money_without_currency | remove: '.' | remove: ','  | divided_by: 100.0}}',
+	currency: '{{ shop.currency }}',
+	content_ids: [{% for line in cart.items %}'{{ line.product_id }}'{% unless forloop.last == true %}, {% endunless %}{% endfor %}]
+  });
+</script>
+{% endif %}
+
+
+{% if template.name == 'index' %}
+<script type="text/javascript">
+  mkq('track', 'Home');
+</script>
+{% endif %}
+
+
+{% if template.name == 'page' %}
+<script type="text/javascript">
+  mkq('track', 'Page', {
+	title: '{{ page.title }}',
+	url: '{{ page.url }}',
+	author: '{{ page.author }}',
+	handle: '{{ page.handle }}',
+	id: '{{ page.id }}'
+  });
+</script>
+{% endif %}
+
+
+{% if template.name == 'register' %}
+<script type="text/javascript">
+  mkq('track', 'Register');
+</script>
+{% endif %}
+
+
+{% if template.name == 'login' %}
+<script type="text/javascript">
+  mkq('track', 'Login');
+</script>
+{% endif %}
+
+
+ {% if search.performed %}
+ <script type="text/javascript">
+ mkq('track', 'Search', {
+   search_string: "{{ search.terms }}"
+ });
+ </script>
+{% endif %}
+
+>>>>>>> 6926f6f92fada7a01d2f0a26122c23ecf4b15309
