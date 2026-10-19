@@ -170,9 +170,8 @@
   outline: 2px solid var(--mt-ink);
   outline-offset: 2px;
 }
-.mt-benefits__consent input:disabled,
-.mt-benefits__consent:has(input:disabled) {
-  cursor: default;
+.mt-benefits__consent[hidden] {
+  display: none;
 }
 
 .mt-benefits__msg {
