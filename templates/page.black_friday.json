@@ -50,6 +50,17 @@
         "ga4_module_name": "Early Access"
       }
     },
+    "full_image_3dbDiA": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
+        "mob_image": "shopify://shop_images/Group_1312.jpg",
+        "link": ""
+      }
+    },
     "product_grid_T7KaXf": {
       "type": "product-grid",
       "name": "Product grid",
@@ -121,6 +132,7 @@
     "full_image_bX7dfb",
     "countdown_NGaQX3",
     "benefits_signup_FErPeg",
+    "full_image_3dbDiA",
     "product_grid_T7KaXf",
     "kol_video_eAFxaE"
   ]
