@@ -26,6 +26,27 @@
 	  content_ids: ['{{ product.id }}'],
 	  image_link:'{{product.featured_image | product_img_url: "large" | replace: "//", "https://"}}'
   });
+  var intervalIdYM = setInterval(function() {
+  var mainAddToCartBtn = document.querySelector('.mt-pdp__ctas .mt-pdp__add');
+  var stickyAddToCartBtn = document.querySelector('.mt-pdp__sticky-add');
+  if (mainAddToCartBtn || stickyAddToCartBtn) {
+    clearInterval(intervalIdYM);
+    const trackAddToCart = () => {
+      mkq('track', 'AddToCart', {
+        value: '{{ product.price | money_without_currency | remove: '.' | remove: ',' | divided_by: 100.0 }}',
+        currency: '{{ shop.currency }}',
+        content_name: '{{ product.title | escape }}',
+        content_ids: ['{{ product.id }}']
+      });
+    };
+    if (mainAddToCartBtn) {
+    mainAddToCartBtn.addEventListener('click', trackAddToCart);
+  }
+  if (stickyAddToCartBtn) {
+    stickyAddToCartBtn.addEventListener('click', trackAddToCart);
+  }
+  }
+}, 500);
 </script>
 {% endif %}
 
