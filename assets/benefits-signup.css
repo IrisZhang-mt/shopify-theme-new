@@ -170,8 +170,10 @@
   outline: 2px solid var(--mt-ink);
   outline-offset: 2px;
 }
+/* Subscribed state: keep the row's space so the form height doesn't jump. */
 .mt-benefits__consent[hidden] {
-  display: none;
+  display: flex;
+  visibility: hidden;
 }
 
 .mt-benefits__msg {
