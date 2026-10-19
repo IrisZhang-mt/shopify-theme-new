@@ -177,11 +177,13 @@
 }
 
 @media (min-width: 990px) {
+  /* 42px side gutters; content caps at 1560px (box 1644px), extra space split evenly. */
   .mt-benefits__inner {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 2.5rem;
+    max-width: calc(97.5rem + 2 * 2.625rem);
     padding: 2.5rem 2.625rem 1.5rem;
   }
 
