@@ -34,33 +34,6 @@
         "end_time": "2026-10-30 00:00"
       }
     },
-    "home_best_sellers_WxhFzH": {
-      "type": "home-best-sellers",
-      "blocks": {
-        "collection_XjQgkn": {
-          "type": "collection",
-          "settings": {
-            "collection": "best-sellers",
-            "label": "Girls"
-          }
-        },
-        "collection_U366yf": {
-          "type": "collection",
-          "settings": {
-            "collection": "",
-            "label": "Boys"
-          }
-        }
-      },
-      "block_order": [
-        "collection_XjQgkn",
-        "collection_U366yf"
-      ],
-      "name": "Best sellers",
-      "settings": {
-        "heading": "Best Sellers"
-      }
-    },
     "kol_video_eAFxaE": {
       "type": "kol-video",
       "blocks": {
@@ -114,13 +87,29 @@
       ],
       "name": "KOL video",
       "settings": {}
+    },
+    "benefits_signup_FErPeg": {
+      "type": "benefits-signup",
+      "name": "Benefits signup",
+      "settings": {
+        "eager_load": false,
+        "placeholder": "Enter your email",
+        "button_label": "Join free",
+        "consent_text": "I agree to receiving marketing emails and special deals",
+        "tags": "newsletter",
+        "success_text": "You're on the list. Sign in to unlock member perks.",
+        "success_button_label": "Sign in",
+        "success_link": "",
+        "preview_success": false,
+        "ga4_module_name": "Early Access"
+      }
     }
   },
   "order": [
     "main",
     "full_image_bX7dfb",
     "countdown_NGaQX3",
-    "home_best_sellers_WxhFzH",
+    "benefits_signup_FErPeg",
     "kol_video_eAFxaE"
   ]
 }
