@@ -9,7 +9,7 @@
   gap: 1.25rem;
   max-width: var(--mt-container);
   margin-inline: auto;
-  padding: 1.25rem;
+  padding: 1rem;
 }
 
 .mt-benefits__media {
