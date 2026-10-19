@@ -87,18 +87,6 @@
       "name": "Anchor tabs",
       "settings": {}
     },
-    "full_image_3dbDiA": {
-      "type": "full-image",
-      "name": "Full image",
-      "settings": {
-        "heading": "",
-        "eager_load": false,
-        "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
-        "mob_image": "shopify://shop_images/Group_1312.jpg",
-        "link": "",
-        "anchor_id": "Best_Sellers"
-      }
-    },
     "product_grid_T7KaXf": {
       "type": "product-grid",
       "name": "Product grid",
@@ -107,7 +95,8 @@
         "count": 4,
         "heading": "Best Sellers",
         "subheading": "10% OFF",
-        "cta_label": "Shop more"
+        "cta_label": "Shop more",
+        "anchor_id": "Best_Sellers"
       }
     },
     "full_image_eCCE9k": {
@@ -130,7 +119,8 @@
         "count": 4,
         "heading": "New Arrivals",
         "subheading": "10% OFF",
-        "cta_label": "Shop more"
+        "cta_label": "Shop more",
+        "anchor_id": ""
       }
     },
     "full_image_PDgb8g": {
@@ -153,7 +143,8 @@
         "count": 4,
         "heading": "Final Sale",
         "subheading": "10% OFF",
-        "cta_label": "Shop more"
+        "cta_label": "Shop more",
+        "anchor_id": ""
       }
     },
     "kol_video_eAFxaE": {
@@ -217,7 +208,6 @@
     "countdown_NGaQX3",
     "benefits_signup_FErPeg",
     "anchor_tabs_QNN9H8",
-    "full_image_3dbDiA",
     "product_grid_T7KaXf",
     "full_image_eCCE9k",
     "product_grid_439aRD",
