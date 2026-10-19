@@ -73,9 +73,9 @@
         "tab_XEgTMT": {
           "type": "tab",
           "settings": {
-            "title": "Best Sellers",
+            "title": "Sale",
             "subtitle": "Up to 40% off",
-            "target_id": ""
+            "target_id": "Sale"
           }
         }
       },
@@ -142,7 +142,7 @@
         "pc_image": "shopify://shop_images/banner-new-for-fall.jpg",
         "mob_image": "shopify://shop_images/Group_1312.jpg",
         "link": "",
-        "anchor_id": ""
+        "anchor_id": "Sale"
       }
     },
     "product_grid_j9hWQD": {
