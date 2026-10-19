@@ -13,11 +13,7 @@ if (!window.mtBenefitsSignupInit) {
 
     el.querySelector('[data-benefits-field]')?.setAttribute('hidden', '');
     el.querySelector('[data-benefits-done]')?.removeAttribute('hidden');
-    const consent = el.querySelector('[data-benefits-consent]');
-    if (consent) {
-      consent.checked = true;
-      consent.disabled = true;
-    }
+    el.querySelector('[data-benefits-consent]')?.setAttribute('hidden', '');
 
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });

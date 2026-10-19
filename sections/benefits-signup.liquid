@@ -76,8 +76,8 @@
       </div>
 
       {%- if section.settings.consent_text != blank -%}
-        <label class="mt-benefits__consent">
-          <input type="checkbox" required data-benefits-consent{% if preview_done %} checked disabled{% endif %}>
+        <label class="mt-benefits__consent" data-benefits-consent{% if preview_done %} hidden{% endif %}>
+          <input type="checkbox" required>
           <span class="mt-benefits__check"></span>
           <span>{{ section.settings.consent_text }}</span>
         </label>

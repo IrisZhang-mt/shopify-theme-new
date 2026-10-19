@@ -170,9 +170,10 @@
   outline: 2px solid var(--mt-ink);
   outline-offset: 2px;
 }
-.mt-benefits__consent input:disabled,
-.mt-benefits__consent:has(input:disabled) {
-  cursor: default;
+/* Subscribed state: keep the row's space so the form height doesn't jump. */
+.mt-benefits__consent[hidden] {
+  display: flex;
+  visibility: hidden;
 }
 
 .mt-benefits__msg {
@@ -228,6 +229,10 @@
   }
   .mt-benefits__done-text {
     font-size: 0.75rem;
+  }
+  .mt-benefits__done-text,
+  .mt-benefits__done .mt-benefits__btn {
+    height: 3.5rem;
   }
   .mt-benefits__btn {
     padding-inline: 1.25rem;
