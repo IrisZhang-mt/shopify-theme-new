@@ -71,7 +71,9 @@
       "other": "Available in {{ count }} colors"
     },
     "show_all_colors": "Show all colors",
-    "show_fewer_colors": "Show fewer colors"
+    "show_fewer_colors": "Show fewer colors",
+    "badge_new": "New",
+    "badge_sale": "Sale"
   },
   "collection": {
     "products_count": {
