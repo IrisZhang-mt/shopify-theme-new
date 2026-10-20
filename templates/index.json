@@ -47,18 +47,6 @@
     "hero": {
       "type": "home-hero",
       "blocks": {
-        "slide_cKRxph": {
-          "type": "slide",
-          "settings": {
-            "pc_image": "shopify://shop_images/pc_c08b1cbe-0844-41ba-b92b-a79628ffc74e.jpg",
-            "mob_image": "shopify://shop_images/app_c8d6ad5d-5ccf-46aa-a739-d7bf61e07fef.jpg",
-            "link": "shopify://pages/black-friday2026",
-            "heading": "Test 1",
-            "subtext": "Up to 35% off. Limited stock and sizes.",
-            "cta_label": "Shop Sales",
-            "cta_url": "shopify://collections/flash-sale"
-          }
-        },
         "panel-1": {
           "type": "panel",
           "settings": {
@@ -84,7 +72,7 @@
             "pc_image": "shopify://shop_images/img_v3_0215r_04f7ee71-1e4b-438b-b211-fc3af8d936bg.jpg",
             "mob_image": "shopify://shop_images/sale-app_cf4dace0-aa79-46e6-924d-296734e56ced.jpg",
             "link": "shopify://collections/flash-sale",
-            "heading": "Test 2",
+            "heading": "Final \nSale",
             "subtext": "Up to 35% off. Limited stock and sizes.",
             "cta_label": "Shop Sales",
             "cta_url": "shopify://collections/flash-sale"
@@ -92,7 +80,6 @@
         }
       },
       "block_order": [
-        "slide_cKRxph",
         "panel-1",
         "panel-2",
         "slide_QzEdXb"
@@ -597,8 +584,7 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/Group_1184.jpg",
         "mob_image": "shopify://shop_images/Group_1187.jpg",
-        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski",
-        "anchor_id": ""
+        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski"
       }
     }
   },
