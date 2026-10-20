@@ -46,7 +46,10 @@
     "free_shipping_remaining_html": "Spend <span data-cart-shipping-amount>{{ amount }}</span> more for free shipping",
     "free_shipping_unlocked": "FREE shipping unlocked !",
     "tier_progress_remaining": "Add {{ count }} more, save {{ reward }}!",
-    "tier_progress_complete": "You've unlocked the best reward!"
+    "tier_progress_complete": "You've unlocked the best reward!",
+    "savings": "Savings",
+    "offers_open": "View current offers",
+    "offers_got_it": "Got it"
   },
   "products": {
     "add_to_cart": "Add to Cart",

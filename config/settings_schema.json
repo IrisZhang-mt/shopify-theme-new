@@ -70,6 +70,69 @@
         "label": "Show tiered discount bar",
         "info": "是否显示多件多折进度条，需要在商店设置 metafields.custom.tiered_discount 中配置多件多折规则",
         "default": false
+      },
+      {
+        "type": "text",
+        "id": "tier_group_labels",
+        "label": "Tiered offer labels",
+        "info": "多件多折商品组的标签，多个用 | 分隔，例如 Best Sellers|New Arrival",
+        "default": "Best Sellers"
+      },
+      {
+        "type": "text",
+        "id": "tier_group_text",
+        "label": "Tiered offer text",
+        "info": "多件多折商品组标签右侧的文案",
+        "default": "Buy more, save more"
+      },
+      {
+        "type": "text",
+        "id": "other_group_labels",
+        "label": "Other offer labels",
+        "info": "不参与多件多折的商品组标签，多个用 | 分隔，例如 New|Sale",
+        "default": "New|Sale"
+      },
+      {
+        "type": "text",
+        "id": "other_group_text",
+        "label": "Other offer text",
+        "info": "不参与多件多折的商品组标签右侧的文案",
+        "default": "Not part of the Best Sellers offer"
+      },
+      {
+        "type": "header",
+        "content": "Offers popup",
+        "info": "弹窗配置：点击购物车里的 ⓘ 弹出，展示当前店铺所有优惠"
+      },
+      {
+        "type": "text",
+        "id": "offers_title",
+        "label": "Title",
+        "default": "Current offers"
+      },
+      {
+        "type": "image_picker",
+        "id": "offers_image_desktop",
+        "label": "Image (desktop)",
+        "info": "PC 端优惠图片，建议宽度 960px。图片的 alt 文字请在 Files 中填写（读屏软件会读取）"
+      },
+      {
+        "type": "image_picker",
+        "id": "offers_image_mobile",
+        "label": "Image (mobile)",
+        "info": "移动端优惠图片，建议宽度 750px。未上传时使用 PC 端图片"
+      },
+      {
+        "type": "text",
+        "id": "offers_rules_title",
+        "label": "Rules title",
+        "default": "How our offers work"
+      },
+      {
+        "type": "textarea",
+        "id": "offers_rules_text",
+        "label": "Rules detail",
+        "default": "Offers apply automatically — no code needed. If an item qualifies for more than one offer, we always apply the one that saves you the most. One offer per item — offers don’t stack."
       }
     ]
   },
