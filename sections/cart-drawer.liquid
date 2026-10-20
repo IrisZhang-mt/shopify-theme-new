@@ -1,5 +1,7 @@
 {{ 'cart.css' | asset_url | stylesheet_tag }}
+{{ 'cart-offers.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'cart.js' | asset_url }}" type="module"></script>
+<script src="{{ 'cart-offers.js' | asset_url }}" type="module"></script>
 
 <div class="mt-cart" data-cart data-cart-root data-url="{{ routes.root_url }}?section_id=cart-drawer" data-currency="{{ cart.currency.iso_code }}" hidden>
   <div class="mt-cart__backdrop" data-cart-close></div>
@@ -9,7 +11,6 @@
         <h2 class="mt-cart__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h2>
         <button class="mt-cart__close" type="button" data-cart-close>{{ 'general.close' | t }}</button>
       </div>
-      {% render 'cart-tier-bar' %}
       {% render 'cart-shipping-bar' %}
       {% render 'checkout-loading' %}
       <div class="mt-cart__body">
@@ -30,11 +31,7 @@
               ]
             }
           </script>
-          <div class="mt-cart__lines">
-            {%- for item in cart.items -%}
-              {% render 'cart-line', item: item, line: forloop.index, item_list_id: 'side_cart', item_list_name: 'Side Cart', module_name: 'Side Cart' %}
-            {%- endfor -%}
-          </div>
+          {% render 'cart-lines', item_list_id: 'side_cart', item_list_name: 'Side Cart', module_name: 'Side Cart' %}
           {%- if section.settings.miles_text != blank -%}
             <div class="mt-cart__miles">
               <span class="mt-cart__miles-mark" aria-hidden="true"></span>
@@ -80,12 +77,20 @@
             <p>{{ 'cart.taxes_note' | t }}</p>
             <a class="mt-cart__view" href="{{ routes.cart_url }}">{{ 'cart.view' | t }}</a>
           </div> {% endcomment %}
+          {%- assign cart_savings = cart.original_total_price | minus: cart.total_price -%}
+          {%- if cart_savings > 0 -%}
+            <div class="mt-cart__savings">
+              <p class="mt-cart__savings-label">{{ 'cart.savings' | t }} <button class="mt-offers-open" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button></p>
+              <p class="mt-cart__savings-amount">-{{ cart_savings | money_without_trailing_zeros }}</p>
+            </div>
+          {%- endif -%}
           <a class="mt-cart__checkout" href="/checkout" data-checkout data-module-name="Side Cart"><span class="mt-cart__checkout-label">{{ 'cart.checkout' | t }} &ndash; {% if cart.original_total_price > cart.total_price %}<s class="mt-cart__checkout-compare">{{ cart.original_total_price | money_without_trailing_zeros }}</s> - {% endif %}<span class="mt-cart__checkout-price">{{ cart.total_price | money_without_trailing_zeros }}</span></span></a>
         </div>
       {%- endif -%}
     </div>
   </aside>
 </div>
+{% render 'cart-offers-modal' %}
 
 {% schema %}
 {
