@@ -1,0 +1,81 @@
+{%- comment -%}
+  Cart line list, grouped by the tiered discount (shop.metafields.custom.tiered_discount):
+  eligible lines sit under the tier bar, the rest under a "not part of the offer" head.
+  Falls back to one flat list when the tier offer is off or no eligible item is in the cart.
+  Each line keeps its original cart position as `line`, so change.js / GA4 index stay correct.
+{%- endcomment -%}
+{%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
+{%- assign tier_qty = 0 -%}
+{%- assign tier_lines = ',' -%}
+{%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
+  {%- assign eligible_collection_raw = tier_config.eligible_collection -%}
+  {%- assign eligible_collections = blank -%}
+  {%- if eligible_collection_raw != blank -%}
+    {%- assign eligible_collections = '' -%}
+    {%- assign eligible_collection_handles = eligible_collection_raw | split: '|' -%}
+    {%- for handle in eligible_collection_handles -%}
+      {%- assign stripped_handle = handle | strip -%}
+      {%- assign eligible_collections = eligible_collections | append: stripped_handle | append: '|' -%}
+    {%- endfor -%}
+    {%- assign eligible_collections = eligible_collections | split: '|' -%}
+  {%- endif -%}
+  {%- for item in cart.items -%}
+    {%- assign item_eligible = false -%}
+    {%- if eligible_collections == blank -%}
+      {%- assign item_eligible = true -%}
+    {%- else -%}
+      {%- for collection in item.product.collections -%}
+        {%- if eligible_collections contains collection.handle -%}
+          {%- assign item_eligible = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- if item_eligible -%}
+      {%- assign tier_qty = tier_qty | plus: item.quantity -%}
+      {%- assign tier_lines = tier_lines | append: forloop.index | append: ',' -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if tier_qty > 0 -%}
+  <div class="mt-cart__group">
+    {% render 'cart-tier-bar', tier_config: tier_config, tier_qty: tier_qty %}
+    <div class="mt-cart__lines">
+      {%- for item in cart.items -%}
+        {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
+        {%- unless tier_lines contains needle -%}{%- continue -%}{%- endunless -%}
+        {% render 'cart-line', item: item, line: forloop.index, group: 'tier', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+      {%- endfor -%}
+    </div>
+  </div>
+  {%- if cart.item_count > tier_qty -%}
+    <div class="mt-cart__group mt-cart__group--other">
+      {%- assign other_labels = settings.other_group_labels | split: '|' -%}
+      {%- if other_labels.size > 0 or settings.other_group_text != blank -%}
+        <div class="mt-cart__group-head">
+          {%- for label in other_labels -%}
+            {%- assign label = label | strip -%}
+            {%- if label != blank -%}<span class="mt-cart__group-tag mt-cart__group-tag--fill">{{ label }}</span>{%- endif -%}
+          {%- endfor -%}
+          {%- if settings.other_group_text != blank -%}
+            <p class="mt-cart__group-text">{{ settings.other_group_text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="mt-cart__lines">
+        {%- for item in cart.items -%}
+          {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
+          {%- if tier_lines contains needle -%}{%- continue -%}{%- endif -%}
+          {% render 'cart-line', item: item, line: forloop.index, group: 'other', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- else -%}
+  <div class="mt-cart__lines">
+    {%- for item in cart.items -%}
+      {% render 'cart-line', item: item, line: forloop.index, item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
