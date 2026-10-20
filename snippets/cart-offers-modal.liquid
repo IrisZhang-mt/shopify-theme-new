@@ -1,0 +1,47 @@
+{%- comment -%}
+  "Current offers" popup, opened by any [data-offers-open] button (cart group head,
+  line discounts, savings). Rendered once by cart-drawer, outside [data-cart-content]
+  so cart refreshes don't rebuild it; cart-offers.js moves it under <body> on open.
+{%- endcomment -%}
+{%- assign offers_desktop = settings.offers_image_desktop -%}
+{%- assign offers_mobile = settings.offers_image_mobile | default: offers_desktop -%}
+<div class="mt-offers" data-offers hidden>
+  <div class="mt-offers__backdrop" data-offers-close></div>
+  <div class="mt-offers__panel" role="dialog" aria-modal="true" {% if settings.offers_title != blank %}aria-labelledby="MtOffersTitle"{% else %}aria-label="{{ 'cart.offers_open' | t }}"{% endif %}>
+    <div class="mt-offers__head">
+      {%- if settings.offers_title != blank -%}
+        <h2 class="mt-offers__title" id="MtOffersTitle">{{ settings.offers_title }}</h2>
+      {%- endif -%}
+      <button class="mt-offers__close" type="button" data-offers-close>{{ 'general.close' | t }}</button>
+    </div>
+    <div class="mt-offers__body">
+      {%- if offers_mobile != blank -%}
+        <picture class="mt-offers__media">
+          {%- if offers_desktop != blank and settings.offers_image_mobile != blank -%}
+            <source
+              media="(min-width: 750px)"
+              srcset="{{ offers_desktop | image_url: width: 480 }} 480w, {{ offers_desktop | image_url: width: 960 }} 960w"
+              sizes="480px"
+              width="{{ offers_desktop.width }}"
+              height="{{ offers_desktop.height }}"
+            >
+          {%- endif -%}
+          {{ offers_mobile | image_url: width: 1100 | image_tag: widths: '375, 750, 960, 1100', sizes: '(min-width: 750px) 480px, calc(100vw - 50px)', loading: 'lazy', decoding: 'async', alt: offers_mobile.alt }}
+        </picture>
+      {%- endif -%}
+      {%- if settings.offers_rules_title != blank or settings.offers_rules_text != blank -%}
+        <div class="mt-offers__rules">
+          {%- if settings.offers_rules_title != blank -%}
+            <h3 class="mt-offers__rules-title">{{ settings.offers_rules_title }}</h3>
+          {%- endif -%}
+          {%- if settings.offers_rules_text != blank -%}
+            <p class="mt-offers__rules-text">{{ settings.offers_rules_text | escape | newline_to_br }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="mt-offers__foot">
+      <button class="mt-offers__done" type="button" data-offers-close>{{ 'cart.offers_got_it' | t }}</button>
+    </div>
+  </div>
+</div>
