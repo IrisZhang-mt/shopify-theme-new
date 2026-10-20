@@ -1,1 +1,605 @@
-{"sections":{"page_banner_RHNQRz":{"type":"page-banner","blocks":{"stat_9Y8XXJ":{"type":"stat","settings":{"label":"Open roles","value":"7 positions","placement":"panel"}},"stat_z88cPe":{"type":"stat","settings":{"label":"Locations","value":"United States · Malaysia","placement":"media"}}},"block_order":["stat_9Y8XXJ","stat_z88cPe"],"disabled":true,"name":"Page banner","settings":{"image":"shopify:\/\/shop_images\/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg","image_mobile":"shopify:\/\/shop_images\/hero-m.png","heading":"Join our team.","text":"moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.","cta_label":"See open roles","cta_url":""}},"hero":{"type":"home-hero","blocks":{"panel-1":{"type":"panel","settings":{"pc_image":"shopify:\/\/shop_images\/3-pc_dedb9207-fc6a-4c7d-af2e-24ddbb97f07e.jpg","mob_image":"shopify:\/\/shop_images\/6-app_dddbbfde-b997-4482-95f6-dbe5118cf786.jpg","link":"shopify:\/\/collections\/best-sellers","info_heading":"Cooler days. Same wild play.","info_text":"Best-loved pieces, made to layer."}},"panel-2":{"type":"panel","settings":{"pc_image":"shopify:\/\/shop_images\/4-pc_79e1d987-28f6-49b3-9a34-90961014696f.jpg","link":"shopify:\/\/collections\/best-sellers","info_heading":"Worldwide Shipping","info_text":"Fast delivery to families around the world"}},"slide_QzEdXb":{"type":"slide","settings":{"pc_image":"shopify:\/\/shop_images\/img_v3_0215r_04f7ee71-1e4b-438b-b211-fc3af8d936bg.jpg","mob_image":"shopify:\/\/shop_images\/sale-app_cf4dace0-aa79-46e6-924d-296734e56ced.jpg","link":"shopify:\/\/collections\/flash-sale","heading":"Final \nSale","subtext":"Up to 35% off. Limited stock and sizes.","cta_label":"Shop Sales","cta_url":"shopify:\/\/collections\/flash-sale"}}},"block_order":["panel-1","panel-2","slide_QzEdXb"],"settings":{"heading":"Stay in\nthe play.","subtext":"Comfort that keeps up, so nothing gets in the way of play.","cta_label":"Shop Best Sellers","cta_url":"shopify:\/\/collections\/best-sellers","slide_interval":5}},"best-sellers":{"type":"home-best-sellers","blocks":{"girls":{"type":"collection","settings":{"collection":"girls","label":"Girls"}},"boys":{"type":"collection","settings":{"collection":"boys","label":"Boys"}}},"block_order":["girls","boys"],"settings":{"heading":"Most Loved"}},"split":{"type":"home-split","blocks":{"girls":{"type":"tile","settings":{"image":"shopify:\/\/shop_images\/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg","heading":"For Girls","url":"shopify:\/\/collections\/girls"}},"boys":{"type":"tile","settings":{"image":"shopify:\/\/shop_images\/boys-pc.jpg","heading":"For Boys","url":"shopify:\/\/collections\/boys"}}},"block_order":["girls","boys"],"settings":{}},"activities":{"type":"home-activities","blocks":{"ice-skating":{"type":"activity","settings":{"collection":"skating-outfits","label":"Ice Skating"}},"skiing":{"type":"activity","settings":{"collection":"skiing","label":""}},"golf":{"type":"activity","settings":{"collection":"golf","label":""}},"tennis":{"type":"activity","settings":{"collection":"tennis","label":""}},"swimming":{"type":"activity","settings":{"collection":"water-sports","label":"Swimming"}},"everyday":{"type":"activity","settings":{"collection":"casual-everyday","label":"Casual Everyday"}},"activities":{"type":"activity","settings":{"collection":"outdoor-exploration","label":"Outdoor Exploration"}}},"block_order":["ice-skating","skiing","golf","tennis","swimming","everyday","activities"],"settings":{"tag":"Shop by Activities"}},"carousel":{"type":"home-carousel","blocks":{"post-3":{"type":"post","disabled":true,"settings":{"image":"shopify:\/\/shop_images\/4_6_dcf708b7-c081-4ad7-bc65-73fee1a81015.jpg","handle":"@babychloemixedkids","url":""}},"post-1":{"type":"post","settings":{"image":"shopify:\/\/shop_images\/4_2_6ed01c38-4a9f-4d4f-b27d-f00af9b1631d.jpg","handle":"@caline_repond","url":"shopify:\/\/products\/girls-swimsuit-waverider"}},"post-4":{"type":"post","settings":{"image":"shopify:\/\/shop_images\/4_3_bdd2c07f-1f37-4641-a4ef-80ace8852054.jpg","handle":"@caline_repond","url":"shopify:\/\/products\/girls-open-back-top-mesh"}},"post-2":{"type":"post","settings":{"image":"shopify:\/\/shop_images\/4_4_2e051e08-a90f-47de-b6cd-f5428f1f8e90.jpg","handle":"@caline_repond","url":"shopify:\/\/products\/girls-skirt-bubble-pleated"}},"post-5":{"type":"post","settings":{"image":"shopify:\/\/shop_images\/4_5.jpg","handle":"@babychloemixedkids","url":"shopify:\/\/products\/kids-sherpa-jacket-fleece"}},"post_JBAGkY":{"type":"post","settings":{"image":"shopify:\/\/shop_images\/4_7.jpg","handle":"@Tyneofficial","url":"shopify:\/\/products\/kids-sherpa-jacket-fleece"}},"post_3N3pFM":{"type":"post","disabled":true,"settings":{"image":"shopify:\/\/shop_images\/4_8.jpg","handle":"@moodytiger","url":""}}},"block_order":["post-3","post-1","post-4","post-2","post-5","post_JBAGkY","post_3N3pFM"],"settings":{}},"page_referral_banner_BjA9gQ":{"type":"page-referral-banner","blocks":{"item_ECCAUC":{"type":"item","settings":{"title":"We take responsibility for our impact.","subtitle":""}},"item_DVWh4t":{"type":"item","settings":{"title":"We take responsibility for our impact.","subtitle":""}},"item_RaNkxe":{"type":"item","settings":{"title":"We take responsibility for our impact.","subtitle":""}}},"block_order":["item_ECCAUC","item_DVWh4t","item_RaNkxe"],"disabled":true,"name":"Referral banner","settings":{"heading":"Give 15%, Get 15%.Give 15%, Get 15%.","subtext":"","show_cta":false,"cta_label":"ddd","cta_url":"","show_icon":true,"show_border":true}},"page_card_grid_ygFVW9":{"type":"page-card-grid","blocks":{"item_qn4UC6":{"type":"item","settings":{"icon":"shopify:\/\/shop_images\/pandectes-banner-logo.png","title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_GbrEyc":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_VtCi9W":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_dFwHH8":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_mCV6mb":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_JUGDYp":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_xF3tc9":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_Ge43fy":{"type":"item","settings":{"title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}}},"block_order":["item_qn4UC6","item_GbrEyc","item_VtCi9W","item_dFwHH8","item_mCV6mb","item_JUGDYp","item_xF3tc9","item_Ge43fy"],"disabled":true,"name":"Card grid","settings":{"heading":"Rack up points.","display_mode":"card"}},"page_card_grid_KiA8Qy":{"type":"page-card-grid","blocks":{"item_dXj64x":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Group_1168.png","title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_YxkTmp":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Group_1168.png","title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_pKpiPE":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Group_1168.png","title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}},"item_F6JJM8":{"type":"item","settings":{"image":"shopify:\/\/shop_images\/Group_1168.png","title":"200 Points","subtitle":"Signup","subtitle_color":"#7c7a73"}}},"block_order":["item_dXj64x","item_YxkTmp","item_pKpiPE","item_F6JJM8"],"disabled":true,"name":"Card grid","settings":{"heading":"Rack up points.","display_mode":"image"}},"product_faq_8L8K4g":{"type":"product-faq","blocks":{"question_TgVAh6":{"type":"question","settings":{"question":"How do I join?","answer":"<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br\/><br\/><\/p>"}},"question_8wXHDL":{"type":"question","settings":{"question":"How do I join?","answer":"<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br\/><br\/><\/p>"}},"question_wqrkc7":{"type":"question","settings":{"question":"How do I join?","answer":"<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br\/><br\/><\/p>"}},"question_qWDxyE":{"type":"question","settings":{"question":"How do I join?","answer":"<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br\/><br\/><\/p>"}}},"block_order":["question_TgVAh6","question_8wXHDL","question_wqrkc7","question_qWDxyE"],"disabled":true,"name":"FAQ","settings":{"heading":"Frequently Asked Questions","open_first":false,"title_align":"left","big_title":true}},"page_careers_roles_Wkqjnc":{"type":"page-careers-roles","blocks":{"title_rYVd6e":{"type":"title","settings":{"country":"The United States","count":"6 roles"}},"item_DwLCMY":{"type":"item","settings":{"job_title":"Store Manager","employment_type":"Full-time","location":"San Jose, CA","link":""}},"title_j6MBCU":{"type":"title","settings":{"country":"The United States","count":"6 roles"}},"item_ccqnJg":{"type":"item","settings":{"job_title":"Store Manager","employment_type":"Full-time","location":"San Jose, CA","link":""}},"item_Lt3cmz":{"type":"item","settings":{"job_title":"Store Manager","employment_type":"Full-time","location":"San Jose, CA","link":""}}},"block_order":["title_rYVd6e","item_DwLCMY","title_j6MBCU","item_ccqnJg","item_Lt3cmz"],"disabled":true,"name":"Careers roles","settings":{"heading":"Find your place.","subtext":"See a position that excites you?\nConnect with us at us.career@moodytiger.com"}},"full_image_VRa6gP":{"type":"full-image","disabled":true,"custom_css":[".mt-full-image {margin-bottom: 80px;}",".mt-full-image h1,.mt-full-image h2,.mt-full-image h3 {font-family: \"FK Display\", \"FK Grotesk\", sans-serif !important; font-size: 35px !important; color: #1d1d1d !important; line-height: 1.2;}","@media (max-width: 749px) {.mt-full-image {margin-bottom: 24px; }}"],"name":"Full image","settings":{"heading":"Special Collection","eager_load":false,"pc_image":"shopify:\/\/shop_images\/Group_1184.jpg","mob_image":"shopify:\/\/shop_images\/Group_1187.jpg","link":"https:\/\/moodytiger.com\/pages\/ice-skating-crystals-by-swarovski"}}},"order":["page_banner_RHNQRz","hero","best-sellers","split","activities","carousel","page_referral_banner_BjA9gQ","page_card_grid_ygFVW9","page_card_grid_KiA8Qy","product_faq_8L8K4g","page_careers_roles_Wkqjnc","full_image_VRa6gP"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_banner_RHNQRz": {
+      "type": "page-banner",
+      "blocks": {
+        "stat_9Y8XXJ": {
+          "type": "stat",
+          "settings": {
+            "label": "Open roles",
+            "value": "7 positions",
+            "placement": "panel"
+          }
+        },
+        "stat_z88cPe": {
+          "type": "stat",
+          "settings": {
+            "label": "Locations",
+            "value": "United States · Malaysia",
+            "placement": "media"
+          }
+        }
+      },
+      "block_order": [
+        "stat_9Y8XXJ",
+        "stat_z88cPe"
+      ],
+      "disabled": true,
+      "name": "Page banner",
+      "settings": {
+        "image": "shopify://shop_images/img_v3_0215c_82c4d15f-2fe3-4b40-b05b-dcca6c36838g.jpg",
+        "image_mobile": "shopify://shop_images/hero-m.png",
+        "heading": "Join our team.",
+        "text": "moodytiger is a global children’s sports lifestyle brand, dedicated to products tailored to the needs of children — inspiring them to explore the world with freedom and joy.",
+        "cta_label": "See open roles",
+        "cta_url": ""
+      }
+    },
+    "hero": {
+      "type": "home-hero",
+      "blocks": {
+        "panel-1": {
+          "type": "panel",
+          "settings": {
+            "pc_image": "shopify://shop_images/3-pc_dedb9207-fc6a-4c7d-af2e-24ddbb97f07e.jpg",
+            "mob_image": "shopify://shop_images/6-app_dddbbfde-b997-4482-95f6-dbe5118cf786.jpg",
+            "link": "shopify://collections/best-sellers",
+            "info_heading": "Cooler days. Same wild play.",
+            "info_text": "Best-loved pieces, made to layer."
+          }
+        },
+        "panel-2": {
+          "type": "panel",
+          "settings": {
+            "pc_image": "shopify://shop_images/4-pc_79e1d987-28f6-49b3-9a34-90961014696f.jpg",
+            "link": "shopify://collections/best-sellers",
+            "info_heading": "Worldwide Shipping",
+            "info_text": "Fast delivery to families around the world"
+          }
+        },
+        "slide_QzEdXb": {
+          "type": "slide",
+          "settings": {
+            "pc_image": "shopify://shop_images/img_v3_0215r_04f7ee71-1e4b-438b-b211-fc3af8d936bg.jpg",
+            "mob_image": "shopify://shop_images/sale-app_cf4dace0-aa79-46e6-924d-296734e56ced.jpg",
+            "link": "shopify://collections/flash-sale",
+            "heading": "Final \nSale",
+            "subtext": "Up to 35% off. Limited stock and sizes.",
+            "cta_label": "Shop Sales",
+            "cta_url": "shopify://collections/flash-sale"
+          }
+        }
+      },
+      "block_order": [
+        "panel-1",
+        "panel-2",
+        "slide_QzEdXb"
+      ],
+      "settings": {
+        "heading": "Stay in\nthe play.",
+        "subtext": "Comfort that keeps up, so nothing gets in the way of play.",
+        "cta_label": "Shop Best Sellers",
+        "cta_url": "shopify://collections/best-sellers",
+        "slide_interval": 5
+      }
+    },
+    "best-sellers": {
+      "type": "home-best-sellers",
+      "blocks": {
+        "girls": {
+          "type": "collection",
+          "settings": {
+            "collection": "girls",
+            "label": "Girls"
+          }
+        },
+        "boys": {
+          "type": "collection",
+          "settings": {
+            "collection": "boys",
+            "label": "Boys"
+          }
+        }
+      },
+      "block_order": [
+        "girls",
+        "boys"
+      ],
+      "settings": {
+        "heading": "Most Loved"
+      }
+    },
+    "split": {
+      "type": "home-split",
+      "blocks": {
+        "girls": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
+            "heading": "For Girls",
+            "url": "shopify://collections/girls"
+          }
+        },
+        "boys": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/boys-pc.jpg",
+            "heading": "For Boys",
+            "url": "shopify://collections/boys"
+          }
+        }
+      },
+      "block_order": [
+        "girls",
+        "boys"
+      ],
+      "settings": {}
+    },
+    "activities": {
+      "type": "home-activities",
+      "blocks": {
+        "ice-skating": {
+          "type": "activity",
+          "settings": {
+            "collection": "skating-outfits",
+            "label": "Ice Skating"
+          }
+        },
+        "skiing": {
+          "type": "activity",
+          "settings": {
+            "collection": "skiing",
+            "label": ""
+          }
+        },
+        "golf": {
+          "type": "activity",
+          "settings": {
+            "collection": "golf",
+            "label": ""
+          }
+        },
+        "tennis": {
+          "type": "activity",
+          "settings": {
+            "collection": "tennis",
+            "label": ""
+          }
+        },
+        "swimming": {
+          "type": "activity",
+          "settings": {
+            "collection": "water-sports",
+            "label": "Swimming"
+          }
+        },
+        "everyday": {
+          "type": "activity",
+          "settings": {
+            "collection": "casual-everyday",
+            "label": "Casual Everyday"
+          }
+        },
+        "activities": {
+          "type": "activity",
+          "settings": {
+            "collection": "outdoor-exploration",
+            "label": "Outdoor Exploration"
+          }
+        }
+      },
+      "block_order": [
+        "ice-skating",
+        "skiing",
+        "golf",
+        "tennis",
+        "swimming",
+        "everyday",
+        "activities"
+      ],
+      "settings": {
+        "tag": "Shop by Activities"
+      }
+    },
+    "carousel": {
+      "type": "home-carousel",
+      "blocks": {
+        "post-3": {
+          "type": "post",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/4_6_dcf708b7-c081-4ad7-bc65-73fee1a81015.jpg",
+            "handle": "@babychloemixedkids",
+            "url": ""
+          }
+        },
+        "post-1": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_2_6ed01c38-4a9f-4d4f-b27d-f00af9b1631d.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-swimsuit-waverider"
+          }
+        },
+        "post-4": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_3_bdd2c07f-1f37-4641-a4ef-80ace8852054.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-open-back-top-mesh"
+          }
+        },
+        "post-2": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_4_2e051e08-a90f-47de-b6cd-f5428f1f8e90.jpg",
+            "handle": "@caline_repond",
+            "url": "shopify://products/girls-skirt-bubble-pleated"
+          }
+        },
+        "post-5": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_5.jpg",
+            "handle": "@babychloemixedkids",
+            "url": "shopify://products/kids-sherpa-jacket-fleece"
+          }
+        },
+        "post_JBAGkY": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/4_7.jpg",
+            "handle": "@Tyneofficial",
+            "url": "shopify://products/kids-sherpa-jacket-fleece"
+          }
+        },
+        "post_3N3pFM": {
+          "type": "post",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/4_8.jpg",
+            "handle": "@moodytiger",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "post-3",
+        "post-1",
+        "post-4",
+        "post-2",
+        "post-5",
+        "post_JBAGkY",
+        "post_3N3pFM"
+      ],
+      "settings": {}
+    },
+    "page_referral_banner_BjA9gQ": {
+      "type": "page-referral-banner",
+      "blocks": {
+        "item_ECCAUC": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_DVWh4t": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        },
+        "item_RaNkxe": {
+          "type": "item",
+          "settings": {
+            "title": "We take responsibility for our impact.",
+            "subtitle": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_ECCAUC",
+        "item_DVWh4t",
+        "item_RaNkxe"
+      ],
+      "disabled": true,
+      "name": "Referral banner",
+      "settings": {
+        "heading": "Give 15%, Get 15%.Give 15%, Get 15%.",
+        "subtext": "",
+        "show_cta": false,
+        "cta_label": "ddd",
+        "cta_url": "",
+        "show_icon": true,
+        "show_border": true
+      }
+    },
+    "page_card_grid_ygFVW9": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_qn4UC6": {
+          "type": "item",
+          "settings": {
+            "icon": "shopify://shop_images/pandectes-banner-logo.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_GbrEyc": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_VtCi9W": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_dFwHH8": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_mCV6mb": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_JUGDYp": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_xF3tc9": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_Ge43fy": {
+          "type": "item",
+          "settings": {
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_qn4UC6",
+        "item_GbrEyc",
+        "item_VtCi9W",
+        "item_dFwHH8",
+        "item_mCV6mb",
+        "item_JUGDYp",
+        "item_xF3tc9",
+        "item_Ge43fy"
+      ],
+      "disabled": true,
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "card"
+      }
+    },
+    "page_card_grid_KiA8Qy": {
+      "type": "page-card-grid",
+      "blocks": {
+        "item_dXj64x": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_YxkTmp": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_pKpiPE": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        },
+        "item_F6JJM8": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/Group_1168.png",
+            "title": "200 Points",
+            "subtitle": "Signup",
+            "subtitle_color": "#7c7a73"
+          }
+        }
+      },
+      "block_order": [
+        "item_dXj64x",
+        "item_YxkTmp",
+        "item_pKpiPE",
+        "item_F6JJM8"
+      ],
+      "disabled": true,
+      "name": "Card grid",
+      "settings": {
+        "heading": "Rack up points.",
+        "display_mode": "image"
+      }
+    },
+    "product_faq_8L8K4g": {
+      "type": "product-faq",
+      "blocks": {
+        "question_TgVAh6": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_8wXHDL": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_wqrkc7": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        },
+        "question_qWDxyE": {
+          "type": "question",
+          "settings": {
+            "question": "How do I join?",
+            "answer": "<p>Our store team can sign you up at checkout, or you can join at moodytiger.com. Membership is free, and joining earns you 200 bonus points to start.<br/><br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_TgVAh6",
+        "question_8wXHDL",
+        "question_wqrkc7",
+        "question_qWDxyE"
+      ],
+      "disabled": true,
+      "name": "FAQ",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "open_first": false,
+        "title_align": "left",
+        "big_title": true
+      }
+    },
+    "page_careers_roles_Wkqjnc": {
+      "type": "page-careers-roles",
+      "blocks": {
+        "title_rYVd6e": {
+          "type": "title",
+          "settings": {
+            "country": "The United States",
+            "count": "6 roles"
+          }
+        },
+        "item_DwLCMY": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA",
+            "link": ""
+          }
+        },
+        "title_j6MBCU": {
+          "type": "title",
+          "settings": {
+            "country": "The United States",
+            "count": "6 roles"
+          }
+        },
+        "item_ccqnJg": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA",
+            "link": ""
+          }
+        },
+        "item_Lt3cmz": {
+          "type": "item",
+          "settings": {
+            "job_title": "Store Manager",
+            "employment_type": "Full-time",
+            "location": "San Jose, CA",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "title_rYVd6e",
+        "item_DwLCMY",
+        "title_j6MBCU",
+        "item_ccqnJg",
+        "item_Lt3cmz"
+      ],
+      "disabled": true,
+      "name": "Careers roles",
+      "settings": {
+        "heading": "Find your place.",
+        "subtext": "See a position that excites you?\nConnect with us at us.career@moodytiger.com"
+      }
+    },
+    "full_image_VRa6gP": {
+      "type": "full-image",
+      "disabled": true,
+      "custom_css": [
+        ".mt-full-image {margin-bottom: 80px;}",
+        ".mt-full-image h1,.mt-full-image h2,.mt-full-image h3 {font-family: \"FK Display\", \"FK Grotesk\", sans-serif !important; font-size: 35px !important; color: #1d1d1d !important; line-height: 1.2;}",
+        "@media (max-width: 749px) {.mt-full-image {margin-bottom: 24px; }}"
+      ],
+      "name": "Full image",
+      "settings": {
+        "heading": "Special Collection",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/Group_1184.jpg",
+        "mob_image": "shopify://shop_images/Group_1187.jpg",
+        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski"
+      }
+    }
+  },
+  "order": [
+    "page_banner_RHNQRz",
+    "hero",
+    "best-sellers",
+    "split",
+    "activities",
+    "carousel",
+    "page_referral_banner_BjA9gQ",
+    "page_card_grid_ygFVW9",
+    "page_card_grid_KiA8Qy",
+    "product_faq_8L8K4g",
+    "page_careers_roles_Wkqjnc",
+    "full_image_VRa6gP"
+  ]
+}
