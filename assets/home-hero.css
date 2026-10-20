@@ -22,6 +22,9 @@
   opacity: 1;
   pointer-events: auto;
 }
+.mt-hero__slide--lead {
+  background: var(--mt-surface);
+}
 .mt-hero__slide--layer .mt-hero__panel {
   min-height: 100%;
 }

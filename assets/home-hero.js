@@ -80,7 +80,10 @@ if (!window.mtHeroInit) {
   const initSlides = () => {
     document.querySelectorAll('[data-hero]').forEach((hero) => {
       if (hero.dataset.heroReady) return;
-      const slides = [...hero.querySelectorAll('[data-hero-slide]')];
+      const domSlides = [...hero.querySelectorAll('[data-hero-slide]')];
+      // The panel slide is always first in the DOM (it's the in-flow base layer); display order is banner_slot.
+      const base = domSlides[0];
+      const slides = [...domSlides].sort((a, b) => parseFloat(a.dataset.bannerSlot) - parseFloat(b.dataset.bannerSlot));
       if (slides.length < 2) {
         trackBanner(slides[0]);
         if (slides[0] && !hero.dataset.heroVideoReady) {
@@ -94,13 +97,15 @@ if (!window.mtHeroInit) {
       const dots = [...hero.querySelectorAll('[data-hero-dot]')];
       let index = 0;
       let timer = 0;
+      let baseShown = false;
       const show = (next) => {
         index = (next + slides.length) % slides.length;
         loadSlide(slides[index]);
+        if (slides[index] === base) baseShown = true;
         slides.forEach((slide, i) => {
           const active = i === index;
           slide.classList.toggle('mt-hero__slide--active', active);
-          syncVideos(slide, active || i === 0);
+          syncVideos(slide, active || (slide === base && baseShown));
         });
         setActiveDot(hero, dots[index]);
         trackBanner(slides[index]);
