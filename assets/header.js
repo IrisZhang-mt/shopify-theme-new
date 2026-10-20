@@ -154,7 +154,7 @@ if (!window.mtHeaderInit) {
       title.textContent = item.title;
       const price = document.createElement('span');
       price.className = 'mt-header__srch-item-price';
-      price.textContent = `${panel.dataset.searchFrom} $${+item.price}`;
+      price.textContent = `$${+item.price}`;
       info.append(title, price);
       card.append(info);
       results.append(card);

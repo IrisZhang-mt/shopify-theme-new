@@ -31,8 +31,7 @@
       <div class="mt-pair__title">
         <p>{{ item.title }}</p>
         <p class="mt-pair__price">
-          {%- if item.price_varies %}{{ 'products.from' | t }} {% endif -%}
-          {{ item.price_min | money_without_trailing_zeros }}
+          {{- item.price_min | money_without_trailing_zeros }}
           {%- if item.compare_at_price_min > item.price_min %} <s class="mt-pair__compare">{{ item.compare_at_price_min | money_without_trailing_zeros }}</s>{% endif -%}
         </p>
       </div>

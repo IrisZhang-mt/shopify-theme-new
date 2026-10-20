@@ -91,8 +91,7 @@
           <s class="mt-card__compare">{{ product.compare_at_price_min | money_without_trailing_zeros }}</s>
         {%- endif -%}
         <span class="mt-card__now">
-          {%- if product.price_varies %}{{ 'products.from' | t }} {% endif -%}
-          {{ product.price_min | money_without_trailing_zeros }}
+          {{- product.price_min | money_without_trailing_zeros }}
         </span>
         {%- if product.compare_at_price_min > product.price_min and sale_badge != true -%}
           {%- assign discount_percent = product.compare_at_price_min | minus: product.price_min | times: 100.0 | divided_by: product.compare_at_price_min | round -%}

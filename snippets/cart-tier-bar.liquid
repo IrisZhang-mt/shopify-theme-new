@@ -29,6 +29,7 @@
       {%- assign tier_qty = tier_qty | plus: item.quantity -%}
     {%- endif -%}
   {%- endfor -%}
+  {%- if tier_qty > 0 -%}
   {%- assign unlocked_count = 0 -%}
   {%- for tier in tiers -%}
     {%- if tier_qty >= tier.qty -%}
@@ -77,4 +78,5 @@
       <span class="mt-cart__tier-segment"><span class="mt-cart__tier-segment-fill" style="width: {{ trailing_pct }}%"></span></span>
     </div>
   </div>
+  {%- endif -%}
 {%- endif -%}
