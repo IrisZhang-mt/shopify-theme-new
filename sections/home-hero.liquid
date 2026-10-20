@@ -105,7 +105,7 @@
               <p class="mt-hero__sub">{{ section.settings.subtext }}</p>
             {%- endif -%}
             {%- if section.settings.cta_label != blank -%}
-              <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="{{ hero_panel_slot }}"data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
+              <a class="mt-hero__cta" href="{{ section.settings.cta_url | default: '#' }}" data-banner-slot="{{ hero_panel_slot }}" data-banner-name="{{ hero_banner_name }}" data-button-name="{{ section.settings.cta_label | escape }}"><span>{{ section.settings.cta_label }}</span></a>
             {%- endif -%}
           </div>
         {%- endif -%}
