@@ -7,35 +7,75 @@
 {%- assign hero_mob_widths = '375,550,750,1100,1500' -%}
 {%- assign hero_pc_widths = '750,1100,1440,1920,2880' -%}
 {%- assign hero_panel_pc_sizes = '63vw' -%}
+{%- comment -%}
+  Display order follows the editor's block order. All panels share one slide, placed where the
+  first panel sits. Only the slide shown first gets preload/eager images; the rest load via JS.
+  banner_slot = display position, which home-hero.js also sorts slides by.
+{%- endcomment -%}
+{%- liquid
+  assign hero_order = ''
+  assign hero_panel_seen = false
+  for block in section.blocks
+    if block.type == 'panel'
+      unless hero_panel_seen
+        assign hero_order = hero_order | append: 'panel,'
+        assign hero_panel_seen = true
+      endunless
+    elsif block.type == 'slide'
+      assign hero_order = hero_order | append: block.id | append: ','
+    endif
+  endfor
+  unless hero_panel_seen
+    assign hero_order = 'panel,' | append: hero_order
+  endunless
+  assign hero_order = hero_order | split: ','
+  for id in hero_order
+    if id == 'panel'
+      assign hero_panel_slot = forloop.index
+    endif
+  endfor
+  assign hero_panel_lead = false
+  if hero_panel_slot == 1
+    assign hero_panel_lead = true
+  endif
+-%}
 
 <section class="mt-hero" data-hero data-hero-interval="{{ section.settings.slide_interval | default: 5 }}">
-  <div class="mt-hero__slide mt-hero__slide--active" data-hero-slide data-banner-slot="1" data-banner-name="{{ hero_banner_name }}">
+  <div class="mt-hero__slide{% if hero_panel_lead %} mt-hero__slide--active{% endif %}" data-hero-slide data-banner-slot="{{ hero_panel_slot }}" data-banner-name="{{ hero_banner_name }}">
     {%- for block in panels -%}
       {%- assign pc_video = block.settings.pc_video -%}
       {%- assign mob_video = block.settings.mob_video -%}
       {%- assign pc_image = block.settings.pc_image | default: block.settings.mob_image -%}
       {%- assign mob_image = block.settings.mob_image | default: block.settings.pc_image -%}
-      <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="1b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
+      <div class="mt-hero__panel{% unless forloop.first %} mt-hero__panel--secondary{% endunless %}" {% unless forloop.first %}data-banner-slot="{{ hero_panel_slot }}b" data-banner-name="{{ hero_banner_name }}"{% endunless %} {{ block.shopify_attributes }}>
         <div class="mt-hero__media">
           {%- if pc_video != blank and mob_video != blank -%}
             {{ pc_video | video_tag: class: 'mt-hero__video mt-hero__video--pc', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
             {{ mob_video | video_tag: class: 'mt-hero__video mt-hero__video--mob', muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
           {%- elsif pc_video != blank or mob_video != blank -%}
-            {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {%- if hero_panel_lead -%}
+              {{ pc_video | default: mob_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+            {%- else -%}
+              {{ pc_video | default: mob_video | video_tag: muted: true, loop: true, controls: false, playsinline: true, preload: 'none' }}
+            {%- endif -%}
           {%- elsif mob_image != blank -%}
             {%- capture pc_srcset -%}{% render 'image-srcset', image: pc_image, widths: hero_pc_widths %}{%- endcapture -%}
-            {{ pc_image | image_url: width: 1100 | preload_tag: as: 'image', media: '(min-width: 750px)', imagesrcset: pc_srcset, imagesizes: hero_panel_pc_sizes, fetchpriority: 'high' }}
-            {%- if forloop.first -%}
-              {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: hero_mob_widths, output: 'widths' %}{%- endcapture -%}
-              {%- capture mob_srcset -%}{% render 'image-srcset', image: mob_image, widths: hero_mob_widths %}{%- endcapture -%}
-              {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', media: '(max-width: 749.98px)', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+            {%- if hero_panel_lead -%}
+              {{ pc_image | image_url: width: 1100 | preload_tag: as: 'image', media: '(min-width: 750px)', imagesrcset: pc_srcset, imagesizes: hero_panel_pc_sizes, fetchpriority: 'high' }}
+              {%- if forloop.first -%}
+                {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: hero_mob_widths, output: 'widths' %}{%- endcapture -%}
+                {%- capture mob_srcset -%}{% render 'image-srcset', image: mob_image, widths: hero_mob_widths %}{%- endcapture -%}
+                {{ mob_image | image_url: width: mob_image.width | preload_tag: as: 'image', media: '(max-width: 749.98px)', imagesrcset: mob_srcset, imagesizes: '100vw', fetchpriority: 'high' }}
+              {%- endif -%}
             {%- endif -%}
             <picture>
               {%- unless forloop.first -%}
                 <source media="(max-width: 749.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
               {%- endunless -%}
-              <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="{{ hero_panel_pc_sizes }}">
-              {%- if forloop.first -%}
+              <source media="(min-width: 750px)" {% unless hero_panel_lead %}data-{% endunless %}srcset="{{ pc_srcset }}" sizes="{{ hero_panel_pc_sizes }}">
+              {%- if hero_panel_lead == false -%}
+                <img data-srcset="{% render 'image-srcset', image: mob_image, widths: hero_mob_widths %}" sizes="100vw" width="{{ mob_image.width }}" height="{{ mob_image.height }}" alt="" decoding="async">
+              {%- elsif forloop.first -%}
                 {{ mob_image | image_url: width: mob_image.width | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', widths: mob_widths, sizes: '100vw', alt: '' }}
               {%- else -%}
                 {{ mob_image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', sizes: '(min-width: 750px) 50vw, 100vw', alt: '' }}
