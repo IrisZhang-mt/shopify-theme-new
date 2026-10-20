@@ -73,8 +73,7 @@
                       </span>
                       <span class="mt-kol__product-title">{{ item.title }}</span>
                       <span class="mt-kol__product-price">
-                        {%- if item.price_varies %}{{ 'products.from' | t }} {% endif -%}
-                        {{ item.price_min | money_without_trailing_zeros }}
+                        {{- item.price_min | money_without_trailing_zeros }}
                       </span>
                     </a>
                   </li>
