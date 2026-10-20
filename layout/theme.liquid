@@ -185,6 +185,110 @@
     <script src="{{ 'size-chart.js' | asset_url }}" type="module"></script>
 
     {{ content_for_header }}
+
+    <!-- Consent Cookie Cleanup：用户拒绝/撤销授权后清除三方平台 Cookie（Shopify Customer Privacy API） -->
+    <script>
+    (function () {
+      /**
+       * 地区判断
+       * 说明：可在此处接入你的 GeoIP 逻辑或 Shopify 隐私合规地区检测。
+       * 如果当前访客不在受 GDPR/CCPA 等法规约束的地区，直接终止脚本执行。
+       */
+      function checkRegionAndConsent() {
+        // 如果 Shopify 隐私接口返回不需要展示弹窗/不处于受控地区，则直接退出
+        // if (window.Shopify && window.Shopify.customerPrivacy) {
+        //   if (!window.Shopify.customerPrivacy.shouldShowBanner()) return false;
+        // }
+        var isInRegulatedRegion = true;
+        return isInRegulatedRegion;
+      }
+
+      if (!checkRegionAndConsent()) return;
+
+      // 2. Cookie 规则配置
+      var cookieRules = {
+        preferences: [
+          { type: 'contains',   value: 'pref_' }
+        ],
+        analytics: [
+          { type: 'equals',     value: '_ga' },
+          { type: 'startsWith', value: '_ga_' },
+          { type: 'contains',   value: '_gid' },
+          { type: 'endsWith',   value: '_gat' }
+        ],
+        marketing: [
+          { type: 'startsWith', value: '_fbp' },
+          { type: 'equals',     value: '_gcl_au' },
+          { type: 'contains',   value: 'uetsid' },
+          { type: 'endsWith',   value: 'uetvid' }
+        ],
+        saleOfData: [
+          { type: 'contains',   value: 'ccPA_' }
+        ]
+      };
+
+      function matchRule(cookieName, rule) {
+        switch (rule.type) {
+          case 'equals':     return cookieName === rule.value;
+          case 'contains':   return cookieName.indexOf(rule.value) !== -1;
+          case 'startsWith': return cookieName.indexOf(rule.value) === 0;
+          case 'endsWith':   return cookieName.slice(-rule.value.length) === rule.value;
+          default:           return false;
+        }
+      }
+
+      function clearCookiesByRules(rules) {
+        if (!document.cookie || !rules || !rules.length) return;
+
+        document.cookie.split(';').forEach(function (cookie) {
+          var parts = cookie.trim().split('=');
+          var name = parts[0];
+          if (!name) return;
+
+          if (rules.some(function (rule) { return matchRule(name, rule); })) {
+            document.cookie = name + '=; Max-Age=0; path=/;';
+            document.cookie = name + '=; Max-Age=0; path=/; domain=' + location.hostname + ';';
+
+            var domainParts = location.hostname.split('.');
+            if (domainParts.length > 1) {
+              document.cookie = name + '=; Max-Age=0; path=/; domain=.' + domainParts.slice(-2).join('.') + ';';
+            }
+          }
+        });
+      }
+
+      function handleConsent(state) {
+        if (!state) return;
+        if (state.preferencesAllowed === false) clearCookiesByRules(cookieRules.preferences);
+        if (state.analyticsAllowed === false)   clearCookiesByRules(cookieRules.analytics);
+        if (state.marketingAllowed === false)   clearCookiesByRules(cookieRules.marketing);
+        if (state.saleOfDataAllowed === false)  clearCookiesByRules(cookieRules.saleOfData);
+      }
+
+      document.addEventListener('visitorConsentCollected', function (event) {
+        handleConsent(event.detail);
+      });
+
+      if (window.Shopify && typeof window.Shopify.loadFeatures === 'function') {
+        window.Shopify.loadFeatures(
+          [{ name: 'consent-tracking-api', version: '0.1' }],
+          function (error) {
+            if (error) return;
+            var privacy = window.Shopify.customerPrivacy;
+            if (!privacy) return;
+
+            handleConsent({
+              preferencesAllowed: privacy.preferencesProcessingAllowed(),
+              analyticsAllowed:   privacy.analyticsProcessingAllowed(),
+              marketingAllowed:   privacy.marketingAllowed(),
+              saleOfDataAllowed:  privacy.saleOfDataAllowed()
+            });
+          }
+        );
+      }
+    })();
+    </script>
+    <!-- End Consent Cookie Cleanup -->
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
