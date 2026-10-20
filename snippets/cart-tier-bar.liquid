@@ -1,35 +1,10 @@
-{%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
-{%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
-  {%- assign eligible_collection_raw = tier_config.eligible_collection -%}
-  {%- assign eligible_collections = blank -%}
-  {%- if eligible_collection_raw != blank -%}
-    {%- assign eligible_collections = '' -%}
-    {%- assign eligible_collection_handles = eligible_collection_raw | split: '|' -%}
-    {%- for handle in eligible_collection_handles -%}
-      {%- assign stripped_handle = handle | strip -%}
-      {%- assign eligible_collections = eligible_collections | append: stripped_handle | append: '|' -%}
-    {%- endfor -%}
-    {%- assign eligible_collections = eligible_collections | split: '|' -%}
-  {%- endif -%}
+{%- comment -%}
+  Rendered by cart-lines, which works out tier_qty (eligible quantity in the cart) once
+  and passes it in together with the tiered_discount metafield value.
+{%- endcomment -%}
+{%- if tier_qty > 0 -%}
   {%- assign tiers = tier_config.tiers -%}
   {%- assign tier_total = tiers.size -%}
-  {%- assign tier_qty = 0 -%}
-  {%- for item in cart.items -%}
-    {%- assign item_eligible = false -%}
-    {%- if eligible_collections == blank -%}
-      {%- assign item_eligible = true -%}
-    {%- else -%}
-      {%- for collection in item.product.collections -%}
-        {%- if eligible_collections contains collection.handle -%}
-          {%- assign item_eligible = true -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
-    {%- if item_eligible -%}
-      {%- assign tier_qty = tier_qty | plus: item.quantity -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- if tier_qty > 0 -%}
   {%- assign unlocked_count = 0 -%}
   {%- for tier in tiers -%}
     {%- if tier_qty >= tier.qty -%}
@@ -42,6 +17,17 @@
     {%- assign tier_remaining = next_tier.qty | minus: tier_qty -%}
   {%- endunless -%}
   <div class="mt-cart__tier-bar">
+    <div class="mt-cart__group-head">
+      {%- assign tier_labels = settings.tier_group_labels | split: '|' -%}
+      {%- for label in tier_labels -%}
+        {%- assign label = label | strip -%}
+        {%- if label != blank -%}<span class="mt-cart__group-tag">{{ label }}</span>{%- endif -%}
+      {%- endfor -%}
+      {%- if settings.tier_group_text != blank -%}
+        <p class="mt-cart__group-text">{{ settings.tier_group_text }}</p>
+      {%- endif -%}
+      <button class="mt-offers-open mt-cart__group-help" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
+    </div>
     {%- if unlocked_count >= tier_total -%}
       <p class="mt-cart__tier-text">{{ 'cart.tier_progress_complete' | t }}</p>
     {%- else -%}
@@ -78,5 +64,4 @@
       <span class="mt-cart__tier-segment"><span class="mt-cart__tier-segment-fill" style="width: {{ trailing_pct }}%"></span></span>
     </div>
   </div>
-  {%- endif -%}
 {%- endif -%}
