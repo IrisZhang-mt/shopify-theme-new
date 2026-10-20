@@ -671,6 +671,34 @@
   .mt-cart__tier-ordinal {
     font-size: 16px;
   }
+
+  .mt-cart__group-head {
+    gap: 0.5rem 0.75rem;
+  }
+
+  .mt-cart__group-tag {
+    padding: 5px 9px;
+    font-size: 14px;
+  }
+
+  .mt-cart__group-text,
+  .mt-cart__group-help {
+    font-size: 18px;
+  }
+
+  .mt-cart__group--other {
+    margin-top: 1.875rem;
+    padding-top: 1.875rem;
+    border-top-width: 1rem;
+  }
+
+  .mt-cart__group--other .mt-cart__group-text {
+    font-size: 14px;
+  }
+
+  .mt-cart__savings {
+    font-size: var(--mt-p-m-size);
+  }
 }
 
 @media screen and (max-width: 749.98px) {
