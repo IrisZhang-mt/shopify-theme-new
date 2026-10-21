@@ -32,7 +32,7 @@
         <ul class="mt-cart__discounts" role="list">
           {%- for discount in item.discounts -%}
             <li class="mt-cart__discount">
-              {{ discount.title }} (-{{ discount.amount | money_without_trailing_zeros }})
+              <span>{{ discount.title }} (-{{ discount.amount | money_without_trailing_zeros }})</span>
               <button class="mt-offers-open" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
             </li>
           {%- endfor -%}

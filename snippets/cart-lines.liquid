@@ -61,6 +61,7 @@
           {%- if settings.other_group_text != blank -%}
             <p class="mt-cart__group-text">{{ settings.other_group_text }}</p>
           {%- endif -%}
+          <button class="mt-offers-open mt-cart__group-help" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
         </div>
       {%- endif -%}
       <div class="mt-cart__lines">
