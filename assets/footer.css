@@ -140,6 +140,9 @@ a.mt-footer__club:focus-visible {
 .mt-footer__field:focus-within::after {
   transform: scaleX(1);
 }
+[dir="rtl"] .mt-footer__field::after {
+  transform-origin: right;
+}
 .mt-footer__field input {
   flex: 1;
   min-width: 0;
@@ -181,6 +184,17 @@ a.mt-footer__club:focus-visible {
 @media (hover: hover) {
   .mt-footer__submit:hover {
     transform: translateX(4px);
+  }
+}
+[dir="rtl"] .mt-footer__submit img {
+  transform: scaleX(-1);
+}
+[dir="rtl"] .mt-footer__field:focus-within .mt-footer__submit {
+  transform: translateX(-4px);
+}
+@media (hover: hover) {
+  [dir="rtl"] .mt-footer__submit:hover {
+    transform: translateX(-4px);
   }
 }
 
@@ -323,6 +337,10 @@ a.mt-footer__club:focus-visible {
   .mt-footer__col-links a:hover {
     opacity: 0.55;
     transform: translateX(4px);
+  }
+  [dir="rtl"] .mt-footer__acc-links a:hover,
+  [dir="rtl"] .mt-footer__col-links a:hover {
+    transform: translateX(-4px);
   }
 }
 
