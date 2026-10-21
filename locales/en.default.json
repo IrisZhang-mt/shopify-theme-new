@@ -49,7 +49,8 @@
     "tier_progress_complete": "You've unlocked the best reward!",
     "savings": "Savings",
     "offers_open": "View current offers",
-    "offers_got_it": "Got it"
+    "offers_got_it": "Got it",
+    "markdown": "SALE {{ percent }}%OFF({{ amount }})"
   },
   "products": {
     "add_to_cart": "Add to Cart",
