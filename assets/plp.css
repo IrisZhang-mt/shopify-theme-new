@@ -58,7 +58,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  padding-right: 0.3125rem;
+  padding-inline-end: 0.3125rem;
 }
 @media (hover: hover) {
   a.mt-plp__tile:hover img {
@@ -469,11 +469,11 @@ a.mt-plp__tile:focus-visible {
   }
   .mt-plp__count {
     position: absolute;
-    left: calc(var(--mt-plp-pad) + var(--mt-plp-aside));
-    transition: left 500ms var(--mt-plp-shift);
+    inset-inline-start: calc(var(--mt-plp-pad) + var(--mt-plp-aside));
+    transition: left 500ms var(--mt-plp-shift), right 500ms var(--mt-plp-shift);
   }
   .mt-plp--full .mt-plp__count {
-    left: calc(var(--mt-plp-pad) + 0.3125rem + (100% - 2 * var(--mt-plp-pad) - 0.625rem) / 3);
+    inset-inline-start: calc(var(--mt-plp-pad) + 0.3125rem + (100% - 2 * var(--mt-plp-pad) - 0.625rem) / 3);
   }
 
   .mt-plp__content {
@@ -520,6 +520,9 @@ a.mt-plp__tile:focus-visible {
       opacity 400ms var(--mt-plp-shift),
       transform 500ms var(--mt-plp-shift),
       visibility 0s 500ms;
+  }
+  [dir="rtl"] .mt-plp__aside--hidden .mt-plp__filters {
+    transform: translateX(1rem);
   }
 
   .mt-plp__filters-bar,

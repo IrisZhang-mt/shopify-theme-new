@@ -70,7 +70,7 @@
 
 .mt-pgrid .mt-card__badges {
   top: 0.4375rem;
-  left: 0.4375rem;
+  inset-inline-start: 0.4375rem;
   gap: 0.25rem;
 }
 /* Metafield badges (e.g. NEW): white with black text; auto discount badge (e.g. 33% OFF): tangerine. */
@@ -169,7 +169,7 @@
 
   .mt-pgrid .mt-card__badges {
     top: 0.9375rem;
-    left: 0.6875rem;
+    inset-inline-start: 0.6875rem;
   }
   .mt-pgrid .mt-card__badge {
     padding: 0.3125rem 0.75rem;
