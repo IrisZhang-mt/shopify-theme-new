@@ -56,6 +56,12 @@
   .mt-referral__cta:hover::after {
     transform: translateX(0.1875rem);
   }
+  [dir="rtl"] .mt-referral__cta:hover::after {
+    transform: translateX(-0.1875rem);
+  }
+}
+[dir="rtl"] .mt-referral__cta::after {
+  content: "\2190";
 }
 .mt-referral__cta:active {
   transform: scale(0.97);
@@ -85,7 +91,7 @@
 
 .mt-referral__list-icon {
   flex-shrink: 0;
-  margin-right: 0.71875rem;
+  margin-inline-end: 0.71875rem;
 }
 
 .mt-referral__list-subtitle {
