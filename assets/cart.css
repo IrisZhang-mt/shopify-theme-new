@@ -404,6 +404,13 @@
   font-size: 1.25rem;
   line-height: 1.2;
 }
+/* RTL: keep an LTR scroll axis so cart.js's scrollLeft progress math holds. */
+[dir="rtl"] .mt-cart__tiles {
+  direction: ltr;
+}
+[dir="rtl"] .mt-cart__tiles > * {
+  direction: rtl;
+}
 .mt-cart__tiles {
   display: flex;
   gap: 0.3125rem;
