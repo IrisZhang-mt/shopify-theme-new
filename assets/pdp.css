@@ -301,7 +301,7 @@
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.4;
-  text-align: left;
+  text-align: start;
   color: var(--mt-moss);
 }
 .mt-pdp__promo-title {
@@ -345,7 +345,7 @@
 }
 .mt-pdp__perk-copy {
   margin: 0;
-  padding-left: 2.1875rem;
+  padding-inline-start: 2.1875rem;
   font-size: var(--mt-cta-s-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-moss);
@@ -396,7 +396,7 @@
   transition-delay: 120ms;
 }
 .mt-pdp__perk-more {
-  padding-left: 2.1875rem;
+  padding-inline-start: 2.1875rem;
   font-size: var(--mt-cta-s-size);
   line-height: var(--mt-p-leading);
   color: var(--mt-moss);
@@ -544,7 +544,7 @@ button.mt-pdp__sticky-add {
   cursor: pointer;
   font-size: var(--mt-cta-s-size);
   line-height: var(--mt-p-leading);
-  text-align: left;
+  text-align: start;
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
 .mt-pdp__acc-head img {
@@ -721,7 +721,7 @@ button.mt-pdp__sticky-add {
   background-color: var(--mt-surface);
   background-image: linear-gradient(var(--mt-off-white), var(--mt-off-white));
   color: var(--mt-ink);
-  border-bottom-right-radius: 4px;
+  border-end-end-radius: 4px;
 }
 @media (hover: hover) {
   .mt-pair__add:hover,
@@ -767,7 +767,7 @@ button.mt-pdp__sticky-add {
     display: grid;
     grid-template-columns: 1fr 42.5%;
     align-items: start;
-    padding-left: var(--mt-pdp-pad);
+    padding-inline-start: var(--mt-pdp-pad);
   }
 
   .mt-pdp__gallery,
