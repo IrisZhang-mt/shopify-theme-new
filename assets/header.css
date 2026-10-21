@@ -128,7 +128,7 @@
   display: flex;
   align-items: center;
   gap: 19px;
-  margin-left: auto;
+  margin-inline-start: auto;
   font-size: var(--mt-p-xs-size);
   line-height: 1.5;
   letter-spacing: var(--mt-tracking-body);
@@ -258,7 +258,7 @@
 }
 .mt-header__cart-count {
   position: absolute;
-  right: -3px;
+  inset-inline-end: -3px;
   bottom: -3px;
   min-width: 12px;
   height: 12px;
@@ -447,9 +447,9 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
 .mt-drawer .tl-switcher-container {
   position: absolute !important;
   top: 1.25rem !important;
-  right: var(--mt-header-pad) !important;
+  inset-inline-end: var(--mt-header-pad) !important;
   bottom: auto !important;
-  left: auto !important;
+  inset-inline-start: auto !important;
   margin: 0 !important;
   z-index: 1;
   font-family: var(--mt-font-body);
@@ -559,7 +559,7 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     gap: var(--mt-header-gap);
     font-size: var(--mt-menu-size);
     justify-self: end;
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .mt-header__search-text {
