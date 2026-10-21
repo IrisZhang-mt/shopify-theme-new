@@ -178,6 +178,7 @@ if (!window.mtCartInit) {
     clearTimeout(closeTimer);
     trigger = window.mtKeyboardFocus(opener) ? opener : null;
     cartEl.hidden = false;
+    bindSwipe(cartEl);
     document.documentElement.classList.add('mt-cart-lock');
     requestAnimationFrame(() => {
       requestAnimationFrame(() => cartEl.classList.add('mt-cart--open'));
@@ -199,6 +200,90 @@ if (!window.mtCartInit) {
     else closeTimer = setTimeout(finish, 450);
     trigger?.focus({ preventScroll: true });
     trigger = null;
+  };
+
+  // Swipe the panel back toward the edge it slid in from (right in LTR,
+  // left in RTL) to close. Gestures starting inside a horizontal scroller
+  // (mobile recs carousel) stay with the scroller.
+  const SWIPE_CLOSE_RATIO = 0.3;
+  const SWIPE_CLOSE_VELOCITY = 0.5;
+  const swipeBound = new WeakSet();
+  const inHorizontalScroller = (el, stop) => {
+    for (; el && el !== stop; el = el.parentElement) {
+      if (el.scrollWidth > el.clientWidth && /auto|scroll/.test(getComputedStyle(el).overflowX)) return true;
+    }
+    return false;
+  };
+  const bindSwipe = (cartEl) => {
+    const panel = cartEl.querySelector('.mt-cart__panel');
+    const backdrop = cartEl.querySelector('.mt-cart__backdrop');
+    if (!panel || swipeBound.has(panel)) return;
+    swipeBound.add(panel);
+    let gesture = null;
+    const reset = () => {
+      panel.style.transition = '';
+      panel.style.transform = '';
+      if (backdrop) {
+        backdrop.style.transition = '';
+        backdrop.style.opacity = '';
+      }
+    };
+    panel.addEventListener(
+      'touchstart',
+      (event) => {
+        gesture = null;
+        if (event.touches.length !== 1 || quickShopOpen() || !cartEl.classList.contains('mt-cart--open')) return;
+        if (inHorizontalScroller(event.target, panel)) return;
+        const touch = event.touches[0];
+        gesture = {
+          x: touch.clientX,
+          y: touch.clientY,
+          t: event.timeStamp,
+          sign: document.documentElement.dir === 'rtl' ? -1 : 1,
+          width: panel.offsetWidth,
+          offset: 0,
+          dragging: false,
+        };
+      },
+      { passive: true }
+    );
+    panel.addEventListener(
+      'touchmove',
+      (event) => {
+        if (!gesture) return;
+        const touch = event.touches[0];
+        const dx = (touch.clientX - gesture.x) * gesture.sign;
+        const dy = touch.clientY - gesture.y;
+        if (!gesture.dragging) {
+          if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return;
+          if (dx <= 0 || Math.abs(dx) <= Math.abs(dy)) {
+            gesture = null;
+            return;
+          }
+          gesture.dragging = true;
+          panel.style.transition = 'none';
+          if (backdrop) backdrop.style.transition = 'none';
+        }
+        event.preventDefault();
+        gesture.offset = Math.max(0, dx);
+        panel.style.transform = `translateX(${gesture.offset * gesture.sign}px)`;
+        if (backdrop) backdrop.style.opacity = String(1 - gesture.offset / gesture.width);
+      },
+      { passive: false }
+    );
+    const end = (event) => {
+      if (!gesture?.dragging) {
+        gesture = null;
+        return;
+      }
+      const { offset, width, t } = gesture;
+      const velocity = offset / Math.max(1, event.timeStamp - t);
+      gesture = null;
+      reset();
+      if (event.type === 'touchend' && (offset > width * SWIPE_CLOSE_RATIO || velocity > SWIPE_CLOSE_VELOCITY)) close();
+    };
+    panel.addEventListener('touchend', end);
+    panel.addEventListener('touchcancel', end);
   };
 
   const mutate = async (request) => {
