@@ -42,7 +42,7 @@
       {%- if markdown_line > 0 or item.discounts != blank -%}
         <ul class="mt-cart__discounts" role="list">
           {%- if markdown_line > 0 -%}
-            <li class="mt-cart__discount">
+            <li class="mt-cart__discount mt-cart__discount--markdown">
               <span>{{ 'cart.markdown' | t: percent: markdown_percent, amount: '__AMOUNT__' | replace: '__AMOUNT__', markdown_line_money }}</span>
               <button class="mt-offers-open" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
             </li>

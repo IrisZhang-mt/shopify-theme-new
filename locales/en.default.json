@@ -50,7 +50,7 @@
     "savings": "Savings",
     "offers_open": "View current offers",
     "offers_got_it": "Got it",
-    "markdown": "SALE {{ percent }}%OFF({{ amount }})"
+    "markdown": "SALE {{ percent }}% OFF ({{ amount }})"
   },
   "products": {
     "add_to_cart": "Add to Cart",
