@@ -221,6 +221,10 @@
 .mt-cart__line--other .mt-cart__discount {
   color: var(--mt-moss);
 }
+/* compare-at markdown line stays accent in every group */
+.mt-cart__discounts .mt-cart__discount--markdown {
+  color: var(--mt-accent);
+}
 .mt-cart__body {
   flex: 1;
   min-height: 0;
