@@ -96,7 +96,7 @@ html.mt-offers-lock body {
   line-height: var(--mt-h-s-leading);
 }
 .mt-offers__close {
-  margin-left: auto;
+  margin-inline-start: auto;
   padding: 0;
   border: 0;
   background: none;
