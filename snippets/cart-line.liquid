@@ -28,8 +28,25 @@
           <p class="mt-cart__opt">{{ option.name }}: {{ option.value }}</p>
         {%- endfor -%}
       {%- endunless -%}
-      {%- if item.discounts != blank -%}
+      {%- comment -%}
+        Compare-at markdown ("SALE"): display only — it's already baked into the price Shopify
+        charges, so it's not a discount application and stays out of Savings / checkout totals.
+      {%- endcomment -%}
+      {%- assign compare_at_price = item.variant.compare_at_price | default: 0 -%}
+      {%- assign markdown_line = 0 -%}
+      {%- if compare_at_price > item.original_price -%}
+        {%- assign markdown_line = compare_at_price | minus: item.original_price | times: item.quantity -%}
+        {%- assign markdown_percent = compare_at_price | minus: item.original_price | times: 100.0 | divided_by: compare_at_price | round -%}
+        {%- assign markdown_line_money = markdown_line | money_without_trailing_zeros -%}
+      {%- endif -%}
+      {%- if markdown_line > 0 or item.discounts != blank -%}
         <ul class="mt-cart__discounts" role="list">
+          {%- if markdown_line > 0 -%}
+            <li class="mt-cart__discount">
+              <span>{{ 'cart.markdown' | t: percent: markdown_percent, amount: '__AMOUNT__' | replace: '__AMOUNT__', markdown_line_money }}</span>
+              <button class="mt-offers-open" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
+            </li>
+          {%- endif -%}
           {%- for discount in item.discounts -%}
             <li class="mt-cart__discount">
               <span>{{ discount.title }} (-{{ discount.amount | money_without_trailing_zeros }})</span>
@@ -47,8 +64,9 @@
   </div>
   <div class="mt-cart__side">
     <p class="mt-cart__price">
-      {%- if item.original_line_price > item.final_line_price -%}
-        <s class="mt-cart__compare">{{ item.original_line_price | money_without_trailing_zeros }}</s>
+      {%- assign strike_line_price = item.original_line_price | plus: markdown_line -%}
+      {%- if strike_line_price > item.final_line_price -%}
+        <s class="mt-cart__compare">{{ strike_line_price | money_without_trailing_zeros }}</s>
       {%- endif %}
       {{ item.final_line_price | money_without_trailing_zeros }}
     </p>
