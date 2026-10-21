@@ -11,6 +11,14 @@
   position: relative;
 }
 
+/* RTL: keep an LTR scroll axis so kol-video.js's scrollLeft/arrow math holds. */
+[dir="rtl"] .mt-kol__track {
+  direction: ltr;
+}
+[dir="rtl"] .mt-kol__track > * {
+  direction: rtl;
+}
+
 /* Mobile: one card per view, native scroll-snap (no JS for the sliding). */
 .mt-kol__track {
   display: flex;

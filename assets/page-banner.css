@@ -47,7 +47,7 @@
     line-height: var(--mt-h-xl-leading);
     letter-spacing: var(--mt-tracking-heading);
     color: #fafbf9;
-    text-align: left;
+    text-align: start;
   }
 
   .mt-banner__mobile-stats {
@@ -188,12 +188,13 @@
   }
   .mt-banner__stat {
     border-top: 1px solid rgba(29, 29, 29, 0.15);
-    padding: 1.125rem 0 0.812rem 6.25rem;
-    text-align: left;
+    padding: 1.125rem 0 0.812rem;
+    padding-inline-start: 6.25rem;
+    text-align: start;
   }
   .mt-banner__stat:first-child {
     /* Matches .mt-banner__content's (100% - 66%) / 2 auto-margin inset, same column reference. */
-    padding-left: 17%;
+    padding-inline-start: 17%;
   }
   .mt-banner__stat-label {
     display: block;
@@ -228,8 +229,12 @@
   }
   .mt-banner__stat[data-placement="media"]:last-child {
     border-top: 1px solid rgba(255, 255, 255, 0.4);
-    padding-left: 2.5rem;
+    padding-inline-start: 2.5rem;
   }
+}
+
+[dir="rtl"] .mt-banner__cta::after {
+  content: "\2190";
 }
 
 @media (hover: hover) {
@@ -238,5 +243,8 @@
   }
   .mt-banner__cta:hover::after {
     transform: translateX(0.1875rem);
+  }
+  [dir="rtl"] .mt-banner__cta:hover::after {
+    transform: translateX(-0.1875rem);
   }
 }

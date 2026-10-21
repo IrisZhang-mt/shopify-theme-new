@@ -54,7 +54,7 @@ html.mt-chart-lock body {
 .mt-chart__close {
   position: absolute;
   top: 1.25rem;
-  right: 1.25rem;
+  inset-inline-end: 1.25rem;
   padding: 0;
   border: 0;
   background: none;
@@ -125,7 +125,7 @@ html.mt-chart-lock body {
 .mt-chart__body td {
   padding: 0.625rem 0.5rem;
   border: 1px solid rgba(var(--mt-ink-rgb), 0.12);
-  text-align: left;
+  text-align: start;
   vertical-align: middle;
 }
 
@@ -149,7 +149,7 @@ html.mt-chart-lock body {
 
 .mt-chart__body ul {
   margin: 0 0 0.75rem;
-  padding-left: 1.125rem;
+  padding-inline-start: 1.125rem;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -189,7 +189,7 @@ html.mt-chart-lock body {
 
   .mt-chart__close {
     top: 1.5rem;
-    right: 1.5rem;
+    inset-inline-end: 1.5rem;
   }
 
   .mt-chart__body {

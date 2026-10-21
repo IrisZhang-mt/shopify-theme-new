@@ -120,10 +120,10 @@
     gap: 0.875rem;
     height: 4.25rem;
     padding: 0 1.5rem;
-    text-align: left;
+    text-align: start;
   }
   .mt-atabs__title {
-    margin-right: auto;
+    margin-inline-end: auto;
     font-size: 1.5rem;
   }
   .mt-atabs__sub {
@@ -142,7 +142,7 @@
     height: 2.25rem;
   }
   .mt-atabs.is-stuck .mt-atabs__title {
-    margin-right: 0;
+    margin-inline-end: 0;
     font-size: 1rem;
   }
   .mt-atabs.is-stuck .mt-atabs__sub {

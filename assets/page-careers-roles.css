@@ -66,7 +66,7 @@
 }
 
 .mt-careers-roles__list-badge {
-  margin-right: 0.875rem;
+  margin-inline-end: 0.875rem;
   padding: 0.25rem 0.75rem;
   border: 1px solid #e7e3da;
   border-radius: 1px;
@@ -149,7 +149,7 @@
   }
 
   .mt-careers-roles__list-badge {
-    margin-right: 1rem;
+    margin-inline-end: 1rem;
     font-size: 0.75rem;
   }
 

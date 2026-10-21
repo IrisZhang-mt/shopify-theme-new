@@ -57,6 +57,10 @@
   background: var(--mt-off-white);
 }
 
+/* RTL: keep an LTR scroll axis so quick-shop.js's scrollLeft/offsetLeft math holds. */
+[dir="rtl"] .mt-qs__track {
+  direction: ltr;
+}
 .mt-qs__track {
   display: flex;
   height: 100%;

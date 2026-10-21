@@ -80,6 +80,9 @@ a.mt-split__tile:focus-visible {
   .mt-split__tile:hover .mt-split__heading {
     transform: translateX(10px);
   }
+  [dir="rtl"] .mt-split__tile:hover .mt-split__heading {
+    transform: translateX(-10px);
+  }
   .mt-split__tile:hover .mt-split__plus img {
     transform: rotate(90deg);
   }

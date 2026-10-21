@@ -52,7 +52,7 @@
 .mt-card__badges {
   position: absolute;
   top: 9px;
-  left: 7px;
+  inset-inline-start: 7px;
   z-index: 2;
   display: flex;
   gap: 0.375rem;
@@ -133,7 +133,7 @@
   margin: calc(-1 * var(--mt-swatch-bleed)) calc(-1 * var(--mt-swatch-bleed)) 0;
   padding: var(--mt-swatch-bleed);
   overflow: hidden;
-  margin-right: 30px;
+  margin-inline-end: 30px;
 }
 [data-title-grid] .mt-card__swatches:empty,
 [data-title-row] .mt-card__swatches:empty {

@@ -11,6 +11,13 @@
   top: 50%;
 }
 
+/* RTL: keep slides in LTR order so the physical prev/next arrows match. */
+[dir="rtl"] .mt-video-grid__track {
+  direction: ltr;
+}
+[dir="rtl"] .mt-video-grid__track > * {
+  direction: rtl;
+}
 .mt-video-grid__track {
   display: flex;
   align-items: center;

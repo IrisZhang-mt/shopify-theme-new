@@ -55,7 +55,7 @@
   font-size: 1rem;
   line-height: 1.2;
   letter-spacing: var(--mt-tracking-heading);
-  text-align: left;
+  text-align: start;
   color: var(--mt-ink);
   transition: color 300ms var(--mt-ease);
 }

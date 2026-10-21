@@ -377,6 +377,14 @@ h6 {
 .mt-row-nav--next {
   right: 0;
 }
+/* RTL: autoplay rows keep an LTR scroll axis so motion.js's scrollLeft math
+   (0 → max) still holds; arrows stay physical to match. Card content reads RTL. */
+[dir="rtl"] [data-autoplay] {
+  direction: ltr;
+}
+[dir="rtl"] [data-autoplay] > * {
+  direction: rtl;
+}
 .mt-row-nav img {
   width: 0.875rem;
   transition: transform var(--mt-dur) var(--mt-ease);
