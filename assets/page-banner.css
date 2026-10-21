@@ -47,7 +47,7 @@
     line-height: var(--mt-h-xl-leading);
     letter-spacing: var(--mt-tracking-heading);
     color: #fafbf9;
-    text-align: left;
+    text-align: start;
   }
 
   .mt-banner__mobile-stats {
