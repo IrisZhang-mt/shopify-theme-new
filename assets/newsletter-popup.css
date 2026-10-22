@@ -101,10 +101,9 @@
   right: 0.625rem;
   color: var(--mt-white);
 }
-/* white X over the image: invert the dark-on-white jpg, screen drops the black */
+/* white X over the image */
 .mt-pop__close--media img {
   filter: invert(1);
-  mix-blend-mode: screen;
 }
 .mt-pop__close--media:focus-visible {
   outline-color: var(--mt-white);

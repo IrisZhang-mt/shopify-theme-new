@@ -153,10 +153,6 @@
   top: 0.9375rem;
   right: 0.9375rem;
 }
-/* over the product image: multiply drops the jpg's white background */
-.mt-qs__close--media img {
-  mix-blend-mode: multiply;
-}
 
 .mt-qs__info {
   display: flex;

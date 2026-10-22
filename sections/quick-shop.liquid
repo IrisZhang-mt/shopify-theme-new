@@ -49,13 +49,13 @@
         <button class="mt-qs__arrow" type="button" data-qs-next aria-label="{{ 'products.next_image' | t }}"><img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt=""></button>
       </div>
     {%- endif -%}
-    <button class="mt-qs__close mt-qs__close--media" type="button" data-qs-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.jpg?v=1792652138" width="20" height="20" alt=""></button>
+    <button class="mt-qs__close mt-qs__close--media" type="button" data-qs-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
   </div>
   <div class="mt-qs__info">
     <div class="mt-qs__body">
       <div class="mt-qs__head">
         <h2 class="mt-qs__name">{{ product.title }}</h2>
-        <button class="mt-qs__close" type="button" data-qs-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.jpg?v=1792652138" width="20" height="20" alt=""></button>
+        <button class="mt-qs__close" type="button" data-qs-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
         <p class="mt-qs__price">
           <span data-qs-price>{{ current.price | money_without_trailing_zeros }}</span>
           <s class="mt-qs__compare" data-qs-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money_without_trailing_zeros }}{% endif %}</s>
