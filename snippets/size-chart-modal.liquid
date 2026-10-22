@@ -3,7 +3,7 @@
   <div class="mt-chart__panel" role="dialog" aria-modal="true" aria-label="{{ chart_name | default: chart_page.title | escape }}">
     <div class="mt-chart__head">
       <p class="mt-chart__name">{{ chart_name | default: chart_page.title }}</p>
-      <button class="mt-chart__close" type="button" data-chart-close>{{ 'general.close' | t }}</button>
+      <button class="mt-chart__close" type="button" data-chart-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.jpg?v=1792652138" width="20" height="20" alt=""></button>
     </div>
     <div class="mt-chart__body">{{ chart_page.content }}</div>
   </div>

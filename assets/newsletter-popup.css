@@ -76,11 +76,14 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: var(--mt-menu-size);
-  line-height: 1.5;
-  letter-spacing: var(--mt-tracking-body);
+  line-height: 0;
   color: var(--mt-ink);
   transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-pop__close img {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 @media (hover: hover) {
   .mt-pop__close:hover {
@@ -97,6 +100,11 @@
   top: 0.625rem;
   right: 0.625rem;
   color: var(--mt-white);
+}
+/* white X over the image: invert the dark-on-white jpg, screen drops the black */
+.mt-pop__close--media img {
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 .mt-pop__close--media:focus-visible {
   outline-color: var(--mt-white);

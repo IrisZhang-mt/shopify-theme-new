@@ -74,10 +74,14 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: var(--mt-p-s-size);
-  line-height: var(--mt-p-leading);
+  line-height: 0;
   color: var(--mt-ink);
   transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-cart__close img {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 @media (hover: hover) {
   .mt-cart__close:hover {
