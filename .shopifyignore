@@ -1,0 +1,3 @@
+# Editor/tool temp files (e.g. assets/cart.css.tmp.28388.xxxx) — never upload via theme dev/push
+*.tmp.*
+**/*.tmp.*
