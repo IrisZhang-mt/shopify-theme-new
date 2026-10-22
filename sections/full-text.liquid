@@ -1,0 +1,95 @@
+{{ 'full-text.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.text != blank -%}
+  <section
+    class="mt-full-text"
+    style="--mt-full-text-pt: {{ section.settings.padding_top }}px; --mt-full-text-pb: {{ section.settings.padding_bottom }}px; --mt-full-text-pl: {{ section.settings.padding_left }}px; --mt-full-text-pr: {{ section.settings.padding_right }}px;
+      {%- if section.settings.text_color != blank %} --mt-full-text-color: {{ section.settings.text_color }};{% endif -%}
+      {%- if section.settings.text_size_mobile != blank %} --mt-full-text-size-mob: {{ section.settings.text_size_mobile }}px;{% endif -%}
+      {%- if section.settings.text_size_desktop != blank %} --mt-full-text-size-pc: {{ section.settings.text_size_desktop }}px;{% endif -%}
+    "
+  >
+    <div class="mt-full-text__text">{{ section.settings.text }}</div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Full text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "info": "留空时不展示"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "info": "留空时使用默认颜色"
+    },
+    {
+      "type": "number",
+      "id": "text_size_desktop",
+      "label": "Font size (PC, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "text_size_mobile",
+      "label": "Font size (Mobile, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Padding left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Padding right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Full text"
+    }
+  ]
+}
+{% endschema %}

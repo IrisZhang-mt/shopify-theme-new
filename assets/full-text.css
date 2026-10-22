@@ -1,0 +1,35 @@
+.mt-full-text {
+  padding: var(--mt-full-text-pt, 50px) var(--mt-full-text-pr, 15px) var(--mt-full-text-pb, 50px) var(--mt-full-text-pl, 15px);
+  background: var(--mt-paper);
+}
+
+.mt-full-text__text {
+  max-width: var(--mt-container);
+  margin-inline: auto;
+  font-size: var(--mt-full-text-size-mob, var(--mt-p-l-size));
+  color: var(--mt-full-text-color, var(--mt-ink));
+}
+
+/* Richtext output (p / ul / ol) inherits size and color from the wrapper. */
+.mt-full-text__text > * {
+  margin: 0;
+  font-size: inherit;
+  color: inherit;
+}
+.mt-full-text__text > * + * {
+  margin-top: 1em;
+}
+.mt-full-text__text ul,
+.mt-full-text__text ol {
+  padding-inline-start: 1.25rem;
+}
+.mt-full-text__text a {
+  color: inherit;
+  text-underline-offset: 0.125rem;
+}
+
+@media screen and (min-width: 750px) {
+  .mt-full-text__text {
+    font-size: var(--mt-full-text-size-pc, var(--mt-p-l-size));
+  }
+}

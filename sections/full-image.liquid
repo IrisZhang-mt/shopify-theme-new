@@ -5,6 +5,8 @@
 {%- assign mob_image = section.settings.mob_image | default: pc_image -%}
 {%- assign link = section.settings.link -%}
 {%- assign heading = section.settings.heading -%}
+{%- assign title = section.settings.title -%}
+{%- assign subtitle = section.settings.subtitle -%}
 {%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
 {%- assign ratio_mobile = mob_image.aspect_ratio | default: pc_image.aspect_ratio | default: 1 -%}
 {%- assign ratio_desktop = pc_image.aspect_ratio | default: mob_image.aspect_ratio | default: 1 -%}
@@ -49,6 +51,34 @@
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
     {%- endif -%}
+    {%- if title != blank or subtitle != blank -%}
+      <div
+        class="mt-full-image__content"
+        style="--mt-full-image-title-color: {{ section.settings.title_color }}; --mt-full-image-subtitle-color: {{ section.settings.subtitle_color }};
+          {%- if section.settings.title_size_mobile != blank %} --mt-full-image-title-size-mob: {{ section.settings.title_size_mobile }}px;{% endif -%}
+          {%- if section.settings.title_size_desktop != blank %} --mt-full-image-title-size-pc: {{ section.settings.title_size_desktop }}px;{% endif -%}
+          {%- if section.settings.subtitle_size_mobile != blank %} --mt-full-image-subtitle-size-mob: {{ section.settings.subtitle_size_mobile }}px;{% endif -%}
+          {%- if section.settings.subtitle_size_desktop != blank %} --mt-full-image-subtitle-size-pc: {{ section.settings.subtitle_size_desktop }}px;{% endif -%}
+        "
+      >
+        {%- if title != blank -%}
+          <h2
+            class="mt-full-image__title"
+            style="--mt-full-image-x-mob: {{ section.settings.title_x_mobile }}; --mt-full-image-y-mob: {{ section.settings.title_y_mobile }}; --mt-full-image-x-pc: {{ section.settings.title_x_desktop }}; --mt-full-image-y-pc: {{ section.settings.title_y_desktop }}; text-align: {{ section.settings.title_align }}"
+          >
+            {{- title -}}
+          </h2>
+        {%- endif -%}
+        {%- if subtitle != blank -%}
+          <p
+            class="mt-full-image__subtitle"
+            style="--mt-full-image-x-mob: {{ section.settings.subtitle_x_mobile }}; --mt-full-image-y-mob: {{ section.settings.subtitle_y_mobile }}; --mt-full-image-x-pc: {{ section.settings.subtitle_x_desktop }}; --mt-full-image-y-pc: {{ section.settings.subtitle_y_desktop }}; text-align: {{ section.settings.subtitle_align }}"
+          >
+            {{- subtitle | newline_to_br -}}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
     {%- if link != blank -%}
       <a
         class="mt-full-image__link"
@@ -89,6 +119,176 @@
       "id": "mob_image",
       "label": "Mobile image",
       "info": "留空时使用 PC 图片"
+    },
+    {
+      "type": "header",
+      "content": "Image text"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "叠加在图片上；留空时不展示"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "叠加在图片上；留空时不展示"
+    },
+    {
+      "type": "header",
+      "content": "Title position",
+      "info": "X：0 靠左 / 50 居中 / 100 靠右；Y：0 靠上 / 50 居中 / 100 靠下"
+    },
+    {
+      "type": "range",
+      "id": "title_x_desktop",
+      "label": "Title X (PC)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_y_desktop",
+      "label": "Title Y (PC)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "title_x_mobile",
+      "label": "Title X (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "title_y_mobile",
+      "label": "Title Y (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "select",
+      "id": "title_align",
+      "label": "Title text alignment",
+      "info": "标题换行时每行的对齐方式",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle position",
+      "info": "X：0 靠左 / 50 居中 / 100 靠右；Y：0 靠上 / 50 居中 / 100 靠下"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_x_desktop",
+      "label": "Subtitle X (PC)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subtitle_y_desktop",
+      "label": "Subtitle Y (PC)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "subtitle_x_mobile",
+      "label": "Subtitle X (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "subtitle_y_mobile",
+      "label": "Subtitle Y (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "subtitle_align",
+      "label": "Subtitle text alignment",
+      "info": "副标题换行时每行的对齐方式",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "number",
+      "id": "title_size_desktop",
+      "label": "Title font size (PC, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "title_size_mobile",
+      "label": "Title font size (Mobile, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "subtitle_size_desktop",
+      "label": "Subtitle font size (PC, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "subtitle_size_mobile",
+      "label": "Subtitle font size (Mobile, px)",
+      "info": "留空时使用默认字号"
     },
     {
       "type": "url",

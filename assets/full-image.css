@@ -32,6 +32,49 @@
   object-position: center;
 }
 
+/* Overlay text sits under __link (z-index 1) so the whole image stays clickable. */
+.mt-full-image__content {
+  --mt-full-image-gutter-x: 1.25rem;
+  --mt-full-image-gutter-y: 1.875rem;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/*
+  Title and subtitle are placed independently by X/Y percentages (0–100)
+  inside the gutters. Translating by the same percentage keeps the element
+  anchored to its own edge: 0 = left/top, 50 = centered, 100 = right/bottom.
+*/
+.mt-full-image__title,
+.mt-full-image__subtitle {
+  --mt-full-image-x: var(--mt-full-image-x-mob, 0);
+  --mt-full-image-y: var(--mt-full-image-y-mob, 100);
+  position: absolute;
+  left: calc(var(--mt-full-image-gutter-x) + (100% - 2 * var(--mt-full-image-gutter-x)) * var(--mt-full-image-x) / 100);
+  top: calc(var(--mt-full-image-gutter-y) + (100% - 2 * var(--mt-full-image-gutter-y)) * var(--mt-full-image-y) / 100);
+  width: max-content;
+  max-width: calc(100% - 2 * var(--mt-full-image-gutter-x));
+  transform: translate(calc(var(--mt-full-image-x) * -1%), calc(var(--mt-full-image-y) * -1%));
+}
+
+.mt-full-image__title {
+  margin: 0;
+  font-family: var(--mt-font-display);
+  font-size: var(--mt-full-image-title-size-mob, var(--mt-h-xl-size));
+  line-height: var(--mt-h-xl-leading);
+  letter-spacing: var(--mt-tracking-heading);
+  color: var(--mt-full-image-title-color, var(--mt-cloud));
+}
+
+.mt-full-image__subtitle {
+  max-width: min(26rem, 100% - 2 * var(--mt-full-image-gutter-x));
+  margin: 0;
+  font-size: var(--mt-full-image-subtitle-size-mob, var(--mt-p-m-size));
+  line-height: var(--mt-p-leading);
+  color: var(--mt-full-image-subtitle-color, var(--mt-cloud));
+}
+
 .mt-full-image__link {
   position: absolute;
   inset: 0;
@@ -49,5 +92,21 @@
 
   .mt-full-image__media {
     aspect-ratio: var(--mt-full-image-ratio-desktop, var(--mt-full-image-ratio, 1));
+  }
+
+  .mt-full-image__content {
+    --mt-full-image-gutter-x: 3.75rem;
+    --mt-full-image-gutter-y: 3.75rem;
+  }
+  .mt-full-image__title,
+  .mt-full-image__subtitle {
+    --mt-full-image-x: var(--mt-full-image-x-pc, 0);
+    --mt-full-image-y: var(--mt-full-image-y-pc, 100);
+  }
+  .mt-full-image__title {
+    font-size: var(--mt-full-image-title-size-pc, var(--mt-h-xl-size));
+  }
+  .mt-full-image__subtitle {
+    font-size: var(--mt-full-image-subtitle-size-pc, var(--mt-p-m-size));
   }
 }
