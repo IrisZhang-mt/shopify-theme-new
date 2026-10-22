@@ -224,6 +224,7 @@
     display: block;
     width: 20px;
     height: 20px;
+    color: var(--mt-ink);
   }
   .mt-header__signup-glint,
   .mt-header__signup::after {
@@ -295,6 +296,7 @@
   display: block;
   width: 20px;
   height: 20px;
+  color: var(--mt-ink);
 }
 
 .mt-icon {

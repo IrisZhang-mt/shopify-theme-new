@@ -184,7 +184,7 @@ if (!window.mtCartInit) {
       requestAnimationFrame(() => cartEl.classList.add('mt-cart--open'));
     });
     if (loadRecs) initRecs(cartEl);
-    cartEl.querySelector('[data-cart-close]:not(.mt-cart__backdrop)')?.focus({ preventScroll: true });
+    cartEl.querySelector('.mt-cart__panel')?.focus({ preventScroll: true });
     if (trackView) pushViewCart(cartEl);
   };
 
@@ -298,7 +298,7 @@ if (!window.mtCartInit) {
     busy = false;
     const cartEl = drawer();
     if (cartEl && !cartEl.hidden && !cartEl.contains(document.activeElement)) {
-      cartEl.querySelector('[data-cart-close]:not(.mt-cart__backdrop)')?.focus({ preventScroll: true });
+      cartEl.querySelector('.mt-cart__panel')?.focus({ preventScroll: true });
     }
   };
 

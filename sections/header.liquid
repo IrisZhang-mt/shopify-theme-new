@@ -49,23 +49,23 @@
       {%- if section.settings.signup_text != blank -%}
         <div class="mt-header__signup-wrap">
           {%- if section.settings.signup_url != blank -%}
-            <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span><img class="mt-header__signup-icon" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/c3f7a87073b4d4dea19de386241912e5.png?v=1792144365" width="20" height="20" alt=""></a>
+            <a class="mt-header__signup" href="{{ section.settings.signup_url }}" data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span>{% render 'icon-account', class: 'mt-header__signup-icon' %}</a>
           {%- else -%}
-            <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span><img class="mt-header__signup-icon" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/c3f7a87073b4d4dea19de386241912e5.png?v=1792144365" width="20" height="20" alt=""></button>
+            <button class="mt-header__signup" type="button" data-pop-open data-text="{{ section.settings.signup_text | escape }}" data-func="Sign up">{{ section.settings.signup_text }}<span class="mt-header__signup-glint" aria-hidden="true"><span class="mt-header__signup-glint-text">{{ section.settings.signup_text }}</span></span>{% render 'icon-account', class: 'mt-header__signup-icon' %}</button>
           {%- endif -%}
         </div>
       {%- endif -%}
       <a class="mt-header__search" href="{{ routes.search_url }}" data-search-open data-func="Search" aria-expanded="false" aria-controls="HeaderSearch" aria-label="{{ 'header.search' | t }}">
         <span class="mt-header__search-text">{{ 'header.search' | t }}</span>
-        <svg class="mt-header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.5" stroke="currentColor"/><path d="m11.2 11.2 3.8 3.8" stroke="currentColor"/></svg>
+        <svg class="mt-header__search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8.73293 16.3565C12.3295 16.3565 15.2452 13.4408 15.2452 9.84426C15.2452 6.24767 12.3295 3.33203 8.73293 3.33203C5.13634 3.33203 2.2207 6.24767 2.2207 9.84426C2.2207 13.4408 5.13634 16.3565 8.73293 16.3565Z" stroke="currentColor" stroke-width="1.31339" stroke-linejoin="round"/><path d="M13.415 14.5261L16.6655 17.7766" stroke="currentColor" stroke-width="1.31339" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <a class="mt-header__cart" href="{{ routes.cart_url }}" data-cart-open data-func="Cart" aria-label="{{ 'cart.title' | t }}">
-        <img class="mt-header__cart-icon" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/carticon.png?v=1791622000" width="20" height="20" alt="">
+        <svg class="mt-header__cart-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.7727 6.25008H4.21889C3.72888 6.25008 3.33301 6.63799 3.33301 7.11254V14.439C3.33301 16.8182 5.31882 18.75 7.77788 18.75H12.2228C14.6728 18.75 16.6663 16.8182 16.6663 14.439V7.11254C16.6629 6.88059 16.5679 6.65948 16.402 6.49777C16.2362 6.33606 16.0131 6.24697 15.7817 6.25008H15.7727Z" stroke="currentColor" stroke-width="1.11111" stroke-miterlimit="10"/><path d="M5 8.75V5.29637C5.00958 4.22117 5.54044 3.1926 6.47695 2.4347C7.41346 1.67681 8.67975 1.25099 10 1.25C12.7471 1.25 15 3.07582 15 5.3298V8.75" stroke="currentColor" stroke-width="1.11111" stroke-miterlimit="10"/></svg>
         <span class="mt-header__cart-count"{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
       </a>
 
       <details class="mt-header__drawer">
-        <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}" data-func="Menu"><img class="mt-burger" src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/Frame_1982663155.png?v=1791625089" width="20" height="20" alt=""></summary>
+        <summary class="mt-header__burger" aria-label="{{ 'header.menu' | t }}" data-func="Menu"><svg class="mt-burger" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5H17.5" stroke="currentColor" stroke-linecap="round"/><path d="M3.5 9.5H17.5" stroke="currentColor" stroke-linecap="round"/><path d="M3.5 13.5H17.5" stroke="currentColor" stroke-linecap="round"/></svg></summary>
         <div class="mt-drawer">
           <div class="mt-drawer__links">
             {%- for link in menu.links -%}

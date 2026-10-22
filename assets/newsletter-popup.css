@@ -80,10 +80,13 @@
   color: var(--mt-ink);
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
-.mt-pop__close img {
+.mt-pop__close svg {
   display: block;
   width: 1.25rem;
   height: 1.25rem;
+}
+.mt-pop__panel:focus {
+  outline: none;
 }
 @media (hover: hover) {
   .mt-pop__close:hover {
@@ -100,10 +103,6 @@
   top: 0.625rem;
   right: 0.625rem;
   color: var(--mt-white);
-}
-/* white X over the image */
-.mt-pop__close--media img {
-  filter: invert(1);
 }
 .mt-pop__close--media:focus-visible {
   outline-color: var(--mt-white);

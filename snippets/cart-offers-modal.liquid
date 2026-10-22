@@ -7,12 +7,12 @@
 {%- assign offers_mobile = settings.offers_image_mobile | default: offers_desktop -%}
 <div class="mt-offers" data-offers hidden>
   <div class="mt-offers__backdrop" data-offers-close></div>
-  <div class="mt-offers__panel" role="dialog" aria-modal="true" {% if settings.offers_title != blank %}aria-labelledby="MtOffersTitle"{% else %}aria-label="{{ 'cart.offers_open' | t }}"{% endif %}>
+  <div class="mt-offers__panel" role="dialog" aria-modal="true" tabindex="-1" {% if settings.offers_title != blank %}aria-labelledby="MtOffersTitle"{% else %}aria-label="{{ 'cart.offers_open' | t }}"{% endif %}>
     <div class="mt-offers__head">
       {%- if settings.offers_title != blank -%}
         <h2 class="mt-offers__title" id="MtOffersTitle">{{ settings.offers_title }}</h2>
       {%- endif -%}
-      <button class="mt-offers__close" type="button" data-offers-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
+      <button class="mt-offers__close" type="button" data-offers-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
     </div>
     <div class="mt-offers__body">
       {%- if offers_mobile != blank -%}

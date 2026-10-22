@@ -3,18 +3,18 @@
 
 <div class="mt-pop" hidden data-pop data-delay="{{ section.settings.delay }}" data-days="{{ section.settings.frequency }}">
   <div class="mt-pop__backdrop" data-pop-close></div>
-  <div class="mt-pop__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.heading | escape }}">
+  <div class="mt-pop__panel" role="dialog" aria-modal="true" aria-label="{{ section.settings.heading | escape }}" tabindex="-1">
     <div class="mt-pop__media">
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 500px, 92vw', alt: ''}}
       {%- endif -%}
-      <button class="mt-pop__close mt-pop__close--media" type="button" data-pop-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
+      <button class="mt-pop__close mt-pop__close--media" type="button" data-pop-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
     </div>
     <div class="mt-pop__content">
       <div class="mt-pop__upper">
         <div class="mt-pop__head">
           <h2 class="mt-pop__heading">{{ section.settings.heading }}</h2>
-          <button class="mt-pop__close" type="button" data-pop-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
+          <button class="mt-pop__close" type="button" data-pop-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
         </div>
         {%- if section.settings.subheading != blank -%}
           <p class="mt-pop__sub">{{ section.settings.subheading }}</p>

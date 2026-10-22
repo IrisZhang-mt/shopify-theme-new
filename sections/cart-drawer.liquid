@@ -5,11 +5,11 @@
 
 <div class="mt-cart" data-cart data-cart-root data-url="{{ routes.root_url }}?section_id=cart-drawer" data-currency="{{ cart.currency.iso_code }}" hidden>
   <div class="mt-cart__backdrop" data-cart-close></div>
-  <aside class="mt-cart__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
+  <aside class="mt-cart__panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}" tabindex="-1">
     <div class="mt-cart__inner" data-cart-content>
       <div class="mt-cart__head">
         <h2 class="mt-cart__title">{{ 'cart.title' | t }} ({{ cart.item_count }})</h2>
-        <button class="mt-cart__close" type="button" data-cart-close aria-label="{{ 'general.close' | t | escape }}"><img src="https://cdn.shopify.com/s/files/1/0475/6920/7457/files/close.png?v=1792653478" width="20" height="20" alt=""></button>
+        <button class="mt-cart__close" type="button" data-cart-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
       </div>
       {% render 'cart-shipping-bar' %}
       {% render 'checkout-loading' %}

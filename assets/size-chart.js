@@ -20,7 +20,7 @@ if (!window.mtChartInit) {
     chart.hidden = false;
     document.documentElement.classList.add('mt-chart-lock');
     requestAnimationFrame(() => requestAnimationFrame(() => chart.classList.add('mt-chart--open')));
-    chart.querySelector('.mt-chart__close')?.focus({ preventScroll: true });
+    chart.querySelector('.mt-chart__panel')?.focus({ preventScroll: true });
   };
 
   const closeChart = (chart, restoreFocus) => {

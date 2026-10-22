@@ -78,10 +78,13 @@
   color: var(--mt-ink);
   transition: opacity var(--mt-dur) var(--mt-ease);
 }
-.mt-cart__close img {
+.mt-cart__close svg {
   display: block;
   width: 1.25rem;
   height: 1.25rem;
+}
+.mt-cart__panel:focus {
+  outline: none;
 }
 @media (hover: hover) {
   .mt-cart__close:hover {

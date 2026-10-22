@@ -49,9 +49,7 @@ if (!window.mtPopInit) {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => el.classList.add("mt-pop--open"));
     });
-    [...el.querySelectorAll("button[data-pop-close]")]
-      .find((item) => item.offsetParent !== null)
-      ?.focus({ preventScroll: true });
+    el.querySelector(".mt-pop__panel")?.focus({ preventScroll: true });
   };
 
   const close = (el, days) => {

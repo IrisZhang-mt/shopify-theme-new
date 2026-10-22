@@ -27,7 +27,7 @@ if (!window.mtOffersInit) {
     el.hidden = false;
     document.documentElement.classList.add('mt-offers-lock');
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('mt-offers--open')));
-    el.querySelector('.mt-offers__close')?.focus({ preventScroll: true });
+    el.querySelector('.mt-offers__panel')?.focus({ preventScroll: true });
   };
 
   const close = () => {

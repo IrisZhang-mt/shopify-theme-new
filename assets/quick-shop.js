@@ -251,7 +251,7 @@ if (!window.mtQuickShopInit) {
       syncArrows();
       requestAnimationFrame(() => qs.classList.add('mt-qs--open'));
     });
-    content.querySelector('[data-qs-close]:not(.mt-qs__close--media)')?.focus({ preventScroll: true });
+    qs.querySelector('[data-qs-box]').focus({ preventScroll: true });
   };
 
   const close = () => {
