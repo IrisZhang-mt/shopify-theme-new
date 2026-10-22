@@ -87,7 +87,10 @@
     "clear_all": "Clear All",
     "apply_filters": "Apply Filters",
     "empty": "No products match your filters.",
-    "clear_all_link": "Clear all filters"
+    "clear_all_link": "Clear all filters",
+    "back_to_top": "Back to top",
+    "viewing": "Viewing {{ shown }} of {{ total }}",
+    "view_more": "View more"
   },
   "blog": {
     "empty": "No articles yet.",

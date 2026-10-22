@@ -13,6 +13,9 @@
   font-size: var(--mt-h-s-size);
   line-height: var(--mt-h-s-leading);
 }
+.mt-plp__title h1:focus {
+  outline: none;
+}
 
 .mt-plp__tiles {
   display: grid;
@@ -414,7 +417,99 @@ a.mt-plp__tile:focus-visible {
 }
 
 .mt-plp__more {
-  height: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding-top: 2.5rem;
+}
+.mt-plp__viewing {
+  margin: 0;
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+}
+.mt-plp__more-btn {
+  min-width: 8.75rem;
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  border: 1px solid var(--mt-ink);
+  background: var(--mt-cloud);
+  color: var(--mt-ink);
+  cursor: pointer;
+  font-size: var(--mt-cta-s-size);
+  line-height: 1.2;
+  transition:
+    background-color var(--mt-dur) var(--mt-ease),
+    color var(--mt-dur) var(--mt-ease),
+    opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-plp__more-btn:hover {
+    background: var(--mt-ink);
+    color: var(--mt-cloud);
+  }
+}
+.mt-plp__more-btn:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+.mt-plp__more-btn[aria-busy='true'] {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+/* Zero-height sticky rail at the end of the grid column: the button floats in the
+   bottom corner while scrolling and stops at the end of the list, never over the footer.
+   z-index stays below the cart drawer (9) and the mobile filter overlay (8). */
+.mt-plp__top-rail {
+  position: sticky;
+  bottom: var(--mt-plp-pad);
+  z-index: 7;
+  height: 0;
+}
+.mt-plp__top {
+  position: absolute;
+  inset-inline-end: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--mt-ink);
+  background: var(--mt-cloud);
+  color: var(--mt-ink);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--mt-dur) var(--mt-ease),
+    transform var(--mt-dur) var(--mt-ease),
+    background-color var(--mt-dur) var(--mt-ease),
+    color var(--mt-dur) var(--mt-ease),
+    visibility 0s var(--mt-dur);
+}
+.mt-plp__top--on {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity var(--mt-dur) var(--mt-ease),
+    transform var(--mt-dur) var(--mt-ease),
+    background-color var(--mt-dur) var(--mt-ease),
+    color var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-plp__top:hover {
+    background: var(--mt-ink);
+    color: var(--mt-cloud);
+  }
+}
+.mt-plp__top:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -478,6 +573,9 @@ a.mt-plp__tile:focus-visible {
 
   .mt-plp__content {
     padding-bottom: 9.375rem;
+  }
+  .mt-plp__more {
+    padding-top: 3.125rem;
   }
 
   .mt-plp__aside {

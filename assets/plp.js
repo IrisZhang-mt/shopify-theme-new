@@ -8,6 +8,7 @@ if (!window.mtPlpInit) {
   const pageCount = new WeakMap();
   const renderedUrl = new WeakMap();
   const RETURN_STATE_KEY = 'mt_plp_return_state';
+  const RESTORE_CONCURRENCY = 4;
 
   // Cards parsed by DOMParser come from an inert document. Re-setting srcset/src once
   // they are in the live grid makes iOS Safari pick up the lazy images; without it a
@@ -23,6 +24,7 @@ if (!window.mtPlpInit) {
         if (src) img.setAttribute('src', src);
       })
     );
+    return cards;
   };
 
   const trackedIds = new WeakMap();
@@ -125,22 +127,11 @@ if (!window.mtPlpInit) {
     window.scrollTo(0, 0);
   };
 
-  let swatchMap = null;
-
-  const applySwatches = (root) => {
-    if (!swatchMap) {
-      const data = document.querySelector('[data-plp-swatch-map]');
-      if (!data) return;
-      try {
-        swatchMap = JSON.parse(data.textContent);
-      } catch {
-        return;
-      }
-    }
-    root.querySelectorAll('.mt-plp__swatch[data-swatch]').forEach((swatch) => {
-      const color = swatchMap[swatch.dataset.swatch];
-      if (color) swatch.style.setProperty('--mt-swatch', color);
-    });
+  // Back-to-top shows once the page is scrolled past one screen.
+  let topFrame = 0;
+  const syncTop = () => {
+    const on = window.scrollY > window.innerHeight;
+    document.querySelectorAll('[data-plp-top]').forEach((top) => top.classList.toggle('mt-plp__top--on', on));
   };
 
   const setOverlay = (plp, on) => {
@@ -163,10 +154,89 @@ if (!window.mtPlpInit) {
   const queueAlign = () => window.mtAlignTitles();
 
   const observeMore = () => {
-    document.querySelectorAll('[data-plp-more]:not([data-observed])').forEach((el) => {
+    document.querySelectorAll('[data-plp-more][data-next-url]:not([data-observed])').forEach((el) => {
       el.dataset.observed = '1';
       moreObserver.observe(el);
     });
+  };
+
+  // Next-page requests keyed by URL. The "View more" block coming within 600px of
+  // the viewport starts the request early; the button click (or a return-state
+  // restore) then reuses the same promise instead of fetching again.
+  const prefetched = new Map();
+  const inflight = new Set();
+
+  const fetchPage = (plp, url) => {
+    if (!prefetched.has(url)) {
+      const controller = new AbortController();
+      inflight.add(controller);
+      const request = fetch(sectionUrl(plp, url), { signal: controller.signal })
+        .then((res) => {
+          if (!res.ok) throw new Error(res.status);
+          return res.text();
+        })
+        .then((html) => new DOMParser().parseFromString(html, 'text/html'))
+        .catch(() => {
+          prefetched.delete(url);
+          return null;
+        })
+        .finally(() => inflight.delete(controller));
+      prefetched.set(url, request);
+    }
+    return prefetched.get(url);
+  };
+
+  // A request still running when the page is left keeps Chrome from putting the
+  // PLP in the back/forward cache, which is what makes "back" from a PDP instant.
+  const abortPrefetch = () => {
+    inflight.forEach((controller) => controller.abort());
+  };
+
+  // Appends a fetched page and points the "View more" block at the page after it.
+  const applyPage = (plp, more, doc) => {
+    const grid = plp.querySelector('[data-plp-grid]');
+    if (!grid) return;
+    prefetched.delete(more.dataset.nextUrl);
+    const cards = appendCards(grid, doc);
+    pageCount.set(grid, (pageCount.get(grid) || 1) + 1);
+    const nextUrl = doc.querySelector('[data-plp-more]')?.dataset.nextUrl;
+    if (nextUrl) {
+      more.dataset.nextUrl = nextUrl;
+    } else {
+      delete more.dataset.nextUrl;
+      moreObserver.unobserve(more);
+      const button = more.querySelector('[data-plp-more-btn]');
+      // Last page: the button goes away, so hand keyboard focus to the first new product.
+      if (button && button === document.activeElement) {
+        cards[0]?.querySelector('a[href]')?.focus({ preventScroll: true });
+      }
+      button?.remove();
+    }
+    const viewing = more.querySelector('[data-plp-viewing]');
+    if (viewing) viewing.textContent = viewing.dataset.template.replace('[shown]', grid.children.length);
+  };
+
+  const loadMore = async (button) => {
+    const more = button.closest('[data-plp-more]');
+    const plp = more?.closest('[data-plp]');
+    const url = more?.dataset.nextUrl;
+    if (!plp || !url || more.dataset.busy) return;
+    more.dataset.busy = '1';
+    button.setAttribute('aria-busy', 'true');
+    const doc = await fetchPage(plp, url);
+    delete more.dataset.busy;
+    button.removeAttribute('aria-busy');
+    if (!doc || !more.isConnected || more.dataset.nextUrl !== url) return;
+    applyPage(plp, more, doc);
+    queueAlign();
+    document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    observeGrid(plp.querySelector('[data-plp-grid]'));
+    // Re-observe so the following page prefetches right away if the block is
+    // still within range (a short last batch doesn't push it out of view).
+    if (more.dataset.nextUrl) {
+      moreObserver.unobserve(more);
+      moreObserver.observe(more);
+    }
   };
 
   const refresh = async (plp, url, push) => {
@@ -196,6 +266,7 @@ if (!window.mtPlpInit) {
     const focusKey = active?.name ? [active.name, active.value] : null;
     const hidden = plp.classList.contains('mt-plp--full');
     plp.querySelectorAll('[data-plp-more]').forEach((more) => moreObserver.unobserve(more));
+    prefetched.clear();
     plp.innerHTML = next.innerHTML;
     document.documentElement.classList.remove('mt-plp-lock');
     const freshGrid = plp.querySelector('[data-plp-grid]');
@@ -214,7 +285,6 @@ if (!window.mtPlpInit) {
         history.pushState({ mtPlp: true }, '', url);
       } catch {}
     }
-    applySwatches(plp);
     observeMore();
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
@@ -304,29 +374,36 @@ if (!window.mtPlpInit) {
     // when this runs from the bfcache pageshow handler, the DOM (and
     // pageCount) already reflect everything loaded before the user left the
     // page, and re-fetching from page 1 would append duplicate cards.
-    plp.querySelectorAll('[data-plp-more]').forEach((more) => moreObserver.unobserve(more));
-    for (let loaded = pageCount.get(grid) || 1; loaded < state.pages; loaded += 1) {
-      const more = plp.querySelector('[data-plp-more]');
-      if (!more) break;
-      let doc;
-      try {
-        const res = await fetch(sectionUrl(plp, more.dataset.nextUrl));
-        if (!res.ok) break;
-        doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-      } catch {
-        break;
+    // Request the missing pages in parallel (each is just the next URL with a
+    // different ?page=), at most RESTORE_CONCURRENCY at a time so a long list
+    // doesn't fire a burst Shopify may rate-limit. Every page is still fetched;
+    // they're appended in order once all are back, and only then is the scroll
+    // placed. Goes through fetchPage() so a prefetched page isn't requested twice.
+    const more = plp.querySelector('[data-plp-more]');
+    const loaded = pageCount.get(grid) || 1;
+    if (more?.dataset.nextUrl && state.pages > loaded) {
+      const urls = [];
+      for (let page = loaded + 1; page <= state.pages; page += 1) {
+        const url = new URL(more.dataset.nextUrl, window.location.origin);
+        url.searchParams.set('page', page);
+        urls.push(page === loaded + 1 ? more.dataset.nextUrl : url.pathname + url.search);
       }
-      appendCards(grid, doc);
-      const nextMore = doc.querySelector('[data-plp-more]');
-      if (nextMore) {
-        more.dataset.nextUrl = nextMore.dataset.nextUrl;
-      } else {
-        more.remove();
+      const docs = new Array(urls.length);
+      let cursor = 0;
+      const worker = async () => {
+        while (cursor < urls.length) {
+          const i = cursor;
+          cursor += 1;
+          docs[i] = await fetchPage(plp, urls[i]);
+        }
+      };
+      await Promise.all(Array.from({ length: Math.min(RESTORE_CONCURRENCY, urls.length) }, worker));
+      for (const doc of docs) {
+        if (!doc || !more.isConnected || !more.dataset.nextUrl) break;
+        applyPage(plp, more, doc);
       }
+      urls.forEach((url) => prefetched.delete(url));
     }
-    pageCount.set(grid, state.pages);
-    const finalMore = plp.querySelector('[data-plp-more]');
-    if (finalMore) moreObserver.observe(finalMore);
     queueAlign();
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
     observeGrid(grid);
@@ -366,38 +443,13 @@ if (!window.mtPlpInit) {
     }, 1100);
   };
 
+  // Prefetch only: nothing is appended until "View more" is clicked.
   const moreObserver = new IntersectionObserver(
     (entries) => {
-      entries.forEach(async (entry) => {
-        if (!entry.isIntersecting) return;
+      entries.forEach((entry) => {
         const more = entry.target;
-        if (more.dataset.busy) return;
-        more.dataset.busy = '1';
-        const plp = more.closest('[data-plp]');
-        let doc;
-        try {
-          const res = await fetch(sectionUrl(plp, more.dataset.nextUrl));
-          if (!res.ok) throw new Error(res.status);
-          doc = new DOMParser().parseFromString(await res.text(), 'text/html');
-        } catch {
-          delete more.dataset.busy;
-          return;
-        }
-        if (!more.isConnected) return;
-        const grid = plp.querySelector('[data-plp-grid]');
-        if (grid) appendCards(grid, doc);
-        if (grid) pageCount.set(grid, (pageCount.get(grid) || 1) + 1);
-        const nextMore = doc.querySelector('[data-plp-more]');
-        if (nextMore) {
-          more.dataset.nextUrl = nextMore.dataset.nextUrl;
-          delete more.dataset.busy;
-        } else {
-          moreObserver.unobserve(more);
-          more.remove();
-        }
-        queueAlign();
-        document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-        observeGrid(plp.querySelector('[data-plp-grid]'));
+        if (!entry.isIntersecting || !more.dataset.nextUrl) return;
+        fetchPage(more.closest('[data-plp]'), more.dataset.nextUrl);
       });
     },
     { rootMargin: '600px 0px' }
@@ -405,7 +457,15 @@ if (!window.mtPlpInit) {
 
   observeMore();
   syncAll();
-  applySwatches(document);
+  syncTop();
+  window.addEventListener(
+    'scroll',
+    () => {
+      cancelAnimationFrame(topFrame);
+      topFrame = requestAnimationFrame(syncTop);
+    },
+    { passive: true }
+  );
   document.querySelectorAll('[data-plp]').forEach((plp) => renderedUrl.set(plp, window.location.href));
   document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
     pageCount.set(grid, 1);
@@ -417,10 +477,9 @@ if (!window.mtPlpInit) {
   });
   desktopMq.addEventListener('change', syncAll);
   document.addEventListener('shopify:section:load', () => {
-    swatchMap = null;
     observeMore();
     syncAll();
-    applySwatches(document);
+    syncTop();
     document.querySelectorAll('[data-plp-grid]').forEach((grid) => {
       pageCount.set(grid, 1);
       observeGrid(grid);
@@ -438,6 +497,17 @@ if (!window.mtPlpInit) {
       } else {
         setOverlay(plp, true);
       }
+      return;
+    }
+    const moreButton = event.target.closest?.('[data-plp-more-btn]');
+    if (moreButton) {
+      loadMore(moreButton);
+      return;
+    }
+    const top = event.target.closest?.('[data-plp-top]');
+    if (top) {
+      window.mtScrollTo(0);
+      top.closest('[data-plp]')?.querySelector('[data-plp-heading]')?.focus({ preventScroll: true });
       return;
     }
     const close = event.target.closest?.('[data-plp-close]');
@@ -523,9 +593,17 @@ if (!window.mtPlpInit) {
     window.mtFocusTrap(event, aside, 'button:not(:disabled), input:not(:disabled), a[href], summary');
   });
 
+  // Covers leaving by any other link too (header, breadcrumbs, quick shop).
+  window.addEventListener('pagehide', abortPrefetch);
+
   window.addEventListener('pageshow', (event) => {
     if (!event.persisted) return;
     document.querySelectorAll('[data-plp]').forEach((plp) => setOverlay(plp, false));
+    // pagehide aborted any prefetch; re-observing re-arms it if "View more" is in range.
+    document.querySelectorAll('[data-plp-more][data-next-url]').forEach((more) => {
+      moreObserver.unobserve(more);
+      moreObserver.observe(more);
+    });
     // A bfcache restore (this is what `persisted` means here) resumes the
     // page without re-running any top-level script, so the normal
     // restoreReturnState() call at boot never happens for it — run it here

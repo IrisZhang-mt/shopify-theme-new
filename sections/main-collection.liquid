@@ -1,12 +1,12 @@
 {{ 'plp.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'plp.js' | asset_url }}" type="module"></script>
 
-{%- paginate collection.products by 24 -%}
+{%- paginate collection.products by section.settings.products_per_page -%}
   {%- assign plp_item_list_id = collection.handle -%}
   {%- assign plp_item_list_name = collection.title -%}
   <div class="mt-plp" data-plp data-url="{{ collection.url }}" data-currency="{{ cart.currency.iso_code }}" data-item-list-id="{{ plp_item_list_id }}" data-item-list-name="{{ plp_item_list_name | escape }}">
     <div class="mt-plp__title">
-      <h1>{{ collection.title }}</h1>
+      <h1 tabindex="-1" data-plp-heading>{{ collection.title }}</h1>
     </div>
 
     {%- assign linked = collection.metafields.custom.category_tiles.value -%}
@@ -44,6 +44,19 @@
 
     <div class="mt-plp__content">
       <aside class="mt-plp__aside" data-plp-aside>
+        {%- assign custom_color_keys = '' -%}
+        {%- assign custom_color_values = '' -%}
+        {%- if settings.color_swatches != blank -%}
+          {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+          {%- for line in custom_color_lines -%}
+            {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+            {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+            {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+            {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+          {%- endfor -%}
+          {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+          {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
+        {%- endif -%}
         <form class="mt-plp__filters" data-plp-filters>
           <div class="mt-plp__filters-bar">
             <button class="mt-plp__filters-close" type="button" data-plp-close>{{ 'collection.hide_filters' | t }}</button>
@@ -66,8 +79,8 @@
                     <label class="mt-plp__option{% if value.count == 0 and value.active == false %} mt-plp__option--off{% endif %}"{% if is_color %} title="{{ value.label | escape }}"{% endif %}>
                       <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" data-filter-content="{{ value.label | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
                       {%- if is_color -%}
-                        {%- assign filter_swatch_handle = value.label | handleize -%}
-                        <span class="mt-plp__swatch" data-swatch="{{ filter_swatch_handle }}" style="--mt-swatch: url('{{ filter_swatch_handle | append: '.png' | file_url }}') var(--mt-off-white)"></span>
+                        {%- capture filter_swatch_value -%}{%- render 'color-swatch', value: value.label, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                        <span class="mt-plp__swatch" style="--mt-swatch: {{ filter_swatch_value }}"></span>
                       {%- else -%}
                         <span class="mt-check"></span>
                       {%- endif -%}
@@ -97,68 +110,44 @@
               {% render 'product-card', product: product, quick: true, align: true, index: card_index, ga4_index: forloop.index0, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw', item_list_id: plp_item_list_id, item_list_name: plp_item_list_name %}
             {%- endfor -%}
           </div>
-          {%- if paginate.next -%}
-            <div class="mt-plp__more" data-plp-more data-next-url="{{ paginate.next.url }}"></div>
-          {%- endif -%}
+          {%- assign viewing_template = 'collection.viewing' | t: shown: '[shown]', total: paginate.items -%}
+          <div class="mt-plp__more" data-plp-more{% if paginate.next %} data-next-url="{{ paginate.next.url }}"{% endif %}>
+            <p class="mt-plp__viewing" role="status" data-plp-viewing data-template="{{ viewing_template | escape }}">{{ 'collection.viewing' | t: shown: collection.products.size, total: paginate.items }}</p>
+            {%- if paginate.next -%}
+              <button class="mt-plp__more-btn" type="button" data-plp-more-btn>{{ 'collection.view_more' | t }}</button>
+            {%- endif -%}
+          </div>
         {%- else -%}
           <div class="mt-plp__empty">
             <p>{{ 'collection.empty' | t }}</p>
             <button class="mt-plp__clear-link" type="button" data-plp-clear>{{ 'collection.clear_all_link' | t }}</button>
           </div>
         {%- endif -%}
+
+        <div class="mt-plp__top-rail">
+          <button class="mt-plp__top" type="button" aria-label="{{ 'collection.back_to_top' | t }}" data-plp-top>
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true" focusable="false"><path d="M6 14V1.5M1 6.5l5-5 5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 {%- endpaginate -%}
 
-{%- assign has_color_filter = false -%}
-{%- for filter in collection.filters -%}
-  {%- assign param_check = filter.param_name | downcase -%}
-  {%- if param_check contains 'color' or param_check contains 'colour' -%}
-    {%- assign has_color_filter = true -%}
-  {%- endif -%}
-{%- endfor -%}
-{%- if has_color_filter -%}
-  {%- assign custom_swatch_keys = '' -%}
-  {%- assign custom_swatch_values = '' -%}
-  {%- if settings.color_swatches != blank -%}
-    {%- assign custom_swatch_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
-    {%- for line in custom_swatch_lines -%}
-      {%- unless line == blank -%}
-        {%- assign custom_swatch_key = line | split: ':' | first | rstrip | handleize -%}
-        {%- assign custom_swatch_value = line | split: ':' | last | lstrip -%}
-        {%- assign custom_swatch_keys = custom_swatch_keys | append: ',' | append: custom_swatch_key -%}
-        {%- assign custom_swatch_values = custom_swatch_values | append: ',' | append: custom_swatch_value -%}
-      {%- endunless -%}
-    {%- endfor -%}
-    {%- assign custom_swatch_keys = custom_swatch_keys | remove_first: ',' | strip_newlines | split: ',' -%}
-    {%- assign custom_swatch_values = custom_swatch_values | remove_first: ',' | split: ',' -%}
-  {%- endif -%}
-  {%- comment -%}
-    Same priority as snippets/color-swatch.liquid. Metaobject pairs come first so the
-    settings pairs after them win on duplicate keys (JSON.parse keeps the last one);
-    metaobject colors only sit behind the guessed "<handle>.png".
-  {%- endcomment -%}
-  {%- capture swatch_map_pairs -%}
-    {%- paginate shop.metaobjects.color_swatch.values by 250 -%}
-      {%- for entry in shop.metaobjects.color_swatch.values -%}
-        {%- assign entry_color = entry.color.value | default: entry.color -%}
-        ~~PAIR~~{{ entry.system.handle | json }}: {{ entry.system.handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: entry_color | json }}
-      {%- endfor -%}
-    {%- endpaginate -%}
-    {%- for key in custom_swatch_keys -%}
-      {%- assign custom_swatch_value = custom_swatch_values[forloop.index0] -%}
-      ~~PAIR~~{{ key | json }}: {% if custom_swatch_value contains '.' %}{{ custom_swatch_value | file_url | prepend: "url('" | append: "')" | json }}{% else %}{{ custom_swatch_value | json }}{% endif %}
-    {%- endfor -%}
-  {%- endcapture -%}
-  {%- assign swatch_map_list = swatch_map_pairs | remove_first: '~~PAIR~~' | split: '~~PAIR~~' -%}
-  <script type="application/json" data-plp-swatch-map>{ {{ swatch_map_list | join: ',' }} }</script>
-{%- endif -%}
-
 {% schema %}
 {
   "name": "Collection",
   "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per load",
+      "info": "Products shown first and added by each \"View more\". Must be a multiple of 4 so every row is full (4 per row on desktop, 2 on mobile).",
+      "min": 4,
+      "max": 100,
+      "step": 4,
+      "default": 24
+    },
     {
       "type": "checkbox",
       "id": "single_line_titles",
