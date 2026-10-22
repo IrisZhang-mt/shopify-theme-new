@@ -58,11 +58,15 @@ html.mt-chart-lock body {
   padding: 0;
   border: 0;
   background: none;
-  font-size: var(--mt-p-s-size);
-  line-height: var(--mt-p-leading);
+  line-height: 0;
   color: var(--mt-ink);
   cursor: pointer;
   transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-chart__close img {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 @media (hover: hover) {
   .mt-chart__close:hover {

@@ -134,10 +134,14 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: var(--mt-p-s-size);
-  line-height: var(--mt-p-leading);
+  line-height: 0;
   color: var(--mt-ink);
   transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-qs__close img {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 @media (hover: hover) {
   .mt-qs__close:hover {
@@ -148,6 +152,10 @@
   position: absolute;
   top: 0.9375rem;
   right: 0.9375rem;
+}
+/* over the product image: multiply drops the jpg's white background */
+.mt-qs__close--media img {
+  mix-blend-mode: multiply;
 }
 
 .mt-qs__info {
