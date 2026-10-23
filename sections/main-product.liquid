@@ -59,6 +59,7 @@
       <div class="mt-pdp__track" data-pdp-track>
         {%- assign image_count = 0 -%}
         {%- assign shown_count = 0 -%}
+        {%- assign zoom_items = '' -%}
         {%- for media in product.media -%}
           {%- if media.media_type == 'image' -%}
             {%- assign image_count = image_count | plus: 1 -%}
@@ -81,8 +82,14 @@
             {%- unless hide_slide -%}
               {%- assign shown_count = shown_count | plus: 1 -%}
             {%- endunless -%}
-            <div class="mt-pdp__slide{% if media_color == blank %} mt-pdp__slide--shared{% endif %}" data-pdp-media="{{ media.position }}" data-pdp-color="{{ media_color | escape }}"{% if hide_slide %} hidden{% endif %}>
+            <div class="mt-pdp__slide{% if media_color == blank %} mt-pdp__slide--shared{% endif %}" data-pdp-media="{{ media.position }}" data-pdp-color="{{ media_color | escape }}" role="button" tabindex="0"{% if hide_slide %} hidden{% endif %}>
               {%- assign image_alt = media.alt | default: product.title | escape -%}
+              {%- capture zoom_item -%}
+                <div class="mt-pdp__zoom-item{% if media_color == blank %} mt-pdp__zoom-item--shared{% endif %}" data-pdp-zoom-media="{{ media.position }}">
+                  {{ media | image_url: width: 2000 | image_tag: widths: '750, 1100, 1500, 2000', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', decoding: 'async', draggable: 'false', alt: image_alt }}
+                </div>
+              {%- endcapture -%}
+              {%- assign zoom_items = zoom_items | append: zoom_item -%}
               {%- if hide_slide == false and shown_count <= 2 -%}
                 {{ media | image_url: width: 1100 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '(min-width: 750px) 28vw, 74vw', alt: image_alt }}
               {%- else -%}
@@ -389,6 +396,21 @@
       </div>
     </div>
   </div>
+
+  {%- if image_count > 0 -%}
+    <div class="mt-pdp__zoom" data-pdp-zoom role="dialog" aria-modal="true" aria-label="{{ product.title | escape }}" hidden>
+      <div class="mt-pdp__zoom-list" data-pdp-zoom-list>{{ zoom_items }}</div>
+      <div class="mt-pdp__zoom-nav">
+        {%- if image_count > 1 -%}
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--prev" type="button" data-pdp-zoom-prev aria-label="{{ 'products.previous_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        {%- endif -%}
+        <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--close" type="button" data-pdp-zoom-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
+        {%- if image_count > 1 -%}
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--next" type="button" data-pdp-zoom-next aria-label="{{ 'products.next_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
 
   <div class="mt-pdp__sticky-cta" data-pdp-sticky-cta>
     <button class="mt-pdp__add mt-pdp__sticky-add" type="button" data-pdp-add data-pdp-variant="{{ current.id }}"{% unless current.available %} disabled{% endunless %}>

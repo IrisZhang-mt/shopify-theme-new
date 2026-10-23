@@ -513,11 +513,146 @@ if (!window.mtPdpInit) {
     }
   };
 
+  const initZoom = (root) => {
+    const zoom = root.querySelector('[data-pdp-zoom]');
+    const list = root.querySelector('[data-pdp-zoom-list]');
+    const track = root.querySelector('[data-pdp-track]');
+    if (!zoom || !list || !track) return;
+    const prev = zoom.querySelector('[data-pdp-zoom-prev]');
+    const next = zoom.querySelector('[data-pdp-zoom-next]');
+    const closeBtn = zoom.querySelector('[data-pdp-zoom-close]');
+    const buttons = [prev, closeBtn, next].filter(Boolean);
+    let items = [];
+    let trigger = null;
+    let drag = null;
+    let suppressClick = false;
+
+    const currentIndex = () => Math.round(list.scrollLeft / list.clientWidth);
+    const updateNav = () => {
+      if (!prev || !next) return;
+      prev.disabled = list.scrollLeft <= 1;
+      next.disabled = list.scrollLeft >= list.scrollWidth - list.clientWidth - 1;
+    };
+    const goTo = (index, smooth) => {
+      const item = items[Math.min(Math.max(index, 0), items.length - 1)];
+      if (!item) return;
+      list.scrollTo({ left: item.offsetLeft, behavior: smooth && !reducedMq.matches ? 'smooth' : 'auto' });
+    };
+
+    const open = (slide) => {
+      // Mirror the gallery's current color filter.
+      zoom.querySelectorAll('[data-pdp-zoom-media]').forEach((item) => {
+        const source = track.querySelector(`[data-pdp-media="${item.dataset.pdpZoomMedia}"]`);
+        item.hidden = !source || source.hidden;
+      });
+      trigger = slide;
+      zoom.hidden = false;
+      document.documentElement.classList.add('mt-pdp-zoom-lock');
+      items = [...zoom.querySelectorAll('[data-pdp-zoom-media]:not([hidden])')].sort(
+        (a, b) => a.offsetLeft - b.offsetLeft
+      );
+      goTo(Math.max(0, items.findIndex((item) => item.dataset.pdpZoomMedia === slide.dataset.pdpMedia)), false);
+      updateNav();
+      requestAnimationFrame(() => zoom.classList.add('mt-is-open'));
+      closeBtn.focus({ preventScroll: true });
+    };
+    const close = () => {
+      if (zoom.hidden) return;
+      zoom.classList.remove('mt-is-open');
+      zoom.hidden = true;
+      document.documentElement.classList.remove('mt-pdp-zoom-lock');
+      trigger?.focus({ preventScroll: true });
+    };
+
+    track.addEventListener('click', (event) => {
+      const slide = event.target.closest('[data-pdp-media]');
+      if (slide) open(slide);
+    });
+    track.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const slide = event.target.closest('[data-pdp-media]');
+      if (!slide) return;
+      event.preventDefault();
+      open(slide);
+    });
+    // Mouse drag; touch devices swipe the scroller natively.
+    list.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      drag = { x: event.clientX, left: list.scrollLeft, index: currentIndex(), moved: false };
+    });
+    list.addEventListener('pointermove', (event) => {
+      if (!drag) return;
+      const dx = event.clientX - drag.x;
+      if (!drag.moved) {
+        if (Math.abs(dx) < 5) return;
+        drag.moved = true;
+        list.setPointerCapture(event.pointerId);
+        list.classList.add('mt-is-dragging');
+      }
+      list.scrollLeft = drag.left - dx;
+    });
+    const endDrag = (event) => {
+      if (!drag) return;
+      const { x, index, moved } = drag;
+      drag = null;
+      if (!moved) return;
+      // Swallow the click that follows a drag so it can't close the viewer.
+      suppressClick = true;
+      setTimeout(() => {
+        suppressClick = false;
+      });
+      const dx = event.clientX - x;
+      const release = () => list.classList.remove('mt-is-dragging');
+      list.addEventListener('scrollend', release, { once: true });
+      setTimeout(release, 600);
+      goTo(Math.abs(dx) > list.clientWidth * 0.15 ? index - Math.sign(dx) : index, true);
+    };
+    list.addEventListener('pointerup', endDrag);
+    list.addEventListener('pointercancel', endDrag);
+    list.addEventListener('scroll', updateNav, { passive: true });
+
+    zoom.addEventListener('click', (event) => {
+      if (suppressClick) {
+        suppressClick = false;
+        return;
+      }
+      if (event.target.closest('[data-pdp-zoom-close]')) {
+        close();
+      } else if (event.target.closest('[data-pdp-zoom-prev]')) {
+        goTo(currentIndex() - 1, true);
+      } else if (event.target.closest('[data-pdp-zoom-next]')) {
+        goTo(currentIndex() + 1, true);
+      } else if (!event.target.closest('img')) {
+        close();
+      }
+    });
+    zoom.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        close();
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        goTo(currentIndex() + (event.key === 'ArrowLeft' ? -1 : 1), true);
+      } else if (event.key === 'Tab') {
+        const enabled = buttons.filter((button) => !button.disabled);
+        const first = enabled[0];
+        const last = enabled[enabled.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+  };
+
   const init = (scope) => {
     scope.querySelectorAll('[data-pdp]').forEach((root) => {
       if (root.dataset.mtReady) return;
       root.dataset.mtReady = 'true';
       initProduct(root);
+      initZoom(root);
       initSticky(root);
       initStickyCta(root);
       initPairs(root);

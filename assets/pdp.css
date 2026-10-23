@@ -50,6 +50,147 @@
     transform: scale(1.03);
   }
 }
+.mt-pdp__slide[data-pdp-media] {
+  cursor: zoom-in;
+}
+
+html.mt-pdp-zoom-lock,
+html.mt-pdp-zoom-lock body {
+  overflow: hidden;
+}
+
+.mt-pdp__zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  overflow: hidden;
+  background: var(--mt-paper);
+  opacity: 0;
+  transition: opacity 300ms var(--mt-ease);
+}
+.mt-pdp__zoom.mt-is-open {
+  opacity: 1;
+}
+
+/* RTL: keep an LTR scroll axis so pdp.js's scrollLeft/offsetLeft math holds. */
+.mt-pdp__zoom-list {
+  position: relative;
+  direction: ltr;
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.mt-pdp__zoom-list::-webkit-scrollbar {
+  display: none;
+}
+.mt-pdp__zoom-list.mt-is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+.mt-pdp__zoom-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.mt-pdp__zoom-item--shared {
+  order: 1;
+}
+.mt-pdp__zoom-item img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  background: var(--mt-off-white);
+  -webkit-user-drag: none;
+}
+
+.mt-pdp__zoom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 2.25rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transform: translateX(-50%);
+}
+.mt-pdp__zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--mt-ink);
+  background: #fff;
+  box-shadow: 0 0.125rem 0.625rem rgba(var(--mt-ink-rgb), 0.15);
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mt-pdp__zoom-btn svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  transition: opacity 200ms var(--mt-ease);
+}
+.mt-pdp__zoom-btn--close {
+  width: 3.625rem;
+  height: 3.625rem;
+  transition: transform 200ms var(--mt-ease);
+}
+.mt-pdp__zoom-btn--close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.mt-pdp__zoom-btn:disabled {
+  cursor: default;
+}
+.mt-pdp__zoom-btn:disabled svg {
+  opacity: 0.3;
+}
+/* Arrow exits through its side and slides back in from the opposite one;
+   the button's overflow clips it in between. */
+@keyframes mt-pdp-zoom-next {
+  50% {
+    transform: translateX(1.875rem);
+  }
+  50.01% {
+    transform: translateX(-1.875rem);
+  }
+}
+@keyframes mt-pdp-zoom-prev {
+  50% {
+    transform: translateX(-1.875rem);
+  }
+  50.01% {
+    transform: translateX(1.875rem);
+  }
+}
+@media (hover: hover) {
+  .mt-pdp__zoom-btn--next:not(:disabled):hover svg {
+    animation: mt-pdp-zoom-next 500ms var(--mt-ease);
+  }
+  .mt-pdp__zoom-btn--prev:not(:disabled):hover svg {
+    animation: mt-pdp-zoom-prev 500ms var(--mt-ease);
+  }
+  .mt-pdp__zoom-btn--close:hover {
+    transform: scale(1.06);
+  }
+}
 
 .mt-pdp__arrows {
   position: absolute;
