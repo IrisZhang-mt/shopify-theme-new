@@ -26,7 +26,15 @@
             <h2 class="mt-pgrid__title">{{ section.settings.heading | escape }}</h2>
           {%- endif -%}
           {%- if section.settings.subheading != blank -%}
-            <p class="mt-pgrid__sub">{{ section.settings.subheading | escape }}</p>
+            <ul class="mt-pgrid__tags" role="list">
+              {%- assign pg_tags = section.settings.subheading | split: '|' -%}
+              {%- for tag in pg_tags -%}
+                {%- assign tag_text = tag | strip -%}
+                {%- if tag_text != blank -%}
+                  <li class="mt-pgrid__tag">{{ tag_text | escape }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -88,7 +96,7 @@
       "type": "text",
       "id": "subheading",
       "label": "Subtitle",
-      "info": "展示在标题右侧的灰色小字，例如 10% OFF；留空时不展示"
+      "info": "展示在标题右侧的橙色标签，多个标签用 | 分隔，例如 BUY 4+: 20% OFF | BUY 6+: 30% OFF；留空时不展示"
     },
     {
       "type": "text",
