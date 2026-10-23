@@ -65,6 +65,8 @@ html.mt-pdp-zoom-lock body {
   z-index: 70;
   overflow: hidden;
   background: var(--mt-paper);
+  /* pdp.js handles swipe, pinch and pan itself; stops page-level zoom. */
+  touch-action: none;
   opacity: 0;
   transition: opacity 300ms var(--mt-ease);
 }
@@ -81,6 +83,9 @@ html.mt-pdp-zoom-lock body {
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior: contain;
+  /* touch-action stops at the nearest scroller, so the one on .mt-pdp__zoom
+     doesn't reach here; without this the browser takes over the swipe. */
+  touch-action: none;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   cursor: grab;
@@ -95,6 +100,8 @@ html.mt-pdp-zoom-lock body {
   cursor: grabbing;
 }
 .mt-pdp__zoom-item {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,12 +115,25 @@ html.mt-pdp-zoom-lock body {
 }
 .mt-pdp__zoom-item img {
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
   background: var(--mt-off-white);
   -webkit-user-drag: none;
+  transition: transform 300ms var(--mt-ease);
+}
+.mt-pdp__zoom-item.mt-is-zoomed img {
+  transform: scale(2);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mt-pdp__zoom-item img {
+    cursor: zoom-in;
+  }
+  .mt-pdp__zoom-item.mt-is-zoomed img {
+    cursor: zoom-out;
+  }
+  .mt-pdp__zoom-list.mt-is-dragging img {
+    cursor: grabbing;
+  }
 }
 
 .mt-pdp__zoom-nav {
@@ -932,6 +952,11 @@ button.mt-pdp__sticky-add {
   }
   .mt-pdp__arrows {
     display: none;
+  }
+  .mt-pdp__zoom-item img {
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .mt-pdp__upper {

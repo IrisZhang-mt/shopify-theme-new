@@ -524,17 +524,89 @@ if (!window.mtPdpInit) {
     const buttons = [prev, closeBtn, next].filter(Boolean);
     let items = [];
     let trigger = null;
-    let drag = null;
     let suppressClick = false;
+    // Mouse click-to-zoom item (CSS 2x + transform-origin pan).
+    let zoomed = null;
+    // Touch pinch state: { item, img, s, x, y }, applied as an inline transform.
+    let pinched = null;
+    // Active pointers and the gesture they form: drag | pan | pinch.
+    const pointers = new Map();
+    let gesture = null;
+    let lastTap = null;
+    const MAX_SCALE = 3;
+
+    const fineMq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    // Moving the transform-origin with the pointer pans the 2x image.
+    const panTo = (event) => {
+      const img = zoomed.querySelector('img');
+      const rect = zoomed.getBoundingClientRect();
+      const x = (event.clientX - rect.left - img.offsetLeft) / img.offsetWidth;
+      const y = (event.clientY - rect.top - img.offsetTop) / img.offsetHeight;
+      const pct = (value) => Math.min(Math.max(value, 0), 1) * 100;
+      img.style.transformOrigin = `${pct(x)}% ${pct(y)}%`;
+    };
+    const paint = (state, animate) => {
+      state.img.style.transition = animate ? '' : 'none';
+      state.img.style.transform =
+        state.s === 1 && !state.x && !state.y ? '' : `translate(${state.x}px, ${state.y}px) scale(${state.s})`;
+    };
+    // Untransformed centre of the image, in viewport coordinates.
+    const centerOf = (state) => {
+      const rect = state.item.getBoundingClientRect();
+      return {
+        x: rect.left + state.img.offsetLeft + state.img.offsetWidth / 2,
+        y: rect.top + state.img.offsetTop + state.img.offsetHeight / 2,
+      };
+    };
+    // How far the image may shift before its edge leaves the screen edge.
+    const limits = (state, s) => ({
+      x: Math.max(0, (state.img.offsetWidth * s - list.clientWidth) / 2),
+      y: Math.max(0, (state.img.offsetHeight * s - list.clientHeight) / 2),
+    });
+    const clamp = (value, max) => Math.min(Math.max(value, -max), max);
+    const pinchStateFor = (item) => {
+      if (pinched?.item === item) return pinched;
+      const img = item.querySelector('img');
+      // Re-pick a sharper srcset candidate for the zoomed view.
+      img.sizes = '100vw';
+      return { item, img, s: 1, x: 0, y: 0 };
+    };
+
+    // Reset any zoom except the one on `keep`.
+    const unzoom = (keep) => {
+      if (zoomed && zoomed !== keep) {
+        zoomed.classList.remove('mt-is-zoomed');
+        zoomed = null;
+      }
+      if (pinched && pinched.item !== keep) {
+        Object.assign(pinched, { s: 1, x: 0, y: 0 });
+        paint(pinched, true);
+        pinched = null;
+      }
+    };
+    const toggleZoom = (item, event) => {
+      if (zoomed === item) {
+        unzoom();
+        return;
+      }
+      unzoom();
+      // Re-pick a sharper srcset candidate for the 2x view.
+      item.querySelector('img').sizes = '100vw';
+      zoomed = item;
+      panTo(event);
+      item.classList.add('mt-is-zoomed');
+    };
 
     const currentIndex = () => Math.round(list.scrollLeft / list.clientWidth);
     const updateNav = () => {
+      if (!gesture) unzoom(items[currentIndex()]);
       if (!prev || !next) return;
       prev.disabled = list.scrollLeft <= 1;
       next.disabled = list.scrollLeft >= list.scrollWidth - list.clientWidth - 1;
     };
     const goTo = (index, smooth) => {
       const item = items[Math.min(Math.max(index, 0), items.length - 1)];
+      unzoom(item);
       if (!item) return;
       list.scrollTo({ left: item.offsetLeft, behavior: smooth && !reducedMq.matches ? 'smooth' : 'auto' });
     };
@@ -558,6 +630,7 @@ if (!window.mtPdpInit) {
     };
     const close = () => {
       if (zoom.hidden) return;
+      unzoom();
       zoom.classList.remove('mt-is-open');
       zoom.hidden = true;
       document.documentElement.classList.remove('mt-pdp-zoom-lock');
@@ -575,41 +648,192 @@ if (!window.mtPdpInit) {
       event.preventDefault();
       open(slide);
     });
-    // Mouse drag; touch devices swipe the scroller natively.
-    list.addEventListener('pointerdown', (event) => {
-      if (event.pointerType !== 'mouse' || event.button !== 0) return;
-      drag = { x: event.clientX, left: list.scrollLeft, index: currentIndex(), moved: false };
-    });
-    list.addEventListener('pointermove', (event) => {
-      if (!drag) return;
-      const dx = event.clientX - drag.x;
-      if (!drag.moved) {
-        if (Math.abs(dx) < 5) return;
-        drag.moved = true;
-        list.setPointerCapture(event.pointerId);
-        list.classList.add('mt-is-dragging');
-      }
-      list.scrollLeft = drag.left - dx;
-    });
-    const endDrag = (event) => {
-      if (!drag) return;
-      const { x, index, moved } = drag;
-      drag = null;
-      if (!moved) return;
-      // Swallow the click that follows a drag so it can't close the viewer.
+    // Gestures. The viewer sets touch-action: none, so touch swipe, pinch and
+    // pan are all handled here; trackpad/wheel scrolling stays native.
+    //   drag  - one pointer, image at 1x: slides the carousel
+    //   pan   - one finger on a pinched image: moves the image, and any
+    //           movement past its edge spills over into the carousel
+    //   pinch - two fingers: scales the current image around their midpoint
+    const swallowClick = () => {
       suppressClick = true;
       setTimeout(() => {
         suppressClick = false;
       });
-      const dx = event.clientX - x;
+    };
+    // A pinched image only hands off to the carousel when the gesture began
+    // with the image already resting on that edge; reaching the edge mid-pan
+    // just rubber-bands. dir > 0 = towards the next slide.
+    const canSpill = (g, dir) => g.type !== 'pan' || (dir > 0 ? g.atNextEdge : g.atPrevEdge);
+    const settleCarousel = (g) => {
+      const shift = list.scrollLeft - g.left;
+      if (!shift) {
+        list.classList.remove('mt-is-dragging');
+        return;
+      }
+      const dir = Math.sign(shift);
+      const flick = Math.abs(g.vx) > 0.4 && Math.sign(-g.vx) === dir;
+      const canTurn = canSpill(g, dir) && (Math.abs(shift) > list.clientWidth * 0.15 || flick);
       const release = () => list.classList.remove('mt-is-dragging');
       list.addEventListener('scrollend', release, { once: true });
       setTimeout(release, 600);
-      goTo(Math.abs(dx) > list.clientWidth * 0.15 ? index - Math.sign(dx) : index, true);
+      goTo(canTurn ? g.index + dir : g.index, true);
     };
-    list.addEventListener('pointerup', endDrag);
-    list.addEventListener('pointercancel', endDrag);
+    const settlePinch = (g) => {
+      const s = Math.min(Math.max(pinched.s, 1), MAX_SCALE);
+      if (s !== pinched.s && s > 1) {
+        // Over-pinched: shrink back around the last midpoint.
+        pinched.x = g.m.x - g.c.x - s * g.lx;
+        pinched.y = g.m.y - g.c.y - s * g.ly;
+      }
+      pinched.s = s;
+      const lim = limits(pinched, s);
+      pinched.x = s === 1 ? 0 : clamp(pinched.x, lim.x);
+      pinched.y = s === 1 ? 0 : clamp(pinched.y, lim.y);
+      paint(pinched, true);
+      if (s === 1) pinched = null;
+    };
+    const toggleTapZoom = (point) => {
+      const item = items[currentIndex()];
+      if (!item) return;
+      if (pinched?.item === item && pinched.s > 1) {
+        Object.assign(pinched, { s: 1, x: 0, y: 0 });
+        paint(pinched, true);
+        pinched = null;
+        return;
+      }
+      pinched = pinchStateFor(item);
+      const c = centerOf(pinched);
+      const lim = limits(pinched, 2);
+      Object.assign(pinched, { s: 2, x: clamp(c.x - point.x, lim.x), y: clamp(c.y - point.y, lim.y) });
+      paint(pinched, true);
+    };
+
+    const startGesture = () => {
+      const pts = [...pointers.values()];
+      const index = currentIndex();
+      const item = items[index];
+      if (!item) return;
+      if (pts.length >= 2) {
+        // Snap back any half-finished carousel drag before pinching.
+        if (list.classList.contains('mt-is-dragging')) {
+          list.scrollLeft = item.offsetLeft;
+          list.classList.remove('mt-is-dragging');
+        }
+        pinched = pinchStateFor(item);
+        const [a, b] = pts;
+        const m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const c = centerOf(pinched);
+        gesture = {
+          type: 'pinch',
+          d0: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+          s0: pinched.s,
+          c,
+          m,
+          lx: (m.x - c.x - pinched.x) / pinched.s,
+          ly: (m.y - c.y - pinched.y) / pinched.s,
+        };
+      } else if (pts.length === 1) {
+        const p = pts[0];
+        const panning = pinched?.item === item && pinched.s > 1;
+        const lim = panning ? limits(pinched, pinched.s) : null;
+        gesture = {
+          type: panning ? 'pan' : 'drag',
+          atNextEdge: panning && pinched.x <= -lim.x + 1,
+          atPrevEdge: panning && pinched.x >= lim.x - 1,
+          start: p,
+          x0: pinched?.x || 0,
+          y0: pinched?.y || 0,
+          left: list.scrollLeft,
+          index,
+          moved: false,
+          vx: 0,
+          lastX: p.x,
+          lastT: performance.now(),
+        };
+      }
+    };
+
+    list.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse') {
+        // A mouse-zoomed image follows the cursor instead of dragging.
+        if (zoomed || event.button !== 0) return;
+        pointers.clear();
+      }
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      startGesture();
+    });
+    list.addEventListener('pointermove', (event) => {
+      if (zoomed && event.pointerType === 'mouse') panTo(event);
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      const g = gesture;
+      if (!g) return;
+
+      if (g.type === 'pinch') {
+        const [a, b] = [...pointers.values()];
+        if (!b) return;
+        g.m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+        const s = Math.min(Math.max((g.s0 * Math.hypot(a.x - b.x, a.y - b.y)) / g.d0, 0.75), MAX_SCALE * 1.5);
+        Object.assign(pinched, { s, x: g.m.x - g.c.x - s * g.lx, y: g.m.y - g.c.y - s * g.ly });
+        paint(pinched, false);
+        return;
+      }
+
+      const dx = event.clientX - g.start.x;
+      const dy = event.clientY - g.start.y;
+      if (!g.moved) {
+        if (Math.hypot(dx, dy) < 5) return;
+        g.moved = true;
+        if (event.pointerType === 'mouse') list.setPointerCapture(event.pointerId);
+      }
+      const now = performance.now();
+      if (now > g.lastT) g.vx = (event.clientX - g.lastX) / (now - g.lastT);
+      g.lastX = event.clientX;
+      g.lastT = now;
+
+      let spill = dx;
+      if (g.type === 'pan') {
+        const lim = limits(pinched, pinched.s);
+        const x = g.x0 + dx;
+        pinched.x = clamp(x, lim.x);
+        pinched.y = clamp(g.y0 + dy, lim.y);
+        paint(pinched, false);
+        spill = x - pinched.x;
+        if (!canSpill(g, -Math.sign(spill))) spill *= 0.25;
+      }
+      if (spill) list.classList.add('mt-is-dragging');
+      list.scrollLeft = g.left - spill;
+    });
+    const endPointer = (event) => {
+      if (!pointers.has(event.pointerId)) return;
+      const point = pointers.get(event.pointerId);
+      pointers.delete(event.pointerId);
+      const g = gesture;
+      gesture = null;
+      if (g?.type === 'pinch') {
+        swallowClick();
+        settlePinch(g);
+      } else if (g?.moved) {
+        // Swallow the click that follows a drag so it can't close the viewer.
+        swallowClick();
+        settleCarousel(g);
+      } else if (g && event.pointerType === 'touch' && event.target.closest('img')) {
+        const now = performance.now();
+        if (lastTap && now - lastTap.t < 300 && Math.hypot(point.x - lastTap.x, point.y - lastTap.y) < 30) {
+          lastTap = null;
+          toggleTapZoom(point);
+        } else {
+          lastTap = { t: now, x: point.x, y: point.y };
+        }
+      }
+      // A finger lifted mid-pinch: carry on panning with the other one.
+      if (pointers.size) startGesture();
+    };
+    list.addEventListener('pointerup', endPointer);
+    list.addEventListener('pointercancel', endPointer);
     list.addEventListener('scroll', updateNav, { passive: true });
+    // iOS Safari: stop the page-level pinch zoom behind the viewer.
+    zoom.addEventListener('gesturestart', (event) => event.preventDefault());
 
     zoom.addEventListener('click', (event) => {
       if (suppressClick) {
@@ -622,7 +846,9 @@ if (!window.mtPdpInit) {
         goTo(currentIndex() - 1, true);
       } else if (event.target.closest('[data-pdp-zoom-next]')) {
         goTo(currentIndex() + 1, true);
-      } else if (!event.target.closest('img')) {
+      } else if (event.target.closest('img')) {
+        if (fineMq.matches) toggleZoom(event.target.closest('[data-pdp-zoom-media]'), event);
+      } else {
         close();
       }
     });
