@@ -20,7 +20,7 @@ param(
     [string]$Store = "moody-tiger-athletics.myshopify.com"
 )
 
-$ThemeId = "167997735158"
+$ThemeId = "168088797430"
 
 $shopifyArgs = @(
     "theme", "push",
@@ -38,3 +38,5 @@ $shopifyArgs = @(
 
 Write-Host "Pushing to draft theme $ThemeId on $Store (layout/sections/snippets/assets/settings_schema.json/locales/en.default.json only, settings_data.json + header-group.json/footer-group.json excluded)..."
 shopify @shopifyArgs
+
+

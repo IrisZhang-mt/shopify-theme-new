@@ -23,7 +23,10 @@
 .mt-kol__track {
   display: flex;
   gap: 1.3125rem;
+  /* overflow-x: auto alone computes overflow-y to auto too, so any sub-pixel
+     vertical overflow made the track draggable up/down. Lock it to x only. */
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
