@@ -8,11 +8,19 @@
   <div class="mt-cols__grid" data-reveal-stagger>
     {%- for block in section.blocks -%}
       <div class="mt-cols__item" data-reveal style="--mt-reveal-i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
-        {%- if block.settings.image != blank -%}
+        {%- assign pc_image = block.settings.image | default: block.settings.mob_image -%}
+        {%- assign mob_image = block.settings.mob_image | default: block.settings.image -%}
+        {%- if pc_image != blank -%}
           <div class="{% if block.settings.image_style == 'icon' %}mt-cols__icon{% else %}mt-cols__media{% endif %}">
-            {%- assign image_alt = block.settings.image.alt | default: block.settings.title | escape -%}
-            {{ block.settings.image | image_url: width: 800 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 25vw, 100vw', alt: image_alt }}
+            {%- assign image_alt = pc_image.alt | default: block.settings.title | escape -%}
+            <picture>
+              <source media="(min-width: 750px)" srcset="{% render 'image-srcset', image: pc_image, widths: '400,600,800' %}" sizes="25vw">
+              {{ mob_image | image_url: width: 800 | image_tag: decoding: 'async', loading: 'lazy', sizes: '50vw', alt: image_alt }}
+            </picture>
           </div>
+        {%- endif -%}
+        {%- if section.settings.show_number -%}
+          <span class="mt-cols__number">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
         {%- endif -%}
         {%- if block.settings.title != blank -%}
           <h3 class="mt-cols__title">{{ block.settings.title }}</h3>
@@ -45,7 +53,7 @@
       "min": 2,
       "max": 4,
       "step": 1,
-      "default": 3
+      "default": 4
     },
     {
       "type": "select",
@@ -56,6 +64,13 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_number",
+      "label": "Show number",
+      "info": "按卡片顺序自动生成 01、02、03…",
+      "default": true
     }
   ],
   "blocks": [
@@ -66,7 +81,14 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "PC image",
+          "info": "留空时使用 Mobile 图片"
+        },
+        {
+          "type": "image_picker",
+          "id": "mob_image",
+          "label": "Mobile image",
+          "info": "留空时使用 PC 图片"
         },
         {
           "type": "select",
@@ -105,6 +127,7 @@
     {
       "name": "Multicolumn",
       "blocks": [
+        { "type": "column" },
         { "type": "column" },
         { "type": "column" },
         { "type": "column" }
