@@ -7,7 +7,7 @@
   assign pg_item_list_name = section.settings.heading | default: pg_collection.title
   assign pg_sizes = '(min-width: 750px) calc((94vw - 27px) / 4), calc((100vw - 37px) / 2)'
   assign has_products = false
-  if pg_collection.products.size > 0
+  if pg_collection.products_count > 0
     assign has_products = true
   endif
 -%}
@@ -39,29 +39,59 @@
         </div>
       {%- endif -%}
 
-      <div class="mt-pgrid__grid" data-pgrid-grid>
-        {%- if has_products -%}
-          {%- for item in pg_collection.products limit: section.settings.count -%}
-            {% render 'product-card',
-              product: item,
-              index: forloop.index0,
-              sizes: pg_sizes,
-              quick: true,
-              sale_badge: true,
-              hide_swatches: true,
-              item_list_id: pg_item_list_id,
-              item_list_name: pg_item_list_name
-            %}
-          {%- endfor -%}
-        {%- else -%}
+      {%- if has_products -%}
+        {%- paginate pg_collection.products by section.settings.count -%}
+          <div class="mt-pgrid__grid" data-pgrid-grid>
+            {%- for item in pg_collection.products -%}
+              {%- assign pg_ga4_index = paginate.current_offset | plus: forloop.index0 -%}
+              {% render 'product-card',
+                product: item,
+                index: forloop.index0,
+                ga4_index: pg_ga4_index,
+                sizes: pg_sizes,
+                quick: true,
+                sale_badge: true,
+                hide_swatches: true,
+                item_list_id: pg_item_list_id,
+                item_list_name: pg_item_list_name
+              %}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            {%- liquid
+              assign pg_from = paginate.current_offset | plus: 1
+              assign pg_to = paginate.current_offset | plus: paginate.page_size | at_most: paginate.items
+              assign pg_count_template = 'collection.showing' | t: from: '[from]', to: '[to]', total: '[total]'
+              assign pg_page_label = 'general.page_n' | t: number: '[n]'
+            -%}
+            {%- comment -%} Page buttons are rendered by product-grid.js (in-place swap, no URL change). {%- endcomment -%}
+            <nav
+              class="mt-pgrid__pager"
+              aria-label="{{ 'general.pagination' | t }}"
+              data-pgrid-pager
+              data-page="{{ paginate.current_page }}"
+              data-pages="{{ paginate.pages }}"
+              data-total="{{ paginate.items }}"
+              data-per-page="{{ paginate.page_size }}"
+              data-template="{{ pg_count_template | escape }}"
+              data-label-page="{{ pg_page_label | escape }}"
+              data-label-prev="{{ 'general.previous' | t | escape }}"
+              data-label-next="{{ 'general.next' | t | escape }}"
+            >
+              <p class="mt-pgrid__count" aria-live="polite" data-pgrid-count>
+                {{- 'collection.showing' | t: from: pg_from, to: pg_to, total: paginate.items -}}
+              </p>
+              <div class="mt-pgrid__pages" data-pgrid-pages></div>
+            </nav>
+          {%- endif -%}
+        {%- endpaginate -%}
+      {%- else -%}
+        <div class="mt-pgrid__grid" data-pgrid-grid>
           {%- for i in (1..4) -%}
             {% render 'product-card', product: blank, index: forloop.index0 %}
           {%- endfor -%}
-        {%- endif -%}
-      </div>
-
-      {%- if section.settings.cta_label != blank and pg_collection != blank -%}
-        <a class="mt-pgrid__cta" href="{{ pg_collection.url }}">{{ section.settings.cta_label | escape }}</a>
+        </div>
       {%- endif -%}
     </div>
   </section>
@@ -75,16 +105,17 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "按该系列在后台设置的排序，取前 N 个商品；SHOP MORE 跳转到该系列"
+      "info": "按该系列在后台设置的排序分页展示全部商品"
     },
     {
       "type": "range",
       "id": "count",
-      "label": "Products shown",
-      "min": 2,
-      "max": 8,
-      "step": 1,
-      "default": 4
+      "label": "Products per page",
+      "min": 4,
+      "max": 12,
+      "step": 4,
+      "default": 4,
+      "info": "超过一页时在列表下方显示翻页"
     },
     {
       "type": "text",
@@ -97,13 +128,6 @@
       "id": "subheading",
       "label": "Subtitle",
       "info": "展示在标题右侧的橙色标签，多个标签用 | 分隔，例如 BUY 4+: 20% OFF | BUY 6+: 30% OFF；留空时不展示"
-    },
-    {
-      "type": "text",
-      "id": "cta_label",
-      "label": "Button label",
-      "default": "Shop more",
-      "info": "留空时不展示按钮"
     },
     {
       "type": "text",

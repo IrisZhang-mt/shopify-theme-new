@@ -1,45 +1,235 @@
 if (!window.mtProductGridInit) {
   window.mtProductGridInit = true;
 
-  // Equalise title heights per visual row so prices and quick-shop bars line up.
-  const measure = () => {
-    document.querySelectorAll('[data-pgrid-grid]').forEach((grid) => {
-      const rows = new Map();
-      grid.querySelectorAll('.mt-card').forEach((card) => {
-        const key = card.offsetTop;
-        if (!rows.has(key)) rows.set(key, []);
-        rows.get(key).push(card);
+  // ---- Pagination: swap the cards in place, no URL change ----
+  // Several grids can share one page and would all follow a shared ?page=, so the
+  // page only lives in data-page. Pager and count update on click (inside the
+  // input window that CLS ignores); the cards follow when the HTML arrives.
+  const reducedMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
+  const saveData = () => navigator.connection?.saveData === true;
+  const cache = new Map();
+  const shownPage = new WeakMap();
+  const pending = new WeakMap();
+
+  const ARROW_PREV = '<svg width="9" height="18" viewBox="0 0 9 18" fill="none" aria-hidden="true"><path d="M8 1 1 9l7 8" stroke="currentColor" stroke-width="1.5"/></svg>';
+  const ARROW_NEXT = '<svg width="9" height="18" viewBox="0 0 9 18" fill="none" aria-hidden="true"><path d="m1 1 7 8-7 8" stroke="currentColor" stroke-width="1.5"/></svg>';
+
+  const sectionId = (section) => section.closest('[id^="shopify-section-"]')?.id.replace('shopify-section-', '') || '';
+  const pagerOf = (section) => section.querySelector('[data-pgrid-pager]');
+
+  // Built from the current URL so a localized page (e.g. /ar/...) gets its own markup.
+  const fetchPage = (section, page) => {
+    const id = sectionId(section);
+    const key = `${id}:${page}`;
+    if (!cache.has(key)) {
+      const url = new URL(window.location.href);
+      url.hash = '';
+      url.searchParams.set('section_id', id);
+      url.searchParams.set('page', page);
+      const request = fetch(url).then((res) => {
+        if (!res.ok) throw new Error(res.status);
+        return res.text();
       });
-      rows.forEach((row) => {
-        let tallest = 0;
-        row.forEach((card) => {
-          const title = card.querySelector('.mt-card__title');
-          if (title) tallest = Math.max(tallest, title.offsetHeight);
-        });
-        if (!tallest) return;
-        row.forEach((card) => card.style.setProperty('--mt-pgrid-title-h', `${tallest}px`));
-      });
+      request.catch(() => cache.delete(key));
+      cache.set(key, request);
+    }
+    return cache.get(key);
+  };
+
+  // A short last page is topped up with the tail of the page before it, so it always
+  // shows the collection's last N products: no blank slots, same height.
+  const isShortLast = (pager, page) =>
+    page > 1 && page === +pager.dataset.pages && +pager.dataset.total % +pager.dataset.perPage !== 0;
+  const sourcePages = (pager, page) => (isShortLast(pager, page) ? [page - 1, page] : [page]);
+
+  const prefetch = (section, page) => {
+    const pager = pagerOf(section);
+    if (!pager || page < 1 || page > +pager.dataset.pages) return;
+    sourcePages(pager, page).forEach((n) => fetchPage(section, n).catch(() => {}));
+  };
+
+  // Always 7 slots (first, last, current ±1, gaps filled), so the arrows never move.
+  const SLOTS = 7;
+  const range = (from, to) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  const pageItems = (current, pages) => {
+    if (pages <= SLOTS) return range(1, pages);
+    if (current <= 4) return [...range(1, 5), '…', pages];
+    if (current >= pages - 3) return [1, '…', ...range(pages - 4, pages)];
+    return [1, '…', current - 1, current, current + 1, '…', pages];
+  };
+
+  const arrowButton = (pager, step) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'mt-pgrid__arrow';
+    button.dataset.pgridStep = step;
+    button.setAttribute('aria-label', step < 0 ? pager.dataset.labelPrev : pager.dataset.labelNext);
+    button.innerHTML = step < 0 ? ARROW_PREV : ARROW_NEXT;
+    return button;
+  };
+
+  const renderPager = (pager) => {
+    const page = +pager.dataset.page;
+    const pages = +pager.dataset.pages;
+    const total = +pager.dataset.total;
+    const perPage = +pager.dataset.perPage;
+    const focused = pager.contains(document.activeElement) ? document.activeElement.dataset.pgridStep || 'page' : '';
+
+    const from = isShortLast(pager, page) ? total - perPage + 1 : (page - 1) * perPage + 1;
+    pager.querySelector('[data-pgrid-count]').textContent = pager.dataset.template
+      .replace('[from]', from)
+      .replace('[to]', Math.min(page * perPage, total))
+      .replace('[total]', total);
+
+    const prev = arrowButton(pager, -1);
+    const next = arrowButton(pager, 1);
+    prev.disabled = page <= 1;
+    next.disabled = page >= pages;
+    const nums = pageItems(page, pages).map((item) => {
+      if (item === '…') {
+        const dots = document.createElement('span');
+        dots.className = 'mt-pgrid__dots';
+        dots.setAttribute('aria-hidden', 'true');
+        dots.textContent = item;
+        return dots;
+      }
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-pgrid__num';
+      button.dataset.pgridPage = item;
+      button.textContent = item;
+      button.setAttribute('aria-label', pager.dataset.labelPage.replace('[n]', item));
+      if (item === page) button.setAttribute('aria-current', 'page');
+      return button;
     });
+    pager.querySelector('[data-pgrid-pages]').replaceChildren(prev, ...nums, next);
+
+    // The buttons were rebuilt; keep keyboard focus on the same control.
+    if (!focused) return;
+    const arrow = focused === '-1' ? prev : focused === '1' ? next : null;
+    (arrow && !arrow.disabled ? arrow : pager.querySelector('[aria-current="page"]'))?.focus();
   };
 
-  const align = () => {
-    document
-      .querySelectorAll('[data-pgrid-grid] .mt-card')
-      .forEach((card) => card.style.removeProperty('--mt-pgrid-title-h'));
-    requestAnimationFrame(measure);
+  const remToPx = (value) => {
+    const n = parseFloat(value) || 0;
+    if (!value.trim().endsWith('rem')) return n;
+    return n * parseFloat(getComputedStyle(document.documentElement).fontSize);
   };
 
-  let frame = 0;
-  const queue = () => {
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(align);
+  // Same offset as anchor-tabs: the header plus the stuck tab bar, if the page has one.
+  const scrollToSection = (section) => {
+    const tabs = document.querySelector('[data-atabs]');
+    const stuck = tabs ? remToPx(getComputedStyle(tabs).getPropertyValue('--mt-atabs-stuck-h')) : 0;
+    const offset = (document.querySelector('.section-header')?.offsetHeight || 0) + stuck;
+    // With motion.js smooth scrolling on, positions on screen follow .mt-scroll, not window.scrollY.
+    const smooth = document.documentElement.classList.contains('mt-smooth') && document.querySelector('.mt-scroll');
+    const scrollY = smooth ? smooth.scrollTop : window.scrollY;
+    const top = Math.max(0, section.getBoundingClientRect().top + scrollY - offset);
+    if (window.mtScrollTo) window.mtScrollTo(top);
+    else window.scrollTo({ top, behavior: reducedMq.matches ? 'auto' : 'smooth' });
   };
 
-  window.addEventListener('resize', queue);
-  window.addEventListener('pageshow', queue);
-  document.addEventListener('shopify:section:load', queue);
-  if (document.fonts?.ready) document.fonts.ready.then(queue);
-  queue();
+  const parseCards = (html) => [
+    ...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('[data-pgrid-grid] > .mt-card'),
+  ];
+
+  const swap = (section, htmls) => {
+    const grid = section.querySelector('[data-pgrid-grid]');
+    const perPage = +pagerOf(section).dataset.perPage;
+    const cards = htmls.flatMap(parseCards).slice(-perPage);
+    if (!cards.length) throw new Error('empty page');
+    // Restart the reveal stagger from the first slot (topped-up cards carry their old index).
+    cards.forEach((card, i) => card.style.setProperty('--mt-reveal-i', i));
+    grid.replaceChildren(...cards);
+    // Cards parsed by DOMParser come from an inert document; re-setting srcset/src makes
+    // iOS Safari pick up the lazy images (same fix as plp.js).
+    cards.forEach((card) =>
+      card.querySelectorAll('img').forEach((img) => {
+        const srcset = img.getAttribute('srcset');
+        const src = img.getAttribute('src');
+        if (srcset) img.setAttribute('srcset', srcset);
+        if (src) img.setAttribute('src', src);
+      })
+    );
+    document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    observe();
+  };
+
+  const go = async (section, page) => {
+    const pager = pagerOf(section);
+    if (!pager || page < 1 || page > +pager.dataset.pages || page === +pager.dataset.page) return;
+    if (!shownPage.has(section)) shownPage.set(section, +pager.dataset.page);
+
+    pager.dataset.page = page;
+    renderPager(pager);
+    scrollToSection(section);
+
+    const grid = section.querySelector('[data-pgrid-grid]');
+    const token = {};
+    pending.set(section, token);
+    grid.setAttribute('aria-busy', 'true');
+    try {
+      const htmls = await Promise.all(sourcePages(pager, page).map((n) => fetchPage(section, n)));
+      if (pending.get(section) !== token) return;
+      swap(section, htmls);
+      shownPage.set(section, page);
+      if (!saveData()) idle(() => prefetch(section, page + 1));
+    } catch {
+      // Keep the cards on screen and put the pager back on the page they belong to.
+      if (pending.get(section) !== token) return;
+      pager.dataset.page = shownPage.get(section);
+      renderPager(pager);
+    } finally {
+      if (pending.get(section) === token) grid.removeAttribute('aria-busy');
+    }
+  };
+
+  // Prefetch the next page once the grid is close to view and the browser is idle.
+  const nearObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        nearObserver.unobserve(entry.target);
+        if (saveData()) return;
+        const section = entry.target;
+        idle(() => prefetch(section, +pagerOf(section).dataset.page + 1));
+      });
+    },
+    { rootMargin: '400px 0px' }
+  );
+
+  const initPagers = () =>
+    document.querySelectorAll('[data-pgrid-pager]').forEach((pager) => {
+      renderPager(pager);
+      nearObserver.observe(pager.closest('[data-pgrid]'));
+    });
+
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest?.('[data-pgrid-pager] button');
+    if (!button || button.disabled) return;
+    const section = button.closest('[data-pgrid]');
+    const pager = pagerOf(section);
+    const page = button.dataset.pgridPage
+      ? +button.dataset.pgridPage
+      : +pager.dataset.page + +button.dataset.pgridStep;
+    go(section, page);
+  });
+
+  // Desktop hover: start loading the page under the pointer before the click.
+  document.addEventListener('pointerover', (event) => {
+    if (event.pointerType !== 'mouse') return;
+    const button = event.target.closest?.('[data-pgrid-pager] button:not(:disabled)');
+    if (!button) return;
+    const section = button.closest('[data-pgrid]');
+    const pager = pagerOf(section);
+    prefetch(
+      section,
+      button.dataset.pgridPage ? +button.dataset.pgridPage : +pager.dataset.page + +button.dataset.pgridStep
+    );
+  });
+
+  document.addEventListener('shopify:section:load', initPagers);
 
   // GA4 — same view_item_list / select_item pattern as the other product-list modules.
   const trackedIds = new WeakMap();
@@ -123,4 +313,6 @@ if (!window.mtProductGridInit) {
       },
     });
   });
+
+  initPagers();
 }

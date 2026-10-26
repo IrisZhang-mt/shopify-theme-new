@@ -61,8 +61,13 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.6875rem 0.3125rem;
+  transition: opacity var(--mt-dur) var(--mt-ease);
 }
-
+/* Waiting on another page: dim in place; the delay skips the flash when the page is prefetched. */
+.mt-pgrid__grid[aria-busy='true'] {
+  opacity: 0.5;
+  transition-delay: 150ms;
+}
 /* ---- Card overrides, scoped to this section ---- */
 .mt-pgrid .mt-card {
   width: auto;
@@ -78,14 +83,18 @@
   max-width: none;
   font-size: 0.8125rem;
 }
+/* Fixed title and price heights so swapping pages never changes the card height. */
 .mt-pgrid .mt-card__title {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  min-height: var(--mt-pgrid-title-h, 0);
+  height: calc(var(--mt-p-leading) * 2em);
 }
 .mt-pgrid .mt-card__price {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
   color: var(--mt-moss);
 }
 /* Sale: current price in tangerine; compare-at and discount keep the card defaults. */
@@ -129,31 +138,73 @@
   letter-spacing: 0.08em;
 }
 
-.mt-pgrid__cta {
+/* ---- Pagination ---- */
+.mt-pgrid__pager {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 2.9375rem 0 0.75rem;
+}
+.mt-pgrid__count {
+  margin: 0;
+  font-family: var(--mt-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* Fixed height: the buttons are filled in by JS, so nothing below moves when they appear. */
+.mt-pgrid__pages {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 1.875rem;
+}
+.mt-pgrid__num,
+.mt-pgrid__dots,
+.mt-pgrid__arrow {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
-  margin-top: 1.5rem;
-  border: 1px solid var(--mt-ink);
-  text-decoration: none;
-  font-family: var(--mt-font-mono);
-  font-size: 0.75rem;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  width: 1.875rem;
+  height: 1.875rem;
+  padding: 0;
+  border: 1px solid transparent;
+  background: none;
   color: var(--mt-ink);
-  transition:
-    background-color var(--mt-dur) var(--mt-ease),
-    color var(--mt-dur) var(--mt-ease);
+  font-family: var(--mt-font-body);
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+.mt-pgrid__num,
+.mt-pgrid__arrow {
+  cursor: pointer;
+}
+.mt-pgrid__arrow {
+  width: 2.25rem;
+}
+.mt-pgrid__arrow svg {
+  width: 0.4375rem;
+  height: 0.875rem;
+}
+.mt-pgrid__num[aria-current='page'] {
+  border-color: var(--mt-ink);
+}
+.mt-pgrid__arrow:disabled {
+  color: rgba(var(--mt-ink-rgb), 0.3);
+  cursor: default;
+}
+[dir='rtl'] .mt-pgrid__arrow svg {
+  transform: scaleX(-1);
 }
 @media (hover: hover) {
-  .mt-pgrid__cta:hover {
-    background: var(--mt-ink);
-    color: var(--mt-cloud);
+  .mt-pgrid__num:not([aria-current='page']):hover {
+    border-color: var(--mt-off-white);
   }
 }
-.mt-pgrid__cta:focus-visible {
+.mt-pgrid__num:focus-visible,
+.mt-pgrid__arrow:focus-visible {
   outline: 2px solid var(--mt-ink);
   outline-offset: 2px;
 }
@@ -203,6 +254,10 @@
   .mt-pgrid .mt-card__price {
     font-size: 1rem;
   }
+  .mt-pgrid .mt-card__title {
+    -webkit-line-clamp: 1;
+    height: calc(var(--mt-p-leading) * 1em);
+  }
 
   .mt-pgrid .mt-card__badges {
     top: 0.9375rem;
@@ -218,15 +273,31 @@
     font-size: 0.75rem;
   }
 
-  .mt-pgrid__cta {
-    height: 3.625rem;
-    margin-top: 2.25rem;
-    font-size: 0.8125rem;
+  .mt-pgrid__pager {
+    gap: 1.25rem;
+    margin: 4.0625rem 0 0.875rem;
+  }
+  .mt-pgrid__pages {
+    height: 2.625rem;
+  }
+  .mt-pgrid__num,
+  .mt-pgrid__dots,
+  .mt-pgrid__arrow {
+    width: 2.5rem;
+    height: 2.625rem;
+    font-size: 0.9375rem;
+  }
+  .mt-pgrid__arrow {
+    width: 3.0625rem;
+  }
+  .mt-pgrid__arrow svg {
+    width: 0.5625rem;
+    height: 1.125rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mt-pgrid__cta {
+  .mt-pgrid__grid {
     transition: none;
   }
 }

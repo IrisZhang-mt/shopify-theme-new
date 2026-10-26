@@ -16,6 +16,7 @@
     "previous": "Previous",
     "next": "Next",
     "pagination": "Pagination",
+    "page_n": "Page {{ number }}",
     "slides": "Slides",
     "slide_n": "Slide {{ number }}",
     "play_video": "Play video",
@@ -90,6 +91,7 @@
     "clear_all_link": "Clear all filters",
     "back_to_top": "Back to top",
     "viewing": "Viewing {{ shown }} of {{ total }}",
+    "showing": "Showing {{ from }}-{{ to }} of {{ total }}",
     "view_more": "View more"
   },
   "blog": {
