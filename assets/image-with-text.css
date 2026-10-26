@@ -111,3 +111,14 @@
   max-width: none;
   padding-inline: 0;
 }
+.mt-imgtext--full .mt-imgtext__body {
+  padding-inline: 0.9375rem;
+}
+@media (min-width: 750px) {
+  .mt-imgtext--full .mt-imgtext__body {
+    padding-inline: 0 3.75rem;
+  }
+  .mt-imgtext--full.mt-imgtext--reverse .mt-imgtext__body {
+    padding-inline: 3.75rem 0;
+  }
+}

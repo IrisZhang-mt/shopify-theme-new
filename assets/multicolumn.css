@@ -102,6 +102,16 @@
   }
 }
 .mt-cols.mt-cols--full {
+  --mt-cols-gutter: 0.9375rem;
   max-width: none;
   padding-inline: 0;
+}
+.mt-cols--full .mt-cols__heading,
+.mt-cols--full .mt-cols__item > :not(.mt-cols__media) {
+  margin-inline: var(--mt-cols-gutter);
+}
+@media (min-width: 750px) {
+  .mt-cols.mt-cols--full {
+    --mt-cols-gutter: 1.875rem;
+  }
 }
