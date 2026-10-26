@@ -1,7 +1,7 @@
 {{ 'multicolumn.css' | asset_url | stylesheet_tag }}
 
 {%- if section.blocks.size > 0 or section.settings.heading != blank -%}
-<section class="mt-cols{% if section.settings.align == 'center' %} mt-cols--center{% endif %}" style="--mt-cols-count: {{ section.settings.columns }}">
+<section class="mt-cols{% if section.settings.align == 'center' %} mt-cols--center{% endif %}{% unless section.settings.contained %} mt-cols--full{% endunless %}" style="--mt-cols-count: {{ section.settings.columns }}">
   {%- if section.settings.heading != blank -%}
     <h2 class="mt-cols__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
   {%- endif -%}
@@ -70,6 +70,13 @@
       "id": "show_number",
       "label": "Show number",
       "info": "按卡片顺序自动生成 01、02、03…",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "contained",
+      "label": "Limit max width",
+      "info": "开启：限制最大宽度并两边留白；关闭：铺满屏幕宽度",
       "default": true
     }
   ],

@@ -107,3 +107,7 @@
     transition: none;
   }
 }
+.mt-imgtext.mt-imgtext--full {
+  max-width: none;
+  padding-inline: 0;
+}

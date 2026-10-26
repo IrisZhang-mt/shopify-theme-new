@@ -1,8 +1,9 @@
 {{ 'rte.css' | asset_url | stylesheet_tag }}
 {{ 'rich-text.css' | asset_url | stylesheet_tag }}
 
-{%- if section.settings.heading != blank or section.settings.text != blank or section.settings.cta_label != blank -%}
-<section class="mt-richtext{% if section.settings.align == 'center' %} mt-richtext--center{% endif %}">
+{%- assign qr_image = section.settings.qr_image -%}
+{%- if section.settings.heading != blank or section.settings.text != blank or section.settings.cta_label != blank or qr_image != blank -%}
+<section class="mt-richtext{% if section.settings.align == 'center' %} mt-richtext--center{% endif %}{% if qr_image != blank %} mt-richtext--qr{% endif %}">
   <div class="mt-richtext__inner">
     {%- if section.settings.heading != blank -%}
       <h2 class="mt-richtext__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
@@ -14,6 +15,15 @@
       <a class="mt-richtext__cta" href="{{ section.settings.cta_url }}" data-reveal style="--mt-reveal-i: 2">{{ section.settings.cta_label }}</a>
     {%- endif -%}
   </div>
+  {%- if qr_image != blank -%}
+    {%- assign qr_alt = qr_image.alt | default: section.settings.qr_caption | escape -%}
+    <div class="mt-richtext__qr" data-reveal style="--mt-reveal-i: 1">
+      {{ qr_image | image_url: width: 300 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 104px, 56px', alt: qr_alt }}
+      {%- if section.settings.qr_caption != blank -%}
+        <p class="mt-richtext__qr-caption">{{ section.settings.qr_caption | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 </section>
 {%- endif -%}
 
@@ -50,6 +60,22 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "QR code"
+    },
+    {
+      "type": "image_picker",
+      "id": "qr_image",
+      "label": "QR code image",
+      "info": "配置后二维码显示在右侧；留空时不展示"
+    },
+    {
+      "type": "textarea",
+      "id": "qr_caption",
+      "label": "QR code caption",
+      "info": "显示在二维码下方；留空时不展示"
     }
   ],
   "presets": [

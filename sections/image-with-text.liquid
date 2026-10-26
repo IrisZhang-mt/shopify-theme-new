@@ -9,7 +9,7 @@
 {%- endif -%}
 
 <section
-  class="mt-imgtext{% if section.settings.layout == 'right' %} mt-imgtext--reverse{% endif %}{% if heading_overlay %} mt-imgtext--overlay{% endif %}"
+  class="mt-imgtext{% if section.settings.layout == 'right' %} mt-imgtext--reverse{% endif %}{% if heading_overlay %} mt-imgtext--overlay{% endif %}{% unless section.settings.contained %} mt-imgtext--full{% endunless %}"
   style="
     {%- if section.settings.heading_color != blank %} --mt-imgtext-heading-color: {{ section.settings.heading_color }};{% endif -%}
     {%- if section.settings.text_color != blank %} --mt-imgtext-text-color: {{ section.settings.text_color }};{% endif -%}
@@ -86,6 +86,13 @@
         { "value": "overlay", "label": "On image" }
       ],
       "default": "side"
+    },
+    {
+      "type": "checkbox",
+      "id": "contained",
+      "label": "Limit max width",
+      "info": "开启：限制最大宽度并两边留白；关闭：铺满屏幕宽度",
+      "default": true
     },
     {
       "type": "text",
