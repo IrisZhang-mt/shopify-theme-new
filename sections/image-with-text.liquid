@@ -1,18 +1,44 @@
 {{ 'rte.css' | asset_url | stylesheet_tag }}
 {{ 'image-with-text.css' | asset_url | stylesheet_tag }}
 
-<section class="mt-imgtext{% if section.settings.layout == 'right' %} mt-imgtext--reverse{% endif %}">
+{%- assign pc_image = section.settings.image -%}
+{%- assign mob_image = section.settings.mob_image | default: pc_image -%}
+{%- assign heading_overlay = false -%}
+{%- if section.settings.heading_position == 'overlay' -%}
+  {%- assign heading_overlay = true -%}
+{%- endif -%}
+
+<section
+  class="mt-imgtext{% if section.settings.layout == 'right' %} mt-imgtext--reverse{% endif %}{% if heading_overlay %} mt-imgtext--overlay{% endif %}"
+  style="
+    {%- if section.settings.heading_color != blank %} --mt-imgtext-heading-color: {{ section.settings.heading_color }};{% endif -%}
+    {%- if section.settings.text_color != blank %} --mt-imgtext-text-color: {{ section.settings.text_color }};{% endif -%}
+    {%- if section.settings.heading_size_mobile != blank %} --mt-imgtext-heading-size-mob: {{ section.settings.heading_size_mobile }}px;{% endif -%}
+    {%- if section.settings.heading_size_desktop != blank %} --mt-imgtext-heading-size-pc: {{ section.settings.heading_size_desktop }}px;{% endif -%}
+    {%- if section.settings.text_size_mobile != blank %} --mt-imgtext-text-size-mob: {{ section.settings.text_size_mobile }}px;{% endif -%}
+    {%- if section.settings.text_size_desktop != blank %} --mt-imgtext-text-size-pc: {{ section.settings.text_size_desktop }}px;{% endif -%}
+  "
+>
   <div class="mt-imgtext__grid">
     <div class="mt-imgtext__media" data-reveal>
-      {%- if section.settings.image != blank -%}
-        {%- assign image_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
-        {{ section.settings.image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', alt: image_alt }}
+      {%- if pc_image != blank and section.settings.mob_image != blank -%}
+        {%- assign image_alt = pc_image.alt | default: section.settings.heading | escape -%}
+        <picture>
+          <source media="(min-width: 750px)" srcset="{% render 'image-srcset', image: pc_image, widths: '750,1100,1500' %}" sizes="50vw">
+          {{ mob_image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: image_alt }}
+        </picture>
+      {%- elsif pc_image != blank -%}
+        {%- assign image_alt = pc_image.alt | default: section.settings.heading | escape -%}
+        {{ pc_image | image_url: width: 1500 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 50vw, 100vw', alt: image_alt }}
       {%- else -%}
         {{ 'image' | placeholder_svg_tag }}
       {%- endif -%}
+      {%- if heading_overlay and section.settings.heading != blank -%}
+        <h2 class="mt-imgtext__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
     </div>
     <div class="mt-imgtext__body">
-      {%- if section.settings.heading != blank -%}
+      {%- if heading_overlay == false and section.settings.heading != blank -%}
         <h2 class="mt-imgtext__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
@@ -35,6 +61,12 @@
       "label": "Image"
     },
     {
+      "type": "image_picker",
+      "id": "mob_image",
+      "label": "Mobile image",
+      "info": "留空时使用 PC 图片"
+    },
+    {
       "type": "select",
       "id": "layout",
       "label": "Image position",
@@ -43,6 +75,17 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_position",
+      "label": "Heading position",
+      "info": "Beside image：标题在文字栏；On image：标题叠加在图片左下角",
+      "options": [
+        { "value": "side", "label": "Beside image" },
+        { "value": "overlay", "label": "On image" }
+      ],
+      "default": "side"
     },
     {
       "type": "text",
@@ -63,6 +106,46 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "留空时使用默认颜色；标题叠加在图片上时通常需要配置为白色"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "info": "留空时使用默认颜色"
+    },
+    {
+      "type": "number",
+      "id": "heading_size_desktop",
+      "label": "Heading font size (PC, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "heading_size_mobile",
+      "label": "Heading font size (Mobile, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "text_size_desktop",
+      "label": "Text font size (PC, px)",
+      "info": "留空时使用默认字号"
+    },
+    {
+      "type": "number",
+      "id": "text_size_mobile",
+      "label": "Text font size (Mobile, px)",
+      "info": "留空时使用默认字号"
     }
   ],
   "presets": [
