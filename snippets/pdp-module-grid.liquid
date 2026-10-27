@@ -1,0 +1,47 @@
+{%- comment -%}
+  Detail module "pdp_detail_grid": heading above a 3-column grid of cards (image, title, body).
+  Cards missing their PC image are skipped.
+  Params: module — pdp_detail_grid metaobject.
+{%- endcomment -%}
+{%- liquid
+  assign heading = module.heading.value
+  assign cards = module.cards.value
+-%}
+
+{%- if cards != blank -%}
+  <div class="mt-pdp-module mt-pdp-grid">
+    <div class="mt-pdp-grid__inner">
+      {%- if heading != blank -%}
+        <h2 class="mt-pdp-module__heading">{{ heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+
+      <ul class="mt-pdp-grid__cards" role="list">
+        {%- for card in cards -%}
+          {%- liquid
+            assign card_pc = card.image_pc.value
+            if card_pc == blank
+              continue
+            endif
+            assign card_mob = card.image_mob.value | default: card_pc
+            assign card_title = card.title.value
+            assign card_alt = card_pc.alt | default: card_title | escape
+          -%}
+          {%- capture card_pc_srcset -%}{% render 'image-srcset', image: card_pc, widths: '450,600,900,1200,1440' %}{%- endcapture -%}
+          {%- capture card_mob_widths -%}{% render 'image-srcset', image: card_mob, widths: '240,360,480,720', output: 'widths' %}{%- endcapture -%}
+          <li class="mt-pdp-grid__card">
+            <picture>
+              <source media="(min-width: 750px)" srcset="{{ card_pc_srcset }}" sizes="33vw" width="{{ card_pc.width }}" height="{{ card_pc.height }}">
+              {{ card_mob | image_url: width: card_mob.width | image_tag: loading: 'lazy', decoding: 'async', widths: card_mob_widths, sizes: '30vw', alt: card_alt, class: 'mt-pdp-grid__image' }}
+            </picture>
+            {%- if card_title != blank -%}
+              <h3 class="mt-pdp-grid__title">{{ card_title | escape }}</h3>
+            {%- endif -%}
+            {%- if card.body.value != blank -%}
+              <p class="mt-pdp-grid__text">{{ card.body.value | escape | newline_to_br }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}

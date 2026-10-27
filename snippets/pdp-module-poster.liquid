@@ -1,0 +1,38 @@
+{%- comment -%}
+  Detail module "pdp_poster": full-width image with heading/body overlaid top-left.
+  Params: module — pdp_poster metaobject.
+{%- endcomment -%}
+{%- liquid
+  assign pc_image = module.image_pc.value
+  assign mob_image = module.image_mob.value | default: pc_image
+  assign heading = module.heading.value
+  assign body = module.body.value
+  assign heading_line = heading | newline_to_br | replace: '<br />', ' ' | strip_newlines
+  assign image_alt = pc_image.alt | default: heading_line | escape
+  if module.text_theme.value == 'dark'
+    assign text_theme = 'dark'
+  else
+    assign text_theme = 'light'
+  endif
+-%}
+
+{%- if pc_image != blank -%}
+  {%- capture pc_srcset -%}{% render 'image-srcset', image: pc_image, widths: '750,1100,1440,2200,2880' %}{%- endcapture -%}
+  {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100,1500', output: 'widths' %}{%- endcapture -%}
+
+  <div class="mt-pdp-module mt-pdp-poster mt-pdp-poster--{{ text_theme }}">
+    <picture>
+      <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="100vw" width="{{ pc_image.width }}" height="{{ pc_image.height }}">
+      {{ mob_image | image_url: width: mob_image.width | image_tag: loading: 'lazy', decoding: 'async', widths: mob_widths, sizes: '100vw', alt: image_alt, class: 'mt-pdp-module__image' }}
+    </picture>
+
+    <div class="mt-pdp-poster__text">
+      {%- if heading != blank -%}
+        <h2 class="mt-pdp-module__heading">{{ heading | escape | newline_to_br }}</h2>
+      {%- endif -%}
+      {%- if body != blank -%}
+        <p class="mt-pdp-module__body">{{ body | escape | newline_to_br }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

@@ -1,0 +1,79 @@
+{%- comment -%}
+  Detail module "pdp_callout": full-width image with heading/body, an icon row (shared
+  pdp_icon library, inline SVG) and hotspot labels placed by % coordinates per breakpoint.
+  Params: module — pdp_callout metaobject.
+{%- endcomment -%}
+{%- liquid
+  assign pc_image = module.image_pc.value
+  assign mob_image = module.image_mob.value | default: pc_image
+  assign heading = module.heading.value
+  assign body = module.body.value
+  assign icons = module.icons.value
+  assign hotspots = module.hotspots.value
+  assign heading_line = heading | newline_to_br | replace: '<br />', ' ' | strip_newlines
+  assign image_alt = pc_image.alt | default: heading_line | escape
+-%}
+
+{%- if pc_image != blank -%}
+  {%- capture pc_srcset -%}{% render 'image-srcset', image: pc_image, widths: '750,1100,1440,2200,2880' %}{%- endcapture -%}
+  {%- capture mob_widths -%}{% render 'image-srcset', image: mob_image, widths: '375,550,750,1100,1500', output: 'widths' %}{%- endcapture -%}
+
+  <div class="mt-pdp-module mt-pdp-callout">
+    <picture>
+      <source media="(min-width: 750px)" srcset="{{ pc_srcset }}" sizes="100vw" width="{{ pc_image.width }}" height="{{ pc_image.height }}">
+      {{ mob_image | image_url: width: mob_image.width | image_tag: loading: 'lazy', decoding: 'async', widths: mob_widths, sizes: '100vw', alt: image_alt, class: 'mt-pdp-module__image' }}
+    </picture>
+
+    <div class="mt-pdp-callout__content">
+      <div class="mt-pdp-callout__text">
+        {%- if heading != blank -%}
+          <h2 class="mt-pdp-module__heading">{{ heading | escape | newline_to_br }}</h2>
+        {%- endif -%}
+        {%- if body != blank -%}
+          <p class="mt-pdp-module__body">{{ body | escape | newline_to_br }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if icons != blank -%}
+        <ul class="mt-pdp-callout__icons" role="list">
+          {%- for icon in icons -%}
+            {%- assign icon_svg = icon.icon_svg.value | strip -%}
+            {%- assign icon_svg_start = icon_svg | slice: 0, 4 | downcase -%}
+            <li class="mt-pdp-callout__icon">
+              {%- comment -%} Only output pasted markup that is an <svg> element {%- endcomment -%}
+              {%- if icon_svg_start == '<svg' -%}
+                <span class="mt-pdp-callout__icon-svg" aria-hidden="true">{{ icon_svg }}</span>
+              {%- endif -%}
+              <span class="mt-pdp-callout__icon-label">{{ icon.label.value | escape }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    {%- for hotspot in hotspots -%}
+      {%- liquid
+        if hotspot.pc_side.value == 'right'
+          assign side_pc = 'right'
+        else
+          assign side_pc = 'left'
+        endif
+        if hotspot.mob_side.value == 'right'
+          assign side_mob = 'right'
+        else
+          assign side_mob = 'left'
+        endif
+      -%}
+      <div
+        class="mt-pdp-callout__hotspot mt-pdp-callout__hotspot--pc-{{ side_pc }} mt-pdp-callout__hotspot--mob-{{ side_mob }}"
+        style="--mt-pdp-x-pc: {{ hotspot.pc_x.value | default: 0 }}%; --mt-pdp-y-pc: {{ hotspot.pc_y.value | default: 0 }}%; --mt-pdp-x-mob: {{ hotspot.mob_x.value | default: 0 }}%; --mt-pdp-y-mob: {{ hotspot.mob_y.value | default: 0 }}%;"
+      >
+        <p class="mt-pdp-callout__hotspot-title">{{ hotspot.title.value | escape }}</p>
+        {%- if hotspot.subtitle.value != blank -%}
+          <p class="mt-pdp-callout__hotspot-subtitle">{{ hotspot.subtitle.value | escape | newline_to_br }}</p>
+        {%- endif -%}
+        <span class="mt-pdp-callout__dot" aria-hidden="true"></span>
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}

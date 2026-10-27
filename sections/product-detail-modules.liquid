@@ -1,0 +1,31 @@
+{%- comment -%}
+  Image/text detail modules below the product info, sourced from the product metafield
+  custom.detail_modules (list of mixed metaobject references). Each entry is dispatched by its
+  metaobject type to a pdp-module-* snippet; unknown types are skipped so a new definition can be
+  added in admin before its snippet exists. Outputs nothing when the list is empty.
+{%- endcomment -%}
+{%- assign detail_modules = product.metafields.custom.detail_modules.value -%}
+
+{%- if detail_modules != blank -%}
+  {{ 'product-detail-modules.css' | asset_url | stylesheet_tag }}
+
+  <section class="mt-detail-modules">
+    {%- for module in detail_modules -%}
+      {%- case module.system.type -%}
+        {%- when 'pdp_poster' -%}
+          {%- render 'pdp-module-poster', module: module -%}
+        {%- when 'pdp_callout' -%}
+          {%- render 'pdp-module-callout', module: module -%}
+        {%- when 'pdp_detail_grid' -%}
+          {%- render 'pdp-module-grid', module: module -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product detail modules",
+  "settings": []
+}
+{% endschema %}

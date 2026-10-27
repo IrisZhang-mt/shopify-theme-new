@@ -74,6 +74,10 @@
       "type": "product-detail-images",
       "settings": {}
     },
+    "detail_modules": {
+      "type": "product-detail-modules",
+      "settings": {}
+    },
     "slideshow_wA86pK": {
       "type": "slideshow",
       "blocks": {
@@ -315,6 +319,7 @@
   "order": [
     "main",
     "detail_images",
+    "detail_modules",
     "slideshow_wA86pK",
     "slideshow_CfnUBb",
     "video_grid",
