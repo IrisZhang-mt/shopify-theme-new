@@ -2,9 +2,15 @@
 <script src="{{ 'footer.js' | asset_url }}" type="module"></script>
 
 <footer class="mt-footer">
-  {%- if section.settings.image != blank -%}
+  {%- assign footer_pc_image = section.settings.image | default: section.settings.mob_image -%}
+  {%- assign footer_mob_image = section.settings.mob_image | default: section.settings.image -%}
+  {%- if footer_mob_image != blank -%}
+    {%- capture footer_mob_widths -%}{% render 'image-srcset', image: footer_mob_image, widths: '375,550,750,1100,1500', output: 'widths' %}{%- endcapture -%}
     <div class="mt-footer__bg">
-      {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'lazy', sizes: '100vw', alt: ''}}
+      <picture>
+        <source media="(min-width: 750px)" srcset="{% render 'image-srcset', image: footer_pc_image, widths: '750,1100,1440,1920,2880' %}" sizes="100vw">
+        {{ footer_mob_image | image_url: width: footer_mob_image.width | image_tag: decoding: 'async', loading: 'lazy', widths: footer_mob_widths, sizes: '100vw', alt: '' }}
+      </picture>
     </div>
   {%- endif -%}
 
@@ -200,7 +206,14 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Background image"
+      "label": "Background image",
+      "info": "PC 端底图；未设置 Mobile background image 时移动端也用这张"
+    },
+    {
+      "type": "image_picker",
+      "id": "mob_image",
+      "label": "Mobile background image",
+      "info": "建议上传 1:3 比例的竖图（如 750×2250），JPG 格式；不填则用 Background image"
     },
     {
       "type": "text",

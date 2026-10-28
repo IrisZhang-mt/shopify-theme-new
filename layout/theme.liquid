@@ -182,8 +182,14 @@
     {{ 'index.css' | asset_url | stylesheet_tag }}
     {{ 'announcement-bar.css' | asset_url | stylesheet_tag }}
     {{ 'header.css' | asset_url | stylesheet_tag }}
-    {{ 'product-card.css' | asset_url | stylesheet_tag }}
-    {{ 'color-swatch.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Home first screen is only the hero, so cards/swatches load async there; PLP/PDP/search need them above the fold. {%- endcomment -%}
+    {%- if request.page_type == 'index' -%}
+      <link rel="stylesheet" href="{{ 'product-card.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link rel="stylesheet" href="{{ 'color-swatch.css' | asset_url }}" media="print" onload="this.media='all'">
+    {%- else -%}
+      {{ 'product-card.css' | asset_url | stylesheet_tag }}
+      {{ 'color-swatch.css' | asset_url | stylesheet_tag }}
+    {%- endif %}
     <link rel="stylesheet" href="{{ 'quick-shop.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'size-chart.css' | asset_url }}" media="print" onload="this.media='all'">
     <script src="{{ 'motion.js' | asset_url }}" type="module"></script>
