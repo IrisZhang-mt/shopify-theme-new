@@ -345,6 +345,15 @@ html.mt-pdp-zoom-lock body {
   justify-content: space-between;
 }
 
+/* Kiwi's own link stays hidden; the theme's Size Chart button opens it (size-chart.js).
+   Without a product metafield the button only shows once Kiwi has a chart for the product. */
+.ks-chart-modal-link {
+  display: none !important;
+}
+body:not(:has(.ks-chart-modal-link)) .mt-pdp__chart[data-chart-wait] {
+  display: none;
+}
+
 .mt-pdp__chart {
   display: flex;
   align-items: center;

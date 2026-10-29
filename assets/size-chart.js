@@ -37,6 +37,14 @@ if (!window.mtChartInit) {
   };
 
   document.addEventListener('click', (event) => {
+    // Kiwi Size Chart (app block on the PDP) injects its own .ks-chart-modal-link once it has a chart
+    // for this product; the theme button then opens Kiwi's chart, otherwise the page fallback below.
+    const kiwiLink = event.target.closest('[data-chart-kiwi]') && document.querySelector('.ks-chart-modal-link');
+    if (kiwiLink) {
+      event.preventDefault();
+      kiwiLink.click();
+      return;
+    }
     const open = event.target.closest('[data-chart-open]');
     if (open) {
       const chart = document.querySelector(`[data-chart="${open.dataset.chartOpen}"]`);

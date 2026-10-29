@@ -106,11 +106,8 @@
                   <p class="mt-qs__option-name">{{ option.name }}:</p>
                   {%- assign chart_meta = product.metafields.custom.size_chart -%}
                   {%- assign chart_page = chart_meta.value -%}
-                  {%- if chart_page.content == blank -%}
-                    {%- assign chart_handle = settings.size_chart_url | split: '/pages/' | last | split: '/' | first | split: '?' | first -%}
-                    {%- assign chart_page = pages[chart_handle] | default: pages['size-chart'] | default: pages['size-guide'] -%}
-                  {%- endif -%}
-                  {%- assign chart_url = chart_page.url | default: chart_meta.value | default: settings.size_chart_url -%}
+                  {%- comment -%} Kiwi only charts the main PDP product, so quick shop shows a chart only from the product's own metafield. {%- endcomment -%}
+                  {%- assign chart_url = chart_page.url | default: chart_meta.value -%}
                   {%- if option.name == 'Size' and chart_url != blank -%}
                     <a class="mt-qs__chart" href="{{ chart_url | escape }}"{% if chart_page.content != blank %} data-chart-open="{{ product.id }}"{% endif %}>
                       <img src="{{ 'ruler.svg' | asset_url }}" width="19" height="9" alt="">
