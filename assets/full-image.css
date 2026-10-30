@@ -62,7 +62,7 @@
   margin: 0;
   font-family: var(--mt-font-display);
   font-size: var(--mt-full-image-title-size-mob, var(--mt-h-xl-size));
-  line-height: var(--mt-h-xl-leading);
+  line-height: var(--mt-full-image-title-leading, 87%);
   letter-spacing: var(--mt-tracking-heading);
   color: var(--mt-full-image-title-color, var(--mt-cloud));
 }

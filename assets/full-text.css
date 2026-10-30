@@ -4,6 +4,8 @@
 }
 
 .mt-full-text__text {
+  letter-spacing: -0.03em;
+  line-height: 96%;
   max-width: var(--mt-container);
   margin-inline: auto;
   font-size: var(--mt-full-text-size-mob, var(--mt-p-l-size));

@@ -3,7 +3,14 @@
 
 {%- assign qr_image = section.settings.qr_image -%}
 {%- if section.settings.heading != blank or section.settings.text != blank or section.settings.cta_label != blank or qr_image != blank -%}
-<section class="mt-richtext{% if section.settings.align == 'center' %} mt-richtext--center{% endif %}{% if qr_image != blank %} mt-richtext--qr{% endif %}">
+<section class="mt-richtext{% if section.settings.align == 'center' %} mt-richtext--center{% endif %}{% if qr_image != blank %} mt-richtext--qr{% endif %}"
+  style="
+    {%- if section.settings.heading_size_mobile != blank %} --mt-richtext-heading-size-mob: {{ section.settings.heading_size_mobile }}px;{% endif -%}
+    {%- if section.settings.heading_size_desktop != blank %} --mt-richtext-heading-size-pc: {{ section.settings.heading_size_desktop }}px;{% endif -%}
+    {%- if section.settings.text_size_mobile != blank %} --mt-richtext-text-size-mob: {{ section.settings.text_size_mobile }}px;{% endif -%}
+    {%- if section.settings.text_size_desktop != blank %} --mt-richtext-text-size-pc: {{ section.settings.text_size_desktop }}px;{% endif -%}
+  "
+>
   <div class="mt-richtext__inner">
     {%- if section.settings.heading != blank -%}
       <h2 class="mt-richtext__heading mt-rise" data-reveal>{{ section.settings.heading }}</h2>
@@ -50,6 +57,38 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "number",
+      "id": "heading_size_desktop",
+      "label": "Heading font size (PC, px)",
+      "info": "留空时默认 70px"
+    },
+    {
+      "type": "number",
+      "id": "heading_size_mobile",
+      "label": "Heading font size (Mobile, px)",
+      "info": "留空时默认 15px"
+    },
+    {
+      "type": "number",
+      "id": "text_size_desktop",
+      "label": "Text font size (PC, px)",
+      "info": "留空时默认 14px"
+    },
+    {
+      "type": "number",
+      "id": "text_size_mobile",
+      "label": "Text font size (Mobile, px)",
+      "info": "留空时默认 8px"
+    },
+    {
+      "type": "header",
+      "content": "Button"
     },
     {
       "type": "text",

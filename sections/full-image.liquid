@@ -54,7 +54,7 @@
     {%- if title != blank or subtitle != blank -%}
       <div
         class="mt-full-image__content"
-        style="--mt-full-image-title-color: {{ section.settings.title_color }}; --mt-full-image-subtitle-color: {{ section.settings.subtitle_color }};
+        style="--mt-full-image-title-color: {{ section.settings.title_color }}; --mt-full-image-subtitle-color: {{ section.settings.subtitle_color }}; --mt-full-image-title-leading: {{ section.settings.title_line_height }}%;
           {%- if section.settings.title_size_mobile != blank %} --mt-full-image-title-size-mob: {{ section.settings.title_size_mobile }}px;{% endif -%}
           {%- if section.settings.title_size_desktop != blank %} --mt-full-image-title-size-pc: {{ section.settings.title_size_desktop }}px;{% endif -%}
           {%- if section.settings.subtitle_size_mobile != blank %} --mt-full-image-subtitle-size-mob: {{ section.settings.subtitle_size_mobile }}px;{% endif -%}
@@ -66,7 +66,7 @@
             class="mt-full-image__title"
             style="--mt-full-image-x-mob: {{ section.settings.title_x_mobile }}; --mt-full-image-y-mob: {{ section.settings.title_y_mobile }}; --mt-full-image-x-pc: {{ section.settings.title_x_desktop }}; --mt-full-image-y-pc: {{ section.settings.title_y_desktop }}; text-align: {{ section.settings.title_align }}"
           >
-            {{- title -}}
+            {{- title | newline_to_br -}}
           </h2>
         {%- endif -%}
         {%- if subtitle != blank -%}
@@ -125,7 +125,7 @@
       "content": "Image text"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "title",
       "label": "Title",
       "info": "叠加在图片上；留空时不展示"
@@ -277,6 +277,16 @@
       "id": "title_size_mobile",
       "label": "Title font size (Mobile, px)",
       "info": "留空时使用默认字号"
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "label": "Title line height",
+      "min": 50,
+      "max": 150,
+      "step": 1,
+      "unit": "%",
+      "default": 87
     },
     {
       "type": "number",
