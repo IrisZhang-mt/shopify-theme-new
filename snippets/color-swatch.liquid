@@ -3,18 +3,19 @@
   module that renders color swatches (PDP, product card, quick shop, PDP pairs) so
   the fallback priority stays identical everywhere.
 
-  Priority: settings.color_swatches text mapping, a guessed "<value | handleize>.png"
-  from Settings > Files, then (as that image's background when it 404s) the
-  metaobject color_swatch color, then off-white. Native Shopify swatches
-  (value.swatch) are deliberately ignored: the store's Color options are plain text.
+  Priority: settings.color_swatches text mapping (filename or HEX), then a guessed
+  "<value | handleize>.png" from Settings > Files with off-white showing through when
+  it 404s. The color_swatch metaobject is not read: a lookup per swatch cost ~100ms
+  on a collection page and its color only ever sat hidden under an existing PNG — a
+  color without a PNG belongs in settings.color_swatches as HEX. Native Shopify
+  swatches (value.swatch) are deliberately ignored: the store's Color options are plain text.
 
   Params: value (the option value), custom_color_keys/custom_color_values (parsed
   from settings.color_swatches).
 {%- endcomment -%}
 {%- liquid
   assign swatch_handle = value | handleize
-  assign swatch_entry = shop.metaobjects.color_swatch[swatch_handle]
-  assign custom_color_lookup = value | downcase | escape
+  assign custom_color_lookup = value | downcase
   assign custom_color_value = ''
   for key in custom_color_keys
     if key == custom_color_lookup
@@ -28,8 +29,7 @@
   elsif custom_color_value != blank
     assign swatch_value = custom_color_value
   else
-    # Guess "<handle>.png" in Settings > Files; if it 404s the metaobject color (or off-white) shows through
-    assign swatch_fallback = swatch_entry.color | default: 'var(--mt-off-white)'
-    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') " | append: swatch_fallback
+    # Guess "<handle>.png" in Settings > Files; if it 404s off-white shows through
+    assign swatch_value = swatch_handle | append: '.png' | file_url | prepend: "url('" | append: "') var(--mt-off-white)"
   endif
 -%}{{- swatch_value -}}
