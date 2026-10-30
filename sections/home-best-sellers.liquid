@@ -1,3 +1,21 @@
+{%- if request.page_type == 'collection' and section.blocks.size == 0 -%}
+  {%- comment -%}
+    Lazy tab panel: only the first tab renders with the home page. Other tabs are fetched
+    on demand from "<tab collection url>?section_id=home-best-sellers" (home-best-sellers.js),
+    which renders this file standalone (no blocks) in that collection's context. GA4 list id/name are
+    placeholders here and filled in by the JS from the clicked tab.
+  {%- endcomment -%}
+  <div data-bs-panel-cards>
+    {%- for product in collection.products limit: 8 -%}
+      {% render 'product-card', product: product, quick: true, align: true, index: forloop.index0, item_list_id: 'pending', item_list_name: collection.title %}
+    {%- endfor -%}
+  </div>
+{%- else -%}
+{%- if request.page_type == 'index' -%}
+  {%- comment -%} theme.liquid loads card/swatch CSS async on home; load it here, ahead of the cards, so a fast scroll on a slow network never shows unstyled cards. {%- endcomment -%}
+  {{ 'product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'color-swatch.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 {{ 'home-best-sellers.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'home-best-sellers.js' | asset_url }}" type="module"></script>
 
@@ -5,7 +23,7 @@
 {%- assign bs_heading = section.settings.heading | default: 'Best Sellers' -%}
 {%- assign bs_item_list_id = bs_heading | handleize | replace: '-', '_' -%}
 
-<section class="mt-bs" data-currency="{{ cart.currency.iso_code }}">
+<section class="mt-bs" data-currency="{{ cart.currency.iso_code }}" data-bs-list-id="{{ bs_item_list_id }}" data-bs-heading="{{ bs_heading | escape }}">
   <div class="mt-bs__intro">
     <div class="mt-bs__lead">
       {%- if section.settings.heading != blank -%}
@@ -20,6 +38,9 @@
               data-bs-target="{{ forloop.index0 }}"
               data-bs-url="{{ block.settings.collection.url | default: '#' }}"
               data-bs-label="{{ block.settings.label | escape }}"
+              {%- if forloop.first == false and block.settings.collection.products_count > 0 %}
+                data-bs-src="{{ block.settings.collection.url }}?section_id=home-best-sellers"
+              {%- endif %}
               aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
               {{ block.shopify_attributes }}
             >
@@ -57,21 +78,18 @@
       <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
     </button>
   </div>
+  {%- comment -%} Tabs with products load on click (data-bs-src); only empty tabs keep their placeholder cards inline. {%- endcomment -%}
   {%- for block in section.blocks offset: 1 -%}
-    {%- assign bs_panel_list_name = bs_heading | append: '_' | append: block.settings.label -%}
-    <template data-bs-panel="{{ forloop.index }}">
-      {%- if block.settings.collection.products.size > 0 -%}
-        {%- for product in block.settings.collection.products limit: 8 -%}
-          {% render 'product-card', product: product, quick: true, align: true, index: forloop.index0, item_list_id: bs_item_list_id, item_list_name: bs_panel_list_name %}
-        {%- endfor -%}
-      {%- else -%}
+    {%- unless block.settings.collection.products_count > 0 -%}
+      <template data-bs-panel="{{ forloop.index }}">
         {%- for i in (0..3) -%}
           {% render 'product-card', product: blank, index: i %}
         {%- endfor -%}
-      {%- endif -%}
-    </template>
+      </template>
+    {%- endunless -%}
   {%- endfor -%}
 </section>
+{%- endif -%}
 
 {% schema %}
 {

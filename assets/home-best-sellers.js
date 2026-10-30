@@ -79,34 +79,61 @@ if (!window.mtBestSellersInit) {
       panels.set(template.dataset.bsPanel, template.content);
       template.remove();
     });
-    state = { panels, current: '0' };
+    state = { panels, current: '0', loading: null };
     panelState.set(section, state);
     return state;
   };
 
-  document.addEventListener('click', (event) => {
-    const button = event.target.closest?.('.mt-bs__filter');
-    if (!button) return;
-    const section = button.closest('.mt-bs');
-    const row = section.querySelector('[data-bs-row]');
-    const key = button.dataset.bsTarget;
-    const state = getPanels(section);
-    if (key === state.current) return;
+  // Tabs after the first are not in the home page HTML: they carry data-bs-src and are
+  // fetched once (starting on hover/touch/focus so the click usually finds them ready).
+  const requests = new WeakMap();
+  const loadPanel = (button) => {
+    if (!button.dataset.bsSrc) return null;
+    if (!requests.has(button)) {
+      const section = button.closest('.mt-bs');
+      const request = fetch(button.dataset.bsSrc)
+        .then((res) => (res.ok ? res.text() : Promise.reject(res.status)))
+        .then((html) => {
+          const cards = new DOMParser().parseFromString(html, 'text/html').querySelector('[data-bs-panel-cards]');
+          if (!cards?.querySelector('.mt-card')) return null;
+          const listName = `${section.dataset.bsHeading}_${button.dataset.bsLabel}`;
+          cards.querySelectorAll('.mt-card[data-item-id]').forEach((card) => {
+            card.dataset.itemListId = section.dataset.bsListId;
+            card.dataset.itemListName = listName;
+          });
+          const panel = document.createDocumentFragment();
+          panel.append(...cards.childNodes);
+          return panel;
+        })
+        .catch(() => null);
+      requests.set(button, request);
+      // A failed request may be retried on the next attempt.
+      request.then((panel) => panel || requests.delete(button));
+    }
+    return requests.get(button);
+  };
 
-    const stash = document.createDocumentFragment();
-    stash.append(...row.childNodes);
-    state.panels.set(state.current, stash);
+  const prefetch = (event) => {
+    const button = event.target.closest?.('.mt-bs__filter[data-bs-src]');
+    if (button) loadPanel(button);
+  };
+  document.addEventListener('pointerover', prefetch);
+  document.addEventListener('focusin', prefetch);
 
-    const next = state.panels.get(key);
-    if (next) {
-      next.querySelectorAll?.('[data-reveal]').forEach((el) => {
+  const showPanel = (row, panel) => {
+    if (panel) {
+      panel.querySelectorAll?.('[data-reveal]').forEach((el) => {
         el.classList.remove('mt-in-view', 'mt-observed');
       });
-      row.append(next);
+      row.append(panel);
     }
-    state.current = key;
+    row.style.minHeight = '';
     row.scrollLeft = 0;
+    document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
+    observeRow(row);
+  };
 
+  const setActiveTab = (section, button) => {
     section.querySelectorAll('.mt-bs__filter').forEach((item) => {
       item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
     });
@@ -116,8 +143,51 @@ if (!window.mtBestSellersInit) {
       const text = cta.querySelector('[data-bs-cta-text]');
       if (text) text.textContent = (window.mtStrings?.shopCollection || 'Shop [label]').replace('[label]', button.dataset.bsLabel);
     }
-    document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
-    observeRow(row);
+  };
+
+  document.addEventListener('click', async (event) => {
+    const button = event.target.closest?.('.mt-bs__filter');
+    if (!button) return;
+    const section = button.closest('.mt-bs');
+    const row = section.querySelector('[data-bs-row]');
+    const key = button.dataset.bsTarget;
+    const state = getPanels(section);
+    if (key === state.current) return;
+
+    // Hold the row's height so the page doesn't jump while a tab loads. Measure before the
+    // cards are moved out; a row that is already loading keeps the height it was given.
+    if (!row.style.minHeight) row.style.minHeight = `${row.offsetHeight}px`;
+    // While a tab is still loading the row is empty, so there is nothing to stash for it.
+    if (state.loading !== state.current) {
+      const stash = document.createDocumentFragment();
+      stash.append(...row.childNodes);
+      state.panels.set(state.current, stash);
+    }
+    row.replaceChildren();
+    const previous = section.querySelector(`.mt-bs__filter[data-bs-target="${state.current}"]`);
+    state.current = key;
+    setActiveTab(section, button);
+
+    if (state.panels.has(key) || !button.dataset.bsSrc) {
+      state.loading = null;
+      showPanel(row, state.panels.get(key));
+      return;
+    }
+
+    state.loading = key;
+    row.setAttribute('aria-busy', 'true');
+    const panel = await loadPanel(button);
+    if (panel) state.panels.set(key, panel);
+    if (state.current !== key) return;
+    row.removeAttribute('aria-busy');
+    if (panel) {
+      state.loading = null;
+      showPanel(row, state.panels.get(key));
+    } else if (previous) {
+      // Network/server failure: fall back to the tab that was showing. state.loading stays
+      // on the failed tab so its empty row is not cached and the next click retries.
+      previous.click();
+    }
   });
 
   document.addEventListener('click', (event) => {

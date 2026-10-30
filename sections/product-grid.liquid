@@ -1,3 +1,8 @@
+{%- if request.page_type == 'index' -%}
+  {%- comment -%} theme.liquid loads card/swatch CSS async on home; load it here, ahead of the cards, so a fast scroll on a slow network never shows unstyled cards. {%- endcomment -%}
+  {{ 'product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'color-swatch.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 {{ 'product-grid.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-grid.js' | asset_url }}" type="module"></script>
 
