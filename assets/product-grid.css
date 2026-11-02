@@ -57,6 +57,61 @@
   white-space: nowrap;
 }
 
+/* ---- Filter tabs: one row; mobile scrolls sideways edge to edge ---- */
+.mt-pgrid__tabs {
+  display: flex;
+  gap: 0.40625rem;
+  margin: 0.4375rem -1rem 1.3125rem;
+  padding-inline: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mt-pgrid__tabs::-webkit-scrollbar {
+  display: none;
+}
+.mt-pgrid__tab {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.125rem;
+  height: 2.25rem;
+  padding: 0 0.75rem 0 0.375rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f0f0ee;
+  color: var(--mt-ink);
+  font-family: var(--mt-font-body);
+  font-size: 0.625rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--mt-dur) var(--mt-ease);
+}
+.mt-pgrid__tab:not(:has(img)) {
+  padding-inline-start: 0.75rem;
+}
+.mt-pgrid__tab[aria-pressed='true'] {
+  background: #b3b3b3;
+}
+.mt-pgrid__tab:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+.mt-pgrid__tab-img {
+  flex: none;
+  width: 1.625rem;
+  height: 1.625rem;
+  object-fit: contain;
+}
+
+.mt-pgrid__empty {
+  margin: 0;
+  padding: 3rem 0;
+  color: var(--mt-moss);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
 .mt-pgrid__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -239,20 +294,54 @@
     font-size: 1.125rem;
   }
 
+  .mt-pgrid__tabs {
+    flex-wrap: wrap;
+    gap: 0.625rem 1.9375rem;
+    margin: 0.125rem 0 2.375rem;
+    padding: 0;
+    overflow: visible;
+  }
+  .mt-pgrid__tab {
+    gap: 0.625rem;
+    height: 2.5rem;
+    padding: 0 1.5rem 0 1.125rem;
+    font-size: 1rem;
+  }
+  .mt-pgrid__tab:not(:has(img)) {
+    padding-inline-start: 1.5rem;
+  }
+  .mt-pgrid__tab-img {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
+  @media (hover: hover) {
+    .mt-pgrid__tab:not([aria-pressed='true']):hover {
+      background: var(--mt-mist);
+    }
+  }
+
+  .mt-pgrid__empty {
+    padding-block: 5rem;
+    font-size: 1rem;
+  }
+
   .mt-pgrid__grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2.25rem 0.5625rem;
   }
 
+  /* Card type follows the card's own width (169px at 750 → 218px in 6 columns → 331px at 1439),
+     not the viewport, so the 4 → 6 column switch at 1440 keeps text and card in proportion. */
   .mt-pgrid .mt-card {
+    container-type: inline-size;
     gap: 1rem;
   }
   .mt-pgrid .mt-card__text {
-    gap: 0.375rem;
+    gap: clamp(0.375rem, 0.74125rem - 1.77cqi, 0.5rem);
   }
   .mt-pgrid .mt-card__title,
   .mt-pgrid .mt-card__price {
-    font-size: 1rem;
+    font-size: clamp(0.8125rem, 0.63375rem + 1.77cqi, 1rem);
   }
   .mt-pgrid .mt-card__title {
     -webkit-line-clamp: 1;
@@ -265,12 +354,12 @@
   }
   .mt-pgrid .mt-card__badge {
     padding: 0.3125rem 0.75rem;
-    font-size: 0.8125rem;
+    font-size: clamp(0.5rem, 0.17375rem + 3.09cqi, 0.8125rem);
   }
 
   .mt-pgrid .mt-card__quick {
     height: 2.25rem;
-    font-size: 0.75rem;
+    font-size: clamp(0.6875rem, 0.621875rem + 0.62cqi, 0.75rem);
   }
 
   .mt-pgrid__pager {
@@ -296,8 +385,20 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* 6 columns from 1440; wider screens keep the 1440 layout and leave the sides empty. */
+@media (min-width: 1440px) {
+  .mt-pgrid__inner {
+    padding-inline: 2.625rem;
+  }
   .mt-pgrid__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    row-gap: 3.125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-pgrid__grid,
+  .mt-pgrid__tab {
     transition: none;
   }
 }

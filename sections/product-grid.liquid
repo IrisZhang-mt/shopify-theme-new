@@ -10,12 +10,56 @@
   assign pg_collection = section.settings.collection
   assign pg_item_list_id = pg_collection.handle
   assign pg_item_list_name = section.settings.heading | default: pg_collection.title
-  assign pg_sizes = '(min-width: 750px) calc((94vw - 27px) / 4), calc((100vw - 37px) / 2)'
+  assign pg_per_page = section.settings.per_page | plus: 0
+  # Keep in sync with templates/collection.pgrid.liquid.
+  assign pg_sizes = '(min-width: 1440px) 218px, (min-width: 750px) calc((94vw - 27px) / 4), calc((100vw - 37px) / 2)'
+  assign pg_by_discount = false
+  if section.settings.tab_filter == 'discount'
+    assign pg_by_discount = true
+  endif
   assign has_products = false
   if pg_collection.products_count > 0
     assign has_products = true
   endif
 -%}
+
+{%- capture pg_tabs -%}
+  {%- if has_products -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign tab_label = block.settings.label | strip
+        if tab_label == blank
+          continue
+        endif
+        if pg_by_discount and block.settings.discount_min == blank
+          continue
+        endif
+        # Label is shown (and may be translated); Tag name is what gets matched. Tabs set up
+        # before Tag name existed fall back to their label.
+        assign tab_tag = block.settings.tag_name | strip | default: tab_label
+      -%}
+      <button
+        class="mt-pgrid__tab"
+        type="button"
+        aria-pressed="false"
+        data-pgrid-tab
+        data-label="{{ tab_label | escape }}"
+        {%- if pg_by_discount %}
+          data-min="{{ block.settings.discount_min }}"
+          {% if block.settings.discount_max != blank %}data-max="{{ block.settings.discount_max }}"{% endif %}
+        {%- else %}
+          data-tag="{{ tab_tag | handle }}"
+        {%- endif %}
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image and pg_by_discount == false -%}
+          {{ block.settings.image | image_url: width: 120 | image_tag: class: 'mt-pgrid__tab-img', width: 30, height: 30, loading: 'lazy', alt: '' }}
+        {%- endif -%}
+        <span>{{ tab_label | escape }}</span>
+      </button>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
 
 {%- if has_products or pg_collection == blank -%}
   <section
@@ -23,6 +67,12 @@
     {% if section.settings.anchor_id != blank %}id="{{ section.settings.anchor_id | handleize }}"{% endif %}
     data-pgrid
     data-currency="{{ cart.currency.iso_code }}"
+    {%- if pg_tabs != blank %}
+      data-feed-url="{{ pg_collection.url }}"
+      data-per-page="{{ pg_per_page }}"
+      data-list-id="{{ pg_item_list_id }}"
+      data-list-name="{{ pg_item_list_name | escape }}"
+    {%- endif %}
   >
     <div class="mt-pgrid__inner">
       {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
@@ -44,8 +94,15 @@
         </div>
       {%- endif -%}
 
+      {%- if pg_tabs != blank -%}
+        {%- comment -%} Filtering is done by product-grid.js: by tag through collection.pgrid, by discount over the whole collection. {%- endcomment -%}
+        <div class="mt-pgrid__tabs" role="group" aria-label="{{ 'collection.filter_tabs' | t }}">
+          {{- pg_tabs -}}
+        </div>
+      {%- endif -%}
+
       {%- if has_products -%}
-        {%- paginate pg_collection.products by section.settings.count -%}
+        {%- paginate pg_collection.products by pg_per_page -%}
           <div class="mt-pgrid__grid" data-pgrid-grid>
             {%- for item in pg_collection.products -%}
               {%- assign pg_ga4_index = paginate.current_offset | plus: forloop.index0 -%}
@@ -62,6 +119,9 @@
               %}
             {%- endfor -%}
           </div>
+          {%- if pg_tabs != blank -%}
+            <p class="mt-pgrid__empty" data-pgrid-empty hidden>{{ 'collection.filter_empty' | t }}</p>
+          {%- endif -%}
 
           {%- if paginate.pages > 1 -%}
             {%- liquid
@@ -113,14 +173,26 @@
       "info": "按该系列在后台设置的排序分页展示全部商品"
     },
     {
-      "type": "range",
-      "id": "count",
+      "type": "select",
+      "id": "per_page",
       "label": "Products per page",
-      "min": 4,
-      "max": 12,
-      "step": 4,
-      "default": 4,
-      "info": "超过一页时在列表下方显示翻页"
+      "options": [
+        { "value": "12", "label": "12" },
+        { "value": "24", "label": "24" }
+      ],
+      "default": "12",
+      "info": "PC 和移动端共用；超过一页时在列表下方显示翻页"
+    },
+    {
+      "type": "select",
+      "id": "tab_filter",
+      "label": "Tabs filter by",
+      "options": [
+        { "value": "tag", "label": "Product tag" },
+        { "value": "discount", "label": "Discount range" }
+      ],
+      "default": "tag",
+      "info": "所有 tab 用同一种方式筛选。Product tag：按 tab 的 Tag name 匹配商品 tag；Discount range：按卡片角标上的折扣百分比，建议系列不超过约 250 个商品"
     },
     {
       "type": "text",
@@ -139,6 +211,49 @@
       "id": "anchor_id",
       "label": "Anchor ID (optional)",
       "info": "供 Anchor tabs 跳转定位，例如 new-arrivals；需与 tab 的 Target ID 一致，同一页面内不要重复"
+    }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "正方形，建议透明底 PNG，至少 120 × 120；仅按 Product tag 筛选时展示",
+          "visible_if": "{{ section.settings.tab_filter == 'tag' }}"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "tab 上显示的文字，可以在 Translate & Adapt 里翻译"
+        },
+        {
+          "type": "text",
+          "id": "tag_name",
+          "label": "Tag name",
+          "info": "用于匹配商品 tag，需与商品 tag 完全一致，例如 Girls；不要翻译。留空时用 Label 匹配",
+          "visible_if": "{{ section.settings.tab_filter == 'tag' }}"
+        },
+        {
+          "type": "number",
+          "id": "discount_min",
+          "label": "Discount from (%)",
+          "info": "仅按 Discount range 筛选时生效，含该值，例如 30",
+          "visible_if": "{{ section.settings.tab_filter == 'discount' }}"
+        },
+        {
+          "type": "number",
+          "id": "discount_max",
+          "label": "Discount to (%)",
+          "info": "含该值，例如 39；留空表示不设上限",
+          "visible_if": "{{ section.settings.tab_filter == 'discount' }}"
+        }
+      ]
     }
   ],
   "presets": [

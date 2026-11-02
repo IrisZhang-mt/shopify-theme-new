@@ -1,0 +1,32 @@
+{%- layout none -%}
+{%- comment -%}
+  Data endpoint for sections/product-grid.liquid, not a page: do not assign it to a collection.
+  product-grid.js fetches /collections/{handle}[/{tag}]?view=pgrid&page=N and swaps in the cards.
+  Fixed 24 per page (a template cannot read query params); the JS slices it for 12-per-page grids.
+  The card params must match the ones in product-grid.liquid.
+{%- endcomment -%}
+{%- paginate collection.products by 24 -%}
+  <div
+    data-pgrid-feed
+    data-page="{{ paginate.current_page }}"
+    data-pages="{{ paginate.pages }}"
+    data-total="{{ paginate.items }}"
+  >
+    <div data-pgrid-grid>
+      {%- for item in collection.products -%}
+        {%- assign pg_ga4_index = paginate.current_offset | plus: forloop.index0 -%}
+        {% render 'product-card',
+          product: item,
+          index: forloop.index0,
+          ga4_index: pg_ga4_index,
+          sizes: '(min-width: 1440px) 218px, (min-width: 750px) calc((94vw - 27px) / 4), calc((100vw - 37px) / 2)',
+          quick: true,
+          sale_badge: true,
+          hide_swatches: true,
+          item_list_id: collection.handle,
+          item_list_name: collection.title
+        %}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endpaginate -%}

@@ -92,7 +92,9 @@
     "back_to_top": "Back to top",
     "viewing": "Viewing {{ shown }} of {{ total }}",
     "showing": "Showing {{ from }}-{{ to }} of {{ total }}",
-    "view_more": "View more"
+    "view_more": "View more",
+    "filter_tabs": "Filter products",
+    "filter_empty": "Nothing here just yet — tap again to see everything."
   },
   "blog": {
     "empty": "No articles yet.",

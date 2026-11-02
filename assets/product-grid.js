@@ -134,11 +134,115 @@ if (!window.mtProductGridInit) {
     ...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('[data-pgrid-grid] > .mt-card'),
   ];
 
-  const swap = (section, htmls) => {
-    const grid = section.querySelector('[data-pgrid-grid]');
-    const perPage = +pagerOf(section).dataset.perPage;
-    const cards = htmls.flatMap(parseCards).slice(-perPage);
+  // ---- Filter tabs: the list comes from templates/collection.pgrid.liquid (24 cards a page) ----
+  // By tag: Shopify filters /collections/{handle}/{tag}, so only the pages a grid page needs are
+  // fetched. By discount: there is no native filter, so the whole collection is fetched once and
+  // filtered on each card's data-sale-percent (the number its sale badge shows).
+  const FEED_SIZE = 24;
+  const filters = new WeakMap();
+  const baseCounts = new WeakMap();
+  const feeds = new Map();
+  const EMPTY_FEED = { total: 0, pages: 0, cards: [] };
+
+  const feedUrl = (section, filter, page) => {
+    const url = new URL(section.dataset.feedUrl, window.location.origin);
+    if (filter.tag) url.pathname += `/${filter.tag}`;
+    url.searchParams.set('view', 'pgrid');
+    url.searchParams.set('page', page);
+    return url.href;
+  };
+
+  const fetchFeed = (url) => {
+    if (!feeds.has(url)) {
+      const request = fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(res.status);
+          // A tag no product in the collection carries redirects to the unfiltered collection.
+          return res.redirected ? null : res.text();
+        })
+        .then((html) => {
+          if (html === null) return EMPTY_FEED;
+          const root = new DOMParser().parseFromString(html, 'text/html').querySelector('[data-pgrid-feed]');
+          if (!root) throw new Error('bad feed');
+          const cards = [...root.querySelectorAll('[data-pgrid-grid] > .mt-card')];
+          return { total: +root.dataset.total, pages: +root.dataset.pages, cards };
+        });
+      request.catch(() => feeds.delete(url));
+      feeds.set(url, request);
+    }
+    return feeds.get(url);
+  };
+
+  const allCards = async (section, filter) => {
+    const first = await fetchFeed(feedUrl(section, filter, 1));
+    const rest = await Promise.all(range(2, first.pages).map((n) => fetchFeed(feedUrl(section, filter, n))));
+    return [first, ...rest].flatMap((feed) => feed.cards);
+  };
+
+  // Same window as the unfiltered grid: a short last page shows the list's last N cards.
+  const windowOf = (page, perPage, total) => {
+    let start = (page - 1) * perPage;
+    if (page > 1 && start + perPage > total) start = Math.max(0, total - perPage);
+    return { start, end: Math.min(start + perPage, total) };
+  };
+
+  const filteredPage = async (section, filter, page) => {
+    const perPage = +section.dataset.perPage;
+    if (filter.tag) {
+      const { total } = await fetchFeed(feedUrl(section, filter, 1));
+      const { start, end } = windowOf(page, perPage, total);
+      if (start >= end) return { cards: [], total, start };
+      const from = Math.floor(start / FEED_SIZE) + 1;
+      const to = Math.floor((end - 1) / FEED_SIZE) + 1;
+      const pages = await Promise.all(range(from, to).map((n) => fetchFeed(feedUrl(section, filter, n))));
+      const offset = (from - 1) * FEED_SIZE;
+      return { cards: pages.flatMap((feed) => feed.cards).slice(start - offset, end - offset), total, start };
+    }
+    const matches = (await allCards(section, {})).filter((card) => {
+      const percent = +card.dataset.salePercent || 0;
+      return percent >= filter.min && percent <= filter.max;
+    });
+    const { start, end } = windowOf(page, perPage, matches.length);
+    return { cards: matches.slice(start, end), total: matches.length, start };
+  };
+
+  const filterOf = (tab) => ({
+    label: tab.dataset.label,
+    ...(tab.dataset.tag
+      ? { tag: tab.dataset.tag }
+      : { min: +tab.dataset.min, max: tab.dataset.max ? +tab.dataset.max : Infinity }),
+  });
+
+  // Cards for one grid page: { cards, total, start }; cards are copies, so cached feeds stay intact.
+  const loadPage = async (section, page) => {
+    const filter = filters.get(section);
+    if (filter) {
+      const result = await filteredPage(section, filter, page);
+      const cards = result.cards.map((card, i) => {
+        const copy = document.importNode(card, true);
+        // GA4: the list is this grid narrowed by the tab, positions count from the filtered list.
+        if (copy.dataset.itemId) {
+          copy.dataset.itemListId = section.dataset.listId;
+          copy.dataset.itemListName = `${section.dataset.listName} - ${filter.label}`;
+          copy.dataset.itemIndex = result.start + i + 1;
+        }
+        return copy;
+      });
+      return { ...result, cards };
+    }
+    // A grid that fits one page has no pager; clearing its tab reloads page 1.
+    const pager = pagerOf(section);
+    const htmls = await Promise.all((pager ? sourcePages(pager, page) : [1]).map((n) => fetchPage(section, n)));
+    const cards = htmls.flatMap(parseCards);
     if (!cards.length) throw new Error('empty page');
+    if (!pager) return { cards, total: cards.length };
+    return { cards: cards.slice(-pager.dataset.perPage), total: baseCounts.get(section)?.total ?? +pager.dataset.total };
+  };
+
+  const swap = (section, cards) => {
+    const grid = section.querySelector('[data-pgrid-grid]');
+    const empty = section.querySelector('[data-pgrid-empty]');
+    if (empty) empty.hidden = cards.length > 0;
     // Restart the reveal stagger from the first slot (topped-up cards carry their old index).
     cards.forEach((card, i) => card.style.setProperty('--mt-reveal-i', i));
     grid.replaceChildren(...cards);
@@ -156,7 +260,47 @@ if (!window.mtProductGridInit) {
     observe();
   };
 
-  const go = async (section, page) => {
+  const prefetchNext = (section, page) => {
+    if (saveData()) return;
+    if (filters.get(section)) idle(() => loadPage(section, page + 1).catch(() => {}));
+    else idle(() => prefetch(section, page + 1));
+  };
+
+  // Pager totals follow the active filter; a list that fits one page hides the pager.
+  const setTotal = (pager, total) => {
+    pager.dataset.total = total;
+    pager.dataset.pages = Math.max(1, Math.ceil(total / +pager.dataset.perPage));
+    pager.hidden = +pager.dataset.pages < 2;
+  };
+
+  // undo() puts the grid's state back when the cards for the new state cannot be loaded.
+  const show = async (section, page, undo) => {
+    const pager = pagerOf(section);
+    const grid = section.querySelector('[data-pgrid-grid]');
+    const token = {};
+    pending.set(section, token);
+    grid.setAttribute('aria-busy', 'true');
+    try {
+      const { cards, total } = await loadPage(section, page);
+      if (pending.get(section) !== token) return;
+      swap(section, cards);
+      if (pager) {
+        setTotal(pager, total);
+        pager.dataset.page = page;
+        renderPager(pager);
+      }
+      shownPage.set(section, page);
+      prefetchNext(section, page);
+    } catch {
+      // Keep the cards on screen and put the controls back on the state they belong to.
+      if (pending.get(section) !== token) return;
+      undo();
+    } finally {
+      if (pending.get(section) === token) grid.removeAttribute('aria-busy');
+    }
+  };
+
+  const go = (section, page) => {
     const pager = pagerOf(section);
     if (!pager || page < 1 || page > +pager.dataset.pages || page === +pager.dataset.page) return;
     if (!shownPage.has(section)) shownPage.set(section, +pager.dataset.page);
@@ -164,25 +308,28 @@ if (!window.mtProductGridInit) {
     pager.dataset.page = page;
     renderPager(pager);
     scrollToSection(section);
-
-    const grid = section.querySelector('[data-pgrid-grid]');
-    const token = {};
-    pending.set(section, token);
-    grid.setAttribute('aria-busy', 'true');
-    try {
-      const htmls = await Promise.all(sourcePages(pager, page).map((n) => fetchPage(section, n)));
-      if (pending.get(section) !== token) return;
-      swap(section, htmls);
-      shownPage.set(section, page);
-      if (!saveData()) idle(() => prefetch(section, page + 1));
-    } catch {
-      // Keep the cards on screen and put the pager back on the page they belong to.
-      if (pending.get(section) !== token) return;
+    show(section, page, () => {
       pager.dataset.page = shownPage.get(section);
       renderPager(pager);
-    } finally {
-      if (pending.get(section) === token) grid.removeAttribute('aria-busy');
-    }
+    });
+  };
+
+  // Single choice; pressing the active tab again goes back to the whole collection.
+  const toggleTab = (section, tab) => {
+    const pager = pagerOf(section);
+    if (pager && !baseCounts.has(section)) baseCounts.set(section, { total: +pager.dataset.total });
+    if (!shownPage.has(section)) shownPage.set(section, pager ? +pager.dataset.page : 1);
+
+    const tabs = [...section.querySelectorAll('[data-pgrid-tab]')];
+    const was = { pressed: tabs.find((t) => t.getAttribute('aria-pressed') === 'true'), filter: filters.get(section) };
+    const pressed = was.pressed === tab ? null : tab;
+    tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === pressed)));
+    filters.set(section, pressed ? filterOf(pressed) : null);
+
+    show(section, 1, () => {
+      tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === was.pressed)));
+      filters.set(section, was.filter);
+    });
   };
 
   // Prefetch the next page once the grid is close to view and the browser is idle.
@@ -206,6 +353,11 @@ if (!window.mtProductGridInit) {
     });
 
   document.addEventListener('click', (event) => {
+    const tab = event.target.closest?.('[data-pgrid-tab]');
+    if (tab) toggleTab(tab.closest('[data-pgrid]'), tab);
+  });
+
+  document.addEventListener('click', (event) => {
     const button = event.target.closest?.('[data-pgrid-pager] button');
     if (!button || button.disabled) return;
     const section = button.closest('[data-pgrid]');
@@ -216,17 +368,24 @@ if (!window.mtProductGridInit) {
     go(section, page);
   });
 
-  // Desktop hover: start loading the page under the pointer before the click.
+  // Desktop hover: start loading the page (or the tab's first page) under the pointer before the click.
   document.addEventListener('pointerover', (event) => {
     if (event.pointerType !== 'mouse') return;
+    const tab = event.target.closest?.('[data-pgrid-tab]');
+    if (tab) {
+      const section = tab.closest('[data-pgrid]');
+      // The pressed tab clears the filter, so its click needs the unfiltered first page.
+      if (tab.getAttribute('aria-pressed') === 'true') fetchPage(section, 1).catch(() => {});
+      else filteredPage(section, filterOf(tab), 1).catch(() => {});
+      return;
+    }
     const button = event.target.closest?.('[data-pgrid-pager] button:not(:disabled)');
     if (!button) return;
     const section = button.closest('[data-pgrid]');
     const pager = pagerOf(section);
-    prefetch(
-      section,
-      button.dataset.pgridPage ? +button.dataset.pgridPage : +pager.dataset.page + +button.dataset.pgridStep
-    );
+    const page = button.dataset.pgridPage ? +button.dataset.pgridPage : +pager.dataset.page + +button.dataset.pgridStep;
+    if (filters.get(section)) loadPage(section, page).catch(() => {});
+    else prefetch(section, page);
   });
 
   document.addEventListener('shopify:section:load', initPagers);
@@ -254,10 +413,12 @@ if (!window.mtProductGridInit) {
   const flushImpressions = (section) => {
     const cards = pendingCards.get(section) || [];
     pendingCards.set(section, []);
+    // Keyed by list too: a product seen unfiltered counts again under a tab's list name.
     const tracked = trackedIds.get(section);
-    const fresh = cards.filter((card) => !tracked.has(card.dataset.itemId));
+    const keyOf = (card) => `${card.dataset.itemListName}|${card.dataset.itemId}`;
+    const fresh = cards.filter((card) => !tracked.has(keyOf(card)));
     if (!fresh.length) return;
-    fresh.forEach((card) => tracked.add(card.dataset.itemId));
+    fresh.forEach((card) => tracked.add(keyOf(card)));
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event_parameters: null });
     window.dataLayer.push({
