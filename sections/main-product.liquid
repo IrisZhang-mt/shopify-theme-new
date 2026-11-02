@@ -2,8 +2,6 @@
 <script src="{{ 'pdp.js' | asset_url }}" type="module"></script>
 
 {%- assign current = product.selected_or_first_available_variant -%}
-{%- capture pdp_ga4_variant -%}{% render 'item-variant-ga4', item: current %}{%- endcapture -%}
-{%- assign pdp_ga4_variant = pdp_ga4_variant | strip -%}
 
 {%- assign color_index = -1 -%}
 {%- for option in product.options_with_values -%}
@@ -11,9 +9,47 @@
     {%- assign color_index = forloop.index0 -%}
   {%- endif -%}
 {%- endfor -%}
+
+{%- comment -%}
+  The default-color metafield applies only without ?variant=. Resolving it here (not in JS)
+  keeps price, gallery and the view_item event on the color the shopper actually sees.
+{%- endcomment -%}
+{%- assign default_color = product.metafields.custom.default_color.value -%}
+{%- if product.selected_variant == nil and default_color != blank and color_index >= 0 -%}
+  {%- assign default_pick = nil -%}
+  {%- for variant in product.variants -%}
+    {%- if variant.options[color_index] == default_color -%}
+      {%- if variant.available -%}
+        {%- assign default_pick = variant -%}
+        {%- break -%}
+      {%- endif -%}
+      {%- if default_pick == nil -%}
+        {%- assign default_pick = variant -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if default_pick -%}
+    {%- assign current = default_pick -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- capture pdp_ga4_variant -%}{% render 'item-variant-ga4', item: current %}{%- endcapture -%}
+{%- assign pdp_ga4_variant = pdp_ga4_variant | strip -%}
+
 {%- assign current_color = '' -%}
+{%- assign available_colors = '|' -%}
+{%- assign current_in_stock = product.available -%}
 {%- if color_index >= 0 -%}
   {%- assign current_color = current.options[color_index] -%}
+  {%- for variant in product.variants -%}
+    {%- if variant.available -%}
+      {%- assign available_colors = available_colors | append: variant.options[color_index] | append: '|' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign current_color_key = '|' | append: current_color | append: '|' -%}
+  {%- unless available_colors contains current_color_key -%}
+    {%- assign current_in_stock = false -%}
+  {%- endunless -%}
 {%- endif -%}
 
 <section
@@ -24,7 +60,7 @@
   data-item-brand="{{ product.vendor | escape }}"
   {% if product.type != blank %}data-item-category="{{ product.type | escape }}"{% endif %}
   {% if color_index >= 0 %} data-pdp-color-opt="{{ color_index }}"{% endif %}
-  {% if product.selected_variant == nil and product.metafields.custom.default_color != blank %} data-pdp-default-color="{{ product.metafields.custom.default_color | escape }}"{% endif %}
+  {% if product.selected_variant %} data-pdp-selected-variant="{{ product.selected_variant.id }}"{% endif %}
 >
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -121,7 +157,7 @@
                 <s class="mt-pdp__compare" data-pdp-compare{% unless current.compare_at_price > current.price %} hidden{% endunless %}>{% if current.compare_at_price > current.price %}{{ current.compare_at_price | money_without_trailing_zeros }}{% endif %}</s>
               </p>
             </div>
-            <p class="mt-pdp__sku" data-pdp-sku{% if current.sku == blank %} hidden{% endif %}>{{ 'products.sku' | t }}: <span data-pdp-sku-value>{{ current.sku }}</span></p>
+            <p class="mt-pdp__sku" data-pdp-sku hidden>{{ 'products.sku' | t }}: <span data-pdp-sku-value></span></p>
             {%- assign features = product.metafields.custom.features.value -%}
             {%- if features -%}
               <div class="mt-pdp__tags">
@@ -153,11 +189,15 @@
                   {%- assign main_colors_title = product.metafields.custom.main_color_promotion_title.value -%}
                   <div class="mt-pdp__option">
                     {%- if main_colors != blank -%}
-                      <p class="mt-pdp__label" aria-live="polite">{{ main_colors_title }}: <span>{{ option.selected_value }}</span></p>
+                      <p class="mt-pdp__label" aria-live="polite">{{ main_colors_title }}: <span>{{ current_color }}</span></p>
                     {%- else -%}
-                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
+                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ current_color }}</span></p>
                     {%- endif -%}
                     <div class="mt-pdp__tiles" data-pdp-tiles>
+                      {%- comment -%}
+                        Colors with no size left are hidden, except the shown color and when the whole
+                        product is sold out (then every color stays, marked sold out).
+                      {%- endcomment -%}
                       {%- for value in option.values -%}
                         {%- assign is_main_color = true -%}
                         {%- if main_colors != blank -%}
@@ -169,30 +209,9 @@
                             {%- endif -%}
                           {%- endfor -%}
                         {%- endif -%}
+                        {%- assign color_key = '|' | append: value | append: '|' -%}
                         {%- if is_main_color -%}
-                          {%- capture swatch_value -%}{%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
-                          <button
-                            class="mt-pdp__tile mt-swatch"
-                            type="button"
-                            style="--mt-swatch: {{ swatch_value | strip_newlines }}"
-                            data-pdp-value="{{ value | escape }}"
-                            data-pdp-opt="{{ forloop.parentloop.index0 }}"
-                            aria-label="{{ option.name }} {{ value | escape }}"
-                            aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
-                          ></button>
-                        {%- endif -%}
-                      {%- endfor -%}
-                      {%- if main_colors != blank -%}
-                        <p class="mt-pdp__group-label">{{ option.name }}</p>
-                        {%- for value in option.values -%}
-                          {%- assign is_main_color = false -%}
-                          {%- for item in main_colors -%}
-                            {%- if value == item or value contains item -%}
-                              {%- assign is_main_color = true -%}
-                              {%- break -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                          {%- unless is_main_color -%}
+                          {%- if product.available == false or value == current_color or available_colors contains color_key -%}
                             {%- capture swatch_value -%}{%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
                             <button
                               class="mt-pdp__tile mt-swatch"
@@ -201,10 +220,42 @@
                               data-pdp-value="{{ value | escape }}"
                               data-pdp-opt="{{ forloop.parentloop.index0 }}"
                               aria-label="{{ option.name }} {{ value | escape }}"
-                              aria-pressed="{% if value.selected %}true{% else %}false{% endif %}"
+                              aria-pressed="{% if value == current_color %}true{% else %}false{% endif %}"
                             ></button>
-                          {%- endunless -%}
-                        {%- endfor -%}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- if main_colors != blank -%}
+                        {%- capture other_tiles -%}
+                          {%- for value in option.values -%}
+                            {%- assign is_main_color = false -%}
+                            {%- for item in main_colors -%}
+                              {%- if value == item or value contains item -%}
+                                {%- assign is_main_color = true -%}
+                                {%- break -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                            {%- assign color_key = '|' | append: value | append: '|' -%}
+                            {%- unless is_main_color -%}
+                              {%- if product.available == false or value == current_color or available_colors contains color_key -%}
+                                {%- capture swatch_value -%}{%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}{%- endcapture -%}
+                                <button
+                                  class="mt-pdp__tile mt-swatch"
+                                  type="button"
+                                  style="--mt-swatch: {{ swatch_value | strip_newlines }}"
+                                  data-pdp-value="{{ value | escape }}"
+                                  data-pdp-opt="{{ forloop.parentloop.index0 }}"
+                                  aria-label="{{ option.name }} {{ value | escape }}"
+                                  aria-pressed="{% if value == current_color %}true{% else %}false{% endif %}"
+                                ></button>
+                              {%- endif -%}
+                            {%- endunless -%}
+                          {%- endfor -%}
+                        {%- endcapture -%}
+                        {%- if other_tiles != blank -%}
+                          <p class="mt-pdp__group-label">{{ option.name }}</p>
+                          {{ other_tiles }}
+                        {%- endif -%}
                       {%- endif -%}
                     </div>
                     <button class="mt-pdp__tiles-toggle" type="button" data-pdp-tiles-toggle hidden aria-expanded="false">
@@ -213,9 +264,14 @@
                     </button>
                   </div>
                 {%- else -%}
+                  {%- comment -%}
+                    Non-color options are never preselected here; pdp.js restores the shopper's pick
+                    only for links carrying size=selected (cart lines, this page's own URL write-back).
+                  {%- endcomment -%}
                   <div class="mt-pdp__option">
+                    <p class="mt-pdp__hint" data-pdp-hint="{{ forloop.index0 }}" role="alert" hidden>{{ 'products.select_size' | t }}</p>
                     <div class="mt-pdp__option-head">
-                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
+                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span></span></p>
                       {%- assign chart_meta = product.metafields.custom.size_chart -%}
                       {%- assign chart_page = chart_meta.value -%}
                       {%- assign chart_url = chart_page.url | default: chart_meta.value -%}
@@ -232,7 +288,7 @@
                     </div>
                     <div class="mt-pdp__pills">
                       {%- for value in option.values -%}
-                        <button class="mt-pdp__pill" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-pressed="{% if value.selected %}true{% else %}false{% endif %}">{{ value }}</button>
+                        <button class="mt-pdp__pill" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-pressed="false">{{ value }}</button>
                       {%- endfor -%}
                     </div>
                   </div>
@@ -328,8 +384,8 @@
             <span data-pdp-qty aria-live="polite">1</span>
             <button class="mt-pdp__qty-btn" type="button" data-pdp-plus aria-label="{{ 'products.increase_quantity' | t }}">+</button>
           </div>
-          <button class="mt-pdp__add" type="button" data-pdp-add data-pdp-variant="{{ current.id }}"{% unless current.available %} disabled{% endunless %}>
-            <span data-pdp-add-label>{%- if current.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
+          <button class="mt-pdp__add" type="button" data-pdp-add{% unless current_in_stock %} disabled{% endunless %}>
+            <span data-pdp-add-label>{%- if current_in_stock %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
             <span class="mt-pdp__add-price" data-pdp-add-price>{{ current.price | money_without_trailing_zeros }}</span>
           </button>
         </div>
@@ -408,8 +464,8 @@
   {%- endif -%}
 
   <div class="mt-pdp__sticky-cta" data-pdp-sticky-cta>
-    <button class="mt-pdp__add mt-pdp__sticky-add" type="button" data-pdp-add data-pdp-variant="{{ current.id }}"{% unless current.available %} disabled{% endunless %}>
-      <span data-pdp-add-label>{%- if current.available %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
+    <button class="mt-pdp__add mt-pdp__sticky-add" type="button" data-pdp-add{% unless current_in_stock %} disabled{% endunless %}>
+      <span data-pdp-add-label>{%- if current_in_stock %}{{ 'products.add_to_cart' | t }}{% else %}{{ 'products.sold_out' | t }}{% endif -%}</span>
       <span class="mt-pdp__add-price" data-pdp-add-price>{{ current.price | money_without_trailing_zeros }}</span>
     </button>
   </div>

@@ -70,6 +70,7 @@
     "shop_collection": "Shop {{ label }}",
     "more_about": "More about {{ title }}",
     "sku": "SKU",
+    "select_size": "Select a size to continue.",
     "available_colors": {
       "one": "Available in {{ count }} color",
       "other": "Available in {{ count }} colors"

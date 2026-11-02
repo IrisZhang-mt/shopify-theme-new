@@ -68,85 +68,128 @@ if (!window.mtPdpInit) {
       return matched;
     };
 
-    // When the newly picked color has no available variant for the currently
-    // selected size, jump to the first available variant for this color.
-    // If the whole color is sold out, leave the size selection as-is.
-    const resolveColorFallback = () => {
-      if (colorOpt < 0 || state.selected[colorOpt] == null) return;
-      const current = matchVariant(state.variants, state.selected);
-      if (current && current.available) return;
-      const colorValue = state.selected[colorOpt];
-      const candidates = state.variants.filter((variant) => variant.options[colorOpt] === colorValue);
-      const availableVariant = candidates.find((variant) => variant.available);
-      if (!availableVariant) return;
-      availableVariant.options.forEach((value, index) => {
-        if (index !== colorOpt) state.selected[index] = value;
-      });
-    };
+    // Sizes (every non-color option) are never preselected: the shopper must
+    // pick them, and switching color never fills or changes them.
+    const isComplete = () => state.selected.every((value) => value != null);
 
     const syncLabels = () => {
       root.querySelectorAll('.mt-pdp__option').forEach((optionEl) => {
         const button = optionEl.querySelector('[data-pdp-value]');
         const label = optionEl.querySelector('.mt-pdp__label span');
         if (!button || !label) return;
-        const optIndex = Number(button.dataset.pdpOpt);
-        if (state.selected[optIndex] != null) label.textContent = state.selected[optIndex];
+        label.textContent = state.selected[Number(button.dataset.pdpOpt)] ?? '';
       });
+    };
+
+    const showHints = (fromSticky) => {
+      const missing = [...root.querySelectorAll('[data-pdp-hint]')].filter(
+        (hint) => state.selected[Number(hint.dataset.pdpHint)] == null
+      );
+      if (!missing.length) return;
+      missing.forEach((hint) => {
+        hint.hidden = false;
+      });
+      // The sticky button is far from the options, so bring them into view;
+      // the in-page button only scrolls if the hint is off-screen.
+      const offset = (document.querySelector('.section-header')?.offsetHeight || 0) + 20;
+      const rect = missing[0].getBoundingClientRect();
+      if (!fromSticky && rect.top >= offset && rect.bottom <= window.innerHeight) return;
+      // Same as product-grid.js: with motion.js smooth scrolling on, positions
+      // follow .mt-scroll, and mtScrollTo drives it instead of the window.
+      const smooth = document.documentElement.classList.contains('mt-smooth') && document.querySelector('.mt-scroll');
+      const scrolled = smooth ? smooth.scrollTop : window.scrollY;
+      // Page position of an element in the right column. On desktop the column is
+      // sticky, so its on-screen top isn't its place in the page; measure from the
+      // top of the hero grid it starts at instead.
+      const col = missing[0].closest('[data-pdp-col]');
+      const hero = col?.parentElement;
+      const pageTop = (el) =>
+        deskMq.matches && col && hero
+          ? hero.getBoundingClientRect().top + scrolled + el.getBoundingClientRect().top - col.getBoundingClientRect().top
+          : el.getBoundingClientRect().top + scrolled;
+      // From the sticky button, start at the product title so the shopper sees
+      // which product and color they're on, unless that would push the size
+      // options below the fold; then fall back to the hint itself.
+      let anchor = pageTop(missing[0]);
+      if (fromSticky) {
+        const title = root.querySelector('.mt-pdp__title');
+        const option = missing[0].closest('.mt-pdp__option') || missing[0];
+        const titleTop = title ? pageTop(title) : null;
+        if (titleTop != null && pageTop(option) + option.offsetHeight - titleTop + offset <= window.innerHeight) {
+          anchor = titleTop;
+        }
+      }
+      const top = Math.max(0, anchor - offset);
+      if (window.mtScrollTo) window.mtScrollTo(top);
+      else window.scrollTo({ top, behavior: reducedMq.matches ? 'auto' : 'smooth' });
     };
 
     const sync = () => {
       root.querySelectorAll('[data-pdp-value]').forEach((button) => {
         const optIndex = Number(button.dataset.pdpOpt);
         button.setAttribute('aria-pressed', String(state.selected[optIndex] === button.dataset.pdpValue));
+        const off = !valueAvailable(state.variants, state.selected, optIndex, button.dataset.pdpValue);
         if (button.classList.contains('mt-pdp__pill')) {
-          button.classList.toggle(
-            'mt-pdp__pill--off',
-            !valueAvailable(state.variants, state.selected, optIndex, button.dataset.pdpValue)
-          );
+          button.classList.toggle('mt-pdp__pill--off', off);
+        } else if (button.classList.contains('mt-pdp__tile')) {
+          button.classList.toggle('mt-pdp__tile--off', off);
         }
       });
-      const variant = matchVariant(state.variants, state.selected);
+      const complete = isComplete();
+      const variant = complete ? matchVariant(state.variants, state.selected) : null;
+      // Until a size is picked, price and media come from the color's variants
+      // (price is the same across sizes of a color).
+      const partial = state.variants.filter((item) =>
+        state.selected.every((value, i) => value == null || item.options[i] === value)
+      );
+      const shown = complete ? variant : partial.find((item) => item.available) || partial[0];
+      const inStock = complete ? Boolean(variant?.available) : partial.some((item) => item.available);
       const adds = [...root.querySelectorAll('[data-pdp-add]')];
       if (!adds.length) return;
       adds.forEach((add) => {
         const addLabel = add.querySelector('[data-pdp-add-label]');
         const addPrice = add.querySelector('[data-pdp-add-price]');
-        if (variant) {
-          add.dataset.pdpVariant = variant.id;
-          add.disabled = !variant.available;
-          if (addLabel) addLabel.textContent = variant.available ? strings.addToCart : strings.soldOut;
-          else add.textContent = variant.available ? strings.addToCart : strings.soldOut;
-          if (addPrice) addPrice.innerHTML = variant.price;
+        add.dataset.pdpVariant = variant ? variant.id : '';
+        if (shown) {
+          add.disabled = !inStock;
+          if (addLabel) addLabel.textContent = inStock ? strings.addToCart : strings.soldOut;
+          else add.textContent = inStock ? strings.addToCart : strings.soldOut;
+          if (addPrice) addPrice.innerHTML = shown.price;
         } else {
           add.disabled = true;
           if (addLabel) addLabel.textContent = strings.unavailable;
           else add.textContent = strings.unavailable;
         }
       });
-      if (variant) {
+      const sku = root.querySelector('[data-pdp-sku]');
+      if (sku) {
+        sku.querySelector('[data-pdp-sku-value]').textContent = variant?.sku || '';
+        sku.hidden = !variant?.sku;
+      }
+      if (shown) {
         const price = root.querySelector('[data-pdp-price]');
-        if (price) price.innerHTML = variant.price;
+        if (price) price.innerHTML = shown.price;
         const compare = root.querySelector('[data-pdp-compare]');
         if (compare) {
-          compare.innerHTML = variant.compare || '';
-          compare.hidden = !variant.compare;
-        }
-        const sku = root.querySelector('[data-pdp-sku]');
-        if (sku) {
-          sku.querySelector('[data-pdp-sku-value]').textContent = variant.sku || '';
-          sku.hidden = !variant.sku;
+          compare.innerHTML = shown.compare || '';
+          compare.hidden = !shown.compare;
         }
         if (state.interacted) {
-          const url = new URL(window.location.href);
-          url.searchParams.set('variant', variant.id);
-          try {
-            history.replaceState(history.state, '', url);
-          } catch {}
+          // Only a full pick is written back; size=selected tells the next load
+          // (refresh, shared link) to keep the size.
+          if (variant) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('variant', variant.id);
+            url.searchParams.set('size', 'selected');
+            try {
+              history.replaceState(history.state, '', url);
+            } catch {}
+          }
           const grouped = syncGallery();
           if (grouped && track && !deskMq.matches) {
             track.scrollTo({ left: 0, behavior: reducedMq.matches ? 'auto' : 'smooth' });
-          } else if (!grouped && variant.media > 0 && track && !deskMq.matches) {
-            const slide = track.querySelector(`[data-pdp-media="${variant.media}"]`);
+          } else if (!grouped && shown.media > 0 && track && !deskMq.matches) {
+            const slide = track.querySelector(`[data-pdp-media="${shown.media}"]`);
             if (slide) {
               track.scrollTo({ left: slide.offsetLeft, behavior: reducedMq.matches ? 'auto' : 'smooth' });
             }
@@ -187,7 +230,8 @@ if (!window.mtPdpInit) {
         state.interacted = true;
         const optIndex = Number(value.dataset.pdpOpt);
         state.selected[optIndex] = value.dataset.pdpValue;
-        if (optIndex === colorOpt) resolveColorFallback();
+        const hint = root.querySelector(`[data-pdp-hint="${optIndex}"]`);
+        if (hint) hint.hidden = true;
         syncLabels();
         sync();
         return;
@@ -235,6 +279,10 @@ if (!window.mtPdpInit) {
       }
       const add = event.target.closest('[data-pdp-add]');
       if (add) {
+        if (!isComplete()) {
+          showHints(Boolean(add.closest('[data-pdp-sticky-cta]')));
+          return;
+        }
         const variant = matchVariant(state.variants, state.selected);
         const qty = state.qty;
         window.mtAddToCart(add, qty).then((added) => {
@@ -266,16 +314,13 @@ if (!window.mtPdpInit) {
       }
     });
 
-    const defaultColor = root.dataset.pdpDefaultColor;
-    if (defaultColor) {
-      const match = [...root.querySelectorAll('[data-pdp-tiles] [data-pdp-value]')].find(
-        (button) => button.dataset.pdpValue === defaultColor
-      );
-      if (match) {
-        state.selected[Number(match.dataset.pdpOpt)] = defaultColor;
-      }
+    // Links from cart lines and this page's own write-back carry size=selected:
+    // the shopper already picked that exact variant, so restore all its options.
+    const selectedId = Number(root.dataset.pdpSelectedVariant);
+    if (selectedId && new URLSearchParams(window.location.search).get('size') === 'selected') {
+      const picked = variants.find((variant) => variant.id === selectedId);
+      if (picked && picked.options.length === state.selected.length) state.selected = [...picked.options];
     }
-    resolveColorFallback();
     syncLabels();
 
     const tiles = root.querySelector('[data-pdp-tiles]');

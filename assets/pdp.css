@@ -345,6 +345,15 @@ html.mt-pdp-zoom-lock body {
   justify-content: space-between;
 }
 
+/* Shown when Add to Cart is pressed before a size is picked (pdp.js). */
+.mt-pdp__hint {
+  margin: 0;
+  padding: 0.75rem 0.9375rem;
+  background: rgba(var(--mt-accent-rgb), 0.12);
+  font-size: var(--mt-p-m-size);
+  line-height: var(--mt-p-leading);
+}
+
 /* Kiwi's own link stays hidden; the theme's Size Chart button opens it (size-chart.js).
    Without a product metafield the button only shows once Kiwi has a chart for the product. */
 .ks-chart-modal-link {
@@ -410,12 +419,33 @@ body:not(:has(.ks-chart-modal-link)) .mt-pdp__chart[data-chart-wait] {
   outline-offset: 2px;
 }
 .mt-pdp__tile {
+  position: relative;
   transition: border-color var(--mt-dur) var(--mt-ease);
 }
 @media (hover: hover) {
   .mt-pdp__tile:hover {
     border-color: rgba(var(--mt-ink-rgb), 0.35);
   }
+}
+/* Picked size is sold out in this color: keep the color, add a black slash with white
+   edges (readable on light and dark swatches), same direction as .mt-pdp__pill--off.
+   It runs past the swatch out to the selected ring on both ends. */
+.mt-pdp__tile--off::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* 100% is inside the swatch border, so add the border and the ring line back. */
+  width: calc(100% + 2 * (var(--mt-swatch-ring) + 2 * var(--mt-swatch-line)));
+  height: 4px;
+  background: linear-gradient(
+    var(--mt-white) 1.5px,
+    var(--mt-ink) 1.5px,
+    var(--mt-ink) 2.5px,
+    var(--mt-white) 2.5px
+  );
+  transform: translate(-50%, -50%) rotate(45deg);
+  pointer-events: none;
 }
 
 .mt-pdp__pills {
