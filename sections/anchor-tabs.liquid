@@ -18,9 +18,6 @@
             {%- if block.settings.subtitle != blank -%}
               <span class="mt-atabs__sub">{{ block.settings.subtitle | escape }}</span>
             {%- endif -%}
-            <svg class="mt-atabs__arrow" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true">
-              <path d="M6 0v13M1 8l5 5 5-5" stroke="currentColor"/>
-            </svg>
           </a>
         {%- endfor -%}
       </div>
@@ -54,7 +51,7 @@
           "id": "subtitle",
           "label": "Subtitle",
           "default": "Up to 40% off",
-          "info": "橙色小字，留空时不展示"
+          "info": "标题旁的大写小字，留空时不展示"
         },
         {
           "type": "text",
