@@ -38,6 +38,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -60,7 +61,7 @@
         "placeholder": "Enter your email",
         "button_label": "Join free",
         "consent_text": "I agree to receiving marketing emails and special deals",
-        "tags": "newsletter",
+        "tags": "BF2026",
         "success_text": "You're on the list. Sign in to unlock member perks.",
         "preview_success": false,
         "ga4_module_name": "Early Access"
@@ -125,19 +126,56 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": "Best_Sellers"
       }
     },
     "product_grid_T7KaXf": {
       "type": "product-grid",
+      "blocks": {
+        "tab_CE3Uxq": {
+          "type": "tab",
+          "settings": {
+            "label": "Tops",
+            "tag_name": "top"
+          }
+        },
+        "tab_9zMgbT": {
+          "type": "tab",
+          "settings": {
+            "label": "Bottoms",
+            "tag_name": "Bottom"
+          }
+        },
+        "tab_NCD93w": {
+          "type": "tab",
+          "settings": {
+            "label": "Jackets",
+            "tag_name": "Jackets"
+          }
+        },
+        "tab_Mp7aMh": {
+          "type": "tab",
+          "settings": {
+            "label": "Shoes",
+            "tag_name": "Shoes"
+          }
+        }
+      },
+      "block_order": [
+        "tab_CE3Uxq",
+        "tab_9zMgbT",
+        "tab_NCD93w",
+        "tab_Mp7aMh"
+      ],
       "name": "Product grid",
       "settings": {
         "collection": "best-sellers",
-        "count": 4,
+        "per_page": "12",
+        "tab_filter": "tag",
         "heading": "Best Sellers",
         "subheading": "Buy 4+: 20% off  | Buy 6+: 30% off  |  Buy 8+: 40% off",
-        "cta_label": "Shop more",
         "anchor_id": "Best_Sellers"
       }
     },
@@ -163,19 +201,32 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "shopify://collections/new-arrival",
         "anchor_id": "New_Arrivals"
       }
     },
     "product_grid_439aRD": {
       "type": "product-grid",
+      "blocks": {
+        "tab_3enL9g": {
+          "type": "tab",
+          "settings": {
+            "label": "",
+            "tag_name": ""
+          }
+        }
+      },
+      "block_order": [
+        "tab_3enL9g"
+      ],
       "name": "Product grid",
       "settings": {
         "collection": "new-arrival",
-        "count": 4,
+        "per_page": "12",
+        "tab_filter": "tag",
         "heading": "New Arrivals",
         "subheading": "Up to 15% OFF",
-        "cta_label": "Shop more",
         "anchor_id": ""
       }
     },
@@ -201,6 +252,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "shopify://collections/flash-sale",
         "anchor_id": "Sale"
       }
@@ -210,10 +262,10 @@
       "name": "Product grid",
       "settings": {
         "collection": "flash-sale",
-        "count": 4,
+        "per_page": "12",
+        "tab_filter": "tag",
         "heading": "Final Sale",
         "subheading": "Up to 50% OFF",
-        "cta_label": "Shop more",
         "anchor_id": ""
       }
     },
