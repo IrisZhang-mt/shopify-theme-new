@@ -154,7 +154,6 @@ html.mt-pdp-zoom-lock body {
   height: 2.75rem;
   padding: 0;
   border: 0;
-  border-radius: 50%;
   color: var(--mt-ink);
   background: #fff;
   box-shadow: 0 0.125rem 0.625rem rgba(var(--mt-ink-rgb), 0.15);
@@ -162,24 +161,26 @@ html.mt-pdp-zoom-lock body {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.mt-pdp__zoom-btn svg {
+.mt-pdp__zoom-btn img {
   width: 0.875rem;
-  height: 0.875rem;
   transition: opacity 200ms var(--mt-ease);
 }
+/* translateX(0) keeps the function list in step with the keyframes below,
+   so the flip never gets interpolated. */
+.mt-pdp__zoom-btn--prev img {
+  transform: translateX(0) scaleX(-1);
+}
 .mt-pdp__zoom-btn--close {
-  width: 3.625rem;
-  height: 3.625rem;
   transition: transform 200ms var(--mt-ease);
 }
 .mt-pdp__zoom-btn--close svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 .mt-pdp__zoom-btn:disabled {
   cursor: default;
 }
-.mt-pdp__zoom-btn:disabled svg {
+.mt-pdp__zoom-btn:disabled img {
   opacity: 0.3;
 }
 /* Arrow exits through its side and slides back in from the opposite one;
@@ -194,17 +195,17 @@ html.mt-pdp-zoom-lock body {
 }
 @keyframes mt-pdp-zoom-prev {
   50% {
-    transform: translateX(-1.875rem);
+    transform: translateX(-1.875rem) scaleX(-1);
   }
   50.01% {
-    transform: translateX(1.875rem);
+    transform: translateX(1.875rem) scaleX(-1);
   }
 }
 @media (hover: hover) {
-  .mt-pdp__zoom-btn--next:not(:disabled):hover svg {
+  .mt-pdp__zoom-btn--next:not(:disabled):hover img {
     animation: mt-pdp-zoom-next 500ms var(--mt-ease);
   }
-  .mt-pdp__zoom-btn--prev:not(:disabled):hover svg {
+  .mt-pdp__zoom-btn--prev:not(:disabled):hover img {
     animation: mt-pdp-zoom-prev 500ms var(--mt-ease);
   }
   .mt-pdp__zoom-btn--close:hover {

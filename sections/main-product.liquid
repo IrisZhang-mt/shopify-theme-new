@@ -397,11 +397,11 @@
       <div class="mt-pdp__zoom-list" data-pdp-zoom-list>{{ zoom_items }}</div>
       <div class="mt-pdp__zoom-nav">
         {%- if image_count > 1 -%}
-          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--prev" type="button" data-pdp-zoom-prev aria-label="{{ 'products.previous_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--prev" type="button" data-pdp-zoom-prev aria-label="{{ 'products.previous_image' | t | escape }}"><img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt=""></button>
         {%- endif -%}
         <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--close" type="button" data-pdp-zoom-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
         {%- if image_count > 1 -%}
-          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--next" type="button" data-pdp-zoom-next aria-label="{{ 'products.next_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--next" type="button" data-pdp-zoom-next aria-label="{{ 'products.next_image' | t | escape }}"><img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt=""></button>
         {%- endif -%}
       </div>
     </div>
