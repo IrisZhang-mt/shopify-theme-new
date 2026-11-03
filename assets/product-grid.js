@@ -352,9 +352,18 @@ if (!window.mtProductGridInit) {
       nearObserver.observe(pager.closest('[data-pgrid]'));
     });
 
+  // A double click or a quick second tap would select and then clear the tab: only the first
+  // click counts, and the same tab ignores clicks for TAB_LOCK ms after it acts. Other tabs stay live.
+  const TAB_LOCK = 1000;
+  const lastTab = new WeakMap();
   document.addEventListener('click', (event) => {
     const tab = event.target.closest?.('[data-pgrid-tab]');
-    if (tab) toggleTab(tab.closest('[data-pgrid]'), tab);
+    if (!tab || event.detail > 1) return;
+    const section = tab.closest('[data-pgrid]');
+    const last = lastTab.get(section);
+    if (last?.tab === tab && event.timeStamp - last.time < TAB_LOCK) return;
+    lastTab.set(section, { tab, time: event.timeStamp });
+    toggleTab(section, tab);
   });
 
   document.addEventListener('click', (event) => {
