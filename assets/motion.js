@@ -271,6 +271,9 @@ if (!window.mtMotionInit) {
     autoRows.forEach((row) => {
       const state = autoState.get(row);
       if (!state || !state.visible || row.hidden || !row.isConnected || state.max <= 0) return;
+      // data-autoplay="0": arrow-only row — tweens on arrow clicks, never drifts on its own.
+      const speed = row.dataset.autoplay === '0' ? 0 : Number(row.dataset.autoplay) || 30;
+      if (!speed && !state.tween) return;
       live = true;
       if (state.tween) {
         const t = Math.min(1, (now - state.tweenStart) / state.tweenDur);
@@ -281,7 +284,6 @@ if (!window.mtMotionInit) {
         return;
       }
       if (now < state.pauseUntil || (hoverMq.matches && state.hover)) return;
-      const speed = Number(row.dataset.autoplay) || 30;
       state.pos += speed * dt * state.dir;
       if (state.pos >= state.max) {
         state.pos = state.max;

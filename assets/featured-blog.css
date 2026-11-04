@@ -1,0 +1,151 @@
+.mt-fb {
+  --mt-fb-pad: 0.9375rem;
+  --mt-fb-gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5625rem;
+  padding: 1.875rem 0 3.75rem;
+  background: var(--mt-paper);
+}
+
+.mt-fb__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding-inline: var(--mt-fb-pad);
+}
+
+.mt-fb__title {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.mt-fb__cta {
+  font-size: var(--mt-cta-s-size);
+  line-height: var(--mt-p-leading);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  color: var(--mt-ink);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+@media (hover: hover) {
+  .mt-fb__cta:hover {
+    opacity: 0.55;
+  }
+}
+.mt-fb__cta:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+.mt-fb__stage {
+  position: relative;
+  container-type: inline-size;
+}
+/* Arrows are desktop-only; centred on the card image (453:500 media). */
+.mt-fb__stage .mt-row-nav {
+  display: none;
+  transition:
+    opacity var(--mt-dur) var(--mt-ease),
+    visibility var(--mt-dur) var(--mt-ease);
+}
+/* Edge flags come from featured-blog.js: no prev arrow at the start, no next arrow at the end. */
+.mt-fb__stage[data-at-start] .mt-row-nav--prev,
+.mt-fb__stage[data-at-end] .mt-row-nav--next {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mt-fb__row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--mt-fb-gap);
+  padding-inline: var(--mt-fb-pad);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--mt-fb-pad);
+  scrollbar-width: none;
+}
+.mt-fb__row::-webkit-scrollbar {
+  display: none;
+}
+.mt-fb__item {
+  flex: 0 0 84%;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.mt-fb .mt-blog__media {
+  aspect-ratio: 290 / 330;
+}
+.mt-fb .mt-blog__meta {
+  font-family: var(--mt-font-mono);
+  font-size: var(--mt-tag-xs-size);
+}
+.mt-fb .mt-blog__name {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-fb__cta,
+  .mt-fb__stage .mt-row-nav {
+    transition: none;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-fb {
+    --mt-fb-pad: 2.375rem;
+    --mt-fb-gap: 1.25rem;
+    gap: 1.75rem;
+    padding: 2.5rem 0 8.75rem;
+  }
+
+  .mt-fb__intro {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mt-fb__title {
+    font-size: var(--mt-h-l-size);
+    line-height: var(--mt-h-l-leading);
+  }
+
+  .mt-fb__cta {
+    font-size: 1rem;
+  }
+
+  /* 3 cards per view up to a 1440px stage; wider screens keep the 1440 card size and reveal more cards.
+     cqw resolves where the var is used (item / arrow), against this stage. */
+  .mt-fb__stage {
+    --mt-fb-card-w: calc((min(100cqw, 90rem) - 2 * var(--mt-fb-pad) - 2 * var(--mt-fb-gap)) / 3);
+  }
+  .mt-fb__stage .mt-row-nav {
+    display: flex;
+    top: calc(var(--mt-fb-card-w) * 500 / 453 / 2);
+  }
+  /* Arrow tweens write scrollLeft per frame; snapping would fight them. */
+  .mt-fb__row {
+    scroll-snap-type: none;
+  }
+  .mt-fb__item {
+    flex-basis: var(--mt-fb-card-w);
+  }
+
+  .mt-fb .mt-blog__media {
+    aspect-ratio: 453 / 500;
+  }
+  .mt-fb .mt-blog__meta {
+    font-size: var(--mt-tag-s-size);
+  }
+  .mt-fb .mt-blog__name {
+    margin-top: 0.9375rem;
+    font-size: 1rem;
+  }
+}

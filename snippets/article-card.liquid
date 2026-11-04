@@ -3,14 +3,15 @@
     {%- assign cover_image = article.metafields.custom.vertical_cover.value | default: article.image -%}
     {%- if cover_image -%}
       {%- assign image_alt = cover_image.alt | default: article.title | escape -%}
-      {{ cover_image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: '(min-width: 750px) 31vw, 92vw', alt: image_alt }}
+      {%- assign image_sizes = sizes | default: '(min-width: 750px) 31vw, 92vw' -%}
+      {{ cover_image | image_url: width: 1000 | image_tag: decoding: 'async', loading: 'lazy', sizes: image_sizes, alt: image_alt }}
     {%- else -%}
       {{ 'image' | placeholder_svg_tag }}
     {%- endif -%}
   </div>
   <p class="mt-blog__meta">
     <span>{{ article.published_at | date: '%B %-d, %Y.' }}</span>
-    {%- if article.tags.size > 0 -%}
+    {%- if article.tags.size > 0 and date_only != true -%}
       <span class="mt-blog__sep mt-blog__extra" aria-hidden="true"></span>
       <span class="mt-blog__extra">{{ article.tags.first | handle }}</span>
     {%- endif -%}
