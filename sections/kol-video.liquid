@@ -7,7 +7,8 @@
   poster images until someone actually presses play.
 {%- endcomment -%}
 {%- if section.blocks.size > 0 -%}
-  <section class="mt-kol" data-kol>
+  {%- assign kol_index = 0 -%}
+  <section class="mt-kol" data-kol data-currency="{{ cart.currency.iso_code }}">
     <div class="mt-kol__stage">
       <div class="mt-kol__track" data-kol-track>
         {%- for block in section.blocks -%}
@@ -63,7 +64,27 @@
             {%- if block.settings.products.size > 0 -%}
               <ul class="mt-kol__products" role="list">
                 {%- for item in block.settings.products limit: 3 -%}
-                  <li class="mt-kol__product">
+                  {%- liquid
+                    assign kol_index = kol_index | plus: 1
+                    assign ga4_pick = item.variants | where: 'available', true | first
+                    assign ga4_pick = ga4_pick | default: item.variants.first
+                  -%}
+                  {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
+                  {%- assign ga4_variant = ga4_variant | strip -%}
+                  {%- comment -%} GA4: one list for the whole section, positions count across cards (same data-item-* set as product-card). {%- endcomment -%}
+                  <li
+                    class="mt-kol__product"
+                    data-item-list-id="kol_video"
+                    data-item-list-name="KOL Video"
+                    data-item-id="{{ ga4_pick.sku }}"
+                    data-item-name="{{ item.title | escape }}"
+                    data-item-brand="{{ item.vendor | escape }}"
+                    {% if item.type != blank %}data-item-category="{{ item.type | escape }}"{% endif %}
+                    {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
+                    data-item-price="{{ item.price_min | divided_by: 100.0 }}"
+                    data-item-discount="{% if item.compare_at_price_min > item.price_min %}{{ item.compare_at_price_min | minus: item.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"
+                    data-item-index="{{ kol_index }}"
+                  >
                     <a class="mt-kol__product-link" href="{{ item.url }}">
                       <span class="mt-kol__product-media">
                         {%- if item.featured_image -%}

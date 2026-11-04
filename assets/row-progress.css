@@ -1,0 +1,26 @@
+/* --mt-progress-size (visible share, 0–1) and --mt-progress-pos (scroll position, 0–1) come from row-progress.js. */
+.mt-progress {
+  --mt-progress-size: 1;
+  --mt-progress-pos: 0;
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+}
+.mt-progress[hidden] {
+  display: none;
+}
+.mt-progress::before {
+  content: "";
+  position: absolute;
+  inset: 1px 0 auto;
+  height: 1px;
+  background: #d2d3d1;
+}
+/* translateX % is relative to the bar itself, so the track is bar / size and the travel is bar * (1 / size - 1). */
+.mt-progress__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--mt-progress-size) * 100%);
+  background: var(--mt-ink);
+  transform: translateX(calc(var(--mt-progress-pos) * (1 / var(--mt-progress-size) - 1) * 100%));
+}

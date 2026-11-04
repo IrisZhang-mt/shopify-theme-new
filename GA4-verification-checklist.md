@@ -940,3 +940,104 @@ DOM 本来就是"移除前"的状态，天然是对的。
 - 没有在真实浏览器里实际点击 Quick Shop/PDP/Pairs 的 Add to Cart 按钮
   看 dataLayer 的实际结果（点击事件没法用 curl 模拟），麻烦你照着上面
   的清单实测
+
+---
+
+## 验证清单：Featured KOL / Featured blog / Full text / Product grid tab（文档无对应行，2026-11-04）
+
+**先说一个判断**：v1.3 文档 sheet3 里没有这几个新组件的行，下面的
+事件名/字段都是按最接近的已有模块类比出来的，**建议先确认口径，再
+按这个验收**：
+- Featured KOL（`sections/featured-kol.liquid`）= 商品列表模块：
+  `view_item_list`；卡片点击打开 Quick Shop，`select_item`
+  （`button_name: "QUICK SHOP"`）/ `view_item` / `add_to_cart` 由
+  `quick-shop.js` 现有逻辑发出。`item_list_id` = 标题
+  `handleize` + `-`→`_`（"Ready, set, play." → `ready_set_play`），
+  `item_list_name` = 标题，标题为空时退回 `Featured KOL`
+- Featured blog（`sections/featured-blog.liquid`）= 类比 Blog 页
+  No.64：`select_content`，`module_name: "Featured Blog"`（固定字面量）
+- Full text（`sections/full-text.liquid`）= 类比 Blog 正文 No.67：
+  富文本里的链接发 `links_entry`
+- Product grid（`sections/product-grid.liquid`）原本已有
+  `view_item_list` / `select_item`，只补了 tab 点击 = 类比 PLP No.35
+  `select_filter`
+- Full image 原本已有 `community_entry`（No.42），未改
+
+- [ ] Featured KOL：滑到模块，控制台出现一条 `view_item_list`，
+      items 只含有商品的卡片，`index` 从 1 连续编号（没配商品的卡片
+      不占位）；横向滑动露出新卡片后再报一批，滑回来不重复报
+- [ ] Featured KOL：点卡片打开 Quick Shop，依次出现 `select_item`
+      （`button_name: "QUICK SHOP"`）和 `view_item`，`item_list_id`/
+      `item_list_name` 同上；弹窗里加购出现 `add_to_cart`
+- [ ] Featured blog：点文章卡片，跳转前出现 `select_content`：
+      `module_name: "Featured Blog"`，`content_name`：文章标题
+- [ ] Featured blog：点 "Read all stories"，出现 `select_content`：
+      `module_name: "Featured Blog"`，`button_name: "Read all stories"`
+- [ ] Full text：在富文本里插一个链接，点击后出现 `links_entry`：
+      `button_name`：链接文案；没有链接的 Full text 不会有任何事件
+- [ ] Product grid：点一个 tab（选中），出现 `select_filter`：
+      `filter_type`：`"Product tag"` 或 `"Discount range"`（随该组件
+      的 Tabs filter by 设置），`filter_content`：tab 文案；再点同一个
+      tab 取消选中**不**触发（跟 PLP 取消勾选不触发一致）
+
+代码改动：
+- `sections/featured-kol.liquid`：section 加 `data-currency`；有商品的
+  卡片加一组跟 `product-card.liquid` 相同的 `data-item-*`（变体走
+  `item-variant-ga4` snippet，折扣用 `compare_at_price_min - price_min`）
+- `assets/featured-kol.js`：加 `view_item_list` 视口分批上报（跟
+  `featured-collection.js` 同一套写法）
+- `assets/featured-blog.js`：加 `select_content` 点击监听，推送后
+  延迟 250ms 跳转（同 `full-image.js`）
+- 新建 `assets/full-text.js`（跟 `full-text.css` 命名对称），
+  `sections/full-text.liquid` 引入；`links_entry` + 延迟跳转（新标签页
+  / `target="_blank"` / 页内锚点不拦截）
+- `assets/product-grid.js`：`toggleTab()` 里选中 tab 时推 `select_filter`
+
+验证：
+- `node --check` 4 个 JS 文件通过；`shopify theme check` 无新增问题
+  （2 条警告都是历史遗留：`product-card-list.liquid` OrphanedSnippet、
+  `mkq_script.liquid` DeprecatedFilter）
+- 临时模板 `page.ga4check.json`（KOL 3 张卡其中 1 张不配商品 / Featured
+  blog 2 篇 / Full text 带链接）在本地 dev 渲染，确认 KOL 卡片的
+  `data-item-*` 和 index（1、2）正确、空卡片不带属性、三个 JS 都加载；
+  验证后已删除临时模板
+- 点击触发的事件没法用 curl 模拟，需要按上面清单在浏览器实测
+
+---
+
+## 验证清单：Benefits signup / Anchor tabs / KOL video（在线表 No.76-80，2026-11-04）
+
+在线规范表（飞书 sheet3）第 84-88 行已补录。口径均为类比，待确认：
+- Benefits signup（No.76）：代码此前已实现 `subscribe`（`module_name` 取
+  组件设置 GA4 module name，默认 Early Access，订阅成功跳回时触发），
+  符合 No.8/9 规则，本次只补录到在线表，代码未改
+- Anchor tabs（No.77）：`select_content_category`，`module_name:
+  "Anchor Tabs"`，`button_name`：tab 标题——参照 Blog Tab（No.63）
+- KOL video（No.78-80）：播放按钮 `select_content`（`module_name:
+  "KOL Video"`，`content_name`：卡片标题，`button_name: "Play"`）；
+  卡片下商品 `view_item_list` / `select_item`（`item_list_id:
+  kol_video`，`item_list_name: KOL Video`，index 跨卡片连续编号）
+
+- [ ] Benefits signup：提交邮箱成功、页面跳回后出现 `subscribe`，
+      `module_name` = 组件里配置的值；提交失败（如邮箱格式错误）不触发
+- [ ] Anchor tabs：点击 tab 出现 `select_content_category`；页面滚动时
+      tab 自动高亮**不**触发
+- [ ] KOL video：点播放按钮出现 `select_content`（Play）
+- [ ] KOL video：滑到商品区出现一条 `view_item_list`，index 1、2、3…
+      跨卡片连续；横向滑出新卡片后再报一批
+- [ ] KOL video：点商品跳转前出现 `select_item`，`button_name:
+      "Product Card"`
+
+代码改动：
+- `sections/kol-video.liquid`：section 加 `data-currency`，商品 `<li>`
+  加一组跟 `product-card.liquid` 相同的 `data-item-*`
+- `assets/kol-video.js`：播放按钮推 `select_content`；商品
+  `view_item_list` 视口分批上报 + 点击 `select_item`
+- `assets/anchor-tabs.js`：tab 点击处理里推 `select_content_category`
+- 未新建文件
+
+验证：
+- `node --check` 两个 JS 通过；`shopify theme check` 无新增问题
+- 临时模板渲染 kol-video（2 张卡 3 个商品），确认 `data-item-*` 和
+  index 1/2/3 正确；验证后已删除临时模板
+- 点击触发的事件需要在浏览器实测

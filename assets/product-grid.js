@@ -326,6 +326,20 @@ if (!window.mtProductGridInit) {
     tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === pressed)));
     filters.set(section, pressed ? filterOf(pressed) : null);
 
+    // GA4: a tab is a filter, reported like the PLP's (on select only, not when cleared).
+    if (pressed) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event_parameters: null });
+      window.dataLayer.push({
+        event: 'ga4Event',
+        event_name: 'select_filter',
+        event_parameters: {
+          filter_type: pressed.dataset.tag ? 'Product tag' : 'Discount range',
+          filter_content: pressed.dataset.label,
+        },
+      });
+    }
+
     show(section, 1, () => {
       tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === was.pressed)));
       filters.set(section, was.filter);

@@ -1,0 +1,12 @@
+{%- comment -%}
+  Scroll indicator for a horizontal row: a hairline track with a bar whose width is the
+  visible share of the row (clientWidth / scrollWidth) and whose position follows scrollLeft.
+  Display only — it can't be dragged. Hidden while the row fits without scrolling.
+  Usage: put the row's scroller and this render inside the same [data-row-stage], and mark
+  the scroller with data-progress-row.
+{%- endcomment -%}
+{{ 'row-progress.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'row-progress.js' | asset_url }}" type="module"></script>
+<div class="mt-progress" data-row-progress hidden aria-hidden="true">
+  <span class="mt-progress__bar"></span>
+</div>

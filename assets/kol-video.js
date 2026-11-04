@@ -59,6 +59,83 @@ if (!window.mtKolVideoInit) {
     video.focus({ preventScroll: true });
   };
 
+  // GA4 — view_item_list / select_item for the products under the cards, same pattern as
+  // the other product-list modules.
+  const trackedIds = new WeakMap();
+  const pendingItems = new WeakMap();
+  const batchTimers = new WeakMap();
+  const BATCH_DELAY = 300;
+
+  const buildItem = (el) => ({
+    item_id: el.dataset.itemId,
+    item_name: el.dataset.itemName,
+    discount: +el.dataset.itemDiscount || 0,
+    index: +el.dataset.itemIndex,
+    item_list_id: el.dataset.itemListId,
+    item_list_name: el.dataset.itemListName,
+    ...(el.dataset.itemCategory ? { item_category: el.dataset.itemCategory } : {}),
+    ...(el.dataset.itemVariant ? { item_variant: el.dataset.itemVariant } : {}),
+    item_brand: el.dataset.itemBrand,
+    price: +el.dataset.itemPrice,
+    quantity: 1,
+  });
+
+  const flushImpressions = (section) => {
+    const items = pendingItems.get(section) || [];
+    pendingItems.set(section, []);
+    const tracked = trackedIds.get(section);
+    const fresh = items.filter((el) => !tracked.has(el.dataset.itemIndex));
+    if (!fresh.length) return;
+    fresh.forEach((el) => tracked.add(el.dataset.itemIndex));
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'view_item_list',
+      event_parameters: {
+        item_list_id: fresh[0].dataset.itemListId,
+        item_list_name: fresh[0].dataset.itemListName,
+        currency: section.dataset.currency,
+        items: fresh.map(buildItem),
+      },
+    });
+  };
+
+  const impressionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        impressionObserver.unobserve(entry.target);
+        const section = entry.target.closest('[data-kol]');
+        if (!section) return;
+        if (!trackedIds.has(section)) trackedIds.set(section, new Set());
+        if (!pendingItems.has(section)) pendingItems.set(section, []);
+        pendingItems.get(section).push(entry.target);
+        clearTimeout(batchTimers.get(section));
+        batchTimers.set(section, setTimeout(() => flushImpressions(section), BATCH_DELAY));
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  document.addEventListener('click', (event) => {
+    const item = event.target.closest?.('[data-kol] .mt-kol__product[data-item-id]');
+    if (!item || !event.target.closest('a')) return;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_item',
+      event_parameters: {
+        item_list_id: item.dataset.itemListId,
+        item_list_name: item.dataset.itemListName,
+        currency: item.closest('[data-kol]')?.dataset.currency,
+        button_name: 'Product Card',
+        items: [buildItem(item)],
+      },
+    });
+  });
+
   const setup = (root) => {
     if (root.dataset.mtReady) return;
     root.dataset.mtReady = 'true';
@@ -68,8 +145,22 @@ if (!window.mtKolVideoInit) {
     if (!track || !cards.length) return;
 
     cards.forEach((card) => {
-      card.querySelector('[data-kol-play]')?.addEventListener('click', () => play(card));
+      card.querySelector('[data-kol-play]')?.addEventListener('click', () => {
+        play(card);
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event_parameters: null });
+        window.dataLayer.push({
+          event: 'ga4Event',
+          event_name: 'select_content',
+          event_parameters: {
+            module_name: 'KOL Video',
+            content_name: card.querySelector('.mt-kol__heading')?.textContent.trim(),
+            button_name: 'Play',
+          },
+        });
+      });
     });
+    root.querySelectorAll('.mt-kol__product[data-item-id]').forEach((item) => impressionObserver.observe(item));
 
     // Crossing the breakpoint would leave the wrong (PC vs mobile) source in place.
     desktopMq.addEventListener('change', () => cards.forEach(reset));
