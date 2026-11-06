@@ -2,7 +2,12 @@
 Push this theme's code to the Shopify draft theme (theme id: 161185300726).
 
 Only pushes code directories: layout/, sections/, snippets/, assets/,
-config/settings_schema.json, locales/en.default.json.
+templates/*.liquid, config/settings_schema.json, locales/en.default.json.
+
+templates/*.liquid are code (404, gift_card, and data endpoints such as
+collection.pgrid.liquid, which must ship together with the JS that reads
+it). templates/*.json are excluded: they carry editor-managed section
+settings, same class of risk as settings_data.json.
 Deliberately excludes config/settings_data.json (merchant-managed
 operational config) so live/draft settings data is never overwritten.
 
@@ -30,13 +35,14 @@ $shopifyArgs = @(
     "--only", "sections/*",
     "--only", "snippets/*",
     "--only", "assets/*",
+    "--only", "templates/*.liquid",
     "--only", "config/settings_schema.json",
     "--only", "locales/en.default.json",
     "--ignore", "sections/header-group.json",
     "--ignore", "sections/footer-group.json"
 )
 
-Write-Host "Pushing to draft theme $ThemeId on $Store (layout/sections/snippets/assets/settings_schema.json/locales/en.default.json only, settings_data.json + header-group.json/footer-group.json excluded)..."
+Write-Host "Pushing to draft theme $ThemeId on $Store (layout/sections/snippets/assets/templates/*.liquid/settings_schema.json/locales/en.default.json only, settings_data.json + templates/*.json + header-group.json/footer-group.json excluded)..."
 shopify @shopifyArgs
 
 

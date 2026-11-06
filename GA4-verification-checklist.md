@@ -1041,3 +1041,50 @@ DOM 本来就是"移除前"的状态，天然是对的。
 - 临时模板渲染 kol-video（2 张卡 3 个商品），确认 `data-item-*` 和
   index 1/2/3 正确；验证后已删除临时模板
 - 点击触发的事件需要在浏览器实测
+
+---
+
+## 验证清单：Product carousel（新组件，在线表 No.81-83，2026-11-05）
+
+新组件 `sections/product-carousel.liquid`（product-grid 的横滑版）。口径
+与 Product grid 完全一致（用户 2026-11-04 确认）：
+- 商品卡 `view_item_list`（视口分批）/ `select_item`（`button_name:
+  "Product Card"`）；`item_list_id` = 系列 handle，`item_list_name` =
+  组件标题（为空时用系列标题）
+- 选中 tab 后：`item_list_name` = `<标题> - <tab 文案>`，index 按筛选
+  后列表从 1 重新编号
+- tab 选中 = `select_filter`（同 Product grid，类比 PLP No.35），取消
+  选中不触发
+- 左侧活动卡是纯图片、不可点击，**不埋点**
+- QUICK SHOP 黑条：卡片带 `data-quick-url`，`select_item`（QUICK SHOP）
+  / `view_item` / `add_to_cart` 由 `quick-shop.js` 现有逻辑发出
+
+- [ ] 滑到组件，出现一条 `view_item_list`，只含露出 ≥50% 的卡片，index
+      1、2、3…；横向滑动 / 点箭头露出新卡片后再报一批，滑回来不重复报
+- [ ] 点商品卡（非 QUICK SHOP）跳转前出现 `select_item`，`button_name:
+      "Product Card"`
+- [ ] 点 QUICK SHOP：出现 `select_item`（QUICK SHOP）+ `view_item`，
+      **不**出现 `button_name: "Product Card"` 的那条
+- [ ] 点一个 tab：出现 `select_filter`（`filter_type`："Product tag" 或
+      "Discount range"，`filter_content`：tab 文案）；随后露出的卡片报
+      `view_item_list`，`item_list_name` = "标题 - tab 文案"，index 从 1 起
+- [ ] 再点同一个 tab 取消：不触发 `select_filter`，已报过的原列表卡片
+      不重复报
+- [ ] 点活动卡：没有任何事件
+
+代码改动：
+- 新建 `sections/product-carousel.liquid` + `assets/product-carousel.css`
+  / `.js`（命名对称）；卡片复用 `product-card.liquid`（参数同
+  product-grid），tab 取数复用 `templates/collection.pgrid.liquid`
+- `assets/product-carousel.js`：`view_item_list` / `select_item` /
+  `select_filter`，写法同 `product-grid.js`
+
+验证：
+- `node --check` 通过；`shopify theme check` 无新增问题
+- 临时模板 `collection.pcarcheck.json`（tag tab + 空 tab + 折扣 tab 两
+  个实例）在本地 dev 用 Edge（CDP）实测：首屏报 `Best Sellers#1.2.3`，
+  点箭头后报 `#4`；选 Tops → `select_filter:Tops` + `Best Sellers -
+  Tops#1.2.3`；空 tab 只报 `select_filter`；折扣 tab 同理。验证后已删除
+  临时模板
+- 商品卡 / QUICK SHOP 点击（`select_item`）未在 CDP 里实测，需按上面清单
+  在浏览器确认

@@ -134,11 +134,11 @@ if (!window.mtProductGridInit) {
     ...new DOMParser().parseFromString(html, 'text/html').querySelectorAll('[data-pgrid-grid] > .mt-card'),
   ];
 
-  // ---- Filter tabs: the list comes from templates/collection.pgrid.liquid (24 cards a page) ----
+  // ---- Filter tabs: the list comes from templates/collection.pgrid.liquid (12 cards a page) ----
   // By tag: Shopify filters /collections/{handle}/{tag}, so only the pages a grid page needs are
   // fetched. By discount: there is no native filter, so the whole collection is fetched once and
   // filtered on each card's data-sale-percent (the number its sale badge shows).
-  const FEED_SIZE = 24;
+  const FEED_SIZE = 12;
   const filters = new WeakMap();
   const baseCounts = new WeakMap();
   const feeds = new Map();

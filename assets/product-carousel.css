@@ -1,0 +1,442 @@
+/* Cards are 138px at a 375 mobile viewport and 302px at 1440, both scaling with the width; fixed 302px from 1440 up. */
+.mt-pcar {
+  --mt-pcar-pad: 1rem;
+  --mt-pcar-gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0 1.75rem;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+}
+
+.mt-pcar__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.0625rem;
+  padding-inline: var(--mt-pcar-pad);
+}
+.mt-pcar__title {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: var(--mt-tracking-heading);
+}
+
+/* ---- Filter tabs: same look as product-grid's; mobile scrolls sideways edge to edge ---- */
+.mt-pcar__tabs {
+  display: flex;
+  gap: 0.40625rem;
+  margin-inline: calc(-1 * var(--mt-pcar-pad));
+  padding-inline: var(--mt-pcar-pad);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.mt-pcar__tabs::-webkit-scrollbar {
+  display: none;
+}
+.mt-pcar__tab {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.125rem;
+  height: 2.25rem;
+  padding: 0 0.75rem 0 0.375rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f0f0ee;
+  color: var(--mt-ink);
+  font-family: var(--mt-font-body);
+  font-size: 0.625rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--mt-dur) var(--mt-ease);
+}
+.mt-pcar__tab:not(:has(img)) {
+  padding-inline-start: 0.75rem;
+}
+.mt-pcar__tab[aria-pressed='true'] {
+  background: #b3b3b3;
+}
+.mt-pcar__tab:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+.mt-pcar__tab-img {
+  flex: none;
+  width: 1.625rem;
+  height: 1.625rem;
+  object-fit: contain;
+}
+
+/* ---- Row ---- */
+.mt-pcar__stage {
+  --mt-pcar-card-w: calc(100cqw * 138 / 375);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  container-type: inline-size;
+}
+/* Arrows are desktop-only; centred on the card image. */
+.mt-pcar__stage .mt-row-nav {
+  display: none;
+  transition:
+    opacity var(--mt-dur) var(--mt-ease),
+    visibility var(--mt-dur) var(--mt-ease);
+}
+/* Edge flags come from product-carousel.js: no prev arrow at the start, no next arrow at the end. */
+.mt-pcar__stage[data-at-start] .mt-row-nav--prev,
+.mt-pcar__stage[data-at-end] .mt-row-nav--next {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.mt-pcar__row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--mt-pcar-gap);
+  padding-inline: var(--mt-pcar-pad);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--mt-pcar-pad);
+  scrollbar-width: none;
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-pcar__row::-webkit-scrollbar {
+  display: none;
+}
+/* Waiting on a tab's cards: dim in place; the delay skips the flash when they are prefetched. */
+.mt-pcar__row[aria-busy='true'] {
+  opacity: 0.5;
+  transition-delay: 150ms;
+}
+.mt-pcar__stage .mt-progress {
+  margin-inline: var(--mt-pcar-pad);
+}
+
+.mt-pcar__empty {
+  flex: 1 0 min(100%, 15rem);
+  align-self: center;
+  margin: 0;
+  padding: 3rem 0;
+  color: var(--mt-moss);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+.mt-pcar__empty[hidden] {
+  display: none;
+}
+
+/* ---- Promo card: as wide as a product card and as tall as the whole card; type scales with its width ---- */
+.mt-pcar__promo {
+  --mt-pcar-promo-inset: 8.7cqi;
+  position: relative;
+  flex: 0 0 var(--mt-pcar-card-w);
+  min-width: 0;
+  overflow: hidden;
+  background: var(--mt-mist);
+  color: var(--mt-pcar-promo-color, var(--mt-white));
+  container-type: inline-size;
+  scroll-snap-align: start;
+}
+.mt-pcar__promo picture,
+.mt-pcar__promo-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mt-pcar__promo-img {
+  object-fit: cover;
+}
+.mt-pcar__promo-eyebrow {
+  position: absolute;
+  margin: 0;
+  top: var(--mt-pcar-promo-inset);
+  inset-inline: var(--mt-pcar-promo-inset);
+  font-family: var(--mt-font-mono);
+  font-size: 0.5rem;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+}
+.mt-pcar__promo-text {
+  position: absolute;
+  inset-inline: var(--mt-pcar-promo-inset);
+  bottom: 11.6cqi;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--mt-font-body);
+  overflow-wrap: anywhere;
+}
+.mt-pcar__promo-kicker,
+.mt-pcar__promo-big {
+  margin: 0;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+}
+.mt-pcar__promo-kicker {
+  margin-bottom: 0.3em;
+  font-size: 9.79cqi;
+}
+/* Headline and suffix share a baseline; a long pair wraps instead of overflowing the card. */
+.mt-pcar__promo-big {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 2cqi;
+}
+.mt-pcar__promo-headline {
+  font-size: 22.04cqi;
+}
+.mt-pcar__promo-suffix {
+  font-size: 15.51cqi;
+}
+.mt-pcar__promo-desc {
+  margin: 0.4em 0 0;
+  font-size: 7.18cqi;
+  line-height: 1.2;
+}
+
+/* ---- Card overrides, scoped to this section (same card as product-grid) ---- */
+.mt-pcar .mt-card {
+  width: var(--mt-pcar-card-w);
+  min-width: 0;
+  flex: 0 0 var(--mt-pcar-card-w);
+  gap: 0.75rem;
+  scroll-snap-align: start;
+}
+.mt-pcar .mt-card__text {
+  gap: 0.25rem;
+}
+.mt-pcar .mt-card__title,
+.mt-pcar .mt-card__price {
+  max-width: none;
+  font-size: 0.75rem;
+}
+/* Fixed title and price heights so every card in the row is the same height. */
+.mt-pcar .mt-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: calc(var(--mt-p-leading) * 2em);
+}
+.mt-pcar .mt-card__price {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--mt-moss);
+}
+.mt-pcar .mt-card--sale .mt-card__now {
+  color: var(--mt-tangerine);
+}
+
+.mt-pcar .mt-card__badges {
+  top: 0.4375rem;
+  inset-inline-start: 0.4375rem;
+  gap: 0.25rem;
+}
+/* Metafield badges (e.g. NEW): white with black text; auto discount badge (e.g. 33% OFF): tangerine. */
+.mt-pcar .mt-card__badge {
+  padding: 0.1875rem 0.375rem;
+  background: var(--mt-white);
+  color: var(--mt-ink);
+  font-family: var(--mt-font-mono);
+  font-size: 0.5rem;
+  line-height: 1;
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+}
+.mt-pcar .mt-card__badge--sale {
+  background: var(--mt-tangerine);
+  color: var(--mt-white);
+}
+
+/* Quick shop is always the full-width bar under the price (no hover overlay). */
+.mt-pcar .mt-card__qs {
+  display: none;
+}
+.mt-pcar .mt-card__quick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 1.625rem;
+  padding: 0;
+  font-size: 0.5625rem;
+  letter-spacing: 0.06em;
+}
+
+/* ---- Shop more ---- */
+.mt-pcar__more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.6875rem;
+  margin: 1rem var(--mt-pcar-pad) 0;
+  border: 1px solid var(--mt-ink);
+  color: var(--mt-ink);
+  font-family: var(--mt-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    background-color var(--mt-dur) var(--mt-ease),
+    color var(--mt-dur) var(--mt-ease);
+}
+.mt-pcar__more:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  .mt-pcar__more:hover {
+    background: var(--mt-ink);
+    color: var(--mt-paper);
+  }
+}
+
+@media (min-width: 750px) {
+  /* Side gutters are 3% of the viewport (≈43px at 1440), as in product-grid. */
+  .mt-pcar {
+    --mt-pcar-pad: 3%;
+    --mt-pcar-gap: 0.625rem;
+    padding: 2.5rem 0 3rem;
+  }
+
+  .mt-pcar__head {
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  .mt-pcar__title {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .mt-pcar__tabs {
+    flex-wrap: wrap;
+    gap: 0.625rem 1.9375rem;
+    margin-inline: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .mt-pcar__tab {
+    gap: 0.625rem;
+    height: 2.5rem;
+    padding: 0 1.5rem 0 1.125rem;
+    font-size: 1rem;
+  }
+  .mt-pcar__tab:not(:has(img)) {
+    padding-inline-start: 1.5rem;
+  }
+  .mt-pcar__tab-img {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
+  @media (hover: hover) {
+    .mt-pcar__tab:not([aria-pressed='true']):hover {
+      background: var(--mt-mist);
+    }
+  }
+
+  .mt-pcar__stage {
+    --mt-pcar-card-w: min(100cqw * 302 / 1440, 18.875rem);
+    gap: 1.75rem;
+  }
+  .mt-pcar__stage .mt-row-nav {
+    display: flex;
+    top: calc(var(--mt-pcar-card-w) * 440 / 335 / 2);
+  }
+  /* Arrow tweens write scrollLeft per frame; snapping would fight them. */
+  .mt-pcar__row {
+    scroll-snap-type: none;
+  }
+
+  .mt-pcar__empty {
+    padding-block: 5rem;
+    font-size: 1rem;
+  }
+
+  .mt-pcar__promo {
+    --mt-pcar-promo-inset: 5.6cqi;
+  }
+  .mt-pcar__promo-eyebrow {
+    top: 7.9cqi;
+    inset-inline: 7.9cqi;
+    font-size: 0.75rem;
+  }
+  .mt-pcar__promo-text {
+    bottom: 10cqi;
+  }
+  .mt-pcar__promo-kicker {
+    font-size: 9.3cqi;
+  }
+  .mt-pcar__promo-headline {
+    font-size: 20.92cqi;
+  }
+  .mt-pcar__promo-suffix {
+    font-size: 14.72cqi;
+  }
+  .mt-pcar__promo-desc {
+    font-size: 6.82cqi;
+  }
+
+  /* Card type follows the card's own width (157px at 750 → 302px at 1440), as in product-grid. */
+  .mt-pcar .mt-card {
+    container-type: inline-size;
+    gap: 1rem;
+  }
+  .mt-pcar .mt-card__text {
+    gap: clamp(0.375rem, 0.74125rem - 1.77cqi, 0.5rem);
+  }
+  .mt-pcar .mt-card__title,
+  .mt-pcar .mt-card__price {
+    font-size: clamp(0.8125rem, 0.63375rem + 1.77cqi, 1rem);
+  }
+  .mt-pcar .mt-card__title {
+    -webkit-line-clamp: 1;
+    height: calc(var(--mt-p-leading) * 1em);
+  }
+
+  .mt-pcar .mt-card__badges {
+    top: 0.9375rem;
+    inset-inline-start: 0.6875rem;
+  }
+  .mt-pcar .mt-card__badge {
+    padding: 0.3125rem 0.75rem;
+    font-size: clamp(0.5rem, 0.17375rem + 3.09cqi, 0.8125rem);
+  }
+
+  .mt-pcar .mt-card__quick {
+    height: 2.25rem;
+    font-size: clamp(0.6875rem, 0.621875rem + 0.62cqi, 0.75rem);
+  }
+
+  .mt-pcar__more {
+    height: 3.625rem;
+    margin-top: 1.875rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* From 1440 the cards stop growing and more of them show; the gutter stays at the 1440 value. */
+@media (min-width: 1440px) {
+  .mt-pcar {
+    --mt-pcar-pad: 2.625rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-pcar__row,
+  .mt-pcar__tab,
+  .mt-pcar__more,
+  .mt-pcar__stage .mt-row-nav {
+    transition: none;
+  }
+}

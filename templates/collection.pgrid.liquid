@@ -1,11 +1,12 @@
 {%- layout none -%}
 {%- comment -%}
-  Data endpoint for sections/product-grid.liquid, not a page: do not assign it to a collection.
+  Data endpoint for sections/product-grid.liquid and sections/product-carousel.liquid, not a page:
+  do not assign it to a collection. product-carousel.js reuses these cards and only rewrites the image sizes.
   product-grid.js fetches /collections/{handle}[/{tag}]?view=pgrid&page=N and swaps in the cards.
-  Fixed 24 per page (a template cannot read query params); the JS slices it for 12-per-page grids.
-  The card params must match the ones in product-grid.liquid.
+  Fixed 12 per page (a template cannot read query params) = FEED_SIZE in product-grid.js; a 24-per-page
+  grid fetches two pages. The card params must match the ones in product-grid.liquid.
 {%- endcomment -%}
-{%- paginate collection.products by 24 -%}
+{%- paginate collection.products by 12 -%}
   <div
     data-pgrid-feed
     data-page="{{ paginate.current_page }}"

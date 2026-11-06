@@ -1,0 +1,328 @@
+{%- if request.page_type == 'index' -%}
+  {%- comment -%} theme.liquid loads card/swatch CSS async on home; load it here, ahead of the cards, so a fast scroll on a slow network never shows unstyled cards. {%- endcomment -%}
+  {{ 'product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'color-swatch.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{{ 'product-carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-carousel.js' | asset_url }}" type="module"></script>
+
+{%- liquid
+  assign pc_collection = section.settings.collection
+  assign pc_item_list_id = pc_collection.handle
+  assign pc_item_list_name = section.settings.heading | default: pc_collection.title
+  # Card width: 138/375 of the viewport on mobile, 302/1440 from 750px, fixed 302px from 1440px (product-carousel.css).
+  assign pc_sizes = '(min-width: 1440px) 302px, (min-width: 750px) 21vw, 37vw'
+  assign pc_by_discount = false
+  if section.settings.tab_filter == 'discount'
+    assign pc_by_discount = true
+  endif
+  assign has_products = false
+  if pc_collection.products_count > 0
+    assign has_products = true
+  endif
+  assign promo_pc = section.settings.promo_image_pc | default: section.settings.promo_image_mb
+  assign promo_mb = section.settings.promo_image_mb | default: section.settings.promo_image_pc
+  assign promo_offset = 0
+  if promo_mb != blank
+    assign promo_offset = 1
+  endif
+  assign pc_more_url = pc_collection.url | default: routes.collections_url
+-%}
+
+{%- capture pc_tabs -%}
+  {%- if has_products -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign tab_label = block.settings.label | strip
+        if tab_label == blank
+          continue
+        endif
+        if pc_by_discount and block.settings.discount_min == blank
+          continue
+        endif
+        assign tab_tag = block.settings.tag_name | strip | default: tab_label
+      -%}
+      <button
+        class="mt-pcar__tab"
+        type="button"
+        aria-pressed="false"
+        data-pcar-tab
+        data-label="{{ tab_label | escape }}"
+        {%- if pc_by_discount %}
+          data-min="{{ block.settings.discount_min }}"
+          {% if block.settings.discount_max != blank %}data-max="{{ block.settings.discount_max }}"{% endif %}
+        {%- else %}
+          data-tag="{{ tab_tag | handle }}"
+        {%- endif %}
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image and pc_by_discount == false -%}
+          {{ block.settings.image | image_url: width: 120 | image_tag: class: 'mt-pcar__tab-img', width: 30, height: 30, loading: 'lazy', alt: '' }}
+        {%- endif -%}
+        <span>{{ tab_label | escape }}</span>
+      </button>
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if has_products or pc_collection == blank -%}
+  <section
+    class="mt-pcar"
+    {% if section.settings.anchor_id != blank %}id="{{ section.settings.anchor_id | handleize }}"{% endif %}
+    data-pcar
+    data-currency="{{ cart.currency.iso_code }}"
+    data-feed-url="{{ pc_collection.url }}"
+    data-list-id="{{ pc_item_list_id }}"
+    data-list-name="{{ pc_item_list_name | escape }}"
+    data-sizes="{{ pc_sizes }}"
+  >
+    {%- if section.settings.heading != blank or pc_tabs != blank -%}
+      <div class="mt-pcar__head">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mt-pcar__title">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if pc_tabs != blank -%}
+          {%- comment -%} Filtering is done by product-carousel.js through collection.pgrid, same as product-grid. {%- endcomment -%}
+          <div class="mt-pcar__tabs" role="group" aria-label="{{ 'collection.filter_tabs' | t }}">
+            {{- pc_tabs -}}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      data-autoplay="0" keeps the row in motion.js for arrow tweens without auto-scrolling; the arrow step is the
+      first card's width, so the promo card is as wide as a product card. Edge flags work as in featured-kol.
+    {%- endcomment -%}
+    <div class="mt-pcar__stage" data-row-stage data-at-start>
+      <div class="mt-pcar__row" data-pcar-row data-autoplay="0" data-wheel-lock data-progress-row data-eager-managed>
+        {%- if promo_mb != blank -%}
+          <div class="mt-pcar__promo" data-reveal style="--mt-pcar-promo-color: {{ section.settings.promo_color }}">
+            <picture>
+              <source
+                media="(min-width: 750px)"
+                srcset="{% render 'image-srcset', image: promo_pc, widths: '302,453,604,906' %}"
+                sizes="(min-width: 1440px) 302px, 21vw"
+              >
+              {%- capture promo_widths %}{% render 'image-srcset', image: promo_mb, widths: '138,276,414,552', output: 'widths' %}{% endcapture -%}
+              {{ promo_mb | image_url: width: 414 | image_tag: class: 'mt-pcar__promo-img', loading: 'lazy', decoding: 'async', widths: promo_widths, sizes: '37vw', alt: '' }}
+            </picture>
+            {%- if section.settings.promo_eyebrow != blank -%}
+              <p class="mt-pcar__promo-eyebrow">{{ section.settings.promo_eyebrow | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.promo_kicker != blank or section.settings.promo_headline != blank or section.settings.promo_suffix != blank or section.settings.promo_text != blank -%}
+              <div class="mt-pcar__promo-text">
+                {%- if section.settings.promo_kicker != blank -%}
+                  <p class="mt-pcar__promo-kicker">{{ section.settings.promo_kicker | escape }}</p>
+                {%- endif -%}
+                {%- if section.settings.promo_headline != blank or section.settings.promo_suffix != blank -%}
+                  <p class="mt-pcar__promo-big">
+                    {%- if section.settings.promo_headline != blank -%}
+                      <span class="mt-pcar__promo-headline">{{ section.settings.promo_headline | escape }}</span>
+                    {%- endif -%}
+                    {%- if section.settings.promo_suffix != blank -%}
+                      <span class="mt-pcar__promo-suffix">{{ section.settings.promo_suffix | escape }}</span>
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+                {%- if section.settings.promo_text != blank -%}
+                  <p class="mt-pcar__promo-desc">{{ section.settings.promo_text | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if has_products -%}
+          {%- comment -%} 12 = MAX in product-carousel.js. {%- endcomment -%}
+          {%- for item in pc_collection.products limit: 12 -%}
+            {%- assign reveal_i = forloop.index0 | plus: promo_offset | at_most: 4 -%}
+            {% render 'product-card',
+              product: item,
+              index: reveal_i,
+              ga4_index: forloop.index0,
+              sizes: pc_sizes,
+              quick: true,
+              sale_badge: true,
+              hide_swatches: true,
+              item_list_id: pc_item_list_id,
+              item_list_name: pc_item_list_name
+            %}
+          {%- endfor -%}
+          {%- if pc_tabs != blank -%}
+            <p class="mt-pcar__empty" data-pcar-empty hidden>{{ 'collection.filter_empty' | t }}</p>
+          {%- endif -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            {% render 'product-card', product: blank, index: forloop.index0 %}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <button class="mt-row-nav mt-row-nav--prev" type="button" data-row-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+        <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+      </button>
+      <button class="mt-row-nav mt-row-nav--next" type="button" data-row-arrow="next" aria-label="{{ 'general.next' | t }}">
+        <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+      </button>
+      {% render 'row-progress' %}
+    </div>
+
+    {%- comment -%} product-carousel.js points this at the active tag tab; discount tabs keep the whole collection. {%- endcomment -%}
+    <a class="mt-pcar__more" href="{{ pc_more_url }}" data-pcar-more>
+      {{- section.settings.more_label | default: 'SHOP MORE' | escape -}}
+    </a>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product carousel",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "按该系列在后台设置的排序横滑展示前 12 个商品"
+    },
+    {
+      "type": "select",
+      "id": "tab_filter",
+      "label": "Tabs filter by",
+      "options": [
+        { "value": "tag", "label": "Product tag" },
+        { "value": "discount", "label": "Discount range" }
+      ],
+      "default": "tag",
+      "info": "所有 tab 用同一种方式筛选，每个 tab 最多展示 12 个商品。Product tag：按 tab 的 Tag name 匹配商品 tag；Discount range：按卡片角标上的折扣百分比，建议系列不超过约 250 个商品"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Title",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "text",
+      "id": "more_label",
+      "label": "Button label",
+      "default": "SHOP MORE",
+      "info": "跳转到系列页；选中按 Product tag 筛选的 tab 时跳到该 tag 筛选后的系列页"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID (optional)",
+      "info": "供 Anchor tabs 跳转定位，例如 best-sellers；需与 tab 的 Target ID 一致，同一页面内不要重复"
+    },
+    {
+      "type": "header",
+      "content": "Promo card"
+    },
+    {
+      "type": "paragraph",
+      "content": "展示在第一位、跟商品一起横滑，不可点击。至少上传一张图片才会展示；不上传时第一个商品排在第一位"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image_pc",
+      "label": "Desktop image",
+      "info": "302 × 511（竖图），建议至少 604 宽；留空时用移动端图片"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image_mb",
+      "label": "Mobile image",
+      "info": "138 × 284（竖图），建议至少 414 宽；留空时用电脑端图片"
+    },
+    {
+      "type": "color",
+      "id": "promo_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "promo_eyebrow",
+      "label": "Top label",
+      "default": "BEST SELLERS",
+      "info": "左上角小字，例如 BEST SELLERS；按输入原样展示"
+    },
+    {
+      "type": "text",
+      "id": "promo_kicker",
+      "label": "Lead-in",
+      "default": "UP TO",
+      "info": "大字上方一行，例如 UP TO"
+    },
+    {
+      "type": "text",
+      "id": "promo_headline",
+      "label": "Headline",
+      "default": "50%",
+      "info": "大字，例如 50%"
+    },
+    {
+      "type": "text",
+      "id": "promo_suffix",
+      "label": "Headline suffix",
+      "default": "OFF",
+      "info": "跟在大字后面同一行的稍小字，例如 OFF"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Description",
+      "default": "Limited stock and sizes.",
+      "info": "底部说明，例如 Limited stock and sizes."
+    }
+  ],
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "正方形，建议透明底 PNG，至少 120 × 120；仅按 Product tag 筛选时展示",
+          "visible_if": "{{ section.settings.tab_filter == 'tag' }}"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "tab 上显示的文字，可以在 Translate & Adapt 里翻译"
+        },
+        {
+          "type": "text",
+          "id": "tag_name",
+          "label": "Tag name",
+          "info": "用于匹配商品 tag，需与商品 tag 完全一致，例如 Girls；不要翻译。留空时用 Label 匹配",
+          "visible_if": "{{ section.settings.tab_filter == 'tag' }}"
+        },
+        {
+          "type": "number",
+          "id": "discount_min",
+          "label": "Discount from (%)",
+          "info": "仅按 Discount range 筛选时生效，含该值，例如 30",
+          "visible_if": "{{ section.settings.tab_filter == 'discount' }}"
+        },
+        {
+          "type": "number",
+          "id": "discount_max",
+          "label": "Discount to (%)",
+          "info": "含该值，例如 39；留空表示不设上限",
+          "visible_if": "{{ section.settings.tab_filter == 'discount' }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product carousel"
+    }
+  ]
+}
+{% endschema %}
