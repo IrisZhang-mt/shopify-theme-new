@@ -131,6 +131,146 @@
         "anchor_id": "Best_Sellers"
       }
     },
+    "product_carousel_RKCxga": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_ihcj3b": {
+          "type": "tab",
+          "settings": {
+            "label": "Shoes",
+            "tag_name": "Shoes"
+          }
+        },
+        "tab_UP9nWU": {
+          "type": "tab",
+          "settings": {
+            "label": "Top",
+            "tag_name": "Top"
+          }
+        }
+      },
+      "block_order": [
+        "tab_ihcj3b",
+        "tab_UP9nWU"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "best-sellers",
+        "tab_filter": "tag",
+        "heading": "Best Sellers",
+        "more_label": "SHOP MORE",
+        "anchor_id": "Best_Sellers",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "BEST SELLERS",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": "Limited stock and sizes."
+      }
+    },
+    "product_carousel_bTXLFE": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_XWwF7g": {
+          "type": "tab",
+          "settings": {
+            "label": "Spring",
+            "tag_name": "Spring"
+          }
+        },
+        "tab_66VCUD": {
+          "type": "tab",
+          "settings": {
+            "label": "Summer",
+            "tag_name": "Summer"
+          }
+        }
+      },
+      "block_order": [
+        "tab_XWwF7g",
+        "tab_66VCUD"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "new-arrival",
+        "tab_filter": "tag",
+        "heading": "New",
+        "more_label": "SHOP MORE",
+        "anchor_id": "New_Arrivals",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "NEW ARR",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": " Limited stock and sizes."
+      }
+    },
+    "product_carousel_zRppcD": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_jpQ4De": {
+          "type": "tab",
+          "settings": {
+            "label": "50%+ OFF",
+            "tag_name": "Spring",
+            "discount_min": 50
+          }
+        },
+        "tab_ffA3qV": {
+          "type": "tab",
+          "settings": {
+            "label": "40-49% OFF",
+            "tag_name": "Summer",
+            "discount_min": 40,
+            "discount_max": 49
+          }
+        },
+        "tab_RmpXfC": {
+          "type": "tab",
+          "settings": {
+            "label": "30-39% OFF",
+            "tag_name": "",
+            "discount_min": 30,
+            "discount_max": 39
+          }
+        },
+        "tab_yDxxxF": {
+          "type": "tab",
+          "settings": {
+            "label": "Under 30% OFF",
+            "tag_name": "",
+            "discount_min": 1,
+            "discount_max": 29
+          }
+        }
+      },
+      "block_order": [
+        "tab_jpQ4De",
+        "tab_ffA3qV",
+        "tab_RmpXfC",
+        "tab_yDxxxF"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "flash-sale",
+        "tab_filter": "discount",
+        "heading": "SALE",
+        "more_label": "SHOP MORE",
+        "anchor_id": "Sale",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "NEW ARR",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": " Limited stock and sizes."
+      }
+    },
     "product_grid_T7KaXf": {
       "type": "product-grid",
       "blocks": {
@@ -169,6 +309,7 @@
         "tab_NCD93w",
         "tab_Mp7aMh"
       ],
+      "disabled": true,
       "name": "Product grid",
       "settings": {
         "collection": "best-sellers",
@@ -181,6 +322,7 @@
     },
     "full_image_eCCE9k": {
       "type": "full-image",
+      "disabled": true,
       "name": "Full image",
       "settings": {
         "heading": "",
@@ -212,14 +354,15 @@
         "tab_3enL9g": {
           "type": "tab",
           "settings": {
-            "label": "",
-            "tag_name": ""
+            "label": "Spring",
+            "tag_name": "Spring"
           }
         }
       },
       "block_order": [
         "tab_3enL9g"
       ],
+      "disabled": true,
       "name": "Product grid",
       "settings": {
         "collection": "new-arrival",
@@ -232,6 +375,7 @@
     },
     "full_image_PDgb8g": {
       "type": "full-image",
+      "disabled": true,
       "name": "Full image",
       "settings": {
         "heading": "",
@@ -259,6 +403,7 @@
     },
     "product_grid_j9hWQD": {
       "type": "product-grid",
+      "disabled": true,
       "name": "Product grid",
       "settings": {
         "collection": "flash-sale",
@@ -326,8 +471,165 @@
         "card_Ritb3d",
         "card_TdMqJ7"
       ],
+      "disabled": true,
       "name": "KOL video",
       "settings": {}
+    },
+    "featured_blog_pKgTJt": {
+      "type": "featured-blog",
+      "blocks": {
+        "article_A3P6c4": {
+          "type": "article",
+          "settings": {
+            "article": "journal/moody-miles-club-guide"
+          }
+        },
+        "article_zTFcxx": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-kids-sizing-guide"
+          }
+        },
+        "article_rp978w": {
+          "type": "article",
+          "settings": {
+            "article": "journal/kids-winter-shoes"
+          }
+        },
+        "article_nk3JT4": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-shipping-returns-faq"
+          }
+        },
+        "article_Bw4bwC": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-kids-stock-up-list"
+          }
+        },
+        "article_UCcx7j": {
+          "type": "article",
+          "settings": {
+            "article": "journal/kids-winter-activewear-checklist"
+          }
+        }
+      },
+      "block_order": [
+        "article_A3P6c4",
+        "article_zTFcxx",
+        "article_rp978w",
+        "article_nk3JT4",
+        "article_Bw4bwC",
+        "article_UCcx7j"
+      ],
+      "name": "Featured blog",
+      "settings": {
+        "heading": "From the Journal",
+        "cta_label": "Read all stories",
+        "cta_url": "shopify://blogs/journal"
+      }
+    },
+    "featured_kol_gfnCem": {
+      "type": "featured-kol",
+      "blocks": {
+        "card_hhMUaQ": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_2e9e023e-be9c-4794-ac0d-3437ad335f45.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_gdgwGN": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_j3xKLT": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_EEJhn6": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_xQwMxf": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_ycCyyM": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_6RqW8U": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_CqpBJz": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_wk7gcJ": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        }
+      },
+      "block_order": [
+        "card_hhMUaQ",
+        "card_gdgwGN",
+        "card_j3xKLT",
+        "card_EEJhn6",
+        "card_xQwMxf",
+        "card_ycCyyM",
+        "card_6RqW8U",
+        "card_CqpBJz",
+        "card_wk7gcJ"
+      ],
+      "name": "Featured KOL",
+      "settings": {
+        "heading": "Ready, set, play."
+      }
     }
   },
   "order": [
@@ -337,11 +639,16 @@
     "benefits_signup_FErPeg",
     "anchor_tabs_QNN9H8",
     "full_image_3dbDiA",
+    "product_carousel_RKCxga",
+    "product_carousel_bTXLFE",
+    "product_carousel_zRppcD",
     "product_grid_T7KaXf",
     "full_image_eCCE9k",
     "product_grid_439aRD",
     "full_image_PDgb8g",
     "product_grid_j9hWQD",
-    "kol_video_eAFxaE"
+    "kol_video_eAFxaE",
+    "featured_blog_pKgTJt",
+    "featured_kol_gfnCem"
   ]
 }
