@@ -1,9 +1,31 @@
-<div class="mt-chart" data-chart="{{ chart_id }}" hidden>
+<div class="mt-chart" data-chart="{{ chart_id }}" data-chart-default-unit="{% if localization.country.iso_code == 'US' %}imperial{% else %}metric{% endif %}" hidden>
   <div class="mt-chart__backdrop" data-chart-close></div>
   <div class="mt-chart__panel" role="dialog" aria-modal="true" aria-label="{{ chart_name | default: chart_page.title | escape }}" tabindex="-1">
     <div class="mt-chart__head">
-      <p class="mt-chart__name">{{ chart_name | default: chart_page.title }}</p>
+      {%- comment -%} Upright round mark from Shopify Files (same as the old Kiwi chart); logo-mark.svg is the tilted footer mark. {%- endcomment -%}
+      <img class="mt-chart__logo" src="{{ 'moody-tiger-athletics-1643262174427.png' | file_url }}" width="200" height="200" alt="" loading="lazy">
+      <div>
+        <p class="mt-chart__name">{{ chart_name | default: chart_page.title }}</p>
+        <p class="mt-chart__sub">{{ 'products.size_chart' | t }}</p>
+      </div>
       <button class="mt-chart__close" type="button" data-chart-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
+    </div>
+    {%- comment -%}
+      Shown by size-chart.js when the page has metric/imperial table pairs.
+      Length-only charts (shoes) read "cm | inches"; charts with weights read "metric | imperial".
+    {%- endcomment -%}
+    {%- assign chart_content = chart_page.content | downcase -%}
+    {%- if chart_content contains '(kg)' or chart_content contains '(lbs)' -%}
+      {%- assign metric_label = 'products.size_chart_metric' | t -%}
+      {%- assign imperial_label = 'products.size_chart_imperial' | t -%}
+    {%- else -%}
+      {%- assign metric_label = 'products.size_chart_cm' | t -%}
+      {%- assign imperial_label = 'products.size_chart_inches' | t -%}
+    {%- endif -%}
+    <div class="mt-chart__units" role="group" aria-label="{{ 'products.size_chart_units' | t | escape }}" data-chart-units hidden>
+      <button type="button" data-chart-unit-set="metric" aria-pressed="false">{{ metric_label }}</button>
+      <span aria-hidden="true">|</span>
+      <button type="button" data-chart-unit-set="imperial" aria-pressed="false">{{ imperial_label }}</button>
     </div>
     <div class="mt-chart__body">{{ chart_page.content }}</div>
   </div>

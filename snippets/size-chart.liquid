@@ -1,0 +1,34 @@
+{%- comment -%}
+  Size Chart button + modal for a product's Size option (PDP, quick shop, pdp-pair).
+  Chart pages are edited by the team in the page editor; matching is fixed here:
+  the product's own custom.size_chart metafield first, then the collection rules below.
+  Params: product, button_class, kiwi (PDP only: hand off to Kiwi when no chart matches).
+{%- endcomment -%}
+{%- liquid
+  assign chart_meta = product.metafields.custom.size_chart
+  assign chart_page = chart_meta.value
+  assign chart_url = chart_page.url | default: chart_meta.value
+  if chart_page.content == blank and chart_url == blank
+    assign collection_handles = product.collections | map: 'handle'
+    comment
+      Most specific first: leggings and shoes products may also sit in the all-clothing collection.
+    endcomment
+    if collection_handles contains 'leggings-1'
+      assign chart_page = pages['size-chart-breezy-leggings']
+    elsif collection_handles contains 'shoes'
+      assign chart_page = pages['size-chart-shoes']
+    elsif collection_handles contains 'all-clothing-size'
+      assign chart_page = pages['size-chart-clothing']
+    endif
+    assign chart_url = chart_page.url
+  endif
+-%}
+{%- if chart_page.content != blank or chart_url != blank or kiwi -%}
+  <a class="{{ button_class }}" href="{{ chart_url | default: '#' | escape }}"{% if chart_page.content != blank %} data-chart-open="{{ product.id }}"{% elsif kiwi %} data-chart-kiwi{% if chart_url == blank %} data-chart-wait{% endif %}{% endif %}>
+    <img src="{{ 'ruler.svg' | asset_url }}" width="19" height="9" alt="">
+    {{ 'products.size_chart' | t }}
+  </a>
+  {%- if chart_page.content != blank -%}
+    {% render 'size-chart-modal', chart_page: chart_page, chart_id: product.id, chart_name: product.title %}
+  {%- endif -%}
+{%- endif -%}

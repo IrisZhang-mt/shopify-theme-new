@@ -7,6 +7,77 @@ if (!window.mtChartInit) {
 
   const openedChart = () => document.querySelector('.mt-chart:not([hidden])');
 
+  // Chart pages are plain page-editor tables. A blank header cell joins the cell to its left,
+  // a blank body cell joins the cell above (e.g. one "S" across sizes 6 and 7).
+  const isBlank = (cell) => !cell.textContent.trim() && !cell.querySelector('img');
+  const mergeBlankCells = (table) => {
+    const rows = [...table.rows].map((row) => [...row.cells]);
+    if (!rows.length || rows.some((cells) => cells.length !== rows[0].length)) return;
+    let left = null;
+    rows[0].forEach((cell) => {
+      if (isBlank(cell) && left) {
+        left.colSpan += 1;
+        cell.remove();
+      } else left = cell;
+    });
+    rows[0].forEach((_, col) => {
+      let above = null;
+      rows.slice(1).forEach((cells) => {
+        const cell = cells[col];
+        if (isBlank(cell) && above) {
+          above.rowSpan += 1;
+          cell.remove();
+        } else if (!isBlank(cell)) above = cell;
+      });
+    });
+  };
+
+  const UNIT_KEY = 'mt-chart-unit';
+  const storedUnit = () => {
+    try {
+      return localStorage.getItem(UNIT_KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  const setUnit = (chart, unit) => {
+    chart.querySelectorAll('[data-chart-unit]').forEach((wrap) => {
+      wrap.hidden = wrap.dataset.chartUnit !== unit;
+    });
+    chart.querySelectorAll('[data-chart-unit-set]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.chartUnitSet === unit));
+    });
+  };
+
+  // Two tables in a row (only empty paragraphs between) are one chart: metric first, imperial second.
+  const prepareChart = (chart) => {
+    if (chart.dataset.chartReady) return;
+    chart.dataset.chartReady = '';
+    const body = chart.querySelector('.mt-chart__body');
+    body.querySelectorAll('table').forEach((table) => {
+      mergeBlankCells(table);
+      const wrap = document.createElement('div');
+      wrap.className = 'mt-chart__scroll';
+      table.before(wrap);
+      wrap.append(table);
+    });
+    let paired = false;
+    body.querySelectorAll('.mt-chart__scroll').forEach((wrap) => {
+      if (wrap.dataset.chartUnit) return;
+      let next = wrap.nextElementSibling;
+      while (next?.matches('p, br') && isBlank(next)) next = next.nextElementSibling;
+      if (!next?.classList.contains('mt-chart__scroll')) return;
+      wrap.dataset.chartUnit = 'metric';
+      next.dataset.chartUnit = 'imperial';
+      paired = true;
+    });
+    if (!paired) return;
+    chart.querySelector('[data-chart-units]').hidden = false;
+    const unit = storedUnit();
+    setUnit(chart, unit === 'metric' || unit === 'imperial' ? unit : chart.dataset.chartDefaultUnit);
+  };
+
   const portal = (chart) => {
     if (chart.parentElement === document.body) return chart;
     document.querySelectorAll(`body > [data-chart="${chart.dataset.chart}"]`).forEach((el) => el.remove());
@@ -16,6 +87,7 @@ if (!window.mtChartInit) {
 
   const openChart = (chart) => {
     chart = portal(chart);
+    prepareChart(chart);
     clearTimeout(closeTimers.get(chart));
     chart.hidden = false;
     document.documentElement.classList.add('mt-chart-lock');
@@ -53,6 +125,15 @@ if (!window.mtChartInit) {
         trigger = open;
         openChart(chart);
       }
+      return;
+    }
+    const unitButton = event.target.closest('[data-chart-unit-set]');
+    if (unitButton) {
+      const unit = unitButton.dataset.chartUnitSet;
+      setUnit(unitButton.closest('.mt-chart'), unit);
+      try {
+        localStorage.setItem(UNIT_KEY, unit);
+      } catch {}
       return;
     }
     const close = event.target.closest('[data-chart-close]');

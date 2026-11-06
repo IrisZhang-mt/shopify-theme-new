@@ -216,18 +216,9 @@
                   <div class="mt-pdp__option">
                     <div class="mt-pdp__option-head">
                       <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
-                      {%- assign chart_meta = product.metafields.custom.size_chart -%}
-                      {%- assign chart_page = chart_meta.value -%}
-                      {%- assign chart_url = chart_page.url | default: chart_meta.value -%}
-                      {%- comment -%} Size data lives in Kiwi; without the product's own metafield the button waits for Kiwi's chart (pdp.css). {%- endcomment -%}
+                      {%- comment -%} Products without a theme chart still wait for Kiwi's (pdp.css). {%- endcomment -%}
                       {%- if option.name == 'Size' -%}
-                        <a class="mt-pdp__chart" href="{{ chart_url | default: '#' | escape }}" data-chart-kiwi{% if chart_url == blank %} data-chart-wait{% endif %}{% if chart_page.content != blank %} data-chart-open="{{ product.id }}"{% endif %}>
-                          <img src="{{ 'ruler.svg' | asset_url }}" width="19" height="9" alt="">
-                          {{ 'products.size_chart' | t }}
-                        </a>
-                        {%- if chart_page.content != blank -%}
-                          {% render 'size-chart-modal', chart_page: chart_page, chart_id: product.id, chart_name: product.title %}
-                        {%- endif -%}
+                        {% render 'size-chart', product: product, button_class: 'mt-pdp__chart', kiwi: true %}
                       {%- endif -%}
                     </div>
                     <div class="mt-pdp__pills">
