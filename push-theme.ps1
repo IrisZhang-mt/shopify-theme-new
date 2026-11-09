@@ -25,7 +25,7 @@ param(
     [string]$Store = "moody-tiger-athletics.myshopify.com"
 )
 
-$ThemeId = "168500166902"
+$ThemeId = "168507834614"
 
 $shopifyArgs = @(
     "theme", "push",

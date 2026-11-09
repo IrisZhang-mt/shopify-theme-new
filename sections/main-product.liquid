@@ -216,9 +216,8 @@
                   <div class="mt-pdp__option">
                     <div class="mt-pdp__option-head">
                       <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{{ option.selected_value }}</span></p>
-                      {%- comment -%} Products without a theme chart still wait for Kiwi's (pdp.css). {%- endcomment -%}
                       {%- if option.name == 'Size' -%}
-                        {% render 'size-chart', product: product, button_class: 'mt-pdp__chart', kiwi: true %}
+                        {% render 'size-chart', product: product, button_class: 'mt-pdp__chart' %}
                       {%- endif -%}
                     </div>
                     <div class="mt-pdp__pills">
