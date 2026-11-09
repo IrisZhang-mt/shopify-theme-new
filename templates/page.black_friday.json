@@ -47,8 +47,8 @@
       "type": "countdown",
       "name": "Countdown",
       "settings": {
-        "label": "Black Friday in",
-        "end_time": "2026-11-02 00:00"
+        "label": "PRE-BLACK FRIDAY SALE IN",
+        "end_time": "2026-11-20 00:00"
       }
     },
     "benefits_signup_FErPeg": {
@@ -130,6 +130,290 @@
         "link": "",
         "anchor_id": "Best_Sellers"
       }
+    },
+    "product_grid_T7KaXf": {
+      "type": "product-grid",
+      "blocks": {
+        "tab_CE3Uxq": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Tops_cdf31503-953d-40e2-9c7b-6ce8f56c1e41.png",
+            "label": "Tops",
+            "tag_name": "top"
+          }
+        },
+        "tab_9zMgbT": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Bottoms.png",
+            "label": "Bottoms",
+            "tag_name": "Bottom"
+          }
+        },
+        "tab_NCD93w": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Outerwear.png",
+            "label": "Outerwear",
+            "tag_name": "Outerwear"
+          }
+        },
+        "tab_Mp7aMh": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Shoes.png",
+            "label": "Shoes",
+            "tag_name": "Shoes"
+          }
+        }
+      },
+      "block_order": [
+        "tab_CE3Uxq",
+        "tab_9zMgbT",
+        "tab_NCD93w",
+        "tab_Mp7aMh"
+      ],
+      "custom_css": [
+        "@media screen and (max-width: 750px) {.mt-pgrid__tag {font-size: 8px; }}"
+      ],
+      "name": "Product grid",
+      "settings": {
+        "collection": "best-sellers",
+        "per_page": "12",
+        "tab_filter": "tag",
+        "heading": "Best Sellers",
+        "subheading": "Buy 2+: 10% off  | Buy 4+: 20% off  | Buy 6+: 30% off  |  Buy 8+: 40% off",
+        "anchor_id": "Best_Sellers"
+      }
+    },
+    "full_image_eCCE9k": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/2-pc_e9ee1b8a-643c-466c-a22a-572d9620fb51.jpg",
+        "mob_image": "shopify://shop_images/2-app_b7ce8513-1ff8-455e-92c6-08524b363bdf.jpg",
+        "title": "",
+        "subtitle": "",
+        "title_x_desktop": 0,
+        "title_y_desktop": 80,
+        "title_x_mobile": 0,
+        "title_y_mobile": 80,
+        "title_align": "left",
+        "subtitle_x_desktop": 0,
+        "subtitle_y_desktop": 100,
+        "subtitle_x_mobile": 0,
+        "subtitle_y_mobile": 100,
+        "subtitle_align": "left",
+        "title_color": "#ffffff",
+        "subtitle_color": "#ffffff",
+        "title_line_height": 87,
+        "link": "shopify://collections/new-arrival",
+        "anchor_id": "New_Arrivals"
+      }
+    },
+    "product_grid_439aRD": {
+      "type": "product-grid",
+      "blocks": {
+        "tab_3enL9g": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Fall.png",
+            "label": "Fall",
+            "tag_name": "秋"
+          }
+        },
+        "tab_NzCKkt": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Winter.png",
+            "label": "Winter",
+            "tag_name": "Winter"
+          }
+        },
+        "tab_tmYAiY": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Summer.png",
+            "label": "Summer",
+            "tag_name": "Summer"
+          }
+        },
+        "tab_Ea8R6j": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Spring_a3d489cb-a41e-4837-b506-61d9b31eef7c.png",
+            "label": "Spring",
+            "tag_name": "Spring"
+          }
+        }
+      },
+      "block_order": [
+        "tab_3enL9g",
+        "tab_NzCKkt",
+        "tab_tmYAiY",
+        "tab_Ea8R6j"
+      ],
+      "name": "Product grid",
+      "settings": {
+        "collection": "new-arrival",
+        "per_page": "12",
+        "tab_filter": "tag",
+        "heading": "New Arrivals",
+        "subheading": "Up to 15% OFF",
+        "anchor_id": ""
+      }
+    },
+    "full_image_PDgb8g": {
+      "type": "full-image",
+      "name": "Full image",
+      "settings": {
+        "heading": "",
+        "eager_load": false,
+        "pc_image": "shopify://shop_images/3-pc_1e04e133-3eef-45f7-9185-0b173754a80d.jpg",
+        "mob_image": "shopify://shop_images/3-app.jpg",
+        "title": "",
+        "subtitle": "",
+        "title_x_desktop": 0,
+        "title_y_desktop": 80,
+        "title_x_mobile": 0,
+        "title_y_mobile": 80,
+        "title_align": "left",
+        "subtitle_x_desktop": 0,
+        "subtitle_y_desktop": 100,
+        "subtitle_x_mobile": 0,
+        "subtitle_y_mobile": 100,
+        "subtitle_align": "left",
+        "title_color": "#ffffff",
+        "subtitle_color": "#ffffff",
+        "title_line_height": 87,
+        "link": "shopify://collections/flash-sale",
+        "anchor_id": "Sale"
+      }
+    },
+    "product_grid_j9hWQD": {
+      "type": "product-grid",
+      "blocks": {
+        "tab_yxymrJ": {
+          "type": "tab",
+          "settings": {
+            "label": "50%+ OFF",
+            "tag_name": "",
+            "discount_min": 50
+          }
+        },
+        "tab_hBHAnd": {
+          "type": "tab",
+          "settings": {
+            "label": "",
+            "tag_name": ""
+          }
+        },
+        "tab_NTHbdQ": {
+          "type": "tab",
+          "settings": {
+            "label": "40-49% OFF",
+            "tag_name": "",
+            "discount_min": 40,
+            "discount_max": 49
+          }
+        },
+        "tab_9BVPDA": {
+          "type": "tab",
+          "settings": {
+            "label": "30-39% OFF",
+            "tag_name": "",
+            "discount_min": 30,
+            "discount_max": 39
+          }
+        },
+        "tab_6YDRka": {
+          "type": "tab",
+          "settings": {
+            "label": "Under 30% OFF",
+            "tag_name": "",
+            "discount_min": 1,
+            "discount_max": 29
+          }
+        }
+      },
+      "block_order": [
+        "tab_yxymrJ",
+        "tab_hBHAnd",
+        "tab_NTHbdQ",
+        "tab_9BVPDA",
+        "tab_6YDRka"
+      ],
+      "name": "Product grid",
+      "settings": {
+        "collection": "flash-sale",
+        "per_page": "12",
+        "tab_filter": "discount",
+        "heading": "Final Sale",
+        "subheading": "Up to 50% OFF",
+        "anchor_id": ""
+      }
+    },
+    "kol_video_eAFxaE": {
+      "type": "kol-video",
+      "blocks": {
+        "card_8C8dwg": {
+          "type": "card",
+          "settings": {
+            "heading": "Snow Mode",
+            "text": "Layered up, head to toe. Tap to shop.",
+            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
+            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
+            "image_pc": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
+            "image_mb": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
+            "products": [
+              "kids-down-vest",
+              "kids-printed-leggings-bootcut",
+              "kids-sports-shoes-swingy-e"
+            ]
+          }
+        },
+        "card_Ritb3d": {
+          "type": "card",
+          "settings": {
+            "heading": "Warm at Play",
+            "text": "Fleece on fleece, all afternoon. Tap to shop.",
+            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
+            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
+            "image_pc": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
+            "image_mb": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
+            "products": [
+              "kids-sherpa-jacket-fleece",
+              "girls-bootcut-pants",
+              "kids-winter-boots-canyon-m"
+            ]
+          }
+        },
+        "card_TdMqJ7": {
+          "type": "card",
+          "settings": {
+            "heading": "Off They Go",
+            "text": "Soft as it looks. Tap to shop.",
+            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
+            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
+            "image_pc": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
+            "image_mb": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
+            "products": [
+              "girls-knit-jacket",
+              "girls-fleece-lined-leggings-solar",
+              "v6-e-sneakers"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "card_8C8dwg",
+        "card_Ritb3d",
+        "card_TdMqJ7"
+      ],
+      "name": "KOL video",
+      "settings": {}
     },
     "product_carousel_RKCxga": {
       "type": "product-carousel",
@@ -270,210 +554,6 @@
         "promo_suffix": "OFF",
         "promo_text": " Limited stock and sizes."
       }
-    },
-    "product_grid_T7KaXf": {
-      "type": "product-grid",
-      "blocks": {
-        "tab_CE3Uxq": {
-          "type": "tab",
-          "settings": {
-            "label": "Tops",
-            "tag_name": "top"
-          }
-        },
-        "tab_9zMgbT": {
-          "type": "tab",
-          "settings": {
-            "label": "Bottoms",
-            "tag_name": "Bottom"
-          }
-        },
-        "tab_NCD93w": {
-          "type": "tab",
-          "settings": {
-            "label": "Jackets",
-            "tag_name": "Jackets"
-          }
-        },
-        "tab_Mp7aMh": {
-          "type": "tab",
-          "settings": {
-            "label": "Shoes",
-            "tag_name": "Shoes"
-          }
-        }
-      },
-      "block_order": [
-        "tab_CE3Uxq",
-        "tab_9zMgbT",
-        "tab_NCD93w",
-        "tab_Mp7aMh"
-      ],
-      "disabled": true,
-      "name": "Product grid",
-      "settings": {
-        "collection": "best-sellers",
-        "per_page": "12",
-        "tab_filter": "tag",
-        "heading": "Best Sellers",
-        "subheading": "Buy 4+: 20% off  | Buy 6+: 30% off  |  Buy 8+: 40% off",
-        "anchor_id": "Best_Sellers"
-      }
-    },
-    "full_image_eCCE9k": {
-      "type": "full-image",
-      "disabled": true,
-      "name": "Full image",
-      "settings": {
-        "heading": "",
-        "eager_load": false,
-        "pc_image": "shopify://shop_images/2-pc_e9ee1b8a-643c-466c-a22a-572d9620fb51.jpg",
-        "mob_image": "shopify://shop_images/2-app_b7ce8513-1ff8-455e-92c6-08524b363bdf.jpg",
-        "title": "",
-        "subtitle": "",
-        "title_x_desktop": 0,
-        "title_y_desktop": 80,
-        "title_x_mobile": 0,
-        "title_y_mobile": 80,
-        "title_align": "left",
-        "subtitle_x_desktop": 0,
-        "subtitle_y_desktop": 100,
-        "subtitle_x_mobile": 0,
-        "subtitle_y_mobile": 100,
-        "subtitle_align": "left",
-        "title_color": "#ffffff",
-        "subtitle_color": "#ffffff",
-        "title_line_height": 87,
-        "link": "shopify://collections/new-arrival",
-        "anchor_id": "New_Arrivals"
-      }
-    },
-    "product_grid_439aRD": {
-      "type": "product-grid",
-      "blocks": {
-        "tab_3enL9g": {
-          "type": "tab",
-          "settings": {
-            "label": "Spring",
-            "tag_name": "Spring"
-          }
-        }
-      },
-      "block_order": [
-        "tab_3enL9g"
-      ],
-      "disabled": true,
-      "name": "Product grid",
-      "settings": {
-        "collection": "new-arrival",
-        "per_page": "12",
-        "tab_filter": "tag",
-        "heading": "New Arrivals",
-        "subheading": "Up to 15% OFF",
-        "anchor_id": ""
-      }
-    },
-    "full_image_PDgb8g": {
-      "type": "full-image",
-      "disabled": true,
-      "name": "Full image",
-      "settings": {
-        "heading": "",
-        "eager_load": false,
-        "pc_image": "shopify://shop_images/3-pc_1e04e133-3eef-45f7-9185-0b173754a80d.jpg",
-        "mob_image": "shopify://shop_images/3-app.jpg",
-        "title": "",
-        "subtitle": "",
-        "title_x_desktop": 0,
-        "title_y_desktop": 80,
-        "title_x_mobile": 0,
-        "title_y_mobile": 80,
-        "title_align": "left",
-        "subtitle_x_desktop": 0,
-        "subtitle_y_desktop": 100,
-        "subtitle_x_mobile": 0,
-        "subtitle_y_mobile": 100,
-        "subtitle_align": "left",
-        "title_color": "#ffffff",
-        "subtitle_color": "#ffffff",
-        "title_line_height": 87,
-        "link": "shopify://collections/flash-sale",
-        "anchor_id": "Sale"
-      }
-    },
-    "product_grid_j9hWQD": {
-      "type": "product-grid",
-      "disabled": true,
-      "name": "Product grid",
-      "settings": {
-        "collection": "flash-sale",
-        "per_page": "12",
-        "tab_filter": "tag",
-        "heading": "Final Sale",
-        "subheading": "Up to 50% OFF",
-        "anchor_id": ""
-      }
-    },
-    "kol_video_eAFxaE": {
-      "type": "kol-video",
-      "blocks": {
-        "card_8C8dwg": {
-          "type": "card",
-          "settings": {
-            "heading": "Snow Mode",
-            "text": "Layered up, head to toe. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "image_pc": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "image_mb": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "products": [
-              "kids-down-vest",
-              "kids-printed-leggings-bootcut",
-              "kids-sports-shoes-swingy-e"
-            ]
-          }
-        },
-        "card_Ritb3d": {
-          "type": "card",
-          "settings": {
-            "heading": "Warm at Play",
-            "text": "Fleece on fleece, all afternoon. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "image_pc": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "image_mb": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "products": [
-              "kids-sherpa-jacket-fleece",
-              "girls-bootcut-pants",
-              "kids-winter-boots-canyon-m"
-            ]
-          }
-        },
-        "card_TdMqJ7": {
-          "type": "card",
-          "settings": {
-            "heading": "Off They Go",
-            "text": "Soft as it looks. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "image_pc": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "image_mb": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "products": [
-              "girls-knit-jacket",
-              "girls-fleece-lined-leggings-solar",
-              "v6-e-sneakers"
-            ]
-          }
-        }
-      },
-      "block_order": [
-        "card_8C8dwg",
-        "card_Ritb3d",
-        "card_TdMqJ7"
-      ],
-      "disabled": true,
-      "name": "KOL video",
-      "settings": {}
     },
     "featured_blog_pKgTJt": {
       "type": "featured-blog",

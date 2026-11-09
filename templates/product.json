@@ -59,8 +59,8 @@
         "returns_title": "30-day returns & exchanges",
         "returns_copy": "Shop with confidence with our 30-day returns policy.",
         "returns_text": "<p>Anything not quite right can go back within 30 days of delivery, unworn and with its tags on. Reach out through the contact page and we will sort the rest.</p>",
-        "promo_image": "shopify://shop_images/pc_0912aecd-7b61-475e-9254-4aa40f13f886.jpg",
-        "promo_image_mobile": "shopify://shop_images/app_669f84e7-d343-4379-b74a-3faaced68a09.jpg",
+        "promo_image": "shopify://shop_images/5bb5459a084bbbf8f860ac7774b6c120_84c58427-1e06-4112-893f-613b9c513019.jpg",
+        "promo_image_mobile": "shopify://shop_images/3b1fb6c3b14881acf7f782124d7fafa0.jpg",
         "promo_title": "",
         "promo_subtitle": "",
         "promo_collections": [
@@ -76,6 +76,7 @@
     },
     "detail_modules": {
       "type": "product-detail-modules",
+      "disabled": true,
       "settings": {}
     },
     "slideshow_wA86pK": {

@@ -47,14 +47,26 @@
     "hero": {
       "type": "home-hero",
       "blocks": {
+        "slide_UzBtjF": {
+          "type": "slide",
+          "settings": {
+            "pc_image": "shopify://shop_images/pc_00c81932-70b6-44b2-9fe6-1fa8c9aba8d9.jpg",
+            "mob_image": "shopify://shop_images/app_ce6969cd-e13e-4a9e-a3e0-8579d76908b6.jpg",
+            "link": "shopify://pages/black-friday2026",
+            "heading": "",
+            "subtext": "",
+            "cta_label": "",
+            "cta_url": ""
+          }
+        },
         "panel-1": {
           "type": "panel",
           "settings": {
             "pc_image": "shopify://shop_images/3-pc_dedb9207-fc6a-4c7d-af2e-24ddbb97f07e.jpg",
             "mob_image": "shopify://shop_images/6-app_dddbbfde-b997-4482-95f6-dbe5118cf786.jpg",
             "link": "shopify://collections/best-sellers",
-            "info_heading": "Cooler days. Same wild play.",
-            "info_text": "Best-loved pieces, made to layer."
+            "info_heading": "The ones they keep reaching for.",
+            "info_text": "Our best-loved pieces,made for every kind of play."
           }
         },
         "panel-2": {
@@ -80,6 +92,7 @@
         }
       },
       "block_order": [
+        "slide_UzBtjF",
         "panel-1",
         "panel-2",
         "slide_QzEdXb"
@@ -124,7 +137,7 @@
         "girls": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/2_79e11269-4c84-4e1b-83fb-b88d1672f252.jpg",
+            "image": "shopify://shop_images/girls.png",
             "heading": "For Girls",
             "url": "shopify://collections/girls"
           }
@@ -132,7 +145,7 @@
         "boys": {
           "type": "tile",
           "settings": {
-            "image": "shopify://shop_images/boys-pc.jpg",
+            "image": "shopify://shop_images/boys_df2e3c84-32bf-41ea-9688-d4925a9558b1.png",
             "heading": "For Boys",
             "url": "shopify://collections/boys"
           }
@@ -584,7 +597,22 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/Group_1184.jpg",
         "mob_image": "shopify://shop_images/Group_1187.jpg",
-        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski"
+        "title": "",
+        "subtitle": "",
+        "title_x_desktop": 0,
+        "title_y_desktop": 80,
+        "title_x_mobile": 0,
+        "title_y_mobile": 80,
+        "title_align": "left",
+        "subtitle_x_desktop": 0,
+        "subtitle_y_desktop": 100,
+        "subtitle_x_mobile": 0,
+        "subtitle_y_mobile": 100,
+        "subtitle_align": "left",
+        "title_color": "#ffffff",
+        "subtitle_color": "#ffffff",
+        "link": "https://moodytiger.com/pages/ice-skating-crystals-by-swarovski",
+        "anchor_id": ""
       }
     }
   },
