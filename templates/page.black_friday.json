@@ -355,66 +355,6 @@
         "anchor_id": ""
       }
     },
-    "kol_video_eAFxaE": {
-      "type": "kol-video",
-      "blocks": {
-        "card_8C8dwg": {
-          "type": "card",
-          "settings": {
-            "heading": "Snow Mode",
-            "text": "Layered up, head to toe. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "image_pc": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "image_mb": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "products": [
-              "kids-down-vest",
-              "kids-printed-leggings-bootcut",
-              "kids-sports-shoes-swingy-e"
-            ]
-          }
-        },
-        "card_Ritb3d": {
-          "type": "card",
-          "settings": {
-            "heading": "Warm at Play",
-            "text": "Fleece on fleece, all afternoon. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "image_pc": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "image_mb": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "products": [
-              "kids-sherpa-jacket-fleece",
-              "girls-bootcut-pants",
-              "kids-winter-boots-canyon-m"
-            ]
-          }
-        },
-        "card_TdMqJ7": {
-          "type": "card",
-          "settings": {
-            "heading": "Off They Go",
-            "text": "Soft as it looks. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "image_pc": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "image_mb": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "products": [
-              "girls-knit-jacket",
-              "girls-fleece-lined-leggings-solar",
-              "v6-e-sneakers"
-            ]
-          }
-        }
-      },
-      "block_order": [
-        "card_8C8dwg",
-        "card_Ritb3d",
-        "card_TdMqJ7"
-      ],
-      "name": "KOL video",
-      "settings": {}
-    },
     "product_carousel_RKCxga": {
       "type": "product-carousel",
       "blocks": {
@@ -727,7 +667,6 @@
     "product_grid_439aRD",
     "full_image_PDgb8g",
     "product_grid_j9hWQD",
-    "kol_video_eAFxaE",
     "featured_blog_pKgTJt",
     "featured_kol_gfnCem"
   ]
