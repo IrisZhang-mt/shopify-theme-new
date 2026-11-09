@@ -13,3 +13,11 @@
 [environments.default]
 store = "moody-tiger-athletics.myshopify.com"
 theme = "161580155126"
+
+# Dev store for BF Spin & Win backend integration (Lily's App Proxy, test
+# orders). Use explicitly: `shopify theme dev -e dev` / `shopify theme push -e dev`.
+# `theme` is pinned to "BF Spin 开发" (#167518339158, unpublished) so
+# `theme dev -e dev` never spawns a fresh duplicate.
+[environments.dev]
+store = "moodytiger-us-dev.myshopify.com"
+theme = "167518339158"
