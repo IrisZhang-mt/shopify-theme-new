@@ -7,6 +7,14 @@
 {%- assign heading = section.settings.heading -%}
 {%- assign title = section.settings.title -%}
 {%- assign subtitle = section.settings.subtitle -%}
+{%- assign title_tag = section.settings.title_tag | default: 'h2' -%}
+{%- assign title_hidden = section.settings.title_hidden -%}
+{%- assign title_visible = false -%}
+{%- if title != blank -%}
+  {%- unless title_hidden -%}
+    {%- assign title_visible = true -%}
+  {%- endunless -%}
+{%- endif -%}
 {%- assign image_alt = pc_image.alt | default: mob_image.alt | default: '' | escape -%}
 {%- assign ratio_mobile = mob_image.aspect_ratio | default: pc_image.aspect_ratio | default: 1 -%}
 {%- assign ratio_desktop = pc_image.aspect_ratio | default: mob_image.aspect_ratio | default: 1 -%}
@@ -51,7 +59,10 @@
     {%- else -%}
       {{ 'lifestyle-1' | placeholder_svg_tag }}
     {%- endif -%}
-    {%- if title != blank or subtitle != blank -%}
+    {%- if title != blank and title_hidden -%}
+      <{{ title_tag }} class="visually-hidden">{{ title | newline_to_br | replace: '<br />', ' ' | strip_newlines | escape }}</{{ title_tag }}>
+    {%- endif -%}
+    {%- if title_visible or subtitle != blank -%}
       <div
         class="mt-full-image__content"
         style="--mt-full-image-title-color: {{ section.settings.title_color }}; --mt-full-image-subtitle-color: {{ section.settings.subtitle_color }}; --mt-full-image-title-leading: {{ section.settings.title_line_height }}%;
@@ -61,13 +72,13 @@
           {%- if section.settings.subtitle_size_desktop != blank %} --mt-full-image-subtitle-size-pc: {{ section.settings.subtitle_size_desktop }}px;{% endif -%}
         "
       >
-        {%- if title != blank -%}
-          <h2
+        {%- if title_visible -%}
+          <{{ title_tag }}
             class="mt-full-image__title"
             style="--mt-full-image-x-mob: {{ section.settings.title_x_mobile }}; --mt-full-image-y-mob: {{ section.settings.title_y_mobile }}; --mt-full-image-x-pc: {{ section.settings.title_x_desktop }}; --mt-full-image-y-pc: {{ section.settings.title_y_desktop }}; text-align: {{ section.settings.title_align }}"
           >
             {{- title | newline_to_br -}}
-          </h2>
+          </{{ title_tag }}>
         {%- endif -%}
         {%- if subtitle != blank -%}
           <p
@@ -129,6 +140,24 @@
       "id": "title",
       "label": "Title",
       "info": "叠加在图片上；留空时不展示"
+    },
+    {
+      "type": "select",
+      "id": "title_tag",
+      "label": "Title HTML tag",
+      "info": "SEO 用：每个页面只能有一个 H1。首页等已有 H1 的页面请保持 H2",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h1", "label": "H1" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_hidden",
+      "label": "Hide title visually",
+      "info": "文字已做在图片里时打开：标题不显示，但保留给搜索引擎和读屏软件。文案需与图上文字一致",
+      "default": false
     },
     {
       "type": "textarea",
