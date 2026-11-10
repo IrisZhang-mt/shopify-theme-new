@@ -650,6 +650,10 @@
       "settings": {
         "heading": "Ready, set, play."
       }
+    },
+    "spin_wheel": {
+      "type": "spin-wheel",
+      "settings": {}
     }
   },
   "order": [
@@ -668,6 +672,7 @@
     "full_image_PDgb8g",
     "product_grid_j9hWQD",
     "featured_blog_pKgTJt",
-    "featured_kol_gfnCem"
+    "featured_kol_gfnCem",
+    "spin_wheel"
   ]
 }

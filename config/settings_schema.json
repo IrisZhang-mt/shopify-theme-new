@@ -152,5 +152,17 @@
         "info": "Enter a store's English name exactly as it appears on the Find a Store page (case and spacing don't matter) to hide it. Takes effect immediately, no code changes needed. Example: Shanghai Songjiang Incity"
       }
     ]
+  },
+  {
+    "name": "Spin & Win",
+    "settings": [
+      {
+        "type": "text",
+        "id": "spin_proxy_prefix",
+        "label": "App Proxy prefix",
+        "default": "/apps/bf/spin",
+        "info": "与 Shopify 后台 App Proxy 设置保持一致，结尾不带 /"
+      }
+    ]
   }
 ]

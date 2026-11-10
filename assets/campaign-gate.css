@@ -1,0 +1,138 @@
+.mt-gate {
+  --mt-gate-hero-bg: #eae1d2;
+  --mt-gate-muted: #6f6e69;
+  min-height: 60vh;
+  background: var(--mt-paper);
+  text-align: center;
+}
+
+.mt-gate__ended[hidden] {
+  display: none;
+}
+
+.mt-gate__hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 21.625rem;
+  padding: 0 1rem 3.8125rem;
+  background: linear-gradient(var(--mt-gate-hero-bg) 0%, var(--mt-gate-hero-bg) 54%, var(--mt-paper) 100%);
+}
+
+.mt-gate__status {
+  margin: 0;
+  font-size: var(--mt-p-s-size);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mt-accent);
+}
+
+.mt-gate__title {
+  max-width: 20rem;
+  margin-top: 0.625rem;
+  font-size: 2.6875rem;
+  line-height: 1;
+}
+
+.mt-gate__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.75rem 3.75rem;
+}
+
+.mt-gate__thanks {
+  margin: 0;
+  font-size: var(--mt-p-xl-size);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-ink);
+}
+
+.mt-gate__message {
+  margin: 0.3125rem 0 0;
+  font-size: var(--mt-p-s-size);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-gate-muted);
+}
+
+.mt-gate__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 18.3125rem;
+  height: 2.6875rem;
+  margin-top: 2.1875rem;
+  border-radius: 0.125rem;
+  font-size: var(--mt-p-xl-size);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--mt-white);
+  background: var(--mt-ink);
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-gate__btn:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 3px;
+}
+
+.mt-gate__slogan {
+  margin: 5rem 0 0;
+  font-size: var(--mt-p-s-size);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-gate-muted);
+}
+
+@media (hover: hover) {
+  .mt-gate__btn:hover {
+    opacity: 0.85;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .mt-gate__hero {
+    min-height: 30rem;
+    padding-bottom: 3.125rem;
+  }
+
+  .mt-gate__status {
+    font-size: 1.125rem;
+  }
+
+  .mt-gate__title {
+    max-width: none;
+    margin-top: 0.9375rem;
+    font-size: 3.4375rem;
+  }
+
+  .mt-gate__body {
+    padding: 3.25rem 1rem 2.5rem;
+  }
+
+  .mt-gate__thanks {
+    font-size: 1.375rem;
+  }
+
+  .mt-gate__message {
+    margin-top: 0.5625rem;
+    font-size: 1.125rem;
+  }
+
+  .mt-gate__btn {
+    max-width: 22.5rem;
+    height: 4rem;
+    margin-top: 3rem;
+    font-size: 1.5rem;
+  }
+
+  .mt-gate__slogan {
+    margin-top: 8.125rem;
+    font-size: 1.125rem;
+  }
+}

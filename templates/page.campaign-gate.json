@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "campaign_gate": {
+      "type": "campaign-gate",
+      "settings": {}
+    }
+  },
+  "order": [
+    "campaign_gate"
+  ]
+}

@@ -1,0 +1,148 @@
+{%- comment -%}
+  Campaign gate — the page an email links to. Everyone waits for the status check:
+  ENDED shows the "has ended" view (logged in or not); anything else (ongoing /
+  not started / error / timeout) sends logged-in customers to the campaign page and
+  everyone else to login with return_to = campaign page. In the theme editor the
+  ended view is shown so its copy can be edited.
+{%- endcomment -%}
+{%- liquid
+  assign target_url = section.settings.target_url | strip
+  assign first_char = target_url | slice: 0
+  assign second_char = target_url | slice: 1
+  if first_char != '/' or second_char == '/'
+    assign target_url = '/pages/black-friday2026'
+  endif
+
+  assign status_url = section.settings.status_url | strip
+  if status_url == blank
+    assign status_url = settings.spin_proxy_prefix | strip | default: '/apps/bf/spin'
+    assign last_char = status_url | slice: -1
+    if last_char == '/'
+      assign status_size = status_url.size | minus: 1
+      assign status_url = status_url | slice: 0, status_size
+    endif
+    assign status_url = status_url | append: '/status'
+  endif
+
+  assign login_path = section.settings.login_path | strip | default: '/customer_authentication/login'
+  assign encoded_target = target_url | url_encode
+  assign login_url = login_path | append: '?return_to=' | append: encoded_target
+
+  assign button_url = section.settings.button_link | default: routes.root_url
+-%}
+
+{{ 'campaign-gate.css' | asset_url | stylesheet_tag }}
+{%- unless request.design_mode -%}
+  <script src="{{ 'campaign-gate.js' | asset_url }}" defer></script>
+{%- endunless -%}
+
+<section
+  class="mt-gate"
+  data-gate
+  data-status-url="{{ status_url | escape }}"
+  {% if customer %}data-next-url="{{ target_url | escape }}"{% else %}data-next-url="{{ login_url | escape }}"{% endif %}
+>
+  <div class="mt-gate__ended" data-gate-ended {% unless request.design_mode %}hidden{% endunless %}>
+    <div class="mt-gate__hero">
+      {%- if section.settings.status_label != blank -%}
+        <p class="mt-gate__status">{{ section.settings.status_label | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="mt-gate__title">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+    </div>
+    <div class="mt-gate__body">
+      {%- if section.settings.thanks != blank -%}
+        <p class="mt-gate__thanks">{{ section.settings.thanks | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.message != blank -%}
+        <p class="mt-gate__message">{{ section.settings.message | escape | newline_to_br }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="mt-gate__btn" href="{{ button_url }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+      {%- if section.settings.slogan != blank -%}
+        <p class="mt-gate__slogan">{{ section.settings.slogan | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Campaign gate",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "活动中转页：先查询活动状态。已结束时（无论是否登录）显示下方结束页；其他情况（进行中 / 未开始 / 查询失败）已登录跳转活动页，未登录跳转登录，登录后回到活动页。"
+    },
+    {
+      "type": "text",
+      "id": "target_url",
+      "label": "Campaign page path",
+      "default": "/pages/black-friday2026",
+      "info": "以 / 开头的站内路径，例如 /pages/black-friday2026"
+    },
+    {
+      "type": "text",
+      "id": "status_url",
+      "label": "Status API path",
+      "info": "留空时使用主题设置 Spin & Win 的 App Proxy 前缀 + /status"
+    },
+    {
+      "type": "text",
+      "id": "login_path",
+      "label": "Login path",
+      "default": "/customer_authentication/login",
+      "info": "新客户账户登录地址，会自动带上 return_to=活动页"
+    },
+    {
+      "type": "header",
+      "content": "Ended view"
+    },
+    {
+      "type": "text",
+      "id": "status_label",
+      "label": "Status label",
+      "default": "THAT’S A WRAP"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Spin & Win has ended"
+    },
+    {
+      "type": "text",
+      "id": "thanks",
+      "label": "Thanks line",
+      "default": "Thanks for playing with us."
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Message",
+      "default": "Our Black Friday Spin & Win is now closed.\nCome explore our everyday styles, made for play."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP NOW",
+      "info": "留空时不显示按钮"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link",
+      "info": "留空时回到首页"
+    },
+    {
+      "type": "text",
+      "id": "slogan",
+      "label": "Slogan",
+      "default": "Stay in the play."
+    }
+  ]
+}
+{% endschema %}

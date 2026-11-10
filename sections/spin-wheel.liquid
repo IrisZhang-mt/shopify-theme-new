@@ -1,0 +1,178 @@
+{%- comment -%}
+  Spin & Win dialog (Black Friday). One dialog, two views:
+  - wheel: 01 signed out / 02 signed in (with or without spins)
+  - prizes: 06 / 07 My prizes
+  Auto-opens on load for signed-in customers (spin-wheel.js decides which view).
+  Any element with [data-spin-open] (optionally ="prizes") opens it manually.
+  All data comes from the App Proxy (theme setting "Spin & Win" prefix).
+{%- endcomment -%}
+{%- liquid
+  assign proxy_prefix = settings.spin_proxy_prefix | strip | default: '/apps/bf/spin'
+  assign last_char = proxy_prefix | slice: -1
+  if last_char == '/'
+    assign prefix_size = proxy_prefix.size | minus: 1
+    assign proxy_prefix = proxy_prefix | slice: 0, prefix_size
+  endif
+
+  assign login_path = section.settings.login_path | strip | default: '/customer_authentication/login'
+  assign return_to = request.path | url_encode
+  assign login_url = login_path | append: '?return_to=' | append: return_to
+-%}
+
+{{ 'spin-wheel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'spin-wheel.js' | asset_url }}" defer></script>
+
+<div
+  class="mt-spin"
+  hidden
+  data-spin
+  data-prefix="{{ proxy_prefix | escape }}"
+  data-mock-src="{{ 'spin-wheel-mock.js' | asset_url }}"
+  {% if customer %}data-logged-in{% endif %}
+  {% if request.design_mode %}data-design-mode{% endif %}
+>
+  <div class="mt-spin__scrim" data-spin-close></div>
+  <div
+    class="mt-spin__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'spin.dialog_label' | t | escape }}"
+    tabindex="-1"
+    data-spin-panel
+  >
+    <button type="button" class="mt-spin__close" data-spin-close aria-label="{{ 'spin.close' | t | escape }}">
+      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+        <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+
+    {%- comment -%} Wheel view: 01 / 02 {%- endcomment -%}
+    <div class="mt-spin__view mt-spin__view--wheel" data-spin-view="wheel">
+      <div class="mt-spin__stage">
+        <div class="mt-spin__heading mt-spin__heading--stage">
+          <p class="mt-spin__event">{{ 'spin.event' | t }}</p>
+          <h2 class="mt-spin__title">{{ 'spin.title' | t }}</h2>
+          <p class="mt-spin__rule" data-spin-rule></p>
+        </div>
+        <div class="mt-spin__wheel" data-spin-wheel></div>
+      </div>
+
+      <div class="mt-spin__content">
+        <div class="mt-spin__heading mt-spin__heading--content">
+          <p class="mt-spin__event">{{ 'spin.event' | t }}</p>
+          <h2 class="mt-spin__title">{{ 'spin.title' | t }}</h2>
+          <p class="mt-spin__rule" data-spin-rule></p>
+        </div>
+
+        {%- comment -%} 01 signed out {%- endcomment -%}
+        <div class="mt-spin__guest" data-spin-state="guest" hidden>
+          <h3 class="mt-spin__guest-title">{{ 'spin.sign_in_title' | t }}</h3>
+          <p class="mt-spin__guest-text">{{ 'spin.sign_in_text' | t }}</p>
+          <a class="mt-spin__btn" href="{{ login_url }}">{{ 'spin.sign_in' | t }}</a>
+          <p class="mt-spin__guest-hint">{{ 'spin.email_hint' | t }}</p>
+          <p class="mt-spin__terms-line">
+            {{- 'spin.no_purchase' | t -}}
+            {%- if section.settings.terms_url != blank %} · <a href="{{ section.settings.terms_url }}">{{ 'spin.see_terms' | t }}</a>{% endif -%}
+          </p>
+        </div>
+
+        {%- comment -%} 02 signed in {%- endcomment -%}
+        <div class="mt-spin__player" data-spin-state="player" hidden>
+          <p class="mt-spin__greeting" data-spin-greeting></p>
+          <p class="mt-spin__balance">
+            <span>{{ 'spin.balance_prefix' | t }}</span>
+            <span class="mt-spin__balance-count" data-spin-count></span>
+            <span data-spin-count-suffix></span>
+          </p>
+          <button type="button" class="mt-spin__btn" data-spin-draw></button>
+          <ul class="mt-spin__orders" data-spin-orders></ul>
+          <div class="mt-spin__foot">
+            <button type="button" class="mt-spin__link" data-spin-go="prizes">{{ 'spin.my_prizes_link' | t }}</button>
+            <p class="mt-spin__terms" data-spin-terms></p>
+          </div>
+        </div>
+
+        <p class="mt-spin__error" data-spin-state="error" hidden>{{ 'spin.load_error' | t }}</p>
+      </div>
+    </div>
+
+    {%- comment -%} Prizes view: 06 / 07 (cards are rendered in stage 5) {%- endcomment -%}
+    <div class="mt-spin__view mt-spin__view--prizes" data-spin-view="prizes" hidden>
+      <div class="mt-spin__prizes-head">
+        <h2 class="mt-spin__prizes-title">{{ 'spin.prizes_title' | t }}</h2>
+        <div class="mt-spin__tabs" role="tablist">
+          <button type="button" class="mt-spin__tab" role="tab" aria-selected="true" data-spin-tab="unused"></button>
+          <button type="button" class="mt-spin__tab" role="tab" aria-selected="false" data-spin-tab="used"></button>
+        </div>
+      </div>
+      <div class="mt-spin__prizes-body">
+        <div class="mt-spin__again" data-spin-again hidden>
+          <span data-spin-again-text></span>
+          <button type="button" class="mt-spin__again-btn" data-spin-go="wheel">{{ 'spin.spin_again' | t }}</button>
+        </div>
+        <div class="mt-spin__prize-list" data-spin-list></div>
+        <p class="mt-spin__error" data-spin-prizes-error hidden>{{ 'spin.load_error' | t }}</p>
+      </div>
+      <p class="mt-spin__note" data-spin-note="unused">
+        <span class="mt-spin__note-touch">{{ 'spin.unused_note_touch' | t }}</span>
+        <span class="mt-spin__note-pointer">{{ 'spin.unused_note_pointer' | t }}</span>
+      </p>
+      <p class="mt-spin__note" data-spin-note="used" hidden>{{ 'spin.used_note' | t }}</p>
+    </div>
+  </div>
+
+  <script type="application/json" data-spin-config>
+    {
+      "firstName": {{ customer.first_name | default: '' | json }},
+      "strings": {
+        "earningRule": {{ 'spin.earning_rule' | t: amount: '[amount]' | json }},
+        "greeting": {{ 'spin.greeting' | t | json }},
+        "greetingName": {{ 'spin.greeting_name' | t: name: '[name]' | json }},
+        "suffixOne": {{ 'spin.balance_suffix_one' | t | json }},
+        "suffixOther": {{ 'spin.balance_suffix_other' | t | json }},
+        "spinNow": {{ 'spin.spin_now' | t: count: '[count]' | json }},
+        "noSpins": {{ 'spin.no_spins' | t | json }},
+        "orderLine": {{ 'spin.order_line' | t: order: '[order]', amount: '[amount]' | json }},
+        "spinsOne": {{ 'spin.spins_one' | t: count: '[count]' | json }},
+        "spinsOther": {{ 'spin.spins_other' | t: count: '[count]' | json }},
+        "usedOne": {{ 'spin.used_one' | t: count: '[count]' | json }},
+        "usedOther": {{ 'spin.used_other' | t: count: '[count]' | json }},
+        "useWithin": {{ 'spin.use_within' | t: time: '[time]' | json }},
+        "expiryRule": {{ 'spin.expiry_rule' | t | json }},
+        "spendRule": {{ 'spin.spend_rule' | t: amount: '[amount]' | json }},
+        "slotOff": {{ 'spin.slot_off' | t | json }},
+        "slotGiftCard": {{ 'spin.slot_gift_card' | t | json }},
+        "slotGiftNote": {{ 'spin.slot_gift_note' | t | json }},
+        "tabUnused": {{ 'spin.tab_unused' | t: count: '[count]' | json }},
+        "tabUsed": {{ 'spin.tab_used' | t: count: '[count]' | json }},
+        "spinsLeftOne": {{ 'spin.spins_left_one' | t: count: '[count]' | json }},
+        "spinsLeftOther": {{ 'spin.spins_left_other' | t: count: '[count]' | json }}
+      }
+    }
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Spin wheel",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "黑五转盘弹窗（页面上不占位置）。已登录：有抽奖次数时自动弹出转盘；没有次数但有未使用奖品时，每个会话弹一次 My prizes。页面上任何带 data-spin-open 的元素点击后可手动打开。接口前缀在主题设置 → Spin & Win。"
+    },
+    {
+      "type": "url",
+      "id": "terms_url",
+      "label": "Terms link",
+      "info": "未登录弹窗底部的 See Terms 链接，留空时不显示"
+    },
+    {
+      "type": "text",
+      "id": "login_path",
+      "label": "Login path",
+      "default": "/customer_authentication/login",
+      "info": "新客户账户登录地址，会自动带上 return_to=当前页面"
+    }
+  ]
+}
+{% endschema %}

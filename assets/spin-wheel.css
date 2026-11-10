@@ -1,0 +1,643 @@
+@media (hover: hover) {
+  html.mt-spin-lock,
+  html.mt-spin-lock body {
+    overflow: hidden;
+  }
+}
+
+.mt-spin {
+  --mt-spin-hero: #eae1d2;
+  --mt-spin-muted: #6f6e69;
+  --mt-spin-line: #e6e6e6;
+  --mt-spin-soft: #fdf3ec;
+  --mt-spin-off-bg: #e6e6e6;
+  --mt-spin-off-ink: #a8a7a2;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.mt-spin[hidden] {
+  display: none;
+}
+
+.mt-spin__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--mt-ink-rgb), 0.6);
+  opacity: 0;
+  transition: opacity 300ms var(--mt-ease);
+}
+
+.mt-spin__panel {
+  position: relative;
+  width: min(33rem, 100%);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 0.5rem;
+  background: var(--mt-paper);
+  color: var(--mt-ink);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity 300ms var(--mt-ease),
+    transform 300ms var(--mt-ease);
+}
+.mt-spin__panel:focus {
+  outline: none;
+}
+
+.mt-spin--open .mt-spin__scrim,
+.mt-spin--open .mt-spin__panel {
+  opacity: 1;
+  transform: none;
+}
+
+.mt-spin__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--mt-moss);
+  cursor: pointer;
+}
+.mt-spin__close:focus-visible,
+.mt-spin__btn:focus-visible,
+.mt-spin__link:focus-visible,
+.mt-spin__tab:focus-visible,
+.mt-spin__again-btn:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+.mt-spin__view[hidden],
+.mt-spin [data-spin-state][hidden],
+.mt-spin__note[hidden],
+.mt-spin__again[hidden] {
+  display: none;
+}
+
+/* ---------- shared text ---------- */
+
+.mt-spin__heading {
+  text-align: center;
+}
+.mt-spin__heading--content {
+  display: none;
+}
+
+.mt-spin__event {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--mt-accent);
+}
+
+.mt-spin__title {
+  font-size: 2.5rem;
+  line-height: 1.4;
+  letter-spacing: -0.04em;
+}
+
+.mt-spin__rule {
+  margin: 0;
+  min-height: 1.2rem;
+  font-size: 0.84375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-moss);
+}
+
+.mt-spin__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 3.25rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 0.1875rem;
+  font-family: var(--mt-font-body);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--mt-white);
+  background: var(--mt-ink);
+  cursor: pointer;
+  transition: opacity var(--mt-dur) var(--mt-ease);
+}
+.mt-spin__btn:disabled {
+  color: var(--mt-spin-off-ink);
+  background: var(--mt-spin-off-bg);
+  cursor: default;
+}
+
+.mt-spin__error {
+  margin: 1.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--mt-spin-muted);
+}
+
+/* ---------- wheel ---------- */
+
+.mt-spin__stage {
+  padding: 1.75rem 1rem 0;
+  background: linear-gradient(var(--mt-spin-hero) 0%, var(--mt-spin-hero) 40%, var(--mt-surface) 78%, var(--mt-paper) 100%);
+}
+
+.mt-spin__wheel {
+  width: min(20.75rem, 82%);
+  margin: 1.25rem auto 0;
+  aspect-ratio: 340 / 364;
+}
+
+.mt-spin__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0.25rem 0.625rem rgba(var(--mt-ink-rgb), 0.12));
+}
+
+.mt-spin__rotor {
+  transform-box: view-box;
+  transform-origin: 170px 170px;
+}
+
+.mt-spin__rim,
+.mt-spin__pointer,
+.mt-spin__wedge--accent {
+  fill: var(--mt-accent);
+}
+.mt-spin__wedge--light {
+  fill: var(--mt-paper);
+}
+.mt-spin__wedge--sand {
+  fill: var(--mt-spin-hero);
+}
+
+.mt-spin__label {
+  fill: var(--mt-ink);
+  font-family: var(--mt-font-body);
+  letter-spacing: -0.02em;
+}
+.mt-spin__label.is-inverse {
+  fill: var(--mt-paper);
+}
+.mt-spin__label-big {
+  font-size: 26px;
+}
+.mt-spin__label-mid {
+  font-size: 20px;
+}
+.mt-spin__label-small {
+  font-size: 10px;
+}
+
+/* ---------- 01 / 02 content ---------- */
+
+.mt-spin__content {
+  padding: 2.5rem 1.5rem 1.75rem;
+}
+
+.mt-spin__guest {
+  text-align: center;
+}
+.mt-spin__guest-title {
+  font-size: 1.40625rem;
+  line-height: 1.4;
+  letter-spacing: -0.04em;
+}
+.mt-spin__guest-text {
+  margin: 0.625rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-spin-muted);
+}
+.mt-spin__guest .mt-spin__btn {
+  margin-top: 1.75rem;
+}
+.mt-spin__guest-hint {
+  margin: 2.75rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--mt-spin-hero);
+  font-size: 0.84375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-spin-muted);
+}
+.mt-spin__terms-line {
+  margin: 1.875rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-moss);
+}
+.mt-spin__terms-line a {
+  color: inherit;
+  text-underline-offset: 0.125rem;
+}
+
+.mt-spin__greeting {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-spin-muted);
+}
+
+.mt-spin__balance {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.mt-spin__balance-count {
+  font-family: var(--mt-font-display);
+  font-size: 3rem;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: var(--mt-accent);
+}
+
+.mt-spin__player .mt-spin__btn {
+  margin-top: 0.75rem;
+}
+
+.mt-spin__orders {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--mt-spin-line);
+}
+.mt-spin__orders[hidden] {
+  display: none;
+}
+
+.mt-spin__order {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--mt-spin-line);
+}
+
+.mt-spin__order-name,
+.mt-spin__order-spins {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.mt-spin__order-exp {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--mt-spin-muted);
+}
+
+.mt-spin__order-spins {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  text-align: right;
+}
+.mt-spin__order-used {
+  color: var(--mt-spin-muted);
+}
+.mt-spin__order-left {
+  color: var(--mt-accent);
+}
+
+.mt-spin__foot {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.mt-spin__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--mt-font-body);
+  font-size: 1.03125rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-accent);
+  cursor: pointer;
+}
+
+.mt-spin__terms {
+  margin: 0.625rem auto 0;
+  max-width: 17rem;
+  font-size: 0.84375rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-moss);
+}
+
+/* ---------- 06 / 07 prizes ---------- */
+
+.mt-spin__prizes-head {
+  padding: 2.5rem 1.5rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(var(--mt-spin-hero) 0%, var(--mt-spin-hero) 54%, var(--mt-surface) 100%);
+}
+
+.mt-spin__prizes-title {
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.mt-spin__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.mt-spin__tab {
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--mt-spin-line);
+  border-radius: 0.1875rem;
+  background: var(--mt-paper);
+  font-family: var(--mt-font-body);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-ink);
+  cursor: pointer;
+}
+.mt-spin__tab[aria-selected='true'] {
+  border-color: var(--mt-ink);
+  background: var(--mt-ink);
+  color: var(--mt-white);
+}
+
+.mt-spin__prizes-body {
+  padding: 1.5rem 1.5rem 0;
+}
+
+.mt-spin__again {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--mt-accent);
+  border-radius: 0.25rem;
+  background: var(--mt-spin-soft);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+.mt-spin__again-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--mt-font-body);
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--mt-accent);
+  cursor: pointer;
+}
+
+.mt-spin__prize-list:empty {
+  display: none;
+}
+
+.mt-spin__note {
+  margin: 0;
+  padding: 1.25rem 1.5rem 1.75rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--mt-spin-muted);
+}
+.mt-spin__note-pointer {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .mt-spin__note-touch {
+    display: none;
+  }
+  .mt-spin__note-pointer {
+    display: inline;
+  }
+  .mt-spin__btn:not(:disabled):hover {
+    opacity: 0.85;
+  }
+  .mt-spin__link:hover,
+  .mt-spin__again-btn:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+  }
+}
+
+/* ---------- desktop: 880 × 560, wheel left / content right ---------- */
+
+@media screen and (min-width: 990px) {
+  .mt-spin__panel {
+    width: 55rem;
+    height: min(35rem, calc(100dvh - 2rem));
+    overflow: hidden;
+  }
+
+  .mt-spin__close {
+    top: 0.875rem;
+    right: 0.875rem;
+  }
+
+  .mt-spin__view--wheel {
+    display: grid;
+    grid-template-columns: 25rem 1fr;
+    height: 100%;
+  }
+
+  .mt-spin__stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(var(--mt-spin-hero) 0%, var(--mt-spin-hero) 54%, var(--mt-surface) 100%);
+  }
+  .mt-spin__heading--stage {
+    display: none;
+  }
+  .mt-spin__wheel {
+    width: 18rem;
+    margin: 0;
+  }
+
+  .mt-spin__content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 3rem 3rem 2.5rem;
+  }
+  .mt-spin__heading--content {
+    display: block;
+    text-align: left;
+  }
+  .mt-spin__heading--content .mt-spin__title {
+    margin-top: 0.5rem;
+    font-size: 2.75rem;
+    line-height: 1;
+  }
+  .mt-spin__heading--content .mt-spin__rule {
+    margin-top: 0.625rem;
+    font-size: 0.9375rem;
+    color: var(--mt-spin-muted);
+  }
+
+  .mt-spin__guest,
+  .mt-spin__player {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: left;
+  }
+
+  .mt-spin__guest {
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--mt-spin-line);
+  }
+  .mt-spin__guest-title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  .mt-spin__guest-text {
+    margin-top: 0.5rem;
+  }
+  .mt-spin__guest .mt-spin__btn {
+    margin-top: 1.5rem;
+  }
+  .mt-spin__guest-hint {
+    margin-top: 1rem;
+    padding-top: 0;
+    border-top: 0;
+    font-size: 0.8125rem;
+  }
+  .mt-spin__terms-line {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: var(--mt-spin-muted);
+  }
+
+  .mt-spin__player {
+    margin-top: 1.5rem;
+  }
+  .mt-spin__greeting {
+    font-size: 0.9375rem;
+  }
+  .mt-spin__balance {
+    margin-top: 0;
+  }
+
+  .mt-spin__btn {
+    height: 3rem;
+    font-size: 0.875rem;
+  }
+
+  .mt-spin__orders {
+    margin-top: 0;
+    border-top: 0;
+  }
+  .mt-spin__order {
+    padding: 0.75rem 0;
+  }
+
+  .mt-spin__foot {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 2rem;
+    text-align: left;
+  }
+  .mt-spin__link {
+    align-self: flex-end;
+    font-size: 0.875rem;
+  }
+  .mt-spin__terms {
+    max-width: none;
+    margin: 1.5rem 0 0;
+    font-size: 0.75rem;
+    color: var(--mt-spin-muted);
+  }
+
+  .mt-spin__view--prizes {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .mt-spin__view--prizes[hidden] {
+    display: none;
+  }
+  .mt-spin__prizes-head {
+    padding: 3rem 2.5rem 1.125rem;
+    text-align: left;
+  }
+  .mt-spin__tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .mt-spin__tab {
+    width: 8.75rem;
+    height: 2.375rem;
+  }
+  .mt-spin__prizes-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.75rem 2.5rem;
+  }
+  .mt-spin__again {
+    font-size: 0.8125rem;
+  }
+  .mt-spin__note {
+    padding: 1rem 2.5rem 1.5rem;
+    border-top: 1px solid var(--mt-spin-line);
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-spin__scrim,
+  .mt-spin__panel {
+    transition: none;
+  }
+}
