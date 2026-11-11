@@ -35,7 +35,8 @@
 | 确认落地页 handle | 中转页默认跳 `/pages/black-friday2026`。**核对线上黑五页面的 handle 是否就是 `black-friday2026`**；不是的话改中转页 section 设置 "Campaign page path" | ⬜ |
 | 主题设置 → Spin & Win → App Proxy prefix | 与 Lily 在线上 App Proxy 配置的前缀一致（默认 `/apps/bf/spin`） | ⬜ |
 | 线上已启用**新客户账户** | 登录跳转用 `/customer_authentication/login`，依赖新客户账户 | ⬜ |
-| 尺码表页面 | `size-chart-clothing`、`size-chart-breezy-leggings`、`size-chart-shoes` 线上存在且已发布 | ⬜ |
+| 尺码表页面 | `size-chart-clothing`、`size-chart-breezy-leggings`、`size-chart-shoes` 线上存在且已发布（选款弹窗的 Size guide 也用这三个页面，缺了就不显示 Size guide） | ⬜ |
+| 赠品色卡 | 18 款赠品 + 夹克的颜色在主题设置 Custom colors 或 Files `<颜色>.png` 里都有（和 quick shop 同一套；缺的颜色会显示米白） | ⬜ |
 | 08 结束页文案、按钮链接 | 中转页 section 设置，默认值来自设计稿，按钮默认回首页 | ⬜ |
 
 ## D. 需要 Lily / 其他人

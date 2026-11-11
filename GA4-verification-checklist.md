@@ -1088,3 +1088,35 @@ DOM 本来就是"移除前"的状态，天然是对的。
   临时模板
 - 商品卡 / QUICK SHOP 点击（`select_item`）未在 CDP 里实测，需按上面清单
   在浏览器确认
+
+## 验证清单：Perks tabs（新组件，在线表 No.84-85，2026-11-10）
+
+- 三个 tab 任意点击 = `select_content_category`（`module_name`：组件标题，
+  黑五页为 "Black Friday Perks"；`button_name`：tab 标题，手机端换行合并
+  为一个空格），点当前已选中的 tab 也触发；页面加载时的默认选中、键盘
+  左右键切换不触发
+- 勾选了 "Opens Spin & Win" 的 tab（黑五页为 Spin & Win）额外发
+  `spin_entry`（`module_name` 同上，`login_status`：`logged_in` / `guest`），
+  与上一条同时发出；落地页自动弹出转盘不触发
+
+- [ ] 点 Member Perks：一条 `select_content_category`，`button_name:
+      "Member Perks"`；四宫格切换，无弹窗
+- [ ] 再点一次 Member Perks：再出现一条同样的事件
+- [ ] 未登录点 Spin & Win：`select_content_category`（"Spin & Win"）+
+      `spin_entry`（`login_status: "guest"`），弹出 01 登录态
+- [ ] 已登录点 Spin & Win：`spin_entry` 的 `login_status: "logged_in"`，
+      弹出 02 转盘（或 0 次态）
+- [ ] 点 Gift Card Bonus：只有 `select_content_category`
+
+代码改动：
+- 新建 `sections/perks-tabs.liquid` + `assets/perks-tabs.css` / `.js`
+  （命名对称）；弹窗由 `spin-wheel.js` 现有的 `[data-spin-open]` 监听打开
+- `assets/perks-tabs.js`：两条事件的推送，写法同 `anchor-tabs.js`
+
+验证：
+- `node --check` 通过；`shopify theme check` 无新增问题
+- 本地 dev（Chrome CDP，未登录）在黑五页依次点 Member ×2、Spin & Win：
+  得到 3 条 `select_content_category` + 1 条 `spin_entry`（`guest`），
+  每条前都有 `{ event_parameters: null }`；转盘弹窗打开且为 guest 态
+- 已登录（`logged_in`）未实测：127.0.0.1 无法登录新客户账户，需在真实
+  域名 + preview_theme_id 下按上面清单确认

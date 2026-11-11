@@ -30,7 +30,6 @@
 }
 
 .mt-gate__title {
-  max-width: 20rem;
   margin-top: 0.625rem;
   font-size: 2.6875rem;
   line-height: 1;
@@ -105,8 +104,12 @@
     font-size: 1.125rem;
   }
 
+  /* Mobile-only line break in the heading (design: "Spin & Win / has ended"). */
+  .mt-gate__br {
+    display: none;
+  }
+
   .mt-gate__title {
-    max-width: none;
     margin-top: 0.9375rem;
     font-size: 3.4375rem;
   }

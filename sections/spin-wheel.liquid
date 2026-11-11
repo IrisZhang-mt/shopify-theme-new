@@ -41,13 +41,13 @@
     data-spin-panel
   >
     <button type="button" class="mt-spin__close" data-spin-close aria-label="{{ 'spin.close' | t | escape }}">
-      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
-        <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <svg viewBox="0 0 12 12" aria-hidden="true">
+        <path d="M0 0l12 12M12 0L0 12" stroke="currentColor" fill="none" vector-effect="non-scaling-stroke"/>
       </svg>
     </button>
 
     {%- comment -%} Wheel view: 01 / 02 {%- endcomment -%}
-    <div class="mt-spin__view mt-spin__view--wheel" data-spin-view="wheel">
+    <div class="mt-spin__view mt-spin__view--wheel" data-spin-view="wheel" data-spin-scroll>
       <div class="mt-spin__stage">
         <div class="mt-spin__heading mt-spin__heading--stage">
           <p class="mt-spin__event">{{ 'spin.event' | t }}</p>
@@ -57,7 +57,7 @@
         <div class="mt-spin__wheel" data-spin-wheel></div>
       </div>
 
-      <div class="mt-spin__content">
+      <div class="mt-spin__content" data-spin-scroll>
         <div class="mt-spin__heading mt-spin__heading--content">
           <p class="mt-spin__event">{{ 'spin.event' | t }}</p>
           <h2 class="mt-spin__title">{{ 'spin.title' | t }}</h2>
@@ -67,9 +67,9 @@
         {%- comment -%} 01 signed out {%- endcomment -%}
         <div class="mt-spin__guest" data-spin-state="guest" hidden>
           <h3 class="mt-spin__guest-title">{{ 'spin.sign_in_title' | t }}</h3>
-          <p class="mt-spin__guest-text">{{ 'spin.sign_in_text' | t }}</p>
+          <p class="mt-spin__guest-text">{{ 'spin.sign_in_text_html' | t }}</p>
           <a class="mt-spin__btn" href="{{ login_url }}">{{ 'spin.sign_in' | t }}</a>
-          <p class="mt-spin__guest-hint">{{ 'spin.email_hint' | t }}</p>
+          <p class="mt-spin__guest-hint">{{ 'spin.email_hint_html' | t }}</p>
           <p class="mt-spin__terms-line">
             {{- 'spin.no_purchase' | t -}}
             {%- if section.settings.terms_url != blank %} · <a href="{{ section.settings.terms_url }}">{{ 'spin.see_terms' | t }}</a>{% endif -%}
@@ -85,6 +85,7 @@
             <span data-spin-count-suffix></span>
           </p>
           <button type="button" class="mt-spin__btn" data-spin-draw></button>
+          <p class="mt-spin__draw-error" data-spin-draw-error role="alert" hidden></p>
           <ul class="mt-spin__orders" data-spin-orders></ul>
           <div class="mt-spin__foot">
             <button type="button" class="mt-spin__link" data-spin-go="prizes">{{ 'spin.my_prizes_link' | t }}</button>
@@ -92,9 +93,128 @@
           </div>
         </div>
 
+        {%- comment -%}
+          04 coupon / 05 gift card result. Mobile: replaces the whole wheel view.
+          Desktop: replaces the right column, the wheel stays on the left.
+        {%- endcomment -%}
+        <div class="mt-spin__result" data-spin-state="result" hidden>
+          <div class="mt-spin__result-hero">
+            <p class="mt-spin__won">{{ 'spin.you_won' | t }}</p>
+            <h2 class="mt-spin__result-title" data-spin-result-title></h2>
+            <p class="mt-spin__result-sub" data-spin-only="coupon">{{ 'spin.next_order' | t }}</p>
+          </div>
+
+          <div class="mt-spin__coupon" data-spin-only="coupon">
+            <p class="mt-spin__coupon-label">{{ 'spin.your_code' | t }}</p>
+            <p class="mt-spin__coupon-code" data-spin-code></p>
+            <p class="mt-spin__coupon-rule" data-spin-coupon-rule></p>
+          </div>
+
+          <div class="mt-spin__card" data-spin-only="card">
+            <span class="mt-spin__card-brand">{{ 'spin.card_brand' | t }}</span>
+            <span class="mt-spin__card-type">{{ 'spin.slot_gift_card' | t }}</span>
+            <span class="mt-spin__card-value" data-spin-card-value></span>
+            <span class="mt-spin__card-code" data-spin-card-code></span>
+          </div>
+          <p class="mt-spin__recipient" data-spin-recipient data-spin-only="card"></p>
+
+          <div class="mt-spin__actions">
+            <button type="button" class="mt-spin__btn mt-spin__btn--line" data-spin-copy>{{ 'spin.copy_code' | t }}</button>
+            <button type="button" class="mt-spin__btn" data-spin-close>{{ 'spin.shop_now' | t }}</button>
+          </div>
+
+          <p class="mt-spin__emailed">{{ 'spin.emailed_html' | t }}</p>
+
+          <div class="mt-spin__links">
+            <button type="button" class="mt-spin__again-link" data-spin-go="wheel" data-spin-again-link></button>
+            <span class="mt-spin__links-divider" data-spin-again-divider aria-hidden="true"></span>
+            <button type="button" class="mt-spin__link" data-spin-go="prizes">{{ 'spin.my_prizes_link' | t }}</button>
+          </div>
+
+          <p class="mt-spin__result-terms" data-spin-result-terms></p>
+        </div>
+
+        {%- comment -%}
+          03 FREE OUTFIT (pick 2) / 04b SHERPA JACKET (pick 1) gift selection; root
+          [data-spin-gift="outfit|jacket"] picks the variant. Mobile: replaces the whole wheel
+          view. Desktop: outfit fills the whole dialog (no wheel), jacket keeps the wheel left.
+          The per-gift style / color / size pickers are built by spin-wheel.js.
+        {%- endcomment -%}
+        <div class="mt-spin__gift" data-spin-state="gift" hidden>
+          <div class="mt-spin__gift-hero">
+            <p class="mt-spin__won">{{ 'spin.you_won' | t }}</p>
+            <h2 class="mt-spin__gift-title" data-gift-title></h2>
+            <p class="mt-spin__gift-sub" data-gift-sub></p>
+          </div>
+
+          <div class="mt-spin__gift-tiles" data-gift-only="outfit">
+            {%- for i in (1..2) -%}
+              <div class="mt-spin__gift-tile" data-gift-tile="{{ forloop.index0 }}">
+                <p class="mt-spin__gift-tile-label">{{ 'spin.gift_tile' | t: number: i }}</p>
+                <p class="mt-spin__gift-tile-free">{{ 'spin.gift_free' | t }}</p>
+                <div class="mt-spin__gift-tile-box">
+                  <svg class="mt-spin__gift-icon" viewBox="0 0 104 104" fill="none" aria-hidden="true">
+                    <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M52 35C44 35 37 32 38 26C39 20 47 23 52 35Z"/>
+                      <path d="M52 35C60 35 67 32 66 26C65 20 57 23 52 35Z"/>
+                      <path d="M83 35H21C19.3 35 18 36.3 18 38V44C18 45.7 19.3 47 21 47H83C84.7 47 86 45.7 86 44V38C86 36.3 84.7 35 83 35Z" fill="var(--mt-surface)"/>
+                      <path d="M78 47H26C24.3 47 23 48.3 23 50V85C23 86.7 24.3 88 26 88H78C79.7 88 81 86.7 81 85V50C81 48.3 79.7 47 78 47Z" fill="var(--mt-surface)"/>
+                    </g>
+                    <path d="M45.5 61.4C45.5 54.9 58.5 54.9 58.5 61.4C58.5 66.8 52 66.8 52 73.3" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>
+                    <circle cx="52" cy="80.85" r="1.95" fill="currentColor"/>
+                  </svg>
+                  <img class="mt-spin__gift-tile-img" width="160" height="160" alt="" hidden data-gift-tile-img>
+                </div>
+                <button type="button" class="mt-spin__gift-choose mt-spin__gift-choose--tile" data-gift-scroll="{{ forloop.index0 }}">{{ 'spin.gift_choose' | t }}</button>
+              </div>
+            {%- endfor -%}
+          </div>
+          <button type="button" class="mt-spin__gift-choose mt-spin__gift-choose--single" data-gift-only="outfit" data-gift-scroll="0">{{ 'spin.gift_choose' | t }}</button>
+          <button type="button" class="mt-spin__link mt-spin__gift-later" data-gift-only="outfit" data-spin-go="prizes">{{ 'spin.my_prizes_link' | t }}</button>
+
+          <div class="mt-spin__gift-prize" data-gift-only="jacket">
+            <div class="mt-spin__gift-prize-box"><img width="112" height="112" alt="" hidden data-gift-prize-img></div>
+            <div class="mt-spin__gift-prize-text">
+              <p class="mt-spin__gift-prize-label">{{ 'spin.gift_your_prize' | t }}</p>
+              <p class="mt-spin__gift-prize-name" data-gift-prize-name></p>
+              <p class="mt-spin__gift-prize-note">{{ 'spin.gift_fit_note' | t }}</p>
+            </div>
+          </div>
+
+          <button type="button" class="mt-spin__gift-cue" data-gift-scroll="0">
+            <span data-gift-only="outfit">{{ 'spin.gift_scroll' | t }}</span>
+            <span data-gift-only="jacket">{{ 'spin.gift_scroll_jacket' | t }}</span>
+            <svg viewBox="0 0 20 12" aria-hidden="true"><path d="M2 2l8 8 8-8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+
+          <div class="mt-spin__gift-picks" data-gift-picks></div>
+          <div class="mt-spin__gift-load" data-gift-load hidden>
+            <p class="mt-spin__error">{{ 'spin.gift_load_error' | t }}</p>
+            <button type="button" class="mt-spin__link" data-gift-reload>{{ 'spin.try_again' | t }}</button>
+          </div>
+
+          <div class="mt-spin__gift-foot">
+            <p class="mt-spin__gift-notes" data-gift-notes></p>
+            <div class="mt-spin__gift-submit">
+              <button type="button" class="mt-spin__btn mt-spin__gift-confirm" data-gift-confirm disabled></button>
+              <p class="mt-spin__gift-msg" data-gift-msg role="status" hidden></p>
+              <p class="mt-spin__emailed mt-spin__gift-emailed" data-gift-only="jacket">{{ 'spin.gift_emailed_html' | t }}</p>
+              <div class="mt-spin__gift-links">
+                <button type="button" class="mt-spin__again-link" data-spin-go="wheel" data-gift-again></button>
+                <span class="mt-spin__links-divider" data-gift-only="jacket" data-gift-again-divider aria-hidden="true"></span>
+                <button type="button" class="mt-spin__link" data-gift-only="jacket" data-spin-go="prizes">{{ 'spin.my_prizes_link' | t }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <p class="mt-spin__error" data-spin-state="error" hidden>{{ 'spin.load_error' | t }}</p>
       </div>
     </div>
+    <button type="button" class="mt-spin__gift-overlay" data-gift-overlay data-gift-scroll="0" hidden>
+      <span>{{ 'spin.gift_scroll_jacket' | t }}</span>
+      <svg viewBox="0 0 16 8" aria-hidden="true"><path d="M0.75 0.75l7.25 6.5 7.25-6.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
 
     {%- comment -%} Prizes view: 06 / 07 (cards are rendered in stage 5) {%- endcomment -%}
     <div class="mt-spin__view mt-spin__view--prizes" data-spin-view="prizes" hidden>
@@ -105,7 +225,7 @@
           <button type="button" class="mt-spin__tab" role="tab" aria-selected="false" data-spin-tab="used"></button>
         </div>
       </div>
-      <div class="mt-spin__prizes-body">
+      <div class="mt-spin__prizes-body" data-spin-scroll>
         <div class="mt-spin__again" data-spin-again hidden>
           <span data-spin-again-text></span>
           <button type="button" class="mt-spin__again-btn" data-spin-go="wheel">{{ 'spin.spin_again' | t }}</button>
@@ -114,7 +234,7 @@
         <p class="mt-spin__error" data-spin-prizes-error hidden>{{ 'spin.load_error' | t }}</p>
       </div>
       <p class="mt-spin__note" data-spin-note="unused">
-        <span class="mt-spin__note-touch">{{ 'spin.unused_note_touch' | t }}</span>
+        <span class="mt-spin__note-touch">{{ 'spin.unused_note_touch_html' | t }}</span>
         <span class="mt-spin__note-pointer">{{ 'spin.unused_note_pointer' | t }}</span>
       </p>
       <p class="mt-spin__note" data-spin-note="used" hidden>{{ 'spin.used_note' | t }}</p>
@@ -146,11 +266,97 @@
         "tabUnused": {{ 'spin.tab_unused' | t: count: '[count]' | json }},
         "tabUsed": {{ 'spin.tab_used' | t: count: '[count]' | json }},
         "spinsLeftOne": {{ 'spin.spins_left_one' | t: count: '[count]' | json }},
-        "spinsLeftOther": {{ 'spin.spins_left_other' | t: count: '[count]' | json }}
+        "spinsLeftOther": {{ 'spin.spins_left_other' | t: count: '[count]' | json }},
+        "resultCoupon": {{ 'spin.result_coupon' | t: value: '[value]' | json }},
+        "resultGiftCard": {{ 'spin.result_gift_card' | t: amount: '[amount]' | json }},
+        "couponRule": {{ 'spin.coupon_rule' | t: date: '[date]' | json }},
+        "couponTerms": {{ 'spin.coupon_terms_html' | t: date: '[date]' | json }},
+        "cardTerms": {{ 'spin.card_terms_html' | t: order: '[order]' | json }},
+        "sentTo": {{ 'spin.sent_to' | t: email: '[email]' | json }},
+        "copied": {{ 'spin.copied' | t | json }},
+        "againOne": {{ 'spin.again_link_one' | t: count: '[count]' | json }},
+        "againOther": {{ 'spin.again_link_other' | t: count: '[count]' | json }},
+        "drawError": {{ 'spin.draw_error' | t | json }},
+        "tryAgain": {{ 'spin.try_again' | t | json }},
+        "drawEnded": {{ 'spin.draw_ended' | t | json }},
+        "drawNotStarted": {{ 'spin.draw_not_started' | t: date: '[date]' | json }},
+        "giftSubOutfit": {{ 'spin.gift_sub_outfit' | t: total: '[total]', order: '[order]' | json }},
+        "giftSubJacket": {{ 'spin.gift_sub_jacket' | t: order: '[order]' | json }},
+        "giftOf": {{ 'spin.gift_of' | t: number: '[number]' | json }},
+        "stepStyle": {{ 'spin.gift_step_style' | t: step: '[step]' | json }},
+        "stepColor": {{ 'spin.gift_step_color' | t: step: '[step]' | json }},
+        "stepSize": {{ 'spin.gift_step_size' | t: step: '[step]' | json }},
+        "stylesNav": {{ 'spin.gift_styles_nav' | t: count: '[count]' | json }},
+        "giftValue": {{ 'spin.gift_value' | t: amount: '[amount]' | json }},
+        "soldOut": {{ 'spin.gift_sold_out' | t | json }},
+        "sizeGuide": {{ 'spin.size_guide' | t | json }},
+        "confirmOutfit": {{ 'spin.gift_confirm_outfit' | t | json }},
+        "confirmJacket": {{ 'spin.gift_confirm_jacket' | t | json }},
+        "noteSoldOut": {{ 'spin.gift_note_sold_out' | t | json }},
+        "noteShipsBf": {{ 'spin.gift_note_ships_bf' | t | json }},
+        "noteShips": {{ 'spin.gift_note_ships' | t: order: '[order]' | json }},
+        "noteReturn": {{ 'spin.gift_note_return' | t: amount: '[amount]' | json }},
+        "hintPickAll": {{ 'spin.gift_hint_pick_all' | t | json }},
+        "hintStyle": {{ 'spin.gift_hint_style' | t: number: '[number]' | json }},
+        "hintColor": {{ 'spin.gift_hint_color' | t: number: '[number]' | json }},
+        "hintColorBoth": {{ 'spin.gift_hint_color_both' | t | json }},
+        "hintSize": {{ 'spin.gift_hint_size' | t: number: '[number]' | json }},
+        "hintSizeBoth": {{ 'spin.gift_hint_size_both' | t | json }},
+        "hintColorOne": {{ 'spin.gift_hint_color_one' | t | json }},
+        "hintSizeOne": {{ 'spin.gift_hint_size_one' | t | json }},
+        "giftTaken": {{ 'spin.gift_error_taken' | t | json }},
+        "giftDeadline": {{ 'spin.gift_error_deadline_html' | t | json }},
+        "giftInvalid": {{ 'spin.gift_error_invalid' | t | json }},
+        "giftNetwork": {{ 'spin.gift_error_network' | t | json }}
+      },
+      {%- comment -%}
+        Color swatches resolve like quick shop / PDP (snippets/color-swatch.liquid): the
+        settings.color_swatches mapping (HEX or a Files filename) first, else "<color handle>.png"
+        from Settings > Files. The API only sends color names, so JS gets the raw mapping plus a
+        Files URL whose filename it swaps.
+      {%- endcomment -%}
+      "swatches": {
+        {%- if settings.color_swatches != blank -%}
+          {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+          {%- assign swatch_sep = '' -%}
+          {%- for line in custom_color_lines -%}
+            {%- unless line contains ':' %}{% continue %}{% endunless -%}
+            {%- assign custom_color_key = line | split: ':' | first | strip_newlines | strip | downcase -%}
+            {%- assign custom_color_value = line | split: ':' | last | strip_newlines | strip -%}
+            {%- if custom_color_key == blank or custom_color_value == blank %}{% continue %}{% endif -%}
+            {{- swatch_sep }}{{ custom_color_key | json }}: {{ custom_color_value | json -}}
+            {%- assign swatch_sep = ',' -%}
+          {%- endfor -%}
+        {%- endif -%}
+      },
+      "swatchFile": {{ 'mt-swatch-file.png' | file_url | json }},
+      {%- liquid
+        assign chart_cloth = pages['size-chart-clothing']
+        assign chart_legging = pages['size-chart-breezy-leggings']
+        assign chart_shoe = pages['size-chart-shoes']
+      -%}
+      "sizeCharts": {
+        "cloth": {% if chart_cloth.content != blank %}"spin-chart-cloth"{% else %}null{% endif %},
+        "legging": {% if chart_legging.content != blank %}"spin-chart-legging"{% else %}null{% endif %},
+        "shoe": {% if chart_shoe.content != blank %}"spin-chart-shoe"{% else %}null{% endif %}
       }
     }
   </script>
 </div>
+
+{%- comment -%}
+  Size charts behind the gift pickers' "Size guide ›" (gift-options sizeChart: cloth / legging /
+  shoe; same pages as the PDP rules in snippets/size-chart.liquid). size-chart.js opens them.
+{%- endcomment -%}
+{%- if chart_cloth.content != blank -%}
+  {% render 'size-chart-modal', chart_page: chart_cloth, chart_id: 'spin-chart-cloth', chart_name: chart_cloth.title %}
+{%- endif -%}
+{%- if chart_legging.content != blank -%}
+  {% render 'size-chart-modal', chart_page: chart_legging, chart_id: 'spin-chart-legging', chart_name: chart_legging.title %}
+{%- endif -%}
+{%- if chart_shoe.content != blank -%}
+  {% render 'size-chart-modal', chart_page: chart_shoe, chart_id: 'spin-chart-shoe', chart_name: chart_shoe.title %}
+{%- endif %}
 
 {% schema %}
 {

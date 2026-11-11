@@ -51,6 +51,66 @@
         "end_time": "2026-11-20 00:00"
       }
     },
+    "perks_tabs_bf": {
+      "type": "perks-tabs",
+      "name": "Perks tabs",
+      "blocks": {
+        "tab_member": {
+          "type": "tab",
+          "settings": {
+            "title": "Member\nPerks",
+            "open_spin": false,
+            "perk_1_title": "2× 10% off",
+            "perk_1_text": "Welcome codes, stackable",
+            "perk_2_title": "200 points",
+            "perk_2_text": "Free at sign-up",
+            "perk_3_title": "Give 15%, Get 15%",
+            "perk_3_text": "Refer a friend",
+            "perk_4_title": "Tier discount",
+            "perk_4_text": "Gold 5% · Platinum 10%"
+          }
+        },
+        "tab_spin": {
+          "type": "tab",
+          "settings": {
+            "title": "Spin & Win",
+            "open_spin": true,
+            "perk_1_title": "1 Spin Per $150",
+            "perk_1_text": "$300 = 2 spins  •  $450 = 3",
+            "perk_2_title": "10%/ 15% Off",
+            "perk_2_text": "Every spin wins  •  1 month",
+            "perk_3_title": "Free Outfit",
+            "perk_3_text": "Pick 2 of 18, ships with order",
+            "perk_4_title": "Gift Card/ Jacket",
+            "perk_4_text": "$25 / $50 cards  • Sherpa Jacket"
+          }
+        },
+        "tab_gift": {
+          "type": "tab",
+          "settings": {
+            "title": "Gift Card\nBonus",
+            "open_spin": false,
+            "perk_1_title": "Buy $300, get $30",
+            "perk_1_text": "Bonus gift card",
+            "perk_2_title": "Buy $500, get $60",
+            "perk_2_text": "Bonus gift card",
+            "perk_3_title": "Buy $1000, get $150",
+            "perk_3_text": "Bonus gift card",
+            "perk_4_title": "Bonus cards",
+            "perk_4_text": "Emailed from Dec 2"
+          }
+        }
+      },
+      "block_order": [
+        "tab_member",
+        "tab_spin",
+        "tab_gift"
+      ],
+      "settings": {
+        "heading": "Black Friday Perks",
+        "default_tab": "2"
+      }
+    },
     "benefits_signup_FErPeg": {
       "type": "benefits-signup",
       "name": "Benefits signup",
@@ -660,6 +720,7 @@
     "main",
     "full_image_bX7dfb",
     "countdown_NGaQX3",
+    "perks_tabs_bf",
     "benefits_signup_FErPeg",
     "anchor_tabs_QNN9H8",
     "full_image_3dbDiA",

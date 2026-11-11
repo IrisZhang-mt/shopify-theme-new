@@ -48,7 +48,9 @@
         <p class="mt-gate__status">{{ section.settings.status_label | escape }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
-        <h1 class="mt-gate__title">{{ section.settings.heading | escape }}</h1>
+        <h1 class="mt-gate__title">
+          {{- section.settings.heading | escape | newline_to_br | replace: '<br />', '<br class="mt-gate__br">' -}}
+        </h1>
       {%- endif -%}
     </div>
     <div class="mt-gate__body">
@@ -107,10 +109,11 @@
       "default": "THAT’S A WRAP"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
-      "default": "Spin & Win has ended"
+      "default": "Spin & Win\nhas ended",
+      "info": "换行只在手机端生效（PC 端为一行）"
     },
     {
       "type": "text",
