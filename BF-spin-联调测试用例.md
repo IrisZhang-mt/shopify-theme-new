@@ -140,7 +140,8 @@ window.spinState = () => {
 
 | 步骤 | 操作 | 通过标准 |
 |---|---|---|
-| T2.1 | 新开一个标签页打开落地页（同一会话只自动弹一次） | 自动弹出 "My prizes"，`spinState().view === 'prizes'` |
+| T2.0 | 控制台运行 `sessionStorage.removeItem('mt-spin-prizes-shown')` | 06 每个会话只自动弹一次，记录在这个键里；不清掉的话同一标签页再进来不会弹（这是规则，不是 bug） |
+| T2.1 | 刷新落地页 | 页面先调 `status`（0 次）再调 `prizes?tab=unused`，有奖品就自动弹出 "My prizes"，`spinState().view === 'prizes'` |
 | T2.2 | 看两个 tab | "Unused · N" / "Used · M"，N、M 与 T0.5 一致；点 Used 只切换按钮颜色，标题不跳动 |
 | T2.3 | 看 Unused 卡片 | 卡片数 = unused `items.length`，顺序同接口；每张：日期 · 订单号（`wonAt` 美东日期 + `orderName`）、标题（折扣 "10% OFF"、礼品卡 "$25 GIFT CARD"、赠品用接口 `name`）；折扣码："Code xxx" + "Use within 1 month · until Mon DD"；礼品卡："Code xxx" + "No expiry date · Balance $xx.xx"（`balance` 为空时没有 Balance）；待选赠品：橙色标题 + CHOOSE（`status: SELECTING` 时按钮置灰） |
 | T2.4 | 点折扣码 / 礼品卡的 COPY | 变 COPIED 约 2 秒 |
