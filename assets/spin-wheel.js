@@ -44,11 +44,24 @@ if (!window.mtSpinInit) {
     requestId: null, // kept across retries of the same draw (the backend dedupes by it)
     stale: false, // status changed by a draw; reload before showing 02 again
     copyCode: '',
+    resultType: '', // prize type shown on 04 / 05 (GA4)
   };
 
   const loggedIn = () => root.hasAttribute('data-logged-in');
   const $ = (selector) => root.querySelector(selector);
   const $$ = (selector) => [...root.querySelectorAll(selector)];
+
+  // GA4 (online sheet No.86-96). House shape: reset push, then the event. Never send coupon
+  // codes, gift card numbers, emails or names.
+  const track = (eventName, parameters) => {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({ event: 'ga4Event', event_name: eventName, event_parameters: parameters });
+  };
+  const spinsLeftParam = (value) => {
+    const num = Number(value ?? state.status?.spinsLeft);
+    return Number.isFinite(num) ? { spins_left: num } : {};
+  };
 
   // ---------- data ----------
 
@@ -351,6 +364,7 @@ if (!window.mtSpinInit) {
       openGift(prize, spinsLeft);
       return;
     }
+    state.resultType = prize.type; // GA4: COPY / SHOP NOW on 04 / 05 report which prize
     const left = Number(spinsLeft) || 0;
     if (prize.type === 'GIFT_CARD') {
       const card = prize.giftCard || {};
@@ -400,6 +414,7 @@ if (!window.mtSpinInit) {
 
   const handleDrawError = async (err) => {
     const code = err?.code;
+    track('spin_error', { action: 'draw', error_code: code ? String(code) : 'network' });
     const business = [40101, 40900, 40901, 40902].includes(code);
     if (business) state.requestId = null; // a new attempt is a new operation
     if (code === 40101) {
@@ -430,16 +445,20 @@ if (!window.mtSpinInit) {
   };
 
   const drawSpin = async () => {
-    if (state.busy || !loggedIn()) return;
+    if (state.busy || !loggedIn() || root.dataset.spinCurrent !== 'wheel' || $('[data-spin-draw]').disabled) return;
     state.busy = true;
     root.dataset.spinBusy = '';
     $('[data-spin-draw-error]').hidden = true;
+    track('spin_click', { button_name: $('[data-spin-draw]').textContent.trim(), ...spinsLeftParam() });
     state.requestId = state.requestId || uuid();
     const token = ++state.drawToken;
     const current = () => token === state.drawToken;
     try {
       const data = await api('/draw', { requestId: state.requestId });
       state.requestId = null;
+      // Reported on the response, not after the animation: closing mid-spin still counts.
+      const won = data.prize || {};
+      track('spin_result', { prize_type: won.type, prize_name: prizeTitle(won), ...spinsLeftParam(data.spinsLeft) });
       if (state.status) state.status.spinsLeft = data.spinsLeft;
       state.stale = true;
       state.counts = { unused: null, used: null };
@@ -600,8 +619,8 @@ if (!window.mtSpinInit) {
       const box = el('span', 'mt-spin__chosen-box');
       const img = el('img');
       img.alt = '';
-      img.width = 44;
-      img.height = 44;
+      img.width = 42;
+      img.height = 56;
       box.append(img);
       const text = el('span', 'mt-spin__chosen-text');
       text.append(el('span', 'mt-spin__chosen-name'), el('span', 'mt-spin__chosen-value'));
@@ -872,6 +891,7 @@ if (!window.mtSpinInit) {
 
   const handleGiftError = async (err) => {
     const code = err?.code;
+    track('spin_error', { action: 'gift_confirm', error_code: code ? String(code) : 'network' });
     if ([40000, 40101, 40400, 40910, 40911, 40912, 40913].includes(code)) gift.requestId = null;
     if (code === 40101) {
       showState('guest');
@@ -916,6 +936,14 @@ if (!window.mtSpinInit) {
         skus: parts.map((part) => part.size.sku),
       });
       gift.requestId = null;
+      track('spin_gift_confirm', {
+        prize_type: gift.prize.type,
+        items: parts.map((part) => ({
+          item_id: part.size.sku,
+          item_name: part.style.title,
+          item_variant: `${part.color.name}_${part.size.size}`,
+        })),
+      });
       gift.prize = null;
       state.counts = { unused: null, used: null };
       state.tab = 'unused';
@@ -1102,11 +1130,14 @@ if (!window.mtSpinInit) {
     if (copy) {
       const prize = prizes.items[state.tab]?.[Number(copy.dataset.prizeCopy)];
       copyCode(copy, prize?.coupon?.code || prize?.giftCard?.code);
+      track('spin_copy_code', { prize_type: prize?.type, module_name: 'my_prizes' });
       return true;
     }
     const choose = target.closest('[data-prize-choose]');
     if (choose) {
-      chooseGift(prizes.items[state.tab]?.[Number(choose.dataset.prizeChoose)]);
+      const prize = prizes.items[state.tab]?.[Number(choose.dataset.prizeChoose)];
+      if (prize) track('spin_gift_choose', { prize_type: prize.type });
+      chooseGift(prize);
       return true;
     }
     if (target.closest('[data-spin-prizes-reload]')) {
@@ -1155,7 +1186,14 @@ if (!window.mtSpinInit) {
 
   // ---------- dialog ----------
 
-  const showView = (name) => {
+  // trigger: 'auto' (landing-page auto-open) | 'click' (opened from the page) | 'in_popup'.
+  const showView = (name, trigger = 'in_popup') => {
+    track('spin_popup_view', {
+      popup_name: name === 'prizes' ? 'my_prizes' : loggedIn() ? 'spin' : 'sign_in',
+      trigger,
+      login_status: loggedIn() ? 'logged_in' : 'guest',
+      ...spinsLeftParam(),
+    });
     // Back on 02 (SPIN AGAIN, reopening…) the wheel starts upright again.
     if (name === 'wheel' && !state.busy) state.rotation = 0;
     root.dataset.spinCurrent = name; // CSS: the close button differs between 01/02 and 06/07
@@ -1168,10 +1206,10 @@ if (!window.mtSpinInit) {
 
   const isOpen = () => !root.hidden && root.classList.contains('mt-spin--open');
 
-  const open = (view = 'wheel') => {
+  const open = (view = 'wheel', trigger = 'click') => {
     if (!root) return;
     const target = view === 'prizes' && loggedIn() ? 'prizes' : 'wheel';
-    showView(target);
+    showView(target, trigger);
     if (isOpen()) return;
     root.hidden = false;
     document.documentElement.classList.add('mt-spin-lock');
@@ -1225,14 +1263,14 @@ if (!window.mtSpinInit) {
     try {
       const status = await loadStatus();
       if (Number(status.spinsLeft) > 0) {
-        open('wheel');
+        open('wheel', 'auto');
         return;
       }
       if (prizesShownThisSession()) return;
       const unused = await api('/prizes?tab=unused');
       if (unused.items?.length) {
         markPrizesShown();
-        open('prizes');
+        open('prizes', 'auto');
       }
     } catch {
       // Status or prizes unavailable: stay quiet on the landing page.
@@ -1322,7 +1360,20 @@ if (!window.mtSpinInit) {
         return;
       }
       if (root.hidden) return;
+      const signIn = event.target.closest?.('[data-spin-sign-in]');
+      if (signIn) {
+        track('spin_sign_in', { button_name: signIn.textContent.trim() });
+        // Same-tab navigation can unload before GTM sends the hit: push first, go 250ms later.
+        if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+          event.preventDefault();
+          setTimeout(() => {
+            window.location.href = signIn.href;
+          }, 250);
+        }
+        return;
+      }
       if (event.target.closest?.('[data-spin-close]')) {
+        if (event.target.closest('[data-spin-shop]')) track('spin_shop_now', { prize_type: state.resultType });
         close();
         return;
       }
@@ -1333,16 +1384,23 @@ if (!window.mtSpinInit) {
       const copy = event.target.closest?.('[data-spin-copy]');
       if (copy) {
         copyCode(copy, state.copyCode);
+        track('spin_copy_code', { prize_type: state.resultType, module_name: 'result' });
         return;
       }
       if (giftClick(event.target) || prizeClick(event.target)) return;
       const go = event.target.closest?.('[data-spin-go]');
       if (go) {
+        if (go.dataset.spinGo === 'wheel') {
+          const module = go.closest('[data-spin-view="prizes"]') ? 'my_prizes' : go.closest('.mt-spin__gift') ? 'gift' : 'result';
+          track('spin_again', { module_name: module });
+        }
         showView(go.dataset.spinGo);
         return;
       }
       const tab = event.target.closest?.('[data-spin-tab]');
       if (tab) {
+        // The visible label without its count ("Unused · 3" → "Unused") so reports don't split by count.
+        track('spin_prizes_tab', { button_name: tab.textContent.replace(/\s*·.*$/, '').trim() });
         state.tab = tab.dataset.spinTab;
         renderTabs();
         renderPrizeList();

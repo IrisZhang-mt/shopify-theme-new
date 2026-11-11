@@ -68,7 +68,7 @@
         <div class="mt-spin__guest" data-spin-state="guest" hidden>
           <h3 class="mt-spin__guest-title">{{ 'spin.sign_in_title' | t }}</h3>
           <p class="mt-spin__guest-text">{{ 'spin.sign_in_text_html' | t }}</p>
-          <a class="mt-spin__btn" href="{{ login_url }}">{{ 'spin.sign_in' | t }}</a>
+          <a class="mt-spin__btn" href="{{ login_url }}" data-spin-sign-in>{{ 'spin.sign_in' | t }}</a>
           <p class="mt-spin__guest-hint">{{ 'spin.email_hint_html' | t }}</p>
           <p class="mt-spin__terms-line">
             {{- 'spin.no_purchase' | t -}}
@@ -120,7 +120,7 @@
 
           <div class="mt-spin__actions">
             <button type="button" class="mt-spin__btn mt-spin__btn--line" data-spin-copy>{{ 'spin.copy_code' | t }}</button>
-            <button type="button" class="mt-spin__btn" data-spin-close>{{ 'spin.shop_now' | t }}</button>
+            <button type="button" class="mt-spin__btn" data-spin-close data-spin-shop>{{ 'spin.shop_now' | t }}</button>
           </div>
 
           <p class="mt-spin__emailed">{{ 'spin.emailed_html' | t }}</p>

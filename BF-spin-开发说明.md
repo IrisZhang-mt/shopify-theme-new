@@ -302,7 +302,7 @@
 | 3 抽奖 + 04/05 | 🟡 代码完成，本地截图 + 流程脚本验证通过，待 dev 店预览 | spin-wheel 三件套 + mock `/draw` + locales 新增 25 条 |
 | 4 选款 03/04b | 🟡 代码完成，本地截图（390 / 1440）+ 流程脚本验证通过，待 dev 店用真实接口预览 | spin-wheel 三件套 + mock gift-options / gift-selection + locales 新增 39 条；size-chart 三个页面在 section 里渲染 |
 | 5 My prizes | 🟡 代码完成，本地截图（390 / 1440）+ CHOOSE 流程验证通过，待 dev 店真实接口预览 | spin-wheel 三件套 + mock 06/07 数据 + locales 新增 15 条、删 `used_note` |
-| 6 埋点 + 验收 | ⬜ | |
+| 6 埋点 + 验收 | 🟡 埋点代码完成 + 飞书表 No.86-96 已登记，本地 dataLayer 验证通过；待 dev 店真实接口验证 + 全量验收 | spin-wheel.js `track()`；GA4-verification-checklist.md 新增一节；联调用例 T8 |
 
 ---
 
@@ -318,6 +318,7 @@
 - **2026-11-10（会话 2，续）**：阶段 3 代码完成：抽奖（`POST /draw`，requestId 重试复用）、转盘旋转停格（`spinTo`，按 `POSITION_SLOTS` 映射，`state.rotation` 累计，重渲染保持角度）、04/05 结果（`data-spin-state="result"`，`data-spin-result="coupon|card"`）、复制、错误处理；mock 新增 `spin_draw` 参数（见 9.4）。本地截图（390 / 1440）与流程脚本（重试、SPIN AGAIN、各错误码、GIFT→06）通过。转盘停下后格子文字随转盘一起旋转（正常转盘行为，设计稿是静态未转图）。**待**：dev 店预览、真机；Lily 确认是否发邮件。下一步阶段 4（03 / 04b 选款），先出问题清单。
 - **2026-11-11**：设计稿两轮核对 + 用户逐条裁定（见 2.10）。阶段 4 代码完成：选款是转盘视图里的 `data-spin-state="gift"`，root `data-spin-gift="outfit|jacket"`；移动端占满整个视图，PC 03 整个 880 弹窗滚动（无转盘）、PC 04b 保留左侧转盘右栏滚动。`GET /prizes/{id}/gift-options` → 每件按 styleNo / 颜色名 / 尺码记录选择 → `POST /prizes/{id}/gift-selection`（requestId 重试复用），成功进 06。色卡：section 把主题设置 Custom colors 原样交给 JS，按 color-swatch.liquid 同样的优先级解析。尺码表：section 渲染 `size-chart-clothing / breezy-leggings / shoes` 三个页面的弹窗（id `spin-chart-*`），按 `sizeChart` 打开。阶段 3 的 PC "Spin again → (1 spin left)" 已改成统一的 "1 spin left · SPIN AGAIN →"（locale `again_link_*` 取代 `again_mobile_* / again_desktop / again_count_*`）。mock 新增 `spin_gift` 参数（见 9.5）。**待**：dev 店真实接口预览（Lily 说接口可调）。同日按用户反馈：03 默认选中第一个有货款式 + 颜色、礼盒在这件选完后换图、swipe 可点击（见 2.10 第四轮）。代码已提交（060277d），进入联调（测试用例见仓库根目录 `BF-spin-联调测试用例.md`）。
 - **2026-11-11（续）**：阶段 5 代码完成（见 2.11）：06 / 07 卡片按两个接口分别渲染；06 CHOOSE 直接打开选款（`chooseGift`），提交成功回 06；COPY 复用 `copyCode(button, code)`。mock 补齐 06 / 07 各类卡片（9.6）。**待**：dev 店真实接口预览；`coupon.usedAt` 字段名核对。
+- **2026-11-11（续 2）**：阶段 6 埋点完成（用户"按建议"）：11 个事件 No.86-96（`spin_popup_view / spin_sign_in / spin_click / spin_result / spin_error / spin_copy_code / spin_shop_now / spin_again / spin_gift_choose / spin_gift_confirm / spin_prizes_tab`），已写入飞书 GA4 表 sheet3 第 94-104 行（C 列合并延到 C104，D94:D104 "Spin & Win 弹窗"，行高 578）；代码层记录在 `GA4-verification-checklist.md` 末节。2.5 节的草案事件名以此为准。**待**：dev 店验证（联调用例 T8）、全量验收。
 
 ---
 

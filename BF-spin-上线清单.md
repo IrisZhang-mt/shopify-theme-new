@@ -45,7 +45,7 @@
 |---|---|
 | Lily：线上店装好 App，App Proxy 指向正式后端 | ⬜ |
 | Lily / EDM：邮件链接用 `https://moodytiger.com/pages/spin-and-win`（不带 `?spin=1`） | ⬜ 已可告知 |
-| GA4：新增事件在飞书 GA4 表 sheet3 末尾加行（阶段 6） | ⬜ |
+| GA4：新增事件在飞书 GA4 表 sheet3 末尾加行（阶段 6） | ✅ No.86-96 已登记（11-11）；上线前确认 GTM 里已为这 11 个 `spin_*` 事件配好转发（TRUEMETRICS） |
 
 ## E. 上线后验证（线上不能用 `spin_mock`）
 

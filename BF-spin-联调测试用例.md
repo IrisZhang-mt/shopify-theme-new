@@ -217,6 +217,26 @@ window.spinState = () => {
 
 如果能把浏览器窗口调到约 390px 宽（或用 DevTools 设备模式 iPhone 12/13）：重复 T1.1–T1.5、T3.5–T3.7、T4.2–T4.12 的**显示检查**（不要再消耗抽奖次数，可以停在已有的结果 / 选款界面上切换宽度），每个截图加 `-m` 后缀。重点看：文字有没有溢出、按钮是否完整、弹窗内能否滚动到底。
 
+### T8 GA4 埋点（和 T1–T6 同时做，不额外消耗抽奖次数）
+
+页面刷新后先在控制台运行一次下面的脚本，之后每做完一步运行 `spinGa()` 看新增的事件：
+
+```js
+window.spinGa = () => (window.dataLayer || []).filter((e) => e.event === 'ga4Event' && /^spin_/.test(e.event_name)).map((e) => [e.event_name, JSON.stringify(e.event_parameters)]);
+```
+
+| 时机 | 应出现的事件（参数要点） |
+|---|---|
+| 进落地页自动弹出 | `spin_popup_view`（popup_name `spin` 或 `my_prizes`，trigger `auto`，login_status `logged_in`） |
+| 点 SPIN NOW | `spin_click`（button_name = 按钮文字，spins_left = 点击前次数）→ `spin_result`（prize_type / prize_name 与结果页一致，spins_left 减 1） |
+| 04 / 05 点 COPY CODE / SHOP NOW | `spin_copy_code`（module_name `result`）/ `spin_shop_now`；**参数里不能出现券码或卡号** |
+| 点 SPIN AGAIN | `spin_again`（结果页 `result` / 选款页 `gift` / 06 `my_prizes`）+ `spin_popup_view`（trigger `in_popup`） |
+| 06 点 Unused / Used、COPY、CHOOSE | `spin_prizes_tab`（button_name 不含数量）、`spin_copy_code`（`my_prizes`）、`spin_gift_choose` |
+| 选款提交成功 | `spin_gift_confirm`（items 里每件的 item_id = 所选 SKU、item_variant = 颜色_尺码）+ `spin_popup_view`（`my_prizes`） |
+| 任意失败（T5） | `spin_error`（action `draw` / `gift_confirm`，error_code = 接口错误码） |
+
+另外检查：`dataLayer` 里每条 `ga4Event` 前面都有一条 `{ event_parameters: null }`。
+
 ---
 
 ## 4. 交付给用户的报告
@@ -226,3 +246,4 @@ window.spinState = () => {
 3. T4.7 显示成米白的颜色名清单
 4. 本次消耗的抽奖次数、提交的赠品（款/色/码）、`giftOrderName`
 5. 控制台里含 `spin` 的报错
+6. T8 每一步 `spinGa()` 的输出（券码 / 卡号如出现在参数里，立即标为失败）
