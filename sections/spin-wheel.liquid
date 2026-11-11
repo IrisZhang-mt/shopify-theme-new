@@ -231,13 +231,18 @@
           <button type="button" class="mt-spin__again-btn" data-spin-go="wheel">{{ 'spin.spin_again' | t }}</button>
         </div>
         <div class="mt-spin__prize-list" data-spin-list></div>
-        <p class="mt-spin__error" data-spin-prizes-error hidden>{{ 'spin.load_error' | t }}</p>
+        <p class="mt-spin__empty" data-spin-empty hidden></p>
+        <div class="mt-spin__prizes-error" data-spin-prizes-error hidden>
+          <p class="mt-spin__error">{{ 'spin.load_error' | t }}</p>
+          <button type="button" class="mt-spin__link" data-spin-prizes-reload>{{ 'spin.try_again' | t }}</button>
+        </div>
       </div>
       <p class="mt-spin__note" data-spin-note="unused">
         <span class="mt-spin__note-touch">{{ 'spin.unused_note_touch_html' | t }}</span>
         <span class="mt-spin__note-pointer">{{ 'spin.unused_note_pointer' | t }}</span>
       </p>
-      <p class="mt-spin__note" data-spin-note="used" hidden>{{ 'spin.used_note' | t }}</p>
+      {%- comment -%} 07 has no note, but keeps the footer band so the list area doesn't change size. {%- endcomment -%}
+      <p class="mt-spin__note mt-spin__note--blank" data-spin-note="used" aria-hidden="true" hidden></p>
     </div>
   </div>
 
@@ -307,7 +312,23 @@
         "giftTaken": {{ 'spin.gift_error_taken' | t | json }},
         "giftDeadline": {{ 'spin.gift_error_deadline_html' | t | json }},
         "giftInvalid": {{ 'spin.gift_error_invalid' | t | json }},
-        "giftNetwork": {{ 'spin.gift_error_network' | t | json }}
+        "giftNetwork": {{ 'spin.gift_error_network' | t | json }},
+        "prizeMeta": {{ 'spin.prize_meta' | t: date: '[date]', order: '[order]' | json }},
+        "prizeCode": {{ 'spin.prize_code' | t: code: '[code]' | json }},
+        "prizeUntil": {{ 'spin.prize_until' | t: date: '[date]' | json }},
+        "prizeNoExpiry": {{ 'spin.prize_no_expiry' | t | json }},
+        "prizeBalance": {{ 'spin.prize_balance' | t: amount: '[amount]' | json }},
+        "prizeChooseOutfit": {{ 'spin.prize_choose_outfit' | t | json }},
+        "prizeChooseJacket": {{ 'spin.gift_fit_note' | t | json }},
+        "prizeShips": {{ 'spin.prize_ships' | t: order: '[order]' | json }},
+        "prizeRedeemed": {{ 'spin.prize_redeemed' | t: name: '[name]' | json }},
+        "prizeItem": {{ 'spin.prize_item' | t: color: '[color]', size: '[size]' | json }},
+        "prizeUsed": {{ 'spin.prize_used' | t | json }},
+        "prizeUsedOn": {{ 'spin.prize_used_on' | t: date: '[date]' | json }},
+        "prizeCopy": {{ 'spin.prize_copy' | t | json }},
+        "prizeChoose": {{ 'spin.prize_choose' | t | json }},
+        "emptyUnused": {{ 'spin.empty_unused' | t | json }},
+        "emptyUsed": {{ 'spin.empty_used' | t | json }}
       },
       {%- comment -%}
         Color swatches resolve like quick shop / PDP (snippets/color-swatch.liquid): the

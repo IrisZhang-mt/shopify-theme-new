@@ -459,13 +459,13 @@ if (!window.mtSpinInit) {
     }
   };
 
-  const copyCode = async (button) => {
-    if (!state.copyCode) return;
+  const copyCode = async (button, code) => {
+    if (!code) return;
     try {
-      await navigator.clipboard.writeText(state.copyCode);
+      await navigator.clipboard.writeText(code);
     } catch {
       const field = document.createElement('textarea');
-      field.value = state.copyCode;
+      field.value = code;
       field.setAttribute('readonly', '');
       field.style.cssText = 'position:fixed;opacity:0';
       document.body.append(field);
@@ -979,7 +979,142 @@ if (!window.mtSpinInit) {
     return false;
   };
 
-  // ---------- prizes view ----------
+  // ---------- prizes view: 06 unused / 07 used ----------
+  // Each tab shows exactly what its own endpoint returns (/prizes?tab=unused|used); the
+  // front end never decides which tab a prize belongs to.
+
+  const prizes = { items: { unused: null, used: null }, failed: { unused: false, used: false }, token: 0 };
+
+  const prizeTitle = (prize) => {
+    if (prize.type === 'COUPON') return fill(str.resultCoupon, { value: prize.name });
+    if (prize.type === 'GIFT_CARD') return `$${prize.name} ${str.slotGiftCard}`;
+    return prize.name || '';
+  };
+
+  const balanceText = (value) => {
+    if (value == null || value === '') return '';
+    const num = Number(value);
+    return Number.isFinite(num) ? fill(str.prizeBalance, { amount: `$${num.toFixed(2)}` }) : '';
+  };
+
+  const prizeButton = (label, attr, index, extraClass) => {
+    const button = el('button', `mt-spin__prize-btn${extraClass ? ` ${extraClass}` : ''}`, label);
+    button.type = 'button';
+    button.setAttribute(attr, index);
+    return button;
+  };
+
+  const prizeCard = (prize, index, tab) => {
+    const used = tab === 'used';
+    const gift = prize.type === 'GIFT' || prize.type === 'GRAND';
+    const card = el('article', 'mt-spin__prize');
+    card.classList.toggle('is-used', used);
+    card.classList.toggle('is-gift', gift);
+
+    const info = el('div', 'mt-spin__prize-info');
+    info.append(
+      el('p', 'mt-spin__prize-meta', fill(str.prizeMeta, { date: easternDate(prize.wonAt), order: prize.orderName || '' })),
+      el('p', 'mt-spin__prize-title', used && gift ? fill(str.prizeRedeemed, { name: prize.name || '' }) : prizeTitle(prize)),
+    );
+
+    // Description parts: inline with " · " between them; "is-line" parts start a new line on mobile.
+    const desc = el('p', 'mt-spin__prize-desc');
+    const part = (text, className) => {
+      if (text) desc.append(el('span', `mt-spin__prize-part${className ? ` ${className}` : ''}`, text));
+    };
+    let action = null;
+    if (prize.type === 'COUPON') {
+      const coupon = prize.coupon || {};
+      part(coupon.code ? fill(str.prizeCode, { code: coupon.code }) : '');
+      if (used) part(coupon.usedAt ? fill(str.prizeUsedOn, { date: easternDate(coupon.usedAt) }) : '');
+      else part(coupon.expiresAt ? fill(str.prizeUntil, { date: easternDate(coupon.expiresAt) }) : '', 'is-line');
+      if (!used && coupon.code) action = prizeButton(str.prizeCopy, 'data-prize-copy', index);
+    } else if (prize.type === 'GIFT_CARD') {
+      const giftCard = prize.giftCard || {};
+      part(giftCard.code ? fill(str.prizeCode, { code: giftCard.code }) : '');
+      // Used cards drop the balance (it's spent).
+      part([str.prizeNoExpiry, used ? '' : balanceText(giftCard.balance)].filter(Boolean).join(' · '), used ? '' : 'is-line');
+      if (!used && giftCard.code) action = prizeButton(str.prizeCopy, 'data-prize-copy', index);
+    } else if (gift && !used) {
+      part(prize.type === 'GRAND' ? str.prizeChooseJacket : str.prizeChooseOutfit);
+      part(fill(str.prizeShips, { order: prize.orderName || '' }), 'is-line is-accent');
+      action = prizeButton(str.prizeChoose, 'data-prize-choose', index, 'mt-spin__prize-btn--choose');
+      // SELECTING = a submit is being processed; it turns SELECTED within seconds.
+      action.disabled = prize.status === 'SELECTING';
+    }
+    if (desc.children.length) info.append(desc);
+    card.append(info);
+
+    if (used && gift) {
+      const list = el('div', 'mt-spin__prize-items');
+      (prize.gift?.items || []).forEach((item) => {
+        const row = el('div', 'mt-spin__prize-item');
+        const thumb = el('span', 'mt-spin__prize-thumb');
+        if (item.image) {
+          const img = el('img');
+          img.src = sizedImage(item.image, 216);
+          img.alt = '';
+          img.width = 108;
+          img.height = 124;
+          img.loading = 'lazy';
+          thumb.append(img);
+        }
+        const text = el('div', 'mt-spin__prize-item-text');
+        text.append(
+          el('p', 'mt-spin__prize-item-name', item.productTitle || ''),
+          el('p', 'mt-spin__prize-item-detail', fill(str.prizeItem, { color: item.color || '', size: item.size || '' })),
+          el('p', 'mt-spin__prize-item-ship', fill(str.prizeShips, { order: prize.orderName || '' })),
+        );
+        row.append(thumb, text);
+        list.append(row);
+      });
+      card.append(list);
+    } else if (used) {
+      card.append(el('span', 'mt-spin__prize-status', str.prizeUsed));
+    }
+    if (action) card.append(action);
+    return card;
+  };
+
+  const renderPrizeList = () => {
+    const items = prizes.items[state.tab];
+    $('[data-spin-list]').replaceChildren(...(items || []).map((prize, i) => prizeCard(prize, i, state.tab)));
+    const empty = $('[data-spin-empty]');
+    empty.textContent = state.tab === 'unused' ? str.emptyUnused : str.emptyUsed;
+    empty.hidden = !(Array.isArray(items) && items.length === 0);
+    $('[data-spin-prizes-error]').hidden = !prizes.failed[state.tab];
+  };
+
+  // 06 CHOOSE → the 03 / 04b pickers inside the wheel view (wheel upright on desktop 04b).
+  const chooseGift = (prize) => {
+    if (!prize || state.busy) return;
+    state.rotation = 0;
+    root.dataset.spinCurrent = 'wheel';
+    $$('[data-spin-view]').forEach((view) => {
+      view.hidden = view.dataset.spinView !== 'wheel';
+    });
+    renderWheel();
+    openGift(prize, state.status?.spinsLeft);
+  };
+
+  const prizeClick = (target) => {
+    const copy = target.closest('[data-prize-copy]');
+    if (copy) {
+      const prize = prizes.items[state.tab]?.[Number(copy.dataset.prizeCopy)];
+      copyCode(copy, prize?.coupon?.code || prize?.giftCard?.code);
+      return true;
+    }
+    const choose = target.closest('[data-prize-choose]');
+    if (choose) {
+      chooseGift(prizes.items[state.tab]?.[Number(choose.dataset.prizeChoose)]);
+      return true;
+    }
+    if (target.closest('[data-spin-prizes-reload]')) {
+      fillPrizesView();
+      return true;
+    }
+    return false;
+  };
 
   const renderTabs = () => {
     $$('[data-spin-tab]').forEach((tab) => {
@@ -998,13 +1133,24 @@ if (!window.mtSpinInit) {
     const left = Number(state.status?.spinsLeft) || 0;
     $('[data-spin-again]').hidden = left <= 0;
     $('[data-spin-again-text]').textContent = plural(left, str.spinsLeftOne, str.spinsLeftOther);
-    $('[data-spin-prizes-error]').hidden = true;
+    const token = ++prizes.token;
+    prizes.items = { unused: null, used: null };
+    prizes.failed = { unused: false, used: false };
     renderTabs();
-    const [unused, used] = await Promise.allSettled([api('/prizes?tab=unused'), api('/prizes?tab=used')]);
-    if (unused.status === 'fulfilled') state.counts.unused = unused.value.items?.length || 0;
-    if (used.status === 'fulfilled') state.counts.used = used.value.items?.length || 0;
-    if (unused.status === 'rejected' && used.status === 'rejected') $('[data-spin-prizes-error]').hidden = false;
+    renderPrizeList();
+    const results = await Promise.allSettled([api('/prizes?tab=unused'), api('/prizes?tab=used')]);
+    if (token !== prizes.token) return;
+    ['unused', 'used'].forEach((key, i) => {
+      const result = results[i];
+      if (result.status === 'fulfilled') {
+        prizes.items[key] = result.value.items || [];
+        state.counts[key] = prizes.items[key].length;
+      } else {
+        prizes.failed[key] = true;
+      }
+    });
     renderTabs();
+    renderPrizeList();
   };
 
   // ---------- dialog ----------
@@ -1186,10 +1332,10 @@ if (!window.mtSpinInit) {
       }
       const copy = event.target.closest?.('[data-spin-copy]');
       if (copy) {
-        copyCode(copy);
+        copyCode(copy, state.copyCode);
         return;
       }
-      if (giftClick(event.target)) return;
+      if (giftClick(event.target) || prizeClick(event.target)) return;
       const go = event.target.closest?.('[data-spin-go]');
       if (go) {
         showView(go.dataset.spinGo);
@@ -1199,6 +1345,8 @@ if (!window.mtSpinInit) {
       if (tab) {
         state.tab = tab.dataset.spinTab;
         renderTabs();
+        renderPrizeList();
+        $('.mt-spin__prizes-body').scrollTop = 0;
       }
     });
 

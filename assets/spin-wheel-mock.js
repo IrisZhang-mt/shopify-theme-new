@@ -59,8 +59,20 @@
     { prizeId: 5530, type: 'GIFT', name: 'FREE OUTFIT', wonAt: iso(-3 * HOUR), orderName: '#10234', status: 'TO_SELECT', coupon: null, giftCard: null, gift: { selectDeadline: iso(45 * HOUR), pickCount: 2, items: [] } },
     { prizeId: 5490, type: 'GIFT_CARD', name: '25', wonAt: iso(-50 * HOUR), orderName: '#10198', status: 'ISSUED', coupon: null, giftCard: { status: 'ISSUED', code: 'BFSPIN7K2Q9XX1234', last4: '1234', sentTo: 'e***@gmail.com', balance: '25.00' }, gift: null },
   ];
+  unused.splice(2, 0, { prizeId: 5531, type: 'GRAND', name: 'SHERPA JACKET', wonAt: iso(-2 * HOUR), orderName: '#10234', status: 'TO_SELECT', coupon: null, giftCard: null, gift: { selectDeadline: iso(46 * HOUR), pickCount: 1, items: [] } });
   const used = [
-    { prizeId: 5401, type: 'COUPON', name: '10%', wonAt: iso(-70 * HOUR), orderName: '#10155', status: 'USED', coupon: { code: 'BFSPIN-2M8XA', startsAt: null, expiresAt: '2027-01-01T04:59:59Z' }, giftCard: null, gift: null },
+    {
+      prizeId: 5420, type: 'GIFT', name: 'FREE OUTFIT', wonAt: iso(-60 * HOUR), orderName: '#10211', status: 'SELECTED', coupon: null, giftCard: null,
+      gift: {
+        selectDeadline: iso(-12 * HOUR), pickCount: 2, giftOrderName: '#10301',
+        items: [
+          { sku: '63211401-MB-6', productTitle: 'Cozy Jacket', image: null, color: 'Midnight Blue', size: '6' },
+          { sku: '63211400-LP-8', productTitle: 'Flare Leggings', image: null, color: 'Leopard Pink', size: '8' },
+        ],
+      },
+    },
+    { prizeId: 5401, type: 'COUPON', name: '10%', wonAt: iso(-70 * HOUR), orderName: '#10155', status: 'USED', coupon: { code: 'BFSPIN-2M8XA', startsAt: null, expiresAt: '2027-01-01T04:59:59Z', usedAt: iso(-20 * HOUR) }, giftCard: null, gift: null },
+    { prizeId: 5388, type: 'GIFT_CARD', name: '50', wonAt: iso(-80 * HOUR), orderName: '#10140', status: 'USED', coupon: null, giftCard: { status: 'USED', code: 'BFSPIN9X8Y7ZZ5678', last4: '5678', sentTo: 'e***@gmail.com', balance: '0.00' }, gift: null },
   ];
 
   const DRAW_ERRORS = { nospins: 40902, ended: 40901, busy: 50300, login: 40101 };
@@ -168,7 +180,8 @@
       giftFailOnce = false;
       throw Object.assign(new Error('spin mock'), { code: 50300 });
     }
-    const jacket = String(prizeId) === 'jacket' || drawCase === 'grand';
+    // 5531 = the SHERPA JACKET waiting in 06; 10086 = whatever SPIN NOW just won.
+    const jacket = String(prizeId) === '5531' || (String(prizeId) === '10086' && drawCase === 'grand');
     const styles = (jacket ? JACKET : OUTFIT).map((style) => ({
       ...style,
       colors: style.colors.map((color) => ({

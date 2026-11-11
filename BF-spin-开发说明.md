@@ -215,6 +215,16 @@
   - 售罄尺码文字统一 #6F6E69（PC 03 稿是 #A8A7A2，用户 OK）。
   - "18 styles · swipe ›" 可点击：往右翻约一屏，到底后回到开头（PC 鼠标用户没法滑）。
 
+### 2.11 阶段 5 确认（2026-11-11）
+
+- 设计稿：移动端 06 `729:15963`、07 `729:16012`；PC 06 `729:16060`、07 `988:44073`（11-11 15:45 版）。06 顶部条 "Spin again →" 在稿里设置了全大写，显示 "SPIN AGAIN →"，与现有代码一致。
+- **两个 tab 的内容完全按各自接口返回**（`/prizes?tab=unused` / `?tab=used`），前端不判断哪个奖品属于哪个 tab（礼品卡余额用完是否进 Used 由后端决定）。
+- 07 赠品每件下方 "Ships with your order #xxx" 用 `orderName`（抽中奖品的订单），不用 `giftOrderName`。
+- 07 折扣码 "Used Nov 23"：用户说使用日期在 coupon 对象里返回，前端先读 `coupon.usedAt`（字段名待用户用掉折扣码后核对）；没有就只显示 "Code XXX"。
+- 07 礼品卡：内容同 06 礼品卡但不显示余额（"Code XXX · No expiry date"），右侧 "Used"，样式同 07 其他卡片。
+- 其余按默认（用户消息未写完 B 类，先按默认）：标题用接口奖品名；待选款赠品标题橙色，FREE OUTFIT 副标题 "Choose style, color & size"、SHERPA "Just pick your fit"；CHOOSE 打开 03 / 04b（转盘回正），`SELECTING` 时按钮置灰；不判断选款期限；COPY 同 04/05；日期行用 `wonAt` 美东时间；礼品卡 `balance` 为空不显示余额；顺序按接口；空状态 "No prizes waiting right now." / "Nothing used yet."；07 无底部说明但保留同高的空白底栏（列表区不跳）；加载失败显示错误 + TRY AGAIN。
+- PC 06 底栏内边距按稿改为 12 / 40 / 16（原 16 / 40 / 24）。
+
 ---
 
 ## 3. 环境
@@ -291,7 +301,7 @@
 | 2 弹窗骨架 | 🟡 代码完成，待 dev 店预览 | spin-wheel 三件套 + spin-wheel-mock.js + locales `spin.*` + page.black_friday.json 末尾加 section |
 | 3 抽奖 + 04/05 | 🟡 代码完成，本地截图 + 流程脚本验证通过，待 dev 店预览 | spin-wheel 三件套 + mock `/draw` + locales 新增 25 条 |
 | 4 选款 03/04b | 🟡 代码完成，本地截图（390 / 1440）+ 流程脚本验证通过，待 dev 店用真实接口预览 | spin-wheel 三件套 + mock gift-options / gift-selection + locales 新增 39 条；size-chart 三个页面在 section 里渲染 |
-| 5 My prizes | ⬜ | |
+| 5 My prizes | 🟡 代码完成，本地截图（390 / 1440）+ CHOOSE 流程验证通过，待 dev 店真实接口预览 | spin-wheel 三件套 + mock 06/07 数据 + locales 新增 15 条、删 `used_note` |
 | 6 埋点 + 验收 | ⬜ | |
 
 ---
@@ -306,7 +316,8 @@
 - **2026-11-10**：阶段 2 代码完成（未预览）。`sections/spin-wheel.liquid`（01/02 转盘视图 + 06/07 奖品视图框架）、`assets/spin-wheel.css/.js`、`assets/spin-wheel-mock.js`、`locales/en.default.json` 新增 `spin.*`、`templates/page.black_friday.json` 末尾加 `spin_wheel`。打开接口：`[data-spin-open]`（值 `prizes` 打开 06）或 `window.mtSpin.open('wheel'|'prizes')`。mock：`?spin_mock=spins|nospin|none|error`（需已登录才会自动弹）。06 每会话一次用 sessionStorage `mt-spin-prizes-shown`。转盘为 SVG（viewBox 340×364，rotor `[data-spin-rotor]` 供阶段 3 旋转，指针在底部）。SPIN NOW 按钮（`[data-spin-draw]`）未接抽奖。06 卡片列表留给阶段 5。移动端字号按 PC 同级（设计稿移动端画板有的放大约 1.4 倍，06 尤其明显）。文案 "3 hour" 改为 "3 hours"（语法）。
 - **2026-11-10（会话 2）**：按用户验证反馈返工阶段 2，**上一条里"移动端字号按 PC 同级"、"viewBox 340×364"已作废**，以 2.8 为准：移动端整体按 `--u` 严格照稿重写（01/02/06），弹窗固定高度（01 移动端例外，随内容），手动换行照稿（含 08 标题），转盘按 11-10 更新后的设计稿（334×391）。新增第 9 节测试方式。待用户在 dev 店预览确认。
 - **2026-11-10（会话 2，续）**：阶段 3 代码完成：抽奖（`POST /draw`，requestId 重试复用）、转盘旋转停格（`spinTo`，按 `POSITION_SLOTS` 映射，`state.rotation` 累计，重渲染保持角度）、04/05 结果（`data-spin-state="result"`，`data-spin-result="coupon|card"`）、复制、错误处理；mock 新增 `spin_draw` 参数（见 9.4）。本地截图（390 / 1440）与流程脚本（重试、SPIN AGAIN、各错误码、GIFT→06）通过。转盘停下后格子文字随转盘一起旋转（正常转盘行为，设计稿是静态未转图）。**待**：dev 店预览、真机；Lily 确认是否发邮件。下一步阶段 4（03 / 04b 选款），先出问题清单。
-- **2026-11-11**：设计稿两轮核对 + 用户逐条裁定（见 2.10）。阶段 4 代码完成：选款是转盘视图里的 `data-spin-state="gift"`，root `data-spin-gift="outfit|jacket"`；移动端占满整个视图，PC 03 整个 880 弹窗滚动（无转盘）、PC 04b 保留左侧转盘右栏滚动。`GET /prizes/{id}/gift-options` → 每件按 styleNo / 颜色名 / 尺码记录选择 → `POST /prizes/{id}/gift-selection`（requestId 重试复用），成功进 06。色卡：section 把主题设置 Custom colors 原样交给 JS，按 color-swatch.liquid 同样的优先级解析。尺码表：section 渲染 `size-chart-clothing / breezy-leggings / shoes` 三个页面的弹窗（id `spin-chart-*`），按 `sizeChart` 打开。阶段 3 的 PC "Spin again → (1 spin left)" 已改成统一的 "1 spin left · SPIN AGAIN →"（locale `again_link_*` 取代 `again_mobile_* / again_desktop / again_count_*`）。mock 新增 `spin_gift` 参数（见 9.5）。**待**：dev 店真实接口预览（Lily 说接口可调）。同日按用户反馈：03 默认选中第一个有货款式 + 颜色、礼盒在这件选完后换图、swipe 可点击（见 2.10 第四轮）。
+- **2026-11-11**：设计稿两轮核对 + 用户逐条裁定（见 2.10）。阶段 4 代码完成：选款是转盘视图里的 `data-spin-state="gift"`，root `data-spin-gift="outfit|jacket"`；移动端占满整个视图，PC 03 整个 880 弹窗滚动（无转盘）、PC 04b 保留左侧转盘右栏滚动。`GET /prizes/{id}/gift-options` → 每件按 styleNo / 颜色名 / 尺码记录选择 → `POST /prizes/{id}/gift-selection`（requestId 重试复用），成功进 06。色卡：section 把主题设置 Custom colors 原样交给 JS，按 color-swatch.liquid 同样的优先级解析。尺码表：section 渲染 `size-chart-clothing / breezy-leggings / shoes` 三个页面的弹窗（id `spin-chart-*`），按 `sizeChart` 打开。阶段 3 的 PC "Spin again → (1 spin left)" 已改成统一的 "1 spin left · SPIN AGAIN →"（locale `again_link_*` 取代 `again_mobile_* / again_desktop / again_count_*`）。mock 新增 `spin_gift` 参数（见 9.5）。**待**：dev 店真实接口预览（Lily 说接口可调）。同日按用户反馈：03 默认选中第一个有货款式 + 颜色、礼盒在这件选完后换图、swipe 可点击（见 2.10 第四轮）。代码已提交（060277d），进入联调（测试用例见仓库根目录 `BF-spin-联调测试用例.md`）。
+- **2026-11-11（续）**：阶段 5 代码完成（见 2.11）：06 / 07 卡片按两个接口分别渲染；06 CHOOSE 直接打开选款（`chooseGift`），提交成功回 06；COPY 复用 `copyCode(button, code)`。mock 补齐 06 / 07 各类卡片（9.6）。**待**：dev 店真实接口预览；`coupon.usedAt` 字段名核对。
 
 ---
 
@@ -419,6 +430,21 @@
 | 1 spin left · SPIN AGAIN → | 回到 02 |
 | My prizes › | 进 06（奖品仍是待选状态） |
 
-### 9.6 后续阶段
+### 9.6 阶段 5：My prizes 06 / 07
 
-每完成一个阶段，在这里追加对应的测试表（5：My prizes 卡片；6：埋点）。
+都需要**已登录**。mock：[nospin](https://moodytiger-us-dev.myshopify.com/pages/black-friday2026?preview_theme_id=167518339158&spin_mock=nospin)（0 次机会，同一会话自动弹 06 一次；再看要新开会话或手动打开 `data-spin-open="prizes"`）。mock 的 Unused 有 15% 折扣码、FREE OUTFIT 待选、SHERPA JACKET 待选、$25 礼品卡；Used 有已兑换的 FREE OUTFIT（2 件）、已用 10% 折扣码（带使用日期）、已用 $50 礼品卡。
+
+| 操作 | 预期 |
+|---|---|
+| 06 卡片 | 左侧橙色竖条；日期 · 订单号 / 标题 / 说明；折扣码、礼品卡右侧 COPY，赠品右侧橙色 CHOOSE |
+| COPY | 变 COPIED 2 秒，复制完整券码 / 卡号 |
+| CHOOSE（FREE OUTFIT / SHERPA） | 进 03 / 04b 选款（PC 04b 左侧转盘是正的）；提交后回到 06，列表刷新 |
+| 切到 Used | 只换按钮颜色，标题不跳；07 卡片左侧米色竖条、标题灰绿；赠品 "· Redeemed" + 每件一行；折扣码 / 礼品卡右侧 "Used" |
+| 某个 tab 为空 | "No prizes waiting right now." / "Nothing used yet." |
+| 接口失败 | "We couldn’t load your spins…" + TRY AGAIN |
+
+真实接口：Unused / Used 的数量和卡片内容应与 `/prizes?tab=unused|used` 返回一一对应。
+
+### 9.7 后续阶段
+
+阶段 6（埋点）完成后在这里追加测试表。

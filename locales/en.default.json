@@ -257,7 +257,6 @@
     "spin_again": "SPIN AGAIN →",
     "unused_note_touch_html": "Tap “Used” to see redeemed gifts<br class=\"mt-spin__br\"> and used codes.",
     "unused_note_pointer": "Click “Used” to see redeemed gifts and used codes.",
-    "used_note": "Prizes you’ve redeemed or used are kept here for reference.",
     "you_won": "YOU WON",
     "result_coupon": "{{ value }} OFF",
     "result_gift_card": "A {{ amount }} gift card",
@@ -314,6 +313,21 @@
     "gift_error_deadline_html": "The time to choose has passed. We’re happy to help — contact us at <a href=\"mailto:order@moodytiger.com\">order@moodytiger.com</a>.",
     "gift_error_invalid": "Something didn’t line up. Please check your picks and try again.",
     "gift_error_network": "That didn’t go through. Please try again.",
-    "gift_load_error": "We couldn’t load the styles. Please try again in a moment."
+    "gift_load_error": "We couldn’t load the styles. Please try again in a moment.",
+    "prize_meta": "{{ date }} · Order {{ order }}",
+    "prize_code": "Code {{ code }}",
+    "prize_until": "Use within 1 month · until {{ date }}",
+    "prize_no_expiry": "No expiry date",
+    "prize_balance": "Balance {{ amount }}",
+    "prize_choose_outfit": "Choose style, color & size",
+    "prize_ships": "Ships with your order {{ order }}",
+    "prize_redeemed": "{{ name }} · Redeemed",
+    "prize_item": "{{ color }} · Size {{ size }}",
+    "prize_used": "Used",
+    "prize_used_on": "Used {{ date }}",
+    "prize_copy": "COPY",
+    "prize_choose": "CHOOSE",
+    "empty_unused": "No prizes waiting right now.",
+    "empty_used": "Nothing used yet."
   }
 }
