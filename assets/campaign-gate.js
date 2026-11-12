@@ -37,6 +37,8 @@ if (!window.mtGateInit) {
     if (!gate) return;
     const status = mockStatus() || (await fetchStatus(gate.dataset.statusUrl));
     if (status === 'ENDED') {
+      const loading = gate.querySelector('[data-gate-loading]');
+      if (loading) loading.hidden = true;
       const ended = gate.querySelector('[data-gate-ended]');
       if (ended) ended.hidden = false;
       return;

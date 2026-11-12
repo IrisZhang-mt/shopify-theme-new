@@ -6,8 +6,66 @@
   text-align: center;
 }
 
-.mt-gate__ended[hidden] {
+.mt-gate__ended[hidden],
+.mt-gate__loading[hidden] {
   display: none;
+}
+
+/* Loading: shown centred in the viewport while the status check runs, until the redirect. */
+.mt-gate__loading {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.mt-gate__spinner {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.mt-gate__spoke {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 0.09375rem);
+  width: 0.1875rem;
+  height: 0.5rem;
+  border-radius: 0.125rem;
+  background: var(--mt-gate-muted);
+  transform-origin: 50% 0.875rem;
+  animation: mt-gate-spoke 0.8s linear infinite;
+}
+.mt-gate__spoke:nth-child(1) { transform: rotate(0deg); animation-delay: -0.7s; }
+.mt-gate__spoke:nth-child(2) { transform: rotate(45deg); animation-delay: -0.6s; }
+.mt-gate__spoke:nth-child(3) { transform: rotate(90deg); animation-delay: -0.5s; }
+.mt-gate__spoke:nth-child(4) { transform: rotate(135deg); animation-delay: -0.4s; }
+.mt-gate__spoke:nth-child(5) { transform: rotate(180deg); animation-delay: -0.3s; }
+.mt-gate__spoke:nth-child(6) { transform: rotate(225deg); animation-delay: -0.2s; }
+.mt-gate__spoke:nth-child(7) { transform: rotate(270deg); animation-delay: -0.1s; }
+.mt-gate__spoke:nth-child(8) { transform: rotate(315deg); animation-delay: 0s; }
+
+@keyframes mt-gate-spoke {
+  from { opacity: 1; }
+  to { opacity: 0.15; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-gate__spoke {
+    animation-duration: 2.4s;
+  }
+}
+
+.mt-gate__loading-text {
+  font-size: var(--mt-p-s-size);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--mt-gate-muted);
 }
 
 .mt-gate__hero {

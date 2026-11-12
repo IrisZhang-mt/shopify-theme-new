@@ -150,7 +150,9 @@ if (!window.mtSpinInit) {
     const wheel = svg('svg', { viewBox: '0 0 334 391', class: 'mt-spin__svg', 'aria-hidden': 'true' });
     const rotor = svg('g', { class: 'mt-spin__rotor', 'data-spin-rotor': '' });
     rotor.style.transform = `rotate(${state.rotation}deg)`;
-    rotor.append(svg('circle', { cx, cy, r: 166, class: 'mt-spin__rim' }));
+    // Rim: 6 units on mobile; PC draws a thinner one (≈4px at the 367px PC wheel). CSS shows one of the two.
+    rotor.append(svg('circle', { cx, cy, r: 166, class: 'mt-spin__rim mt-spin__rim--mobile' }));
+    rotor.append(svg('circle', { cx, cy, r: 163.6, class: 'mt-spin__rim mt-spin__rim--desktop' }));
     POSITION_SLOTS.forEach((slotId, i) => {
       const a0 = ((i * 60 - 90) * Math.PI) / 180;
       const a1 = (((i + 1) * 60 - 90) * Math.PI) / 180;

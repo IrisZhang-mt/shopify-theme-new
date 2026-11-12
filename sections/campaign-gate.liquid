@@ -42,6 +42,16 @@
   data-status-url="{{ status_url | escape }}"
   {% if customer %}data-next-url="{{ target_url | escape }}"{% else %}data-next-url="{{ login_url | escape }}"{% endif %}
 >
+  {%- unless request.design_mode -%}
+    <div class="mt-gate__loading" role="status" data-gate-loading>
+      <span class="mt-gate__spinner" aria-hidden="true">
+        {%- for i in (1..8) -%}<span class="mt-gate__spoke"></span>{%- endfor -%}
+      </span>
+      {%- if section.settings.loading_label != blank -%}
+        <span class="mt-gate__loading-text">{{ section.settings.loading_label | escape }}</span>
+      {%- endif -%}
+    </div>
+  {%- endunless -%}
   <div class="mt-gate__ended" data-gate-ended {% unless request.design_mode %}hidden{% endunless %}>
     <div class="mt-gate__hero">
       {%- if section.settings.status_label != blank -%}
@@ -97,6 +107,13 @@
       "label": "Login path",
       "default": "/customer_authentication/login",
       "info": "新客户账户登录地址，会自动带上 return_to=活动页"
+    },
+    {
+      "type": "text",
+      "id": "loading_label",
+      "label": "Loading text",
+      "default": "loading",
+      "info": "查询活动状态、跳转前在页面正中显示的文字（带转圈动画）；留空只显示动画"
     },
     {
       "type": "header",

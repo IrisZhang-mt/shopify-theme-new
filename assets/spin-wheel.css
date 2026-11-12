@@ -259,6 +259,9 @@
 .mt-spin__wedge--accent {
   fill: var(--mt-accent);
 }
+.mt-spin__rim--desktop {
+  display: none;
+}
 .mt-spin__wedge--light {
   fill: var(--mt-paper);
 }
@@ -900,7 +903,7 @@
 .mt-spin__gift-prize-box {
   flex: none;
   width: calc(112 * var(--u));
-  height: calc(112 * var(--u));
+  height: calc(112 * 4 / 3 * var(--u));
   overflow: hidden;
   border-radius: calc(3 * var(--u));
   background: var(--mt-white);
@@ -908,7 +911,8 @@
 .mt-spin__gift-prize-box img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
 }
 .mt-spin__gift-prize-text {
   padding-top: calc(5 * var(--u));
@@ -1663,15 +1667,24 @@
   .mt-spin__stage {
     display: flex;
     justify-content: center;
-    padding: 6.0625rem 0 0;
+    align-items: center;
+    padding: 0;
     background: var(--mt-spin-hero-bg);
   }
   .mt-spin__heading--stage {
     display: none;
   }
+  /* The svg box has 34 empty units above the rim and 9 below the pointer: the negative top
+     margin (25 units) lifts the drawn wheel to the true vertical centre. */
   .mt-spin__wheel {
-    width: 17.9375rem;
-    margin: 0;
+    width: 22.9375rem;
+    margin: calc(-25 / 334 * 22.9375rem) 0 0;
+  }
+  .mt-spin__rim--mobile {
+    display: none;
+  }
+  .mt-spin__rim--desktop {
+    display: inline;
   }
 
   .mt-spin__content {
@@ -2534,7 +2547,7 @@
   }
   .mt-spin__gift-prize-box {
     width: 5.5rem;
-    height: 5.5rem;
+    height: calc(5.5rem * 4 / 3);
     border-radius: 0.1875rem;
   }
   .mt-spin__gift-prize-text {
