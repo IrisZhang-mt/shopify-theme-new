@@ -252,9 +252,27 @@
   letter-spacing: var(--mt-tracking-tag);
   text-transform: uppercase;
 }
-.mt-pcar .mt-card__badge--sale {
+.mt-pcar .mt-card__badge--sale,
+.mt-pcar .mt-card__badge--points {
   background: var(--mt-tangerine);
   color: var(--mt-white);
+}
+
+/* Show points: "+144 pts" after the price (wraps to its own line when it doesn't fit) and a 2× POINTS
+   badge in place of the discount badge. product-card.css hides both by default. */
+.mt-pcar[data-show-points] .mt-card__badge--points {
+  display: block;
+}
+.mt-pcar[data-show-points] .mt-card--points .mt-card__badge--sale {
+  display: none;
+}
+.mt-pcar[data-show-points] .mt-card--points .mt-card__price {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+.mt-pcar[data-show-points] .mt-card__points {
+  display: inline;
+  color: var(--mt-tangerine);
 }
 
 /* Quick shop is always the full-width bar under the price (no hover overlay). */

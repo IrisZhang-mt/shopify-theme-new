@@ -75,6 +75,7 @@
     data-list-id="{{ pc_item_list_id }}"
     data-list-name="{{ pc_item_list_name | escape }}"
     data-sizes="{{ pc_sizes }}"
+    {%- if section.settings.show_points %} data-show-points{% endif %}
   >
     {%- if section.settings.heading != blank or pc_tabs != blank -%}
       <div class="mt-pcar__head">
@@ -145,6 +146,7 @@
               quick: true,
               sale_badge: true,
               hide_swatches: true,
+              points: true,
               item_list_id: pc_item_list_id,
               item_list_name: pc_item_list_name
             %}
@@ -207,6 +209,13 @@
       "label": "Button label",
       "default": "SHOP MORE",
       "info": "跳转到系列页；选中按 Product tag 筛选的 tab 时跳到该 tag 筛选后的系列页"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_points",
+      "label": "Show points",
+      "default": false,
+      "info": "商品元字段 custom.bf_double_points 大于 0 时，在价格后展示积分（如 +144 pts），并用 2× POINTS 角标替代折扣角标"
     },
     {
       "type": "text",

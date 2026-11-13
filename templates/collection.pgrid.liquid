@@ -4,7 +4,8 @@
   do not assign it to a collection. product-carousel.js reuses these cards and only rewrites the image sizes.
   product-grid.js fetches /collections/{handle}[/{tag}]?view=pgrid&page=N and swaps in the cards.
   Fixed 12 per page (a template cannot read query params) = FEED_SIZE in product-grid.js; a 24-per-page
-  grid fetches two pages. The card params must match the ones in product-grid.liquid.
+  grid fetches two pages. The card params must match the ones in product-grid.liquid, plus points
+  (hidden by product-card.css; product-carousel shows them when its Show points is on).
 {%- endcomment -%}
 {%- paginate collection.products by 12 -%}
   <div
@@ -24,6 +25,7 @@
           quick: true,
           sale_badge: true,
           hide_swatches: true,
+          points: true,
           item_list_id: collection.handle,
           item_list_name: collection.title
         %}

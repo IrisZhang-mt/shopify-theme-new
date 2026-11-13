@@ -81,7 +81,9 @@
     },
     "show_all_colors": "Show all colors",
     "show_fewer_colors": "Show fewer colors",
-    "badge_sale": "{{ percent }}% OFF"
+    "badge_sale": "{{ percent }}% OFF",
+    "badge_points": "2× Points",
+    "points_earn": "+{{ points }} pts"
   },
   "collection": {
     "products_count": {

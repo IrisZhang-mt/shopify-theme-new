@@ -117,6 +117,11 @@
 .mt-card__discount {
   color: var(--mt-midnight);
 }
+/* Opt-in points (product-card's points param): hidden unless a section shows them. */
+.mt-card__badge--points,
+.mt-card__points {
+  display: none;
+}
 
 .mt-card__swatches {
   position: relative;
