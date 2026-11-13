@@ -1,0 +1,233 @@
+{%- comment -%}
+  Welcome spin (new-subscriber email wheel). Site-wide popup, lives in the footer group.
+  - Signed-in customers: nothing is rendered (no CSS / JS loaded).
+  - Guests: welcome-spin.js opens it 8s after load, at most once every 3 days per browser
+    (localStorage), and only after GET /activities/{code} succeeds.
+  - Wheel slots, prize codes and result copy come from the App Proxy; everything the API
+    doesn't send is fixed copy in locales (welcome_spin.*), not merchant settings.
+  States (data-ws-state): form (A1–A3) → result (A4 coupon / A5 gift / A6 grand) | member (A7).
+{%- endcomment -%}
+{%- unless customer -%}
+  {%- liquid
+    assign proxy_prefix = section.settings.proxy_prefix | strip | default: '/apps/bf/station/welcome-spin'
+    assign last_char = proxy_prefix | slice: -1
+    if last_char == '/'
+      assign prefix_size = proxy_prefix.size | minus: 1
+      assign proxy_prefix = proxy_prefix | slice: 0, prefix_size
+    endif
+    assign activity_code = section.settings.activity_code | strip | default: 'welcome-spin-bf2026'
+
+    # Fixed by request (2026-11-13): landing page for "Shop Black Friday", legal links, login.
+    assign shop_path = '/pages/black-friday2026'
+    assign terms_url = '/pages/terms-of-service'
+    assign privacy_url = '/pages/privacy-policy02'
+    assign return_to = request.path | url_encode
+    assign login_url = '/customer_authentication/login?return_to=' | append: return_to
+  -%}
+
+  <link rel="stylesheet" href="{{ 'welcome-spin.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript>{{ 'welcome-spin.css' | asset_url | stylesheet_tag }}</noscript>
+  <script src="{{ 'welcome-spin.js' | asset_url }}" defer></script>
+
+  <div
+    class="mt-ws"
+    hidden
+    data-ws
+    data-ws-state="form"
+    data-prefix="{{ proxy_prefix | escape }}"
+    data-activity="{{ activity_code | escape }}"
+    data-mock-src="{{ 'welcome-spin-mock.js' | asset_url }}"
+    style="--mt-ws-hub: url('{{ 'welcome-spin-hub.jpg' | asset_url }}')"
+    {% if request.design_mode %}data-design-mode{% endif %}
+  >
+    <div class="mt-ws__scrim" data-ws-close></div>
+    <div
+      class="mt-ws__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="MtWsTitle"
+      tabindex="-1"
+      data-ws-panel
+    >
+      <button type="button" class="mt-ws__close" data-ws-close aria-label="{{ 'welcome_spin.close' | t | escape }}">
+        <svg viewBox="0 0 14 14" aria-hidden="true">
+          <path d="M0 0l14 14M14 0L0 14" stroke="currentColor" fill="none"/>
+        </svg>
+      </button>
+
+      <div class="mt-ws__dial">
+        <div class="mt-ws__disc">
+          <div class="mt-ws__wheel" data-ws-wheel></div>
+          <div class="mt-ws__hub" aria-hidden="true">
+            <span class="mt-ws__hub-bg" data-ws-hub-bg></span>
+            <p class="mt-ws__hub-idle">{{ 'welcome_spin.hub' | t }}</p>
+            <p class="mt-ws__hub-won">
+              <span class="mt-ws__hub-label">{{ 'welcome_spin.won_hub' | t }}</span>
+              <span class="mt-ws__hub-prize" data-ws-hub-prize></span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-ws__content" data-ws-scroll>
+        <div class="mt-ws__ticket">
+          <div class="mt-ws__stub" aria-hidden="true">
+            <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2.38333" stroke-linejoin="round">
+              <path d="M6.4165 15.5835H37.5832V22.0002H6.4165V15.5835Z"/>
+              <path d="M9.1665 22V37.5833H34.8332V22"/>
+              <path d="M22 15.5835V37.5835"/>
+              <path d="M21.9998 15.5833C18.6998 15.5833 14.2998 13.9333 14.2998 10.8167C14.2998 8.79999 15.9498 7.69999 17.5998 8.24999C20.1665 9.16665 21.9998 12.8333 21.9998 15.5833Z"/>
+              <path d="M22 15.5833C25.3 15.5833 29.7 13.9333 29.7 10.8167C29.7 8.79999 28.05 7.69999 26.4 8.24999C23.8333 9.16665 22 12.8333 22 15.5833Z"/>
+            </svg>
+          </div>
+          <div class="mt-ws__face">
+            <p class="mt-ws__eyebrow" data-ws-eyebrow>{{ 'welcome_spin.eyebrow' | t }}</p>
+            <h2 class="mt-ws__title" id="MtWsTitle" data-ws-title>
+              <span class="mt-ws__title-small">{{ 'welcome_spin.title_small' | t }}</span>
+              <span class="mt-ws__title-big">{{ 'welcome_spin.title_big' | t }}</span>
+            </h2>
+            <p class="mt-ws__text" data-ws-text>{{ 'welcome_spin.intro' | t }}</p>
+          </div>
+        </div>
+
+        <div class="mt-ws__lower">
+          {%- comment -%} A1–A3: email form {%- endcomment -%}
+          <form class="mt-ws__stack mt-ws__form" data-ws-only="form" data-ws-form novalidate>
+            <div class="mt-ws__trap" aria-hidden="true">
+              <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" data-ws-honeypot></label>
+            </div>
+            <div class="mt-ws__group">
+              <label class="mt-ws__visually-hidden" for="MtWsEmail">{{ 'welcome_spin.email_label' | t }}</label>
+              <input
+                class="mt-ws__field"
+                id="MtWsEmail"
+                type="email"
+                name="email"
+                autocomplete="email"
+                inputmode="email"
+                placeholder="{{ 'welcome_spin.email_placeholder' | t | escape }}"
+                aria-describedby="MtWsEmailError"
+                data-ws-email
+              >
+              <p class="mt-ws__error" id="MtWsEmailError" role="alert" hidden data-ws-email-error></p>
+            </div>
+            <div class="mt-ws__group">
+              <label class="mt-ws__consent">
+                <input type="checkbox" name="consent" aria-describedby="MtWsConsentError" data-ws-consent>
+                <span class="mt-ws__box" aria-hidden="true">
+                  <svg viewBox="0 0 8 5.4" fill="none"><path d="M0.5 2.6L3 4.9L7.5 0.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                </span>
+                <span>{{ 'welcome_spin.consent' | t }}</span>
+              </label>
+              <p class="mt-ws__error" id="MtWsConsentError" role="alert" hidden data-ws-consent-error>
+                {{- 'welcome_spin.error_consent' | t -}}
+              </p>
+            </div>
+            <button type="submit" class="mt-ws__btn" data-ws-submit>{{ 'welcome_spin.spin' | t }}</button>
+          </form>
+
+          {%- comment -%} A4–A6: result {%- endcomment -%}
+          <div class="mt-ws__stack" data-ws-only="result" hidden>
+            <div class="mt-ws__gift" data-ws-gift hidden>
+              <div class="mt-ws__gift-media">
+                <img class="mt-ws__gift-mark" src="{{ 'welcome-spin-tiger.png' | asset_url }}" alt="" width="22" height="22" loading="lazy" data-ws-gift-mark>
+                <img class="mt-ws__gift-img" alt="" width="64" height="64" hidden data-ws-gift-img>
+              </div>
+              <div class="mt-ws__gift-text">
+                <p class="mt-ws__gift-name" data-ws-gift-name></p>
+                <p class="mt-ws__gift-note" data-ws-gift-note></p>
+              </div>
+            </div>
+            <div class="mt-ws__code">
+              <span class="mt-ws__code-value" data-ws-code></span>
+              <button type="button" class="mt-ws__copy" data-ws-copy>{{ 'welcome_spin.copy' | t }}</button>
+            </div>
+            <a class="mt-ws__btn" href="{{ shop_path }}" data-ws-shop hidden>{{ 'welcome_spin.shop' | t }}</a>
+            <button type="button" class="mt-ws__btn" data-ws-add hidden>{{ 'welcome_spin.add_gift' | t }}</button>
+          </div>
+
+          {%- comment -%} A7: already subscribed {%- endcomment -%}
+          <div class="mt-ws__member" data-ws-only="member" hidden>
+            <button type="button" class="mt-ws__btn" data-ws-close data-ws-keep>{{ 'welcome_spin.keep_shopping' | t }}</button>
+            <button type="button" class="mt-ws__btn mt-ws__btn--ghost" data-ws-back>{{ 'welcome_spin.back_to_wheel' | t }}</button>
+            <a class="mt-ws__link" href="{{ login_url }}" data-ws-sign-in>{{ 'welcome_spin.sign_in' | t }}</a>
+          </div>
+
+          <p class="mt-ws__fine" data-ws-fine>
+            {{- 'welcome_spin.fine_print_html' | t: terms_url: terms_url, privacy_url: privacy_url -}}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script type="application/json" data-ws-config>
+      {
+        "shopPath": {{ shop_path | json }},
+        "strings": {
+          "eyebrow": {{ 'welcome_spin.eyebrow' | t | json }},
+          "titleSmall": {{ 'welcome_spin.title_small' | t | json }},
+          "titleBig": {{ 'welcome_spin.title_big' | t | json }},
+          "intro": {{ 'welcome_spin.intro' | t | json }},
+          "spin": {{ 'welcome_spin.spin' | t | json }},
+          "spinning": {{ 'welcome_spin.spinning' | t | json }},
+          "errorEmail": {{ 'welcome_spin.error_email' | t | json }},
+          "errorUsed": {{ 'welcome_spin.error_used' | t | json }},
+          "errorRate": {{ 'welcome_spin.error_rate' | t | json }},
+          "errorEnded": {{ 'welcome_spin.error_ended' | t | json }},
+          "errorGeneric": {{ 'welcome_spin.error_generic' | t | json }},
+          "youWon": {{ 'welcome_spin.you_won' | t | json }},
+          "couponTitleSmall": {{ 'welcome_spin.coupon_title_small' | t | json }},
+          "couponText": {{ 'welcome_spin.coupon_text' | t | json }},
+          "couponFine": {{ 'welcome_spin.coupon_fine_print' | t | json }},
+          "giftTitleSmall": {{ 'welcome_spin.gift_title_small' | t | json }},
+          "giftTitleBig": {{ 'welcome_spin.gift_title_big' | t | json }},
+          "giftText": {{ 'welcome_spin.gift_text' | t | json }},
+          "giftName": {{ 'welcome_spin.gift_name' | t | json }},
+          "giftNote": {{ 'welcome_spin.gift_note' | t | json }},
+          "giftFine": {{ 'welcome_spin.gift_fine_print' | t | json }},
+          "grandEyebrow": {{ 'welcome_spin.grand_eyebrow' | t | json }},
+          "grandTitleSmall": {{ 'welcome_spin.grand_title_small' | t | json }},
+          "grandTitleBig": {{ 'welcome_spin.grand_title_big' | t | json }},
+          "grandText": {{ 'welcome_spin.grand_text' | t | json }},
+          "grandName": {{ 'welcome_spin.grand_name' | t | json }},
+          "grandNote": {{ 'welcome_spin.grand_note' | t | json }},
+          "grandFine": {{ 'welcome_spin.grand_fine_print' | t | json }},
+          "addGift": {{ 'welcome_spin.add_gift' | t | json }},
+          "adding": {{ 'welcome_spin.adding' | t | json }},
+          "addFailed": {{ 'welcome_spin.add_failed' | t | json }},
+          "copied": {{ 'welcome_spin.copied' | t | json }},
+          "memberEyebrow": {{ 'welcome_spin.member_eyebrow' | t | json }},
+          "memberTitleSmall": {{ 'welcome_spin.member_title_small' | t | json }},
+          "memberTitleBig": {{ 'welcome_spin.member_title_big' | t | json }},
+          "memberText": {{ 'welcome_spin.member_text' | t | json }}
+        }
+      }
+    </script>
+  </div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Welcome spin",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "新客邮箱转盘弹窗（页面上不占位置）。仅未登录访客：进入页面 8 秒后弹出，同一浏览器 3 天内最多弹一次；活动接口不可用时不弹。转盘格子、奖品码由后端接口返回，弹窗文案固定在代码里。"
+    },
+    {
+      "type": "text",
+      "id": "proxy_prefix",
+      "label": "Proxy prefix",
+      "default": "/apps/bf/station/welcome-spin",
+      "info": "App Proxy 接口前缀，与后端约定一致，一般不需要改"
+    },
+    {
+      "type": "text",
+      "id": "activity_code",
+      "label": "Activity code",
+      "default": "welcome-spin-bf2026",
+      "info": "后端活动编号，换活动时由后端提供"
+    }
+  ]
+}
+{% endschema %}

@@ -21,3 +21,11 @@ theme = "161580155126"
 [environments.dev]
 store = "moodytiger-us-dev.myshopify.com"
 theme = "167518339158"
+
+# Dev store theme for the Welcome Spin (new-customer email spin) integration,
+# kept separate so it never overwrites the BF Spin theme above. Use explicitly:
+# `shopify theme dev -e welcome` / `shopify theme push -e welcome`.
+# `theme` is pinned to #167699677270 (unpublished, created for this feature).
+[environments.welcome]
+store = "moodytiger-us-dev.myshopify.com"
+theme = "167699677270"

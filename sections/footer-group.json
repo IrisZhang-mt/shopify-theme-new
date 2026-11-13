@@ -56,10 +56,18 @@
         "delay": 6,
         "frequency": 30
       }
+    },
+    "welcome_spin": {
+      "type": "welcome-spin",
+      "settings": {
+        "proxy_prefix": "/apps/bf/station/welcome-spin",
+        "activity_code": "welcome-spin-bf2026"
+      }
     }
   },
   "order": [
     "footer",
-    "popup"
+    "popup",
+    "welcome_spin"
   ]
 }
