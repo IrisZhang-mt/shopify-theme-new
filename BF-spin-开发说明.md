@@ -319,10 +319,13 @@
 - **2026-11-11**：设计稿两轮核对 + 用户逐条裁定（见 2.10）。阶段 4 代码完成：选款是转盘视图里的 `data-spin-state="gift"`，root `data-spin-gift="outfit|jacket"`；移动端占满整个视图，PC 03 整个 880 弹窗滚动（无转盘）、PC 04b 保留左侧转盘右栏滚动。`GET /prizes/{id}/gift-options` → 每件按 styleNo / 颜色名 / 尺码记录选择 → `POST /prizes/{id}/gift-selection`（requestId 重试复用），成功进 06。色卡：section 把主题设置 Custom colors 原样交给 JS，按 color-swatch.liquid 同样的优先级解析。尺码表：section 渲染 `size-chart-clothing / breezy-leggings / shoes` 三个页面的弹窗（id `spin-chart-*`），按 `sizeChart` 打开。阶段 3 的 PC "Spin again → (1 spin left)" 已改成统一的 "1 spin left · SPIN AGAIN →"（locale `again_link_*` 取代 `again_mobile_* / again_desktop / again_count_*`）。mock 新增 `spin_gift` 参数（见 9.5）。**待**：dev 店真实接口预览（Lily 说接口可调）。同日按用户反馈：03 默认选中第一个有货款式 + 颜色、礼盒在这件选完后换图、swipe 可点击（见 2.10 第四轮）。代码已提交（060277d），进入联调（测试用例见仓库根目录 `BF-spin-联调测试用例.md`）。
 - **2026-11-11（续）**：阶段 5 代码完成（见 2.11）：06 / 07 卡片按两个接口分别渲染；06 CHOOSE 直接打开选款（`chooseGift`），提交成功回 06；COPY 复用 `copyCode(button, code)`。mock 补齐 06 / 07 各类卡片（9.6）。**待**：dev 店真实接口预览；`coupon.usedAt` 字段名核对。
 - **2026-11-11（续 2）**：阶段 6 埋点完成（用户"按建议"）：11 个事件 No.86-96（`spin_popup_view / spin_sign_in / spin_click / spin_result / spin_error / spin_copy_code / spin_shop_now / spin_again / spin_gift_choose / spin_gift_confirm / spin_prizes_tab`），已写入飞书 GA4 表 sheet3 第 94-104 行（C 列合并延到 C104，D94:D104 "Spin & Win 弹窗"，行高 578）；代码层记录在 `GA4-verification-checklist.md` 末节。2.5 节的草案事件名以此为准。**待**：dev 店验证（联调用例 T8）、全量验收。
+- **2026-11-13**：按用户要求删除全部 mock：`assets/spin-wheel-mock.js`（git rm）、section 的 `data-mock-src`、`spin-wheel.js` 的 `window.mtSpinMock` 分支与 `loadMock`（改为直接 `autoOpen()`）、`campaign-gate.js` 的 `mockStatus`。第 9 节的 mock 链接作废。dev 主题 #167518339158 上已上传过的 `assets/spin-wheel-mock.js` 需要单独删除（推送时处理）。同日：转盘按 01 新稿（Figma 1261:4350 / 1261:4377）重做样式、指针移到顶部；修复 `&` 双重转义（section 第 39/286/287/321 行）。
 
 ---
 
 ## 9. 测试方式（速查）
+
+> ⚠️ **2026-11-13 起 `spin_mock` / `spin_draw` / `spin_gift` 测试数据已删除**（用户自测完成，不提供给测试同事）。下面带这些参数的链接**不再生效**，只作历史记录；现在只能用真实账号 + 真实接口测（见 `BF-spin-联调测试用例.md`）。
 
 > **在 VS Code 里按 `Ctrl+Shift+V` 打开预览**，表格才会正常显示，链接可以直接点（按住 Ctrl 点击可在浏览器打开）。下面的链接都已带上预览主题 `preview_theme_id=167518339158`。
 

@@ -16,7 +16,7 @@
 | `assets/campaign-gate.js` | 1 | ⬜ |
 | `config/settings_schema.json`（新增 "Spin & Win" 组 `spin_proxy_prefix`） | 1 | ⬜ |
 | `sections/spin-wheel.liquid` + `assets/spin-wheel.css/.js` | 2–5 | ⬜（阶段 2 已有，后续阶段继续改） |
-| `assets/spin-wheel-mock.js`（只在非线上主题加载，推上去也无影响） | 2 | ⬜（开发中） |
+| ~~`assets/spin-wheel-mock.js`~~（2026-11-13 已删除 mock；dev 主题上的旧文件要删掉，见 2026-11-13 交接记录） | — | — |
 | `locales/en.default.json`（`spin.*` 文案） | 2–5 | ⬜（开发中） |
 
 ## B. 模板（`push-theme.ps1` **不推** `templates/*.json`，要单独处理）
@@ -47,14 +47,13 @@
 | Lily / EDM：邮件链接用 `https://moodytiger.com/pages/spin-and-win`（不带 `?spin=1`） | ⬜ 已可告知 |
 | GA4：新增事件在飞书 GA4 表 sheet3 末尾加行（阶段 6） | ✅ No.86-96 已登记（11-11）；上线前确认 GTM 里已为这 11 个 `spin_*` 事件配好转发（TRUEMETRICS） |
 
-## E. 上线后验证（线上不能用 `spin_mock`）
+## E. 上线后验证
 
 | 项 | 状态 |
 |---|---|
 | 无痕窗口打开 `/pages/spin-and-win` → 跳登录 → 登录后回到黑五页 | ⬜ |
 | 已登录打开 `/pages/spin-and-win` → 直接到黑五页 | ⬜ |
 | 手机 Safari / Chrome、Gmail 内置浏览器各走一遍上面两条 | ⬜ |
-| 线上加 `?spin_mock=ended` **不生效**（mock 只在非线上主题） | ⬜ |
 | 黑五页：有次数账号自动弹 02；0 次有奖品弹 06；都没有不弹 | ⬜ |
 | 活动结束后（12/2 美东）打开中转页显示 08 | ⬜ |
 
