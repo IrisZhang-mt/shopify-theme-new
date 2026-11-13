@@ -387,6 +387,19 @@ a.mt-plp__tile:focus-visible {
 .mt-plp .mt-card__swatches:empty {
   min-height: var(--mt-swatch-size);
 }
+/* Points collections (main-collection's "Show points on collections"): "+144 pts" after the price,
+   wrapping to its own line as a whole when it doesn't fit, and a 2× POINTS badge.
+   product-card.css hides both by default. */
+.mt-plp[data-show-points] .mt-card__badge--points {
+  display: block;
+  background: var(--mt-tangerine);
+  color: var(--mt-white);
+}
+.mt-plp[data-show-points] .mt-card__points {
+  display: inline;
+  color: var(--mt-tangerine);
+  white-space: nowrap;
+}
 
 .mt-plp__empty {
   display: flex;
