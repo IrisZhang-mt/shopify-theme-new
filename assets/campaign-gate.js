@@ -4,16 +4,6 @@ if (!window.mtGateInit) {
   const TIMEOUT_MS = 5000;
   const gate = document.querySelector('[data-gate]');
 
-  // ?spin_mock=ended shows the ended view, any other value acts as ONGOING.
-  // Never honoured on the live (role "main") theme.
-  const mockStatus = () => {
-    const role = window.Shopify && window.Shopify.theme && window.Shopify.theme.role;
-    if (!role || role === 'main') return null;
-    const mock = new URLSearchParams(window.location.search).get('spin_mock');
-    if (!mock) return null;
-    return mock === 'ended' ? 'ENDED' : 'ONGOING';
-  };
-
   const fetchStatus = async (url) => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -35,7 +25,7 @@ if (!window.mtGateInit) {
 
   const run = async () => {
     if (!gate) return;
-    const status = mockStatus() || (await fetchStatus(gate.dataset.statusUrl));
+    const status = await fetchStatus(gate.dataset.statusUrl);
     if (status === 'ENDED') {
       const loading = gate.querySelector('[data-gate-loading]');
       if (loading) loading.hidden = true;

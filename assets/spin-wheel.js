@@ -67,7 +67,6 @@ if (!window.mtSpinInit) {
 
   // GET by default; pass a body to POST it as JSON.
   const api = async (path, body) => {
-    if (window.mtSpinMock) return window.mtSpinMock(path, body);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
     try {
@@ -1293,22 +1292,6 @@ if (!window.mtSpinInit) {
     }
   };
 
-  // ?spin_mock=… loads fake data — never on the live (role "main") theme.
-  const loadMock = () =>
-    new Promise((resolve) => {
-      const role = window.Shopify?.theme?.role;
-      const mock = new URLSearchParams(window.location.search).get('spin_mock');
-      if (!mock || !role || role === 'main') {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = root.dataset.mockSrc;
-      script.onload = resolve;
-      script.onerror = resolve;
-      document.head.append(script);
-    });
-
   // ---------- always-visible scrollbar on touch devices ----------
   // Touch browsers use overlay scrollbars that fade out and can't be styled, so the CSS
   // hides them there and we draw a thin track + thumb for every scroll area instead.
@@ -1365,7 +1348,7 @@ if (!window.mtSpinInit) {
 
   if (root && !root.hasAttribute('data-design-mode')) {
     setupScrollbars();
-    loadMock().then(autoOpen);
+    autoOpen();
 
     document.addEventListener('click', (event) => {
       const opener = event.target.closest?.('[data-spin-open]');
