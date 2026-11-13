@@ -234,11 +234,12 @@
   color: var(--mt-moss);
 }
 
-/* The svg box is the design's "Prize wheel" frame (334 × 391); it starts above the rule's bottom. */
+/* The svg box is the design's "Prize wheel优化" frame (354 wide), cropped at the rim's bottom
+   (354 × 386); it starts just above the rule's bottom. */
 .mt-spin__wheel {
-  width: calc(334 * var(--u));
-  margin: calc(-9.9 * var(--u)) auto 0;
-  aspect-ratio: 334 / 391;
+  width: calc(354 * var(--u));
+  margin: calc(-4.9 * var(--u)) auto 0;
+  aspect-ratio: 354 / 386;
 }
 
 .mt-spin__svg {
@@ -246,21 +247,18 @@
   width: 100%;
   height: auto;
   overflow: visible;
-  filter: drop-shadow(0 0.25rem 0.625rem rgba(var(--mt-ink-rgb), 0.12));
+  filter: drop-shadow(0 calc(4.24 * var(--u)) calc(4.24 * var(--u)) rgba(0, 0, 0, 0.25));
 }
 
 .mt-spin__rotor {
   transform-box: view-box;
-  transform-origin: 167px 200px;
+  transform-origin: 177px 212.25px;
 }
 
 .mt-spin__rim,
 .mt-spin__pointer,
 .mt-spin__wedge--accent {
   fill: var(--mt-accent);
-}
-.mt-spin__rim--desktop {
-  display: none;
 }
 .mt-spin__wedge--light {
   fill: var(--mt-paper);
@@ -273,19 +271,25 @@
 .mt-spin__label {
   fill: var(--mt-ink);
   font-family: var(--mt-font-body);
-  letter-spacing: -0.02em;
 }
-.mt-spin__label.is-inverse {
+.mt-spin__label-amount {
+  font-size: 27.56px;
+  letter-spacing: -0.03em;
+}
+.mt-spin__label-name {
+  font-size: 23.32px;
+  letter-spacing: -0.03em;
+}
+.mt-spin__label-detail {
+  font-size: 11.66px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* On orange wedges only the big text turns light; the small caps detail stays ink (design). */
+.mt-spin__label.is-inverse .mt-spin__label-amount,
+.mt-spin__label.is-inverse .mt-spin__label-name {
   fill: var(--mt-paper);
-}
-.mt-spin__label-big {
-  font-size: 26px;
-}
-.mt-spin__label-mid {
-  font-size: 20px;
-}
-.mt-spin__label-small {
-  font-size: 10.24px;
 }
 
 .mt-spin__content {
@@ -1674,17 +1678,15 @@
   .mt-spin__heading--stage {
     display: none;
   }
-  /* The svg box has 34 empty units above the rim and 9 below the pointer: the negative top
-     margin (25 units) lifts the drawn wheel to the true vertical centre. */
+  /* Design PC wheel frame: 347.7px wide (354 units). The svg box has 24.4 units above the pointer
+     and 0.7 below the rim: the negative top margin (23.7 units) lifts the drawn wheel to the true
+     vertical centre. */
   .mt-spin__wheel {
-    width: 22.9375rem;
-    margin: calc(-25 / 334 * 22.9375rem) 0 0;
+    width: 21.73125rem;
+    margin: calc(-23.7 / 354 * 21.73125rem) 0 0;
   }
-  .mt-spin__rim--mobile {
-    display: none;
-  }
-  .mt-spin__rim--desktop {
-    display: inline;
+  .mt-spin__svg {
+    filter: drop-shadow(0 0.26rem 0.26rem rgba(0, 0, 0, 0.25));
   }
 
   .mt-spin__content {

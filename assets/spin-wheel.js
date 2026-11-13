@@ -114,45 +114,54 @@ if (!window.mtSpinInit) {
     return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
   };
 
-  // Label for one wedge, centred on (x, y). Sizes are in wheel units (viewBox 334 × 391 = mobile design px).
+  // Label for one wedge: a centred vertical stack (design: amount/name on top, small caps detail
+  // below, 3.18 gap, line height = font size), centred on (x, y). Sizes are in wheel units
+  // (viewBox 354 wide = mobile design px).
+  const LABEL_SIZES = { amount: 27.56, name: 23.32, detail: 11.66 };
+  const LABEL_GAP = 3.18;
   const wedgeLabel = (slot, x, y, cls) => {
     const g = svg('g', { class: `mt-spin__label ${cls}` });
-    const text = (attrs, content) => g.append(svg('text', { x, 'text-anchor': 'middle', ...attrs }, content));
-    if (slot.type === 'COUPON') {
-      const t = svg('text', { x, y: y + 9, 'text-anchor': 'middle' });
-      t.append(svg('tspan', { class: 'mt-spin__label-big' }, slot.name));
-      t.append(svg('tspan', { class: 'mt-spin__label-small', dx: 1 }, str.slotOff));
-      g.append(t);
-    } else if (slot.type === 'GIFT_CARD') {
-      text({ y: y + 4, class: 'mt-spin__label-big' }, `$${slot.name}`);
-      text({ y: y + 18, class: 'mt-spin__label-small' }, str.slotGiftCard);
-    } else {
-      const lines = splitTwo(slot.name);
-      const note = slot.type === 'GIFT' ? str.slotGiftNote : '';
-      let top = y - (lines.length - 1) * 10 + (note ? -2 : 6);
-      lines.forEach((line) => {
-        text({ y: top, class: 'mt-spin__label-mid' }, line);
-        top += 20;
-      });
-      if (note) text({ y: top - 2, class: 'mt-spin__label-small' }, note);
+    let lines;
+    if (slot.type === 'COUPON') lines = [['amount', slot.name], ['detail', str.slotOff]];
+    else if (slot.type === 'GIFT_CARD') lines = [['amount', `$${slot.name}`], ['detail', str.slotGiftCard]];
+    else {
+      lines = splitTwo(slot.name).map((line) => ['name', line]);
+      if (slot.type === 'GIFT' && str.slotGiftNote) lines.push(['detail', str.slotGiftNote]);
     }
+    const kindOf = (i) => lines[i][0];
+    // Consecutive name lines sit flush; the gap only separates the big text from the detail.
+    const gapBefore = (i) => (i > 0 && kindOf(i) !== kindOf(i - 1) ? LABEL_GAP : 0);
+    const height = lines.reduce((sum, [kind], i) => sum + LABEL_SIZES[kind] + gapBefore(i), 0);
+    let top = y - height / 2;
+    lines.forEach(([kind, content], i) => {
+      top += gapBefore(i);
+      const size = LABEL_SIZES[kind];
+      g.append(
+        svg(
+          'text',
+          { x, y: top + size / 2, 'text-anchor': 'middle', 'dominant-baseline': 'central', class: `mt-spin__label-${kind}` },
+          content,
+        ),
+      );
+      top += size;
+    });
     return g;
   };
 
   const renderWheel = () => {
     const slots = state.status?.slots?.length === 6 ? state.status.slots : FALLBACK_SLOTS;
     const bySlot = Object.fromEntries(slots.map((s) => [s.slot, s]));
-    // viewBox = the mobile 01 "Prize wheel" frame (334 × 391): rim r166 centred at (167, 200),
-    // wedges r160, pointer tip 145 below centre, base 182 below (CSS rotor origin must match).
-    const cx = 167;
-    const cy = 200;
-    const r = 160;
-    const wheel = svg('svg', { viewBox: '0 0 334 391', class: 'mt-spin__svg', 'aria-hidden': 'true' });
+    // viewBox = the mobile 01 "Prize wheel优化" frame (1261:4350, 354 wide), cropped at the rim's
+    // bottom (386) so the content below keeps its place: rim r173.05 centred at (177, 212.25),
+    // wedges r169.35, pointer at 12 o'clock pointing down — base y 24.4, tip y 63.5
+    // (CSS rotor origin must match).
+    const cx = 177;
+    const cy = 212.25;
+    const r = 169.35;
+    const wheel = svg('svg', { viewBox: '0 0 354 386', class: 'mt-spin__svg', 'aria-hidden': 'true' });
     const rotor = svg('g', { class: 'mt-spin__rotor', 'data-spin-rotor': '' });
     rotor.style.transform = `rotate(${state.rotation}deg)`;
-    // Rim: 6 units on mobile; PC draws a thinner one (≈4px at the 367px PC wheel). CSS shows one of the two.
-    rotor.append(svg('circle', { cx, cy, r: 166, class: 'mt-spin__rim mt-spin__rim--mobile' }));
-    rotor.append(svg('circle', { cx, cy, r: 163.6, class: 'mt-spin__rim mt-spin__rim--desktop' }));
+    rotor.append(svg('circle', { cx, cy, r: 173.05, class: 'mt-spin__rim' }));
     POSITION_SLOTS.forEach((slotId, i) => {
       const a0 = ((i * 60 - 90) * Math.PI) / 180;
       const a1 = (((i + 1) * 60 - 90) * Math.PI) / 180;
@@ -160,12 +169,17 @@ if (!window.mtSpinInit) {
       rotor.append(svg('path', { d, class: `mt-spin__wedge mt-spin__wedge--${POSITION_FILLS[i]}` }));
       const mid = (((i + 0.5) * 60 - 90) * Math.PI) / 180;
       const slot = bySlot[slotId] || FALLBACK_SLOTS[slotId];
-      rotor.append(
-        wedgeLabel(slot, cx + 92 * Math.cos(mid), cy + 92 * Math.sin(mid), POSITION_FILLS[i] === 'accent' ? 'is-inverse' : ''),
-      );
+      // Label centre radius from the design: 128 for two-line amounts, a little less for the names.
+      const lr = { GIFT: 122, GRAND: 124 }[slot.type] || 128;
+      const lx = cx + lr * Math.cos(mid);
+      const ly = cy + lr * Math.sin(mid);
+      const label = wedgeLabel(slot, lx, ly, POSITION_FILLS[i] === 'accent' ? 'is-inverse' : '');
+      // Text faces away from the centre, so the won wedge reads upright under the top pointer.
+      label.setAttribute('transform', `rotate(${(i + 0.5) * 60} ${lx} ${ly})`);
+      rotor.append(label);
     });
     wheel.append(rotor);
-    wheel.append(svg('path', { d: 'M167 345 L185.5 382 L148.5 382 Z', class: 'mt-spin__pointer' }));
+    wheel.append(svg('path', { d: 'M177 63.5 L196.55 24.4 L157.45 24.4 Z', class: 'mt-spin__pointer' }));
     $('[data-spin-wheel]').replaceChildren(wheel);
 
     const threshold = state.status?.spinThreshold;
@@ -328,13 +342,13 @@ if (!window.mtSpinInit) {
   };
 
   // Turn the rotor clockwise at least MIN_TURNS times so the won slot's wedge centre sits
-  // on the pointer at 6 o'clock. Resolves when the wheel has stopped.
+  // on the pointer at 12 o'clock. Resolves when the wheel has stopped.
   const spinTo = (slot) =>
     new Promise((resolve) => {
       const rotor = $('[data-spin-rotor]');
       const position = Math.max(0, POSITION_SLOTS.indexOf(slot));
       const centre = position * 60 + 30; // clockwise from 12 o'clock
-      const landing = (((180 - centre) % 360) + 360) % 360;
+      const landing = (360 - centre) % 360;
       const from = state.rotation;
       let to = from - (((from % 360) + 360) % 360) + MIN_TURNS * 360 + landing;
       if (to - from < MIN_TURNS * 360) to += 360;
