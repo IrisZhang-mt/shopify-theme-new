@@ -36,7 +36,7 @@
     class="mt-spin__panel"
     role="dialog"
     aria-modal="true"
-    aria-label="{{ 'spin.dialog_label' | t | escape }}"
+    aria-label="{{ 'spin.dialog_label' | t }}"
     tabindex="-1"
     data-spin-panel
   >
@@ -283,8 +283,8 @@
         "againOther": {{ 'spin.again_link_other' | t: count: '[count]' | json }},
         "drawError": {{ 'spin.draw_error' | t | json }},
         "tryAgain": {{ 'spin.try_again' | t | json }},
-        "drawEnded": {{ 'spin.draw_ended' | t | json }},
-        "drawNotStarted": {{ 'spin.draw_not_started' | t: date: '[date]' | json }},
+        "drawEnded": {{ 'spin.draw_ended' | t | replace: '&amp;', '&' | json }},
+        "drawNotStarted": {{ 'spin.draw_not_started' | t: date: '[date]' | replace: '&amp;', '&' | json }},
         "giftSubOutfit": {{ 'spin.gift_sub_outfit' | t: total: '[total]', order: '[order]' | json }},
         "giftSubJacket": {{ 'spin.gift_sub_jacket' | t: order: '[order]' | json }},
         "giftOf": {{ 'spin.gift_of' | t: number: '[number]' | json }},
@@ -318,7 +318,7 @@
         "prizeUntil": {{ 'spin.prize_until' | t: date: '[date]' | json }},
         "prizeNoExpiry": {{ 'spin.prize_no_expiry' | t | json }},
         "prizeBalance": {{ 'spin.prize_balance' | t: amount: '[amount]' | json }},
-        "prizeChooseOutfit": {{ 'spin.prize_choose_outfit' | t | json }},
+        "prizeChooseOutfit": {{ 'spin.prize_choose_outfit' | t | replace: '&amp;', '&' | json }},
         "prizeChooseJacket": {{ 'spin.gift_fit_note' | t | json }},
         "prizeShips": {{ 'spin.prize_ships' | t: order: '[order]' | json }},
         "prizeRedeemed": {{ 'spin.prize_redeemed' | t: name: '[name]' | json }},
