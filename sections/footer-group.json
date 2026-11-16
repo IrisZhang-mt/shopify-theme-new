@@ -60,7 +60,7 @@
     "welcome_spin": {
       "type": "welcome-spin",
       "settings": {
-        "proxy_prefix": "/apps/bf/station/welcome-spin",
+        "proxy_prefix": "/apps/station-dev/station/welcome-spin",
         "activity_code": "welcome-spin-bf2026"
       }
     }

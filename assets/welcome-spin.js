@@ -4,6 +4,9 @@
   if (window.mtWelcomeSpinInit) return;
   window.mtWelcomeSpinInit = true;
 
+  // TEMP TEST (2026-11-16): open on every page load — no 8s delay, no 3-day check.
+  // Set back to false (or delete) once testing is done.
+  const TEST_ALWAYS_OPEN = true;
   const STORAGE_KEY = 'mt-welcome-spin-shown';
   const DELAY_MS = 8000;
   const INTERVAL_MS = 3 * 24 * 60 * 60 * 1000;
@@ -373,6 +376,32 @@
     prize.closest('.mt-ws__hub-won').classList.toggle('is-two', two);
   };
 
+  // The wheel's short prize name for a slot ("8% off"), from the activity API.
+  const slotTitle = (slotId) => state.slots.find((s) => s.slot === slotId)?.title || '';
+
+  // The draw API's title is the full headline ("8% off is yours"); the design sets it in two
+  // sizes, so split it along the design's line break:
+  //   coupon: big "8% off"            + small "is yours"     (big line first)
+  //   gift:   small "A free moodytiger" + big "gift is yours"
+  //   grand:  small "You won the"       + big "grand prize"
+  // The fixed phrase (locales) marks the split. A title that doesn't contain it falls back:
+  // coupon keeps the title (or the wheel name) as the big line; gift / grand use the fixed copy.
+  const splitTitle = (kind, rawTitle, name) => {
+    const title = String(rawTitle || '').trim().replace(/\s+/g, ' ');
+    const lower = title.toLowerCase();
+    if (kind === 'coupon') {
+      const tail = str.couponTitleSmall;
+      const big = lower.endsWith(` ${tail.toLowerCase()}`) ? title.slice(0, -tail.length).trim() : title || name;
+      return { big, small: title.slice(big.length).trim() || tail, bigFirst: true };
+    }
+    const head = kind === 'gift' ? str.giftTitleSmall : str.grandTitleSmall;
+    const fallbackBig = kind === 'gift' ? str.giftTitleBig : str.grandTitleBig;
+    if (lower.startsWith(`${head.toLowerCase()} `)) {
+      return { small: title.slice(0, head.length), big: title.slice(head.length).trim() };
+    }
+    return { small: head, big: fallbackBig };
+  };
+
   // A4 coupon / A5 gift / A6 grand.
   const showResult = (prize) => {
     const type = String(prize.prizeType || '').toUpperCase();
@@ -382,19 +411,13 @@
     state.kind = kind;
     root.dataset.wsPrize = kind;
 
-    if (kind === 'coupon') {
-      setCopy({
-        eyebrow: str.youWon,
-        big: prize.title || '',
-        small: str.couponTitleSmall,
-        bigFirst: true,
-        text: prize.description || str.couponText,
-      });
-    } else if (kind === 'gift') {
-      setCopy({ eyebrow: str.youWon, small: str.giftTitleSmall, big: str.giftTitleBig, text: prize.description || str.giftText });
-    } else {
-      setCopy({ eyebrow: str.grandEyebrow, small: str.grandTitleSmall, big: str.grandTitleBig, text: prize.description || str.grandText });
-    }
+    const name = slotTitle(prize.slot);
+    const lines = splitTitle(kind, prize.title, name);
+    setCopy({
+      eyebrow: kind === 'grand' ? str.grandEyebrow : str.youWon,
+      ...lines,
+      text: prize.description || { coupon: str.couponText, gift: str.giftText, grand: str.grandText }[kind],
+    });
     const fallbackFine = { coupon: str.couponFine, gift: fill(str.giftFine, { code }), grand: str.grandFine }[kind];
     $('[data-ws-fine]').textContent = prize.expireText || fallbackFine;
 
@@ -421,7 +444,7 @@
       loadGiftProduct(prize.extra?.productHandle, state.token);
     }
 
-    hubLabel(prize.title);
+    hubLabel(name || lines.big);
     markWinner(prize.slot);
     showOnly('result');
   };
@@ -435,7 +458,6 @@
           email,
           consent: true,
           requestId: state.requestId,
-          honeypot: $('[data-ws-honeypot]').value,
         });
       } catch (err) {
         // 40900 = the same request is still being processed: wait, retry with the same requestId.
@@ -753,8 +775,9 @@
     if (root.hasAttribute('data-design-mode')) return;
     loadMock().then(() => {
       const mock = useMock();
-      if (!mock && !dueToShow()) return;
-      const delay = mock && mockParams.has('ws_delay') ? Number(mockParams.get('ws_delay')) * 1000 : DELAY_MS;
+      if (!TEST_ALWAYS_OPEN && !mock && !dueToShow()) return;
+      let delay = mock && mockParams.has('ws_delay') ? Number(mockParams.get('ws_delay')) * 1000 : DELAY_MS;
+      if (TEST_ALWAYS_OPEN) delay = 0;
       setTimeout(autoOpen, delay);
     });
   };

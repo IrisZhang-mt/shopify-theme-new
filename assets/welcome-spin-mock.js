@@ -18,8 +18,10 @@
     { prizeCode: 'WELCOMESHIP', slot: 5, title: 'Free shipping', prizeType: 'COUPON', sectorWeight: 5 },
   ].map((s) => ({ ...s, extra: { sectorWeight: s.sectorWeight } }));
 
+  // The draw API's title is the full headline (2026-11-16): "8% off is yours".
   const coupon = (slot) => ({
     ...slot,
+    title: `${slot.title} is yours`,
     userPrizeId: 3,
     description: "For your first order. We've sent the code to your inbox, too.",
     contentType: 'code',
