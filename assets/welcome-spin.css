@@ -530,6 +530,17 @@
   gap: calc(15.22 * var(--u));
   padding: calc(8 * var(--u)) calc(13.04 * var(--u));
   border: calc(1.087 * var(--u)) solid var(--mt-ws-line);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 200ms var(--mt-ease);
+}
+/* With a productHandle the row is a link to the gift's PDP. */
+.mt-ws__gift[href] {
+  cursor: pointer;
+}
+.mt-ws__gift[href]:focus-visible {
+  outline: 1px solid var(--mt-ink);
+  outline-offset: 2px;
 }
 .mt-ws__gift-media {
   position: relative;
@@ -619,6 +630,9 @@
   }
   .mt-ws__btn--ghost:not(:disabled):hover {
     opacity: 1;
+    border-color: var(--mt-ink);
+  }
+  .mt-ws__gift[href]:hover {
     border-color: var(--mt-ink);
   }
 }

@@ -437,11 +437,16 @@
     add.disabled = false;
     add.textContent = str.addGift;
 
-    $('[data-ws-gift]').hidden = kind === 'coupon';
+    const giftRow = $('[data-ws-gift]');
+    giftRow.hidden = kind === 'coupon';
     if (kind !== 'coupon') {
       $('[data-ws-gift-name]').textContent = kind === 'gift' ? str.giftName : str.grandName;
       $('[data-ws-gift-note]').textContent = kind === 'gift' ? str.giftNote : str.grandNote;
-      loadGiftProduct(prize.extra?.productHandle, state.token);
+      // The row opens the gift's PDP — only when we know which product it is.
+      const handle = String(prize.extra?.productHandle || '').trim();
+      if (handle) giftRow.href = `/products/${encodeURIComponent(handle)}`;
+      else giftRow.removeAttribute('href');
+      loadGiftProduct(handle, state.token);
     }
 
     hubLabel(name || lines.big);
@@ -740,6 +745,13 @@
       track('welcome_spin_click', clickParams(back));
       showForm(true);
       $('[data-ws-email]').focus();
+      return;
+    }
+    const gift = target.closest('[data-ws-gift][href]');
+    if (gift) {
+      // button_name = the product name shown, not the whole row's text.
+      track('welcome_spin_click', { ...clickParams(gift), button_name: $('[data-ws-gift-name]').textContent.trim() });
+      followLink(event, gift);
       return;
     }
     const link = target.closest('[data-ws-shop], [data-ws-sign-in]');

@@ -125,7 +125,8 @@
 
           {%- comment -%} A4–A6: result {%- endcomment -%}
           <div class="mt-ws__stack" data-ws-only="result" hidden>
-            <div class="mt-ws__gift" data-ws-gift hidden>
+            {%- comment -%} Links to the product's PDP when the API sends productHandle (href set in JS). {%- endcomment -%}
+            <a class="mt-ws__gift" data-ws-gift hidden>
               <div class="mt-ws__gift-media">
                 <img class="mt-ws__gift-mark" src="{{ 'welcome-spin-tiger.png' | asset_url }}" alt="" width="22" height="22" loading="lazy" data-ws-gift-mark>
                 <img class="mt-ws__gift-img" alt="" width="64" height="64" hidden data-ws-gift-img>
@@ -134,7 +135,7 @@
                 <p class="mt-ws__gift-name" data-ws-gift-name></p>
                 <p class="mt-ws__gift-note" data-ws-gift-note></p>
               </div>
-            </div>
+            </a>
             <div class="mt-ws__code">
               <span class="mt-ws__code-value" data-ws-code></span>
               <button type="button" class="mt-ws__copy" data-ws-copy>{{ 'welcome_spin.copy' | t }}</button>

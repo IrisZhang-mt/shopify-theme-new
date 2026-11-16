@@ -216,6 +216,7 @@ window.wsGa = () => (window.dataLayer || []).filter((e) => e.event === 'ga4Event
 | T4.2 | 运行 `wsState()` | `state: 'result', prize: 'gift'` |
 | T4.3 | 看右侧 | 眉题 "You won"；标题 "A free moodytiger"（小）/ "gift is yours"（大）（接口 `title` 以 "A free moodytiger" 开头时按它拆分，否则用这句固定文案；记录接口实际返回的 `title`）；说明 = 接口 `description`（"Add it to your cart and it's free on orders of $79 or more."）；礼品行：左边方图，右边商品名 + "Free with orders of $79+"；码框 `WELCOMEGIFT` + Copy；按钮 "Add gift to cart"；底部 = 接口 `expireText` |
 | T4.4 | 礼品行的图和名称 | `productHandle` 对应的商品存在：显示商品主图和商品标题（`__wsLog` 里有 `GET /products/<handle>.js` 且 status 200）。不存在：显示老虎 logo 占位和 "moodytiger Gift"（这是兜底，记录下来） |
+| T4.4b | 点礼品行（图片 + 名称那一块） | **有 `productHandle`**：鼠标悬停时边框变深、指针变手型；点击约 0.25 秒后跳到 `/products/<productHandle>`（礼品商品详情页）；`wsGa()` 有 `welcome_spin_click`（`button_name` = 商品名，`module_name: 'result'`，`prize_type: 'gift'`）。**没有 `productHandle`**：不可点击、无手型。做完后返回首页，用新邮箱继续后面的步骤需要重新抽奖（⚠️ 先问用户），也可以先做 T4.5 再回来测这一步 |
 | T4.5 | 点 Add gift to cart | **商品已建好**：按钮变 "Adding…"，然后弹窗关闭、购物车抽屉自动打开，礼品在购物车里，数量 1。`__wsLog` 依次有 `GET /cart.js`、`POST /cart/add.js`（status 200）、`POST /cart/update.js`（body `{discount: 'WELCOMEGIFT'}`）。**商品还没建 / variantId 是占位**：按钮显示 "Couldn’t add it just now. Try again"，约 2.5 秒后恢复，弹窗不关（记为"阻塞：礼品商品未建"） |
 | T4.6 | 运行 `fetch('/cart.js').then(r=>r.json()).then(c=>({items:c.items.map(i=>[i.variant_id,i.quantity,i.final_line_price]),codes:c.discount_codes}))` | 礼品 variant 在购物车，`discount_codes` 里有 `WELCOMEGIFT` |
 | T4.7 | 满 $79 规则 | 购物车其他商品不足 $79 时礼品不免费；再加商品使合计 ≥$79 后，礼品行价格变 0（或结账页显示免费）。⚠️ 不要付款 |
@@ -230,7 +231,7 @@ window.wsGa = () => (window.dataLayer || []).filter((e) => e.event === 'ga4Event
 |---|---|---|
 | T5.1 | 同 T3.1–T3.4 抽奖 | `prizeType: 'GRAND'`；指针停在 GRAND PRIZE 格 |
 | T5.2 | `wsState()` | `state: 'result', prize: 'grand'` |
-| T5.3 | 看右侧 | 眉题 "GRAND PRIZE"；标题 "You won the"（小）/ "grand prize"（大）（接口 `title` 以 "You won the" 开头时按它拆分，否则用这句固定文案；记录接口实际返回的 `title`）；说明 "A moodytiger gift bundle, shipped free with your first order."；礼品行商品名（兜底 "moodytiger Gift Bundle"）+ "Ships with your first order"；码 `WELCOMEGRAND`；按钮 "Add gift to cart"；底部 "Applies to your first order · valid for 30 days"（以接口为准） |
+| T5.3 | 看右侧 | 眉题 "GRAND PRIZE"；标题 "You won the"（小）/ "grand prize"（大）（接口 `title` 以 "You won the" 开头时按它拆分，否则用这句固定文案；记录接口实际返回的 `title`）；说明 "A moodytiger gift bundle, shipped free with your first order."；礼品行商品名（兜底 "moodytiger Gift Bundle"）+ "Free with orders of $79+"；码 `WELCOMEGRAND`；按钮 "Add gift to cart"；底部 "Applies to your first order · valid for 30 days"（以接口为准） |
 | T5.4 | 中心圆 | "YOU WON" + "GRAND / PRIZE" 两行 |
 | T5.5 | 点 Add gift to cart | 同 T4.5–T4.6，码换成 `WELCOMEGRAND` |
 | T5.6 | 截图 | `T5-A6.png` |
