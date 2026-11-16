@@ -11,34 +11,6 @@
     {%- assign color_index = forloop.index0 -%}
   {%- endif -%}
 {%- endfor -%}
-{%- comment -%}
-  No Color option (e.g. gift card "Amount"): group the gallery by whichever option
-  has values named in image alt **markers**, so the option name itself doesn't matter.
-{%- endcomment -%}
-{%- if color_index < 0 -%}
-  {%- assign alt_markers = '|' -%}
-  {%- for media in product.media -%}
-    {%- if media.alt contains '**' -%}
-      {%- assign alt_marker_parts = media.alt | split: '**' -%}
-      {%- if alt_marker_parts.size >= 2 -%}
-        {%- assign alt_marker = alt_marker_parts[1] | strip | downcase -%}
-        {%- assign alt_markers = alt_markers | append: alt_marker | append: '|' -%}
-      {%- endif -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- if alt_markers != '|' -%}
-    {%- for option in product.options_with_values -%}
-      {%- for value in option.values -%}
-        {%- assign value_key = value | strip | downcase | prepend: '|' | append: '|' -%}
-        {%- if alt_markers contains value_key -%}
-          {%- assign color_index = forloop.parentloop.index0 -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-      {%- if color_index >= 0 -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-  {%- endif -%}
-{%- endif -%}
 {%- assign current_color = '' -%}
 {%- if color_index >= 0 -%}
   {%- assign current_color = current.options[color_index] -%}
