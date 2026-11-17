@@ -150,6 +150,10 @@
   min-width: 0;
   padding: calc(10 * var(--u)) calc(12 * var(--u)) calc(10 * var(--u)) 0;
 }
+/* A perk with a linked product is an <a>: same look as the plain cell. */
+a.mt-perks__cell {
+  text-decoration: none;
+}
 .mt-perks__cell:nth-child(odd) {
   border-right: 1px solid var(--mt-perks-line);
 }

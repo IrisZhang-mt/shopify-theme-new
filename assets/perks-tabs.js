@@ -53,6 +53,27 @@ if (!window.mtPerksTabsInit) {
     }
   });
 
+  // GA4 — a perk linked to a product: select_content with the perk title as content_name
+  // (same shape as featured-blog.js).
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest?.('[data-perks-link]');
+    const root = link?.closest('[data-perks]');
+    if (!root) return;
+    push('select_content', {
+      module_name: root.dataset.moduleName,
+      content_name: link.querySelector('.mt-perks__perk')?.textContent.trim(),
+    });
+
+    // Hold the navigation so GTM can send the hit first (same as featured-blog.js);
+    // new-tab clicks don't unload this page and are left alone.
+    if (event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    setTimeout(() => {
+      window.location.href = link.href;
+    }, 250);
+  });
+
   // Arrow keys move between tabs (switches the grid only — no dialog, no GA4).
   document.addEventListener('keydown', (event) => {
     const tab = event.target.closest?.('[data-perks-tab]');

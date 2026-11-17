@@ -1121,6 +1121,26 @@ DOM 本来就是"移除前"的状态，天然是对的。
 - 已登录（`logged_in`）未实测：127.0.0.1 无法登录新客户账户，需在真实
   域名 + preview_theme_id 下按上面清单确认
 
+### 追加：Perk 跳转商品（在线表 No.97，第 105 行，2026-11-17）
+
+- 每个 perk 可选一个商品（`perk_N_product`），选了才渲染成链接；点击 =
+  `select_content`（`module_name`：组件标题，黑五页 "Black Friday Perks"；
+  `content_name`：perk 标题），先上报，250ms 后跳转（同 featured-blog.js），
+  Ctrl/Cmd/中键新标签打开不拦截
+- 未配置商品的 perk 不可点击、不触发
+
+- [ ] 点一个配置了商品的 perk：一条 `select_content`，`content_name` 为该
+      perk 标题，随后跳到商品详情页
+- [ ] 点未配置商品的 perk：无事件、不跳转
+
+代码改动：`sections/perks-tabs.liquid`（4 个 product 设置 + `<a data-perks-link>`）、
+`assets/perks-tabs.js`（事件 + 跳转等待）、`assets/perks-tabs.css`（链接去下划线）
+
+验证：本地 dev（Edge CDP）点 linked perk，dataLayer 原样为
+`{event_parameters:null}` + `{event:'ga4Event', event_name:'select_content',
+event_parameters:{module_name:'Black Friday Perks', content_name:'Free Outfit'}}`，
+之后跳到 `/products/kids-2-in-1-leggings-fairy`；点未配置的 perk 无事件
+
 
 ## 验证清单：Spin & Win 转盘弹窗（新组件，在线表 No.86-96，2026-11-11）
 

@@ -93,17 +93,27 @@
           {%- liquid
             assign perk_title_key = 'perk_' | append: i | append: '_title'
             assign perk_text_key = 'perk_' | append: i | append: '_text'
+            assign perk_product_key = 'perk_' | append: i | append: '_product'
             assign perk_title = block.settings[perk_title_key]
             assign perk_text = block.settings[perk_text_key]
+            assign perk_product = block.settings[perk_product_key]
           -%}
-          <div class="mt-perks__cell">
+          {%- if perk_product != blank -%}
+            <a class="mt-perks__cell" href="{{ perk_product.url }}" data-perks-link>
+          {%- else -%}
+            <div class="mt-perks__cell">
+          {%- endif -%}
             {%- if perk_title != blank -%}
               <p class="mt-perks__perk">{{ perk_title | escape }}</p>
             {%- endif -%}
             {%- if perk_text != blank -%}
               <p class="mt-perks__note">{{ perk_text | escape }}</p>
             {%- endif -%}
-          </div>
+          {%- if perk_product != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
         {%- endfor -%}
       </div>
     {%- endfor -%}
@@ -175,6 +185,12 @@
           "label": "Text"
         },
         {
+          "type": "product",
+          "id": "perk_1_product",
+          "label": "Link to product",
+          "info": "选择后点击此 perk 跳转到该商品详情页；不选则不跳转"
+        },
+        {
           "type": "header",
           "content": "Perk 2"
         },
@@ -187,6 +203,12 @@
           "type": "text",
           "id": "perk_2_text",
           "label": "Text"
+        },
+        {
+          "type": "product",
+          "id": "perk_2_product",
+          "label": "Link to product",
+          "info": "选择后点击此 perk 跳转到该商品详情页；不选则不跳转"
         },
         {
           "type": "header",
@@ -203,6 +225,12 @@
           "label": "Text"
         },
         {
+          "type": "product",
+          "id": "perk_3_product",
+          "label": "Link to product",
+          "info": "选择后点击此 perk 跳转到该商品详情页；不选则不跳转"
+        },
+        {
           "type": "header",
           "content": "Perk 4"
         },
@@ -215,6 +243,12 @@
           "type": "text",
           "id": "perk_4_text",
           "label": "Text"
+        },
+        {
+          "type": "product",
+          "id": "perk_4_product",
+          "label": "Link to product",
+          "info": "选择后点击此 perk 跳转到该商品详情页；不选则不跳转"
         }
       ]
     }
