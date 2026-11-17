@@ -6,7 +6,7 @@
 
   // TEMP TEST (2026-11-16): open on every page load — no 8s delay, no 3-day check.
   // Set back to false (or delete) once testing is done.
-  const TEST_ALWAYS_OPEN = true;
+  const TEST_ALWAYS_OPEN = false;
   const STORAGE_KEY = 'mt-welcome-spin-shown';
   const DELAY_MS = 8000;
   const INTERVAL_MS = 3 * 24 * 60 * 60 * 1000;
@@ -96,7 +96,6 @@
   // GET by default; pass a body to POST it as JSON. Rejects with err.code = the API's business
   // code (undefined for network errors / timeouts).
   const api = async (path, body) => {
-    if (window.mtWelcomeSpinMock) return window.mtWelcomeSpinMock(path, body);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
     try {
@@ -695,25 +694,6 @@
     track('welcome_spin_view');
   };
 
-  // ?ws_mock=… loads fake API answers — never on the live (role "main") theme.
-  const mockParams = new URLSearchParams(window.location.search);
-  const useMock = () => {
-    const role = window.Shopify?.theme?.role;
-    return Boolean(mockParams.get('ws_mock') && role && role !== 'main');
-  };
-  const loadMock = () =>
-    new Promise((resolve) => {
-      if (!useMock()) {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = root.dataset.mockSrc;
-      script.onload = resolve;
-      script.onerror = resolve;
-      document.head.append(script);
-    });
-
   // ---------- events ----------
 
   const onClick = (event) => {
@@ -785,13 +765,8 @@
     });
 
     if (root.hasAttribute('data-design-mode')) return;
-    loadMock().then(() => {
-      const mock = useMock();
-      if (!TEST_ALWAYS_OPEN && !mock && !dueToShow()) return;
-      let delay = mock && mockParams.has('ws_delay') ? Number(mockParams.get('ws_delay')) * 1000 : DELAY_MS;
-      if (TEST_ALWAYS_OPEN) delay = 0;
-      setTimeout(autoOpen, delay);
-    });
+    if (!TEST_ALWAYS_OPEN && !dueToShow()) return;
+    setTimeout(autoOpen, TEST_ALWAYS_OPEN ? 0 : DELAY_MS);
   };
 
   document.addEventListener('keydown', (event) => {
