@@ -4,7 +4,14 @@
 {%- paginate collection.products by section.settings.products_per_page -%}
   {%- assign plp_item_list_id = collection.handle -%}
   {%- assign plp_item_list_name = collection.title -%}
-  <div class="mt-plp" data-plp data-url="{{ collection.url }}" data-currency="{{ cart.currency.iso_code }}" data-item-list-id="{{ plp_item_list_id }}" data-item-list-name="{{ plp_item_list_name | escape }}">
+  {%- liquid
+    assign plp_points = false
+    assign plp_points_handles = section.settings.points_collections | remove: ' ' | split: ','
+    if plp_points_handles contains collection.handle
+      assign plp_points = true
+    endif
+  -%}
+  <div class="mt-plp" data-plp data-url="{{ collection.url }}" data-currency="{{ cart.currency.iso_code }}" data-item-list-id="{{ plp_item_list_id }}" data-item-list-name="{{ plp_item_list_name | escape }}"{% if plp_points %} data-show-points{% endif %}>
     <div class="mt-plp__title">
       <h1 tabindex="-1" data-plp-heading>{{ collection.title }}</h1>
     </div>
@@ -107,7 +114,7 @@
               {%- if forloop.index0 < 4 -%}
                 {%- assign card_eager = true -%}
               {%- endif -%}
-              {% render 'product-card', product: product, quick: true, align: true, index: card_index, ga4_index: forloop.index0, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw', item_list_id: plp_item_list_id, item_list_name: plp_item_list_name %}
+              {% render 'product-card', product: product, quick: true, align: true, index: card_index, ga4_index: forloop.index0, eager: card_eager, sizes: '(min-width: 750px) 25vw, 46vw', points: plp_points, item_list_id: plp_item_list_id, item_list_name: plp_item_list_name %}
             {%- endfor -%}
           </div>
           {%- assign viewing_template = 'collection.viewing' | t: shown: '[shown]', total: paginate.items -%}
@@ -154,6 +161,13 @@
       "label": "Single-line product titles",
       "info": "Truncates long titles with an ellipsis so every card keeps one title line.",
       "default": false
+    },
+    {
+      "type": "text",
+      "id": "points_collections",
+      "label": "Show points on collections",
+      "info": "系列 handle，多个用英文逗号分隔。在这些系列页，商品元字段 custom.bf_double_points 大于 0 时，在价格后展示积分（如 +144 pts）并加 2× POINTS 角标",
+      "default": "double-points"
     }
   ],
   "blocks": [

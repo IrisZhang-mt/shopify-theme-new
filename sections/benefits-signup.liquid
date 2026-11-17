@@ -29,7 +29,7 @@
 -%}
 
 <section
-  class="mt-benefits"
+  class="mt-benefits{% if mob_image == blank %} mt-benefits--no-media{% endif %}"
   data-benefits
   data-section-id="{{ section.id }}"
   data-benefits-module="{{ section.settings.ga4_module_name | escape }}"
