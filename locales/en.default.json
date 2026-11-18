@@ -344,7 +344,7 @@
     "consent": "I agree to receiving marketing emails and special deals",
     "spin": "Spin the wheel",
     "spinning": "Spinning…",
-    "fine_print_html": "One spin per new subscriber. Odds vary.<br class=\"mt-ws__mobile-br\"> See <a href=\"{{ terms_url }}\">Terms</a> and <a href=\"{{ privacy_url }}\">Privacy Policy</a>.",
+    "fine_print_html": "One spin per new subscriber · Prizes awarded at random.<br class=\"mt-ws__mobile-br\"> See <a href=\"{{ terms_url }}\">Terms</a> and <a href=\"{{ privacy_url }}\">Privacy Policy</a>.",
     "error_email": "Please enter a valid email address.",
     "error_consent": "Please tick the box to spin.",
     "error_used": "This email has already had its welcome spin. Your code is waiting in your inbox.",
