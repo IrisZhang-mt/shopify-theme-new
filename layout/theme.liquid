@@ -132,7 +132,8 @@
     {% render 'structured-data' %}
 
     {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 96, height: 96 }}">
+      {%- comment -%} format=png：CDN 不栅格化 SVG，强制转 PNG，保证与 type 一致（Google favicon 要求） {%- endcomment -%}
+      <link rel="icon" type="image/png" sizes="96x96" href="{{ settings.favicon | image_url: width: 96, height: 96 }}&format=png">
     {%- else -%}
       <link rel="icon" type="image/svg+xml" href="{{ 'logo-mark.svg' | asset_url }}">
     {%- endif -%}

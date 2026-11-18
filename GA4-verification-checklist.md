@@ -1088,3 +1088,92 @@ DOM 本来就是"移除前"的状态，天然是对的。
   临时模板
 - 商品卡 / QUICK SHOP 点击（`select_item`）未在 CDP 里实测，需按上面清单
   在浏览器确认
+
+## 验证清单：Perks tabs（新组件，在线表 No.84-85，2026-11-10）
+
+- 三个 tab 任意点击 = `select_content_category`（`module_name`：组件标题，
+  黑五页为 "Black Friday Perks"；`button_name`：tab 标题，手机端换行合并
+  为一个空格），点当前已选中的 tab 也触发；页面加载时的默认选中、键盘
+  左右键切换不触发
+- 勾选了 "Opens Spin & Win" 的 tab（黑五页为 Spin & Win）额外发
+  `spin_entry`（`module_name` 同上，`login_status`：`logged_in` / `guest`），
+  与上一条同时发出；落地页自动弹出转盘不触发
+
+- [ ] 点 Member Perks：一条 `select_content_category`，`button_name:
+      "Member Perks"`；四宫格切换，无弹窗
+- [ ] 再点一次 Member Perks：再出现一条同样的事件
+- [ ] 未登录点 Spin & Win：`select_content_category`（"Spin & Win"）+
+      `spin_entry`（`login_status: "guest"`），弹出 01 登录态
+- [ ] 已登录点 Spin & Win：`spin_entry` 的 `login_status: "logged_in"`，
+      弹出 02 转盘（或 0 次态）
+- [ ] 点 Gift Card Bonus：只有 `select_content_category`
+
+代码改动：
+- 新建 `sections/perks-tabs.liquid` + `assets/perks-tabs.css` / `.js`
+  （命名对称）；弹窗由 `spin-wheel.js` 现有的 `[data-spin-open]` 监听打开
+- `assets/perks-tabs.js`：两条事件的推送，写法同 `anchor-tabs.js`
+
+验证：
+- `node --check` 通过；`shopify theme check` 无新增问题
+- 本地 dev（Chrome CDP，未登录）在黑五页依次点 Member ×2、Spin & Win：
+  得到 3 条 `select_content_category` + 1 条 `spin_entry`（`guest`），
+  每条前都有 `{ event_parameters: null }`；转盘弹窗打开且为 guest 态
+- 已登录（`logged_in`）未实测：127.0.0.1 无法登录新客户账户，需在真实
+  域名 + preview_theme_id 下按上面清单确认
+
+### 追加：Perk 跳转商品（在线表 No.97，第 105 行，2026-11-17）
+
+- 每个 perk 可选一个商品（`perk_N_product`），选了才渲染成链接；点击 =
+  `select_content`（`module_name`：组件标题，黑五页 "Black Friday Perks"；
+  `content_name`：perk 标题），先上报，250ms 后跳转（同 featured-blog.js），
+  Ctrl/Cmd/中键新标签打开不拦截
+- 未配置商品的 perk 不可点击、不触发
+
+- [ ] 点一个配置了商品的 perk：一条 `select_content`，`content_name` 为该
+      perk 标题，随后跳到商品详情页
+- [ ] 点未配置商品的 perk：无事件、不跳转
+
+代码改动：`sections/perks-tabs.liquid`（4 个 product 设置 + `<a data-perks-link>`）、
+`assets/perks-tabs.js`（事件 + 跳转等待）、`assets/perks-tabs.css`（链接去下划线）
+
+验证：本地 dev（Edge CDP）点 linked perk，dataLayer 原样为
+`{event_parameters:null}` + `{event:'ga4Event', event_name:'select_content',
+event_parameters:{module_name:'Black Friday Perks', content_name:'Free Outfit'}}`，
+之后跳到 `/products/kids-2-in-1-leggings-fairy`；点未配置的 perk 无事件
+
+
+## 验证清单：Spin & Win 转盘弹窗（新组件，在线表 No.86-96，2026-11-11）
+
+在线表 sheet3 第 94-104 行（D 列 "Spin & Win 弹窗"，C 列并入"通用组件"）。规范里没有对应行，事件名统一 `spin_` 前缀（与 No.85 `spin_entry` 一致），O 列已注明"新增；…待确认"。**券码、礼品卡号、邮箱、姓名一律不上报。**
+
+| No. | 事件 | 触发 | 参数 |
+|---|---|---|---|
+| 86 | `spin_popup_view` | 弹窗打开，或弹窗内切到 01 / 02 / 06 | `popup_name` sign_in / spin / my_prizes；`trigger` auto / click / in_popup；`login_status`；`spins_left`（取不到不传） |
+| 87 | `spin_sign_in` | 01 点 SIGN IN | `button_name`（先推再 250ms 跳转，修饰键点击不拦截） |
+| 88 | `spin_click` | 点 SPIN NOW / TRY AGAIN | `button_name`、`spins_left`（点击前） |
+| 89 | `spin_result` | /draw 返回成功（不等动画） | `prize_type`、`prize_name`（展示名）、`spins_left`（抽后） |
+| 90 | `spin_error` | 抽奖 / 选款提交失败 | `action` draw / gift_confirm；`error_code`（string，网络错误 network） |
+| 91 | `spin_copy_code` | 04 / 05 / 06 点 COPY | `prize_type`、`module_name` result / my_prizes |
+| 92 | `spin_shop_now` | 04 / 05 点 SHOP NOW | `prize_type` |
+| 93 | `spin_again` | 点 SPIN AGAIN | `module_name` result / gift / my_prizes |
+| 94 | `spin_gift_choose` | 06 点 CHOOSE | `prize_type` |
+| 95 | `spin_gift_confirm` | 选款提交成功 | `prize_type`、`items[]` { item_id: SKU, item_name: 款名, item_variant: 颜色_尺码 } |
+| 96 | `spin_prizes_tab` | 点 Unused / Used | `button_name`（不含数量） |
+
+验证（dev 店，控制台先运行 `dataLayer.filter(e => e.event === 'ga4Event' && /^spin_/.test(e.event_name))` 查看）：
+- [ ] 有次数账号进黑五页：`spin_popup_view`（popup_name spin, trigger auto, spins_left = 次数）
+- [ ] 0 次有奖品账号：`spin_popup_view`（my_prizes, auto）
+- [ ] 未登录点 Spin & Win tab：No.85 `spin_entry` + `spin_popup_view`（sign_in, click）；点 SIGN IN：`spin_sign_in` 后才跳转
+- [ ] 点 SPIN NOW：`spin_click` → `spin_result`（prize_type / prize_name 与结果页一致，spins_left 减 1）
+- [ ] 04 / 05 点 COPY CODE、SHOP NOW：`spin_copy_code`（module_name result）、`spin_shop_now`；参数里没有券码 / 卡号
+- [ ] 点 SPIN AGAIN（结果页 / 选款页 / 06）：`spin_again` 的 module_name 分别为 result / gift / my_prizes，随后 `spin_popup_view`（spin, in_popup）
+- [ ] 06 点 Unused / Used：`spin_prizes_tab`；点 COPY：`spin_copy_code`（my_prizes）；点 CHOOSE：`spin_gift_choose`
+- [ ] 选款提交成功：`spin_gift_confirm` 的 items 与所选款 / 色 / 码一致，随后 `spin_popup_view`（my_prizes, in_popup）
+- [ ] 抽奖 / 选款失败：`spin_error`（action、error_code 与接口返回一致）
+- [ ] 每条事件前都有一条 `{ event_parameters: null }`
+
+代码改动：
+- `assets/spin-wheel.js`：`track()` 统一推送；`showView(name, trigger)` 发 popup_view（`open(view, trigger)`，自动弹出传 auto）；抽奖 / 选款 / 06 各点击点各发一条；抽奖按钮只在转盘视图且未禁用时响应
+- `sections/spin-wheel.liquid`：SIGN IN 加 `data-spin-sign-in`，SHOP NOW 加 `data-spin-shop`
+
+本地验证（mock + 无头 Chrome 读 dataLayer）：抽中折扣 → COPY → SHOP NOW、抽奖 50300、抽中赠品 → 提交、06 切 tab → COPY → CHOOSE → SPIN AGAIN 四个流程，事件与参数如上表，每条前有重置推送。已登录真实接口未实测，按上面清单在 dev 店确认。
