@@ -125,7 +125,7 @@
 - 礼品卡显示完整卡号 + COPY CODE（PC 05 打码稿忽略）。
 - 06/07 奖品名用接口大标题（设计稿 "FREE GIFT" 忽略）。
 - 04b 文案以移动端为准，不写金额。
-- 折扣码有效期按设计稿 "Use within 1 month · until Dec 31"；**不处理 `coupon.startsAt`**。
+- 折扣码有效期（2026-11-19 改）：04 券码下方 "One-time use · Valid from Dec 1 to Dec 31"、06 卡片 "Valid from Dec 1 to Dec 31"，开始 = `coupon.startsAt`、结束 = `coupon.expiresAt`，均按美东时间取月/日（`couponValidity()`）。缺 `startsAt` → "Valid until Dec 31"；缺 `expiresAt` → 整句不显示。04 底部条款 "One-time use by {date}" 未改。
 - 礼品卡 `balance` 为 `null` 时 06 不显示余额这一段。
 - 转盘画面顺时针为 10% → 15% → FREE OUTFIT → $25 → $50 → SHERPA，与 slot 0–5 顺序不同，停格需按画面位置映射。
 - 中转页：页面 handle `spin-and-win`；08 有 footer（稿里没画）；08 文案与按钮链接在 section 设置里，按钮默认首页。
@@ -162,7 +162,7 @@
 
 - 设计稿：移动端 04 `665:13926`（10%，**为准**）/ `651:12031`（15%，条款字号换行不一致，忽略）、05 `651:12107`；PC 04 `736:38330`、05 `736:38611`（11-10 14:58 版）。
 - 移动端：抽中后整个转盘视图换成结果；PC：左侧转盘保留（停在中奖格），右栏换成结果。
-- 折扣条款（用户给定，两种折扣共用）："Enter the code at checkout. Stacking with⏎multi-buy deals. One-time use by {date}. If your order is cancelled or refunded, this code may be voided."（移动端在 "Stacking with" 后换行；PC 按设计每句一行）。`{date}` 与券面 "(by Dec 31)" 都由 `coupon.expiresAt` 按美东时间算。
+- 折扣条款（用户给定，两种折扣共用）："Enter the code at checkout. Stacking with⏎multi-buy deals. One-time use by {date}. If your order is cancelled or refunded, this code may be voided."（移动端在 "Stacking with" 后换行；PC 按设计每句一行）。`{date}` 由 `coupon.expiresAt` 按美东时间算（券面有效期见上方 2026-11-19 修改）。
 - 动画：4 秒、至少 5 圈、停在格子正中（不加随机偏移），停后 0.6 秒出结果；减少动态效果时 1 秒。
 - SHOP NOW：关闭弹窗，留在黑五页。COPY CODE：复制后显示 COPIED 2 秒。
 - SPIN AGAIN：回 02 并重新拉 status；`spinsLeft = 0` 时不显示 SPIN AGAIN。

@@ -143,7 +143,7 @@ window.spinState = () => {
 | T2.0 | 控制台运行 `sessionStorage.removeItem('mt-spin-prizes-shown')` | 06 每个会话只自动弹一次，记录在这个键里；不清掉的话同一标签页再进来不会弹（这是规则，不是 bug） |
 | T2.1 | 刷新落地页 | 页面先调 `status`（0 次）再调 `prizes?tab=unused`，有奖品就自动弹出 "My prizes"，`spinState().view === 'prizes'` |
 | T2.2 | 看两个 tab | "Unused · N" / "Used · M"，N、M 与 T0.5 一致；点 Used 只切换按钮颜色，标题不跳动 |
-| T2.3 | 看 Unused 卡片 | 卡片数 = unused `items.length`，顺序同接口；每张：日期 · 订单号（`wonAt` 美东日期 + `orderName`）、标题（折扣 "10% OFF"、礼品卡 "$25 GIFT CARD"、赠品用接口 `name`）；折扣码："Code xxx" + "Use within 1 month · until Mon DD"；礼品卡："Code xxx" + "No expiry date · Balance $xx.xx"（`balance` 为空时没有 Balance）；待选赠品：橙色标题 + CHOOSE（`status: SELECTING` 时按钮置灰） |
+| T2.3 | 看 Unused 卡片 | 卡片数 = unused `items.length`，顺序同接口；每张：日期 · 订单号（`wonAt` 美东日期 + `orderName`）、标题（折扣 "10% OFF"、礼品卡 "$25 GIFT CARD"、赠品用接口 `name`）；折扣码："Code xxx" + "Valid from Mon DD to Mon DD"（`coupon.startsAt` → `expiresAt`，美东；无 startsAt 时 "Valid until Mon DD"）；礼品卡："Code xxx" + "No expiry date · Balance $xx.xx"（`balance` 为空时没有 Balance）；待选赠品：橙色标题 + CHOOSE（`status: SELECTING` 时按钮置灰） |
 | T2.4 | 点折扣码 / 礼品卡的 COPY | 变 COPIED 约 2 秒 |
 | T2.5 | 切到 Used | 卡片数 = used `items.length`；已选赠品显示 "名称 · Redeemed" + 每件 "款名 / 颜色 · Size x / Ships with your order #orderName"；已用折扣码右侧 "Used"，有使用日期时显示 "Code xxx · Used Mon DD"。**记录 used 折扣码在接口里的使用日期字段名**（前端读的是 `coupon.usedAt`，不一样要告诉用户） |
 | T2.6 | 某个 tab 没有奖品 | 显示 "No prizes waiting right now." / "Nothing used yet." |
@@ -159,7 +159,7 @@ window.spinState = () => {
 | T3.3 | 停下后运行 `mask(__spinLog)` | 有一条 `POST /apps/bf/spin/draw`，`body.requestId` 是 UUID 格式，`code: 0`；记录 `data.slot`、`data.prize.type`、`data.prize.name`、`data.spinsLeft` |
 | T3.4 | 看指针（底部三角）指着的格子 | 和 `data.slot` 对应的格子一致：slot 0=10%、1=15%、2=$25、3=$50、4=FREE OUTFIT、5=SHERPA JACKET |
 | T3.5 | 停下约 0.6 秒后出结果，运行 `spinState()` | COUPON → `state: 'result', result: 'coupon'`；GIFT_CARD → `result: 'card'`；GIFT → `state: 'gift', gift: 'outfit'`；GRAND → `state: 'gift', gift: 'jacket'`（后两种接 T4） |
-| T3.6 | 折扣券结果（04） | 标题 "10% OFF" / "15% OFF"；券码 = `prize.coupon.code`；"One-time use · Use within 1 month (by Mon DD)"，日期 = `coupon.expiresAt` 换算成美东时间的月/日；底部条款里的日期一致 |
+| T3.6 | 折扣券结果（04） | 标题 "10% OFF" / "15% OFF"；券码 = `prize.coupon.code`；"One-time use · Valid from Mon DD to Mon DD"，开始/结束 = `coupon.startsAt` / `coupon.expiresAt` 换算成美东时间的月/日；底部条款 "by Mon DD" 与结束日期一致 |
 | T3.7 | 礼品卡结果（05） | 标题 "A $25 gift card"；卡面金额白色、完整卡号 = `prize.giftCard.code`；有 `sentTo` 时显示 "Sent to …"，没有就不显示；条款里订单号 = `prize.orderName` |
 | T3.8 | 点 COPY CODE | 按钮变 "COPIED" 约 2 秒后恢复；（可选）运行 `navigator.clipboard.readText().then(t=>t.slice(0,3)+'***')` 确认已复制 |
 | T3.9 | 看 "N spin(s) left · SPIN AGAIN →" | N = `data.spinsLeft`；`spinsLeft = 0` 时这一行不显示 |

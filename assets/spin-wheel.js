@@ -340,6 +340,15 @@ if (!window.mtSpinInit) {
     return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' }).format(date);
   };
 
+  // Coupon validity: "Valid from Dec 1 to Dec 31" (coupon.startsAt → coupon.expiresAt);
+  // "Valid until Dec 31" when there's no start date; '' when there's no end date.
+  const couponValidity = (coupon) => {
+    const end = easternDate(coupon.expiresAt);
+    if (!end) return '';
+    const start = easternDate(coupon.startsAt);
+    return start ? fill(str.prizeValid, { start, end }) : fill(str.prizeUntil, { date: end });
+  };
+
   // Turn the rotor clockwise at least MIN_TURNS times so the won slot's wedge centre sits
   // on the pointer at 12 o'clock. Resolves when the wheel has stopped.
   const spinTo = (slot) =>
@@ -399,7 +408,10 @@ if (!window.mtSpinInit) {
       setOnly('coupon');
       $('[data-spin-result-title]').textContent = fill(str.resultCoupon, { value: prize.name });
       $('[data-spin-code]').textContent = coupon.code || '';
-      $('[data-spin-coupon-rule]').textContent = fill(str.couponRule, { date });
+      const validity = couponValidity(coupon);
+      const rule = $('[data-spin-coupon-rule]');
+      rule.textContent = validity ? fill(str.couponRule, { validity }) : '';
+      rule.hidden = !validity;
       $('[data-spin-result-terms]').innerHTML = fill(str.couponTerms, { date });
       state.copyCode = coupon.code || '';
     }
@@ -1070,7 +1082,7 @@ if (!window.mtSpinInit) {
       const coupon = prize.coupon || {};
       part(coupon.code ? fill(str.prizeCode, { code: coupon.code }) : '');
       if (used) part(coupon.usedAt ? fill(str.prizeUsedOn, { date: easternDate(coupon.usedAt) }) : '');
-      else part(coupon.expiresAt ? fill(str.prizeUntil, { date: easternDate(coupon.expiresAt) }) : '', 'is-line');
+      else part(couponValidity(coupon), 'is-line');
       if (!used && coupon.code) action = prizeButton(str.prizeCopy, 'data-prize-copy', index);
     } else if (prize.type === 'GIFT_CARD') {
       const giftCard = prize.giftCard || {};

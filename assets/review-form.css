@@ -223,6 +223,42 @@
   color: var(--mt-moss);
 }
 
+.mt-rf__thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.mt-rf__thumb {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  background: var(--mt-mist);
+}
+.mt-rf__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mt-rf__thumb-remove {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(var(--mt-ink-rgb), 0.65);
+  cursor: pointer;
+  color: var(--mt-white);
+}
+
 .mt-rf__note {
   margin: 0;
   font-size: var(--mt-p-s-size);
