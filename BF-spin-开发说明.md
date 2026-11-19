@@ -221,7 +221,7 @@
 - **两个 tab 的内容完全按各自接口返回**（`/prizes?tab=unused` / `?tab=used`），前端不判断哪个奖品属于哪个 tab（礼品卡余额用完是否进 Used 由后端决定）。
 - 07 赠品每件下方 "Ships with your order #xxx" 用 `orderName`（抽中奖品的订单），不用 `giftOrderName`。
 - 07 折扣码 "Used Nov 23"：用户说使用日期在 coupon 对象里返回，前端先读 `coupon.usedAt`（字段名待用户用掉折扣码后核对）；没有就只显示 "Code XXX"。
-- 07 礼品卡：内容同 06 礼品卡但不显示余额（"Code XXX · No expiry date"），右侧 "Used"，样式同 07 其他卡片。
+- 07 礼品卡：内容同 06 礼品卡但不显示余额（"Code XXX · by Dec 31"；2026-11-19 起礼品卡有截止日，`giftCard.expiresAt` 美东月/日，接口无此字段时不显示），右侧 "Used"，样式同 07 其他卡片。
 - 其余按默认（用户消息未写完 B 类，先按默认）：标题用接口奖品名；待选款赠品标题橙色，FREE OUTFIT 副标题 "Choose style, color & size"、SHERPA "Just pick your fit"；CHOOSE 打开 03 / 04b（转盘回正），`SELECTING` 时按钮置灰；不判断选款期限；COPY 同 04/05；日期行用 `wonAt` 美东时间；礼品卡 `balance` 为空不显示余额；顺序按接口；空状态 "No prizes waiting right now." / "Nothing used yet."；07 无底部说明但保留同高的空白底栏（列表区不跳）；加载失败显示错误 + TRY AGAIN。
 - PC 06 底栏内边距按稿改为 12 / 40 / 16（原 16 / 40 / 24）。
 

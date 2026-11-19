@@ -143,7 +143,7 @@ window.spinState = () => {
 | T2.0 | 控制台运行 `sessionStorage.removeItem('mt-spin-prizes-shown')` | 06 每个会话只自动弹一次，记录在这个键里；不清掉的话同一标签页再进来不会弹（这是规则，不是 bug） |
 | T2.1 | 刷新落地页 | 页面先调 `status`（0 次）再调 `prizes?tab=unused`，有奖品就自动弹出 "My prizes"，`spinState().view === 'prizes'` |
 | T2.2 | 看两个 tab | "Unused · N" / "Used · M"，N、M 与 T0.5 一致；点 Used 只切换按钮颜色，标题不跳动 |
-| T2.3 | 看 Unused 卡片 | 卡片数 = unused `items.length`，顺序同接口；每张：日期 · 订单号（`wonAt` 美东日期 + `orderName`）、标题（折扣 "10% OFF"、礼品卡 "$25 GIFT CARD"、赠品用接口 `name`）；折扣码："Code xxx" + "Valid from Mon DD to Mon DD"（`coupon.startsAt` → `expiresAt`，美东；无 startsAt 时 "Valid until Mon DD"）；礼品卡："Code xxx" + "No expiry date · Balance $xx.xx"（`balance` 为空时没有 Balance）；待选赠品：橙色标题 + CHOOSE（`status: SELECTING` 时按钮置灰） |
+| T2.3 | 看 Unused 卡片 | 卡片数 = unused `items.length`，顺序同接口；每张：日期 · 订单号（`wonAt` 美东日期 + `orderName`）、标题（折扣 "10% OFF"、礼品卡 "$25 GIFT CARD"、赠品用接口 `name`）；折扣码："Code xxx" + "Valid from Mon DD to Mon DD"（`coupon.startsAt` → `expiresAt`，美东；无 startsAt 时 "Valid until Mon DD"）；礼品卡："Code xxx" + "by Mon DD · Balance $xx.xx"（日期 = `giftCard.expiresAt` 美东；无 expiresAt 时没有日期，`balance` 为空时没有 Balance；07 已使用只显示 "by Mon DD"）；待选赠品：橙色标题 + CHOOSE（`status: SELECTING` 时按钮置灰） |
 | T2.4 | 点折扣码 / 礼品卡的 COPY | 变 COPIED 约 2 秒 |
 | T2.5 | 切到 Used | 卡片数 = used `items.length`；已选赠品显示 "名称 · Redeemed" + 每件 "款名 / 颜色 · Size x / Ships with your order #orderName"；已用折扣码右侧 "Used"，有使用日期时显示 "Code xxx · Used Mon DD"。**记录 used 折扣码在接口里的使用日期字段名**（前端读的是 `coupon.usedAt`，不一样要告诉用户） |
 | T2.6 | 某个 tab 没有奖品 | 显示 "No prizes waiting right now." / "Nothing used yet." |

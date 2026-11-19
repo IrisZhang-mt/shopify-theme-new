@@ -361,7 +361,7 @@
     "prize_code": "Code {{ code }}",
     "prize_valid": "Valid from {{ start }} to {{ end }}",
     "prize_until": "Valid until {{ date }}",
-    "prize_no_expiry": "No expiry date",
+    "prize_card_by": "by {{ date }}",
     "prize_balance": "Balance {{ amount }}",
     "prize_choose_outfit": "Choose style, color & size",
     "prize_ships": "Ships with your order {{ order }}",

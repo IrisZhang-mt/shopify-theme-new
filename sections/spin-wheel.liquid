@@ -316,7 +316,7 @@
         "prizeCode": {{ 'spin.prize_code' | t: code: '[code]' | json }},
         "prizeValid": {{ 'spin.prize_valid' | t: start: '[start]', end: '[end]' | json }},
         "prizeUntil": {{ 'spin.prize_until' | t: date: '[date]' | json }},
-        "prizeNoExpiry": {{ 'spin.prize_no_expiry' | t | json }},
+        "prizeCardBy": {{ 'spin.prize_card_by' | t: date: '[date]' | json }},
         "prizeBalance": {{ 'spin.prize_balance' | t: amount: '[amount]' | json }},
         "prizeChooseOutfit": {{ 'spin.prize_choose_outfit' | t | replace: '&amp;', '&' | json }},
         "prizeChooseJacket": {{ 'spin.gift_fit_note' | t | json }},

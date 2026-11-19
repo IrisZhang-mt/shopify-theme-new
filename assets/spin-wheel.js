@@ -1088,7 +1088,9 @@ if (!window.mtSpinInit) {
       const giftCard = prize.giftCard || {};
       part(giftCard.code ? fill(str.prizeCode, { code: giftCard.code }) : '');
       // Used cards drop the balance (it's spent).
-      part([str.prizeNoExpiry, used ? '' : balanceText(giftCard.balance)].filter(Boolean).join(' · '), used ? '' : 'is-line');
+      // "by Dec 31" from giftCard.expiresAt (US Eastern); dropped when the API sends no expiry.
+      const cardEnd = easternDate(giftCard.expiresAt);
+      part([cardEnd ? fill(str.prizeCardBy, { date: cardEnd }) : '', used ? '' : balanceText(giftCard.balance)].filter(Boolean).join(' · '), used ? '' : 'is-line');
       if (!used && giftCard.code) action = prizeButton(str.prizeCopy, 'data-prize-copy', index);
     } else if (gift && !used) {
       part(prize.type === 'GRAND' ? str.prizeChooseJacket : str.prizeChooseOutfit);
