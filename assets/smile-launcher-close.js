@@ -1,4 +1,4 @@
-// Smile.io 积分悬浮按钮的关闭 ×：跟随按钮右上角定位，点击后本标签页内隐藏按钮（sessionStorage）。
+// Smile.io 积分悬浮按钮的关闭 ×：放在按钮右侧（间隔 2px、顶部齐平），点击后本标签页内隐藏按钮（sessionStorage）。
 // Smile 按钮在 iframe 内且外框 overflow:hidden，所以 × 是独立的 fixed 元素，按外框实际位置对齐。
 //
 // Smile 实测行为（2026-11-19，生产 / 预览一致）：
@@ -10,7 +10,8 @@
 // 全程事件驱动：没有定时轮询，用户不操作 Smile 时只有 body 监听里的 isConnected 判断。
 (() => {
   const KEY = 'mt_smile_launcher_closed';
-  const HALF = 16; // × 点击区域 32px 的一半，与 smile-launcher-close.css 保持一致
+  const INSET = 6; // 可见圆底在 32px 点击区域内的内缩，与 smile-launcher-close.css 的 ::before inset 保持一致
+  const GAP = 2; // 圆底与按钮框的水平间距
   const root = document.documentElement;
   const btn = document.querySelector('[data-smile-close]');
   if (!btn || root.classList.contains('mt-smile-closed')) return;
@@ -53,9 +54,9 @@
       launcherVisible();
     btn.hidden = !rect;
     if (!rect) return;
-    // × 圆心落在按钮框右上角
-    btn.style.left = `${Math.round(rect.right - HALF)}px`;
-    btn.style.top = `${Math.round(rect.top - HALF)}px`;
+    // 可见圆底放在按钮框右侧、间隔 GAP，顶部与按钮框齐平
+    btn.style.left = `${Math.round(rect.right + GAP - INSET)}px`;
+    btn.style.top = `${Math.round(rect.top - INSET)}px`;
   };
 
   // 按钮框宽度有约 0.25s 过渡（收起面板后 60px → 原宽），变化后再补一次定位

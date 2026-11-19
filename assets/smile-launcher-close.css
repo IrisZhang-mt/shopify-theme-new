@@ -10,7 +10,8 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: #1d1d1d;
+  /* 品牌橙，只作用于本按钮的 SVG（currentColor），不影响购物车等其他关闭按钮 */
+  color: #fd8204;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -19,13 +20,13 @@
   display: none;
 }
 
-/* 可见白色圆底 20px，点击区域 32px */
+/* 可见白色圆底 20px（50% 透明），点击区域 32px；inset 与 smile-launcher-close.js 的 INSET 保持一致 */
 .mt-smile-close::before {
   content: '';
   position: absolute;
   inset: 6px;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
 }
 
