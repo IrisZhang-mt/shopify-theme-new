@@ -1177,3 +1177,27 @@ event_parameters:{module_name:'Black Friday Perks', content_name:'Free Outfit'}}
 - `sections/spin-wheel.liquid`：SIGN IN 加 `data-spin-sign-in`，SHOP NOW 加 `data-spin-shop`
 
 本地验证（mock + 无头 Chrome 读 dataLayer）：抽中折扣 → COPY → SHOP NOW、抽奖 50300、抽中赠品 → 提交、06 切 tab → COPY → CHOOSE → SPIN AGAIN 四个流程，事件与参数如上表，每条前有重置推送。已登录真实接口未实测，按上面清单在 dev 店确认。
+
+
+## 验证清单：Smile 会员悬浮按钮关闭 ×（新组件，在线表 No.98，2026-11-19）
+
+在线表 sheet3 第 106 行（C 列并入"通用组件"，D 列 "Smile 会员悬浮按钮"）。规范里没有对应行，复用 No.7 `click_function`，O 列已注明"新增；参照 No.7…待确认"。
+
+| No. | 事件 | 触发 | 参数 |
+|---|---|---|---|
+| 98 | `click_function` | 点 Smile 悬浮按钮右上角 × | `module_name: 'Rewards Launcher'`、`button_name: 'Close'`（均为固定值） |
+
+验证（预览主题，PC 和移动端各一遍；控制台运行 `dataLayer.filter(e => e.event_name === 'click_function')` 查看）：
+- [ ] 进任意页面，Smile 按钮右上角出现 ×；积分面板打开时 × 隐藏，关闭面板后 × 回到原位
+- [ ] 点 ×：Smile 按钮消失，dataLayer 出现一条 `click_function`（Rewards Launcher / Close），前面有一条 `{ event_parameters: null }`
+- [ ] 同一标签页跳到其他页面 / 刷新：Smile 按钮不出现、不闪现，不再触发事件；`sessionStorage.mt_smile_launcher_closed === '1'`
+- [ ] 新开标签页：按钮和 × 恢复
+- [ ] 点橙色按钮本体仍能正常打开积分面板（× 没有挡住按钮的主要点击区域）
+
+代码改动：
+- `snippets/smile-launcher-close.liquid`（新增）：内联 style + script 在 Smile app embed 之前执行，已关闭时给 `<html>` 加 `mt-smile-closed`，直接隐藏 `.smile-launcher-frame-container`；输出 × 按钮，引入同名 CSS/JS
+- `assets/smile-launcher-close.js`（新增）：同时兼容 Smile 两套前端——lite（`#smile-ui-lite-container` / `#smile-ui-lite-launcher-frame-container`，首屏渲染、opacity 淡入）和完整版（`#smile-ui-container .smile-launcher-frame-container`，首次点击后插入并删除 lite）；完整版首次渲染的按钮框 computed `visibility:hidden` 但内部 iframe 自身 visible，所以可见性以 iframe 为准；`smile-launcher-open` 或面板 `.smile-panel-frame-container` 存在时隐藏 ×；按按钮框实际位置定位；全程事件驱动（body / Smile 外壳的 MutationObserver + 外壳内动画结束事件），无定时轮询；点击写 sessionStorage 并推送 GA4
+- `assets/smile-launcher-close.css`（新增）：× 样式（可见 20px 深色圆点，点击区域 32px）
+- `layout/theme.liquid`：`</body>` 前 `{% render 'smile-launcher-close' %}`
+
+本地验证（无头 Chrome，PC 1440 / 移动 390；Smile 在自动化浏览器里不渲染按钮，按线上 DOM 模拟了按钮框）：定位、面板打开时隐藏、按钮宽度变化后重新定位、点击后隐藏 + sessionStorage + 事件、跨页保持隐藏、新标签页恢复均通过。真实 Smile 下需要按上面清单在预览主题上确认。

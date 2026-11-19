@@ -1,0 +1,22 @@
+{%- comment -%}
+  Smile.io 积分悬浮按钮（app embed，iframe 渲染）外挂一个关闭 ×。
+  关闭记录写 sessionStorage：同一标签页内不再出现，新标签页恢复。
+  内联脚本在 Smile（body 末尾的 app embed）之前同步执行，已关闭时直接
+  给 <html> 加 class 隐藏按钮框，避免闪现。面板（.smile-panel-frame-container）不受影响。
+{%- endcomment -%}
+<style>
+  .mt-smile-closed #smile-ui-container .smile-launcher-frame-container,
+  .mt-smile-closed #smile-ui-lite-launcher-frame-container { display: none !important; }
+</style>
+<script>
+  try {
+    if (sessionStorage.getItem('mt_smile_launcher_closed') === '1') {
+      document.documentElement.classList.add('mt-smile-closed');
+    }
+  } catch (e) {}
+</script>
+<button type="button" class="mt-smile-close" aria-label="{{ 'general.close' | t }}" hidden data-smile-close>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 16.1515L16.1088 4.04272" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" vector-effect="non-scaling-stroke"/><path d="M15.957 16.1085L3.84828 3.99975" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>
+</button>
+{{ 'smile-launcher-close.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'smile-launcher-close.js' | asset_url }}" defer></script>

@@ -1,0 +1,46 @@
+/* Smile.io 积分悬浮按钮的关闭 ×（定位由 smile-launcher-close.js 按按钮实际位置计算） */
+.mt-smile-close {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d1d1d;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mt-smile-close[hidden] {
+  display: none;
+}
+
+/* 可见白色圆底 20px，点击区域 32px */
+.mt-smile-close::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+}
+
+/* × 与购物车抽屉关闭图标同一 SVG；non-scaling-stroke 保持 1.2px 线宽 */
+.mt-smile-close svg {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+
+.mt-smile-close:focus-visible::before {
+  outline: 2px solid #fd8204;
+  outline-offset: 2px;
+}
+
+.mt-smile-closed .mt-smile-close {
+  display: none;
+}
