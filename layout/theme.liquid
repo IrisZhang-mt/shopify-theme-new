@@ -84,7 +84,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
     <meta name="theme-color" content="#fafbf9">
-    <link rel="canonical" href="{{ canonical_url }}">
+    {%- liquid
+      # canonical：/{lang}-{market} 区域副本归并到语言根页（en → 主站），hreflang 不动
+      # 规则见 canonical-区域归并-开发说明.md；新增主市场语言时加进 merge_langs
+      assign canonical_href = canonical_url
+      assign merge_langs = 'en,es,ar,de,fr,ms' | split: ','
+      # 范围：博客 + pages；产品页/集合页保持自指（11-19 定：/en-gb 产品页指主站会把 USD 价格页当规范页）
+      assign merge_page_types = 'article,blog,page' | split: ','
+      if merge_page_types contains request.page_type and routes.root_url != '/' and routes.root_url contains '-'
+        assign prefix_parts = routes.root_url | remove_first: '/' | split: '-'
+        assign prefix_lang = prefix_parts | first
+        if prefix_parts.size == 2 and merge_langs contains prefix_lang
+          if prefix_lang == 'en'
+            assign canonical_href = canonical_url | remove_first: routes.root_url
+            # 首页 https://moodytiger.com/en-gb → https://moodytiger.com 需补 /
+            assign after_scheme = canonical_href | split: '://' | last
+            unless after_scheme contains '/'
+              assign canonical_href = canonical_href | append: '/'
+            endunless
+          else
+            assign lang_root = '/' | append: prefix_lang
+            assign canonical_href = canonical_url | replace_first: routes.root_url, lang_root
+          endif
+        endif
+      endif
+    -%}
+    <link rel="canonical" href="{{ canonical_href }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.shopify.com">
 
@@ -109,7 +134,7 @@
       endif
     -%}
     <meta property="og:site_name" content="{{ shop.name | escape }}">
-    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:url" content="{{ canonical_href }}">
     <meta property="og:title" content="{{ og_title | escape }}">
     <meta property="og:type" content="{{ og_type }}">
     {%- if page_description -%}

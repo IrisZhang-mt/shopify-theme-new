@@ -98,7 +98,16 @@ SEO 部门提出：区域副本（`/en-gb`、`/es-ca`、`/fr-ca`、`/ms-eu` 等�
 已经告知 SEO 的风险：hreflang 仍然会把 `/en-gb` 等副本标为对应地区的版本，和新的 canonical 存在信号冲突，这是这个方案本身带来的，不是实现 bug。
 "美国主词进前 10"不作为验收标准。
 
-**回复结论**：（待填）
+**回复结论**（11-20，SEO 对五条都回复"ok"）：
+
+1. 适用范围：**只做博客 + pages**（`request.page_type` ∈ article / blog / page，对应 `theme.liquid` 里的 `merge_page_types`）。
+   产品页这期不做（11-19 17:19 定：`/en-gb` 产品页指主站会把 USD 价格页当规范页），products 模板和集合页保持自指。
+2. `hk.moodytiger.com` 保持指向自身：同意。
+3. 新增语言走白名单（en es ar de fr ms）：同意。
+4. `og:url` 和 canonical 同步修改：同意。
+5. 首页单独处理（`/en-gb` → `https://moodytiger.com/`，`/es-ca` → `https://moodytiger.com/es`）：同意。
+   11-20 实测线上 `/es` 首页的 canonical 是 `https://moodytiger.com/es`（没有末尾斜杠），所以 es 等语言不补斜杠，只有 en 需要补。
+   按第 1 条的暂定范围，首页（index）不在范围内，这段补斜杠逻辑要等范围扩大到全站才会用到。
 
 ## 六、验证清单
 
