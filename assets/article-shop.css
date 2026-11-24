@@ -1,0 +1,556 @@
+/* Shop the article (snippets/article-shop.liquid). Figma "moodytiger网站2026" → 2026.11.16 blog 设计:
+   carousel 1479:6798 (PC) / 1479:7959 (mobile 375), link card 1479:6931, hotspot card 1479:6959.
+   Mobile values are drawn at 375 and scale with the viewport (capped at 560) through --asp-u. */
+
+/* ---- SHOP THIS SECTION ---- */
+.mt-asp {
+  --asp-u: calc(min(100vw, 560px) / 375);
+  --asp-gap: calc(12 * var(--asp-u));
+  --mt-swatch-size: calc(10 * var(--asp-u));
+  --mt-swatch-gap: calc(4 * var(--asp-u));
+  --mt-swatch-bleed: 0px;
+}
+.mt-art__rte > .mt-asp {
+  margin-top: calc(16 * var(--asp-u));
+  margin-bottom: calc(44 * var(--asp-u));
+}
+
+.mt-asp__head {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.mt-asp .mt-asp__label,
+.mt-asp .mt-asp__count {
+  margin: 0;
+  font-family: var(--mt-font-mono);
+  font-size: calc(11 * var(--asp-u));
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mt-moss);
+}
+.mt-asp__label {
+  flex: 1;
+}
+.mt-asp__arrow {
+  display: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--mt-ink);
+  cursor: pointer;
+  transition: opacity 300ms var(--mt-ease);
+}
+.mt-asp__arrow svg {
+  display: block;
+}
+.mt-asp__arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.mt-asp__arrow:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+.mt-asp[data-single] .mt-asp__count,
+.mt-asp[data-single] .mt-asp__arrow {
+  visibility: hidden;
+}
+
+/* The row bleeds to the right edge of the screen (the body text column has 15px side padding). */
+.mt-asp__row {
+  display: flex;
+  gap: var(--asp-gap);
+  margin-top: calc(12 * var(--asp-u));
+  margin-right: -0.9375rem;
+  padding-right: 0.9375rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.mt-asp__row::-webkit-scrollbar {
+  display: none;
+}
+
+.mt-asp .mt-card {
+  --mt-card-w: calc(200 * var(--asp-u));
+  gap: calc(8 * var(--asp-u));
+  scroll-snap-align: start;
+}
+.mt-asp .mt-card__media {
+  aspect-ratio: 200 / 262;
+  background: var(--mt-mist);
+}
+/* article.css sizes body images (height: auto); the card image fills its frame as everywhere else. */
+.mt-art__rte .mt-asp .mt-card__media img {
+  height: 100%;
+}
+.mt-asp .mt-card__badges {
+  top: calc(8 * var(--asp-u));
+  inset-inline-start: calc(8 * var(--asp-u));
+  gap: calc(4 * var(--asp-u));
+}
+.mt-asp .mt-card__badge {
+  padding: calc(3 * var(--asp-u)) calc(6 * var(--asp-u));
+  background: var(--mt-white);
+  color: var(--mt-ink);
+  font-family: var(--mt-font-mono);
+  font-size: calc(9 * var(--asp-u));
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.mt-asp .mt-card__badge--sale {
+  background: var(--mt-tangerine);
+  color: var(--mt-white);
+}
+.mt-asp .mt-card__text {
+  gap: calc(8 * var(--asp-u));
+}
+.mt-asp .mt-card__title,
+.mt-asp .mt-card__price {
+  max-width: none;
+  font-size: calc(13 * var(--asp-u));
+  letter-spacing: 0;
+}
+.mt-asp .mt-card__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(36 * var(--asp-u));
+  line-height: calc(18 * var(--asp-u));
+  color: var(--mt-ink);
+}
+.mt-asp .mt-card__price {
+  flex-wrap: nowrap;
+  gap: calc(6 * var(--asp-u));
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1.28;
+  color: var(--mt-ink);
+}
+.mt-asp .mt-card__compare {
+  color: var(--mt-moss);
+}
+.mt-asp .mt-card--sale .mt-card__now {
+  color: var(--mt-tangerine);
+}
+.mt-asp .mt-card__swatches:not(:empty) {
+  margin: 0;
+  padding: 0;
+}
+.mt-asp .mt-card__swatch {
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+}
+
+/* QUICK SHOP is a full-width bar under the card on every device here (no hover overlay). */
+.mt-asp .mt-card__qs {
+  display: none;
+}
+.mt-asp .mt-card .mt-card__quick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: calc(34 * var(--asp-u));
+  padding: 0;
+  background: #f0f0eb;
+  color: var(--mt-ink);
+  font-size: calc(10 * var(--asp-u));
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  transition: background-color 300ms var(--mt-ease);
+}
+
+@media screen and (min-width: 750px) {
+  .mt-asp {
+    --asp-gap: 0.75rem;
+    --mt-swatch-size: 0.75rem;
+    --mt-swatch-gap: 0.25rem;
+  }
+  .mt-art__rte > .mt-asp {
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .mt-asp .mt-asp__label,
+  .mt-asp .mt-asp__count {
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+  .mt-asp__count {
+    margin-inline-end: 0;
+  }
+  .mt-asp__arrow {
+    display: block;
+  }
+  .mt-asp__arrow + .mt-asp__arrow {
+    margin-inline-start: -0.25rem;
+  }
+  .mt-asp__row {
+    margin-top: 0.75rem;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  /* Three cards a page. */
+  .mt-asp .mt-card {
+    --mt-card-w: calc((100% - 2 * var(--asp-gap)) / 3);
+    gap: 0;
+  }
+  .mt-asp .mt-card__media {
+    aspect-ratio: 245 / 322;
+  }
+  .mt-asp .mt-card__badges {
+    top: 0.5rem;
+    inset-inline-start: 0.5rem;
+  }
+  .mt-asp .mt-card__badge {
+    padding: 0.1875rem 0.375rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+  .mt-asp .mt-card__text {
+    gap: 0.5rem;
+    margin-top: 0.9375rem;
+  }
+  .mt-asp .mt-card__title,
+  .mt-asp .mt-card__price {
+    font-size: 0.875rem;
+  }
+  .mt-asp .mt-card__title {
+    min-height: 0;
+    line-height: 1.2;
+  }
+  .mt-asp .mt-card__price {
+    gap: 0.5rem;
+  }
+  .mt-asp .mt-card__swatch {
+    border: 1px solid #d9d9d6;
+  }
+  .mt-asp .mt-card .mt-card__quick {
+    height: 1.75rem;
+    margin-top: auto;
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+  }
+  /* 10px between the swatches (or price) and the bar; margin-top: auto keeps bars level across the row. */
+  .mt-asp .mt-card__text::after {
+    content: "";
+    height: 0.125rem;
+  }
+}
+
+@media (hover: hover) {
+  .mt-asp .mt-card .mt-card__quick:hover,
+  .mt-asp-pop--link .mt-asp-pop__add:hover {
+    background: #e4e4dc;
+  }
+  .mt-asp__arrow:not(:disabled):hover {
+    opacity: 0.6;
+  }
+}
+
+/* ---- Small product cards (link hover card + hotspot card) ---- */
+.mt-asp-pop {
+  display: flex;
+  align-items: center;
+  background: var(--mt-white);
+  color: var(--mt-ink);
+}
+.mt-asp-pop__media {
+  flex: none;
+  display: block;
+  width: 3.5rem;
+  height: 4.375rem;
+  background: var(--mt-mist);
+}
+/* Hotspot cards sit inside the article's photo blocks, whose img / p rules (article.css: .mt-art__full,
+   __pair, __gallery — absolute fill, fixed aspect ratios, clipped p, 89vw gallery p) would otherwise reach
+   the card. `html body` outranks those (and html.mt-motion .mt-art__full img) without touching article.css. */
+html body .mt-asp-pop .mt-asp-pop__media img {
+  position: static;
+  inset: auto;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+  transform: none;
+  will-change: auto;
+}
+.mt-asp-pop__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.mt-asp-pop__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.8125rem;
+  color: inherit;
+  text-decoration: none;
+}
+html body .mt-asp-pop .mt-asp-pop__price {
+  position: static;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  flex: none;
+  width: auto;
+  max-width: none;
+  aspect-ratio: auto;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.28;
+  color: var(--mt-ink);
+}
+.mt-asp-pop__compare {
+  color: var(--mt-moss);
+}
+.mt-asp-pop--sale .mt-asp-pop__now {
+  color: var(--mt-tangerine);
+}
+.mt-asp-pop__add {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--mt-ink);
+  cursor: pointer;
+}
+.mt-asp-pop a:focus-visible,
+.mt-asp-pop button:focus-visible {
+  outline: 2px solid var(--mt-ink);
+  outline-offset: 2px;
+}
+
+/* Link hover card (desktop only), 1479:6931 */
+.mt-asp-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+.mt-asp-pop--link {
+  position: absolute;
+  z-index: 20;
+  width: max-content;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 200ms var(--mt-ease),
+    transform 200ms var(--mt-ease),
+    visibility 0s linear 200ms;
+}
+.mt-asp-pop--link.is-open {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 200ms var(--mt-ease),
+    transform 200ms var(--mt-ease),
+    visibility 0s;
+}
+.mt-asp-pop--link .mt-asp-pop__info {
+  width: 10.625rem;
+}
+.mt-asp-pop--link .mt-asp-pop__title {
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+}
+.mt-asp-pop--link .mt-asp-pop__price {
+  gap: 0.5rem;
+  letter-spacing: -0.01em;
+}
+.mt-asp-pop--link .mt-asp-pop__compare {
+  font-size: 0.8125rem;
+}
+.mt-asp-pop--link .mt-asp-pop__add {
+  flex: none;
+  padding: 0.625rem 1rem;
+  background: #f0f0eb;
+  font-size: 0.8125rem;
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  transition: background-color 300ms var(--mt-ease);
+}
+
+/* Photo hotspots */
+.mt-asp-host {
+  position: relative;
+}
+span.mt-asp-host {
+  display: block;
+}
+/* Photos with dots skip the parallax (article-shop.js drops data-mt-parallax): the image fills its frame. */
+html .mt-art__rte p.mt-asp-host--still img {
+  height: 100%;
+  transform: none !important;
+}
+.mt-asp-spots {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.mt-asp-dot {
+  --asp-dot: 1rem;
+  --asp-core: 0.25rem;
+  position: absolute;
+  z-index: 1;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.875rem 0 0 -0.875rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.mt-asp-dot::before,
+.mt-asp-dot::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition:
+    width 200ms var(--mt-ease),
+    height 200ms var(--mt-ease),
+    background-color 200ms var(--mt-ease);
+}
+.mt-asp-dot::before {
+  width: var(--asp-dot);
+  height: var(--asp-dot);
+  background: rgba(255, 255, 255, 0.55);
+}
+.mt-asp-dot::after {
+  width: var(--asp-core);
+  height: var(--asp-core);
+  background: rgba(29, 29, 29, 0.7);
+}
+.mt-asp-dot.is-on {
+  --asp-dot: 1.375rem;
+  --asp-core: 0.375rem;
+}
+.mt-asp-dot.is-on::before {
+  background: var(--mt-white);
+}
+.mt-asp-dot.is-on::after {
+  background: var(--mt-ink);
+}
+.mt-asp-dot[hidden] {
+  display: none;
+}
+.mt-asp-dot:focus-visible {
+  outline: 2px solid var(--mt-white);
+  outline-offset: -2px;
+}
+
+/* Hotspot card, 252 × 108 (1479:6959) */
+.mt-asp-pop--spot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  gap: 0.875rem;
+  width: 15.75rem;
+  min-height: 6.75rem;
+  padding: 0.875rem 1.125rem 0.875rem 0.875rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  pointer-events: auto;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 200ms var(--mt-ease),
+    visibility 0s linear 200ms;
+}
+.mt-asp-pop--spot.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 200ms var(--mt-ease),
+    visibility 0s;
+}
+.mt-asp-pop--spot .mt-asp-pop__info {
+  flex: 1;
+}
+.mt-asp-pop--spot .mt-asp-pop__title {
+  line-height: 1.385;
+}
+.mt-asp-pop--spot .mt-asp-pop__price {
+  gap: 0.375rem;
+}
+.mt-asp-pop--spot .mt-asp-pop__add {
+  align-self: flex-start;
+  padding-bottom: 0.1875rem;
+  border-bottom: 1px solid currentColor;
+  font-family: var(--mt-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+}
+/* The close button only shows once a card is pinned open (a click on the dot, or the first dot on touch screens). */
+.mt-asp-pop__close {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--mt-ink);
+  cursor: pointer;
+}
+.mt-asp-pop__close svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mt-asp-pop--spot.is-pinned .mt-asp-pop__close {
+  display: block;
+}
+.mt-asp-pop--spot.is-pinned .mt-asp-pop__info {
+  padding-inline-end: 0.625rem;
+}
+
+@media screen and (min-width: 750px) {
+  .mt-asp-dot {
+    --asp-dot: 1.25rem;
+    --asp-core: 0.3125rem;
+  }
+  .mt-asp-dot.is-on {
+    --asp-dot: 1.75rem;
+    --asp-core: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-asp-pop,
+  .mt-asp-dot::before,
+  .mt-asp-dot::after,
+  .mt-asp__arrow {
+    transition: none !important;
+  }
+}

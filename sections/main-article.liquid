@@ -37,8 +37,9 @@
       {% if article.metafields.custom.quote != blank %}data-art-quote="{{ article.metafields.custom.quote | escape }}"{% endif %}
       {% if article.metafields.custom.quote_author != blank %}data-art-quote-author="{{ article.metafields.custom.quote_author | escape }}"{% endif %}
     >
-      {{ article.content }}
+      {% render 'article-shop', part: 'content', article: article %}
     </div>
+    {% render 'article-shop', part: 'tail', article: article %}
 
     <div class="mt-art__tags">
       <button class="mt-art__tag" type="button" data-art-share data-reveal>{%- assign share_fallback = 'article.share_post' | t -%}{{ section.settings.share_label | default: share_fallback }}</button>

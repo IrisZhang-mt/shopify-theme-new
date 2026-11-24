@@ -1,0 +1,211 @@
+{%- comment -%}
+  Shop the article — products inside a blog post body (main-article.liquid). Three parts, all opt-in per article:
+
+  1. SHOP THIS SECTION carousel: products from the article metafield custom.shop_products
+     (list of products), shown where the body has a line reading [shop-this-section]. To hide it, delete
+     that line or wrap it in an HTML comment; the products stay. Sold-out products are skipped; at most
+     12 are shown.
+  2. Product link cards: body links to a product page ending in #shop (e.g. /products/kids-beanie#shop)
+     show a small card on desktop hover. Touch devices just follow the link.
+  3. Photo hotspots: custom.shop_hotspots (list of blog_hotspot metaobjects: image_index = which body
+     image, counting from 1; pos_x / pos_y = position on the original image file in %; product). Sold-out
+     products are skipped; at most 3 dots per image (article-shop.js).
+
+  part: 'content' → the article body, with the placeholder and image numbers stamped in
+        'tail'    → hidden carousel + card templates + assets (only when the article uses any part)
+        'pop'     → one small product card (link: desktop hover card; spot: hotspot card); internal
+{%- endcomment -%}
+{%- liquid
+  assign marker = '[shop-this-section]'
+
+  if part == 'pop'
+    if kind == 'spot'
+      assign pop_list_id = 'blog_photo_hotspot'
+      assign pop_list_name = 'Photo Hotspot_' | append: article.title
+    else
+      assign pop_list_id = 'blog_product_link'
+      assign pop_list_name = 'Product Link_' | append: article.title
+    endif
+    assign ga4_pick = product.variants | where: 'available', true | first
+    assign ga4_pick = ga4_pick | default: product.variants.first
+  else
+    assign source = article.content
+    assign shop_products = article.metafields.custom.shop_products.value
+    assign section_max = 12
+    assign show_section = false
+    assign section_count = 0
+    if source contains marker
+      for item in shop_products
+        if item.available and section_count < section_max
+          assign section_count = section_count | plus: 1
+        endif
+      endfor
+      if section_count > 0
+        assign show_section = true
+      endif
+    endif
+
+    assign spot_count = 0
+    for spot in article.metafields.custom.shop_hotspots.value
+      if spot.product.value.available and spot.image_index.value > 0
+        assign spot_count = spot_count | plus: 1
+      endif
+    endfor
+  endif
+-%}
+
+{%- case part -%}
+  {%- when 'content' -%}
+    {%- liquid
+      assign body = source
+      if body contains marker
+        if show_section
+          # The text stays inside the (hidden) span so the line survives article.js's clean-up of pasted docs.
+          assign body = body | replace: marker, '<span data-asp-slot hidden>[shop-this-section]</span>'
+        else
+          assign body = body | replace: '<p>[shop-this-section]</p>', '' | replace: marker, ''
+        endif
+      endif
+    -%}
+    {%- if spot_count > 0 and body contains '<img' -%}
+      {%- comment -%} Number the body images in their original order (article.js regroups them later). {%- endcomment -%}
+      {%- assign img_parts = body | split: '<img' -%}
+      {%- for img_part in img_parts -%}
+        {%- unless forloop.first -%}
+          {%- assign img_open = '<img data-asp-img="' | append: forloop.index0 | append: '"' -%}
+          {{- img_open -}}
+        {%- endunless -%}
+        {{- img_part -}}
+      {%- endfor -%}
+    {%- else -%}
+      {{ body }}
+    {%- endif -%}
+
+  {%- when 'tail' -%}
+    {%- liquid
+      # Product links marked #shop: unique handles in body order (at most 10, to stay well inside all_products' limit).
+      assign link_handles = ','
+      assign link_count = 0
+      if source contains '#shop'
+        assign href_parts = source | split: 'href="'
+        for href_part in href_parts
+          if forloop.first or link_count >= 10
+            continue
+          endif
+          assign href = href_part | split: '"' | first
+          assign href_hash = href | split: '#' | last
+          unless href contains '/products/' and href contains '#' and href_hash == 'shop'
+            continue
+          endunless
+          assign link_handle = href | split: '/products/' | last | split: '#' | first | split: '?' | first | split: '/' | first
+          assign link_key = ',' | append: link_handle | append: ','
+          if link_handle == blank or link_handles contains link_key
+            continue
+          endif
+          assign link_handles = link_handles | append: link_handle | append: ','
+          assign link_count = link_count | plus: 1
+        endfor
+      endif
+      assign link_handles = link_handles | remove_first: ',' | split: ','
+    -%}
+    {%- if show_section or spot_count > 0 or link_count > 0 -%}
+      {{ 'article-shop.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'article-shop.js' | asset_url }}" type="module"></script>
+
+      {%- if show_section -%}
+        {%- assign section_list_name = 'Shop This Section_' | append: article.title -%}
+        <div class="mt-asp" data-asp data-currency="{{ cart.currency.iso_code }}" hidden>
+          <div class="mt-asp__head">
+            <p class="mt-asp__label">{{ 'article.shop_section' | t }}</p>
+            <p class="mt-asp__count" data-asp-count>1 / {{ section_count }}</p>
+            <button class="mt-asp__arrow" type="button" data-asp-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="1.25"/></svg>
+            </button>
+            <button class="mt-asp__arrow" type="button" data-asp-arrow="next" aria-label="{{ 'general.next' | t }}">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="1.25"/></svg>
+            </button>
+          </div>
+          <div class="mt-asp__row" data-asp-row>
+            {%- assign card_index = 0 -%}
+            {%- for item in shop_products -%}
+              {%- unless item.available and card_index < section_max -%}{%- continue -%}{%- endunless -%}
+              {%- render 'product-card', product: item, quick: true, sale_badge: true, index: card_index, sizes: '(min-width: 750px) 270px, 54vw', item_list_id: 'blog_shop_this_section', item_list_name: section_list_name -%}
+              {%- assign card_index = card_index | plus: 1 -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if link_count > 0 -%}
+        {%- assign link_index = 0 -%}
+        {%- for link_handle in link_handles -%}
+          {%- assign link_product = all_products[link_handle] -%}
+          {%- unless link_product.available -%}{%- continue -%}{%- endunless -%}
+          {%- assign link_index = link_index | plus: 1 -%}
+          <template data-asp-link="{{ link_handle | escape }}">
+            {%- render 'article-shop', part: 'pop', kind: 'link', product: link_product, article: article, index: link_index -%}
+          </template>
+        {%- endfor -%}
+        <div class="mt-asp-layer" data-asp-layer></div>
+      {%- endif -%}
+
+      {%- if spot_count > 0 -%}
+        {%- assign spot_index = 0 -%}
+        {%- for spot in article.metafields.custom.shop_hotspots.value -%}
+          {%- assign spot_product = spot.product.value -%}
+          {%- unless spot_product.available and spot.image_index.value > 0 -%}{%- continue -%}{%- endunless -%}
+          {%- assign spot_index = spot_index | plus: 1 -%}
+          <template data-asp-spot data-img="{{ spot.image_index.value }}" data-x="{{ spot.pos_x.value | default: 50 }}" data-y="{{ spot.pos_y.value | default: 50 }}" data-title="{{ spot_product.title | escape }}">
+            {%- render 'article-shop', part: 'pop', kind: 'spot', product: spot_product, article: article, index: spot_index -%}
+          </template>
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endif -%}
+
+  {%- when 'pop' -%}
+    {%- capture pop_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
+    {%- assign pop_variant = pop_variant | strip -%}
+    {%- assign on_sale = false -%}
+    {%- if product.compare_at_price_min > product.price_min -%}{%- assign on_sale = true -%}{%- endif -%}
+    <div
+      class="mt-asp-pop mt-asp-pop--{{ kind }}{% if on_sale %} mt-asp-pop--sale{% endif %}"
+      data-asp-pop
+      data-currency="{{ cart.currency.iso_code }}"
+      data-quick-url="{{ product.url }}"
+      data-item-list-id="{{ pop_list_id }}"
+      data-item-list-name="{{ pop_list_name | escape }}"
+      data-item-id="{{ ga4_pick.sku }}"
+      data-item-name="{{ product.title | escape }}"
+      data-item-brand="{{ product.vendor | escape }}"
+      {% if product.type != blank %}data-item-category="{{ product.type | escape }}"{% endif %}
+      {% if pop_variant != blank %}data-item-variant="{{ pop_variant | escape }}"{% endif %}
+      data-item-price="{{ product.price_min | divided_by: 100.0 }}"
+      data-item-discount="{% if on_sale %}{{ product.compare_at_price_min | minus: product.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"
+      data-item-index="{{ index }}"
+    >
+      <a class="mt-asp-pop__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+        {%- if product.featured_image -%}
+          {{ product.featured_image | image_url: width: 168 | image_tag: width: 56, height: 70, loading: 'lazy', decoding: 'async', sizes: '56px', widths: '112, 168', alt: '' }}
+        {%- endif -%}
+      </a>
+      <div class="mt-asp-pop__info">
+        <a class="mt-asp-pop__title" href="{{ product.url }}">{{ product.title }}</a>
+        <p class="mt-asp-pop__price">
+          {%- if on_sale -%}
+            <s class="mt-asp-pop__compare">{{ product.compare_at_price_min | money_without_trailing_zeros }}</s>
+          {%- endif -%}
+          <span class="mt-asp-pop__now">{{ product.price_min | money_without_trailing_zeros }}</span>
+        </p>
+        {%- if kind == 'spot' -%}
+          <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'article.add_to_bag' | t }}</button>
+        {%- endif -%}
+      </div>
+      {%- if kind == 'spot' -%}
+        <button class="mt-asp-pop__close" type="button" data-asp-close aria-label="{{ 'general.close' | t }}">
+          {%- render 'icon-close' -%}
+        </button>
+      {%- else -%}
+        <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'article.add_to_bag' | t }}</button>
+      {%- endif -%}
+    </div>
+{%- endcase -%}
