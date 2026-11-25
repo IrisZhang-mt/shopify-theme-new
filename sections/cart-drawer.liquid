@@ -13,6 +13,9 @@
       </div>
       {% render 'cart-shipping-bar' %}
       {% render 'checkout-loading' %}
+      {%- if section.settings.notice_text != blank -%}
+        <p class="mt-cart__notice">{{ section.settings.notice_text }}</p>
+      {%- endif -%}
       <div class="mt-cart__body">
         {%- if cart.item_count == 0 -%}
           <div class="mt-cart__empty">
@@ -107,6 +110,12 @@
       "id": "recs_heading",
       "label": "Recommendations heading",
       "default": "We think you'll love"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "notice_text",
+      "label": "Notice text",
+      "info": "Shown above the cart items, centered in the brand color. Leave blank to hide."
     }
   ]
 }
