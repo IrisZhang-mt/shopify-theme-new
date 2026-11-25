@@ -137,13 +137,27 @@
       {%- endif -%}
 
       {%- if link_count > 0 -%}
+        {%- comment -%} Swatch colours for the link cards (1479:6940), parsed once as in product-card. {%- endcomment -%}
+        {%- assign custom_color_keys = '' -%}
+        {%- assign custom_color_values = '' -%}
+        {%- if settings.show_products_swatches and settings.color_swatches != blank -%}
+          {%- assign custom_color_lines = settings.color_swatches | newline_to_br | split: '<br />' -%}
+          {%- for line in custom_color_lines -%}
+            {%- assign custom_color_key = line | split: ':' | first | rstrip -%}
+            {%- assign custom_color_value = line | split: ':' | last | lstrip -%}
+            {%- assign custom_color_keys = custom_color_keys | append: ',' | append: custom_color_key -%}
+            {%- assign custom_color_values = custom_color_values | append: ',' | append: custom_color_value -%}
+          {%- endfor -%}
+          {%- assign custom_color_keys = custom_color_keys | remove_first: ',' | strip_newlines | downcase | split: ',' -%}
+          {%- assign custom_color_values = custom_color_values | remove_first: ',' | split: ',' -%}
+        {%- endif -%}
         {%- assign link_index = 0 -%}
         {%- for link_handle in link_handles -%}
           {%- assign link_product = all_products[link_handle] -%}
           {%- unless link_product.available -%}{%- continue -%}{%- endunless -%}
           {%- assign link_index = link_index | plus: 1 -%}
           <template data-asp-link="{{ link_handle | escape }}">
-            {%- render 'article-shop', part: 'pop', kind: 'link', product: link_product, article: article, index: link_index -%}
+            {%- render 'article-shop', part: 'pop', kind: 'link', product: link_product, article: article, index: link_index, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
           </template>
         {%- endfor -%}
         <div class="mt-asp-layer" data-asp-layer></div>
@@ -190,6 +204,22 @@
       </a>
       <div class="mt-asp-pop__info">
         <a class="mt-asp-pop__title" href="{{ product.url }}">{{ product.title }}</a>
+        {%- if kind == 'link' and settings.show_products_swatches -%}
+          {%- assign color_option = product.options_with_values | where: 'name', 'Color' | first -%}
+          {%- unless color_option -%}
+            {%- assign color_option = product.options_with_values | where: 'name', 'Colour' | first -%}
+          {%- endunless -%}
+          {%- if color_option -%}
+            <div class="mt-asp-pop__swatches" aria-hidden="true">
+              {%- for value in color_option.values limit: 9 -%}
+                {%- capture swatch_value -%}
+                  {%- render 'color-swatch', value: value, custom_color_keys: custom_color_keys, custom_color_values: custom_color_values -%}
+                {%- endcapture -%}
+                <span class="mt-asp-pop__swatch" style="--mt-swatch: {{ swatch_value | strip_newlines | strip }}"></span>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
         <p class="mt-asp-pop__price">
           {%- if on_sale -%}
             <s class="mt-asp-pop__compare">{{ product.compare_at_price_min | money_without_trailing_zeros }}</s>
@@ -197,7 +227,7 @@
           <span class="mt-asp-pop__now">{{ product.price_min | money_without_trailing_zeros }}</span>
         </p>
         {%- if kind == 'spot' -%}
-          <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'article.add_to_bag' | t }}</button>
+          <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'products.quick_shop' | t }}</button>
         {%- endif -%}
       </div>
       {%- if kind == 'spot' -%}
@@ -205,7 +235,7 @@
           {%- render 'icon-close' -%}
         </button>
       {%- else -%}
-        <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'article.add_to_bag' | t }}</button>
+        <button class="mt-asp-pop__add" type="button" data-qs-open>{{ 'products.quick_shop' | t }}</button>
       {%- endif -%}
     </div>
 {%- endcase -%}
