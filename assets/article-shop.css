@@ -60,13 +60,13 @@
   visibility: hidden;
 }
 
-/* The row bleeds to the right edge of the screen (the body text column has 15px side padding). */
+/* The row bleeds to the right edge of the screen (past the body column's side padding, article.css --art-gutter). */
 .mt-asp__row {
   display: flex;
   gap: var(--asp-gap);
   margin-top: calc(12 * var(--asp-u));
-  margin-right: -0.9375rem;
-  padding-right: 0.9375rem;
+  margin-right: calc(-1 * var(--art-gutter, 0.9375rem));
+  padding-right: var(--art-gutter, 0.9375rem);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;

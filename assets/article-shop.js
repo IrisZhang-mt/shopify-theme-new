@@ -6,7 +6,7 @@ if (!window.mtArticleShopInit) {
   const MARKER = '[shop-this-section]';
   const MAX_SPOTS = 3;
   // Desktop = a mouse on a wide screen: link hover cards, hotspot cards open on hover (right of the dot).
-  // Everything else taps: links just navigate, hotspot cards open under the dot, the first one open by default.
+  // Everything else taps: links just navigate, hotspot cards open under the dot once it is tapped.
   const desktopMq = window.matchMedia('(min-width: 750px) and (hover: hover) and (pointer: fine)');
   const wideMq = window.matchMedia('(min-width: 750px)');
   const reducedMq = window.mtReducedMq || window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -152,6 +152,17 @@ if (!window.mtArticleShopInit) {
     });
     syncRow(module);
     row.querySelectorAll('.mt-card[data-item-id]').forEach((card) => viewObserver.observe(card));
+    // Cards past the first page are clipped by the row, so the page reveal (motion.js) only fires once they are
+    // scrolled to and they show up late after the first Next (QA 2026-11-25): reveal the whole row with page one.
+    const rowReveal = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        rowReveal.disconnect();
+        row.querySelectorAll('.mt-card[data-reveal]').forEach((card) => card.classList.add('mt-in-view'));
+      },
+      { threshold: 0.15 }
+    );
+    rowReveal.observe(row);
   };
 
   const mountSection = (art) => {
@@ -347,13 +358,8 @@ if (!window.mtArticleShopInit) {
     viewObserver.observe(spot.card);
   };
 
-  // Touch screens start with the first (visible) dot of every photo open.
-  const resetGroup = (group) => {
-    closeGroup(group);
-    if (desktopMq.matches) return;
-    const first = group.spots.find((spot) => !spot.dot.hidden);
-    if (first) openSpot(group, first, true);
-  };
+  // Both devices start with every card closed: a tap / click on a dot opens it (QA 2026-11-25, adjustment 1).
+  const resetGroup = (group) => closeGroup(group);
 
   const hostFor = (img) => {
     // article.js puts image-only paragraphs into .mt-art__full / __pair / __gallery: the paragraph is the frame.
@@ -413,22 +419,14 @@ if (!window.mtArticleShopInit) {
       groups.push(group);
       placeSpots(group);
       resetGroup(group);
-      if (!img.complete) {
-        img.addEventListener(
-          'load',
-          () => {
-            placeSpots(group);
-            if (!desktopMq.matches && !group.pinned) resetGroup(group);
-          },
-          { once: true }
-        );
-      }
+      if (!img.complete) img.addEventListener('load', () => placeSpots(group), { once: true });
       hostResize.observe(host);
     });
     return stilled;
   };
 
-  // Clicks: a dot pins its card (or closes it when it is the pinned one); × closes. Both devices.
+  // Clicks: a dot pins its card (or closes it when it is the pinned one); × or anywhere outside the open card
+  // closes it. Both devices.
   document.addEventListener('click', (event) => {
     const close = event.target.closest?.('[data-asp-close]');
     if (close) {
@@ -436,6 +434,11 @@ if (!window.mtArticleShopInit) {
       if (group) closeGroup(group);
       return;
     }
+    groups.forEach((group) => {
+      if (group.pinned && !group.pinned.card.contains(event.target) && !group.pinned.dot.contains(event.target)) {
+        closeGroup(group);
+      }
+    });
     const dot = event.target.closest?.('.mt-asp-dot');
     if (dot) {
       event.preventDefault();

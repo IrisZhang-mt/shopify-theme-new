@@ -3,10 +3,16 @@
   关闭记录写 sessionStorage：同一标签页内不再出现，新标签页恢复。
   内联脚本在 Smile（body 末尾的 app embed）之前同步执行，已关闭时直接
   给 <html> 加 class 隐藏按钮框，避免闪现。面板（.smile-panel-frame-container）不受影响。
+  Quick Shop / 购物车抽屉打开期间（mt-qs-lock / mt-cart-lock）同样隐藏按钮框，
+  否则它压在弹层底部的按钮上（2026-11-25 验收问题 2）。
 {%- endcomment -%}
 <style>
   .mt-smile-closed #smile-ui-container .smile-launcher-frame-container,
-  .mt-smile-closed #smile-ui-lite-launcher-frame-container { display: none !important; }
+  .mt-smile-closed #smile-ui-lite-launcher-frame-container,
+  .mt-qs-lock #smile-ui-container .smile-launcher-frame-container,
+  .mt-qs-lock #smile-ui-lite-launcher-frame-container,
+  .mt-cart-lock #smile-ui-container .smile-launcher-frame-container,
+  .mt-cart-lock #smile-ui-lite-launcher-frame-container { display: none !important; }
 </style>
 <script>
   try {

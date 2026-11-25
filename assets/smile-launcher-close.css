@@ -42,6 +42,8 @@
   outline-offset: 2px;
 }
 
-.mt-smile-closed .mt-smile-close {
+.mt-smile-closed .mt-smile-close,
+.mt-qs-lock .mt-smile-close,
+.mt-cart-lock .mt-smile-close {
   display: none;
 }

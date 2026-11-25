@@ -2,53 +2,127 @@
 {{ 'article.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'article.js' | asset_url }}" type="module"></script>
 
+{%- comment -%}
+  Figma "moodytiger网站2026" → 2026.11.16 blog 设计: PC 1479:6740, mobile 1479:7086 / 7306.
+  Body extras built by article.js: chapters (from the body H2s), quick summary (<ul class="quick-summary">),
+  FAQ accordion (H3s under an H2 "FAQ" / "Frequently asked questions"), tables, figure captions.
+{%- endcomment -%}
+{%- liquid
+  assign share_url = canonical_url
+  assign category = article.tags.first
+  assign lead = article.excerpt | strip_html | strip
+  assign share_media = ''
+  if article.image
+    assign share_media = article.image | image_url: width: 1200 | prepend: 'https:'
+  endif
+  assign whatsapp_text = article.title | append: ' ' | append: share_url
+-%}
+
+{%- capture share_icons -%}
+  <div class="mt-art__share" role="group" aria-label="{{ 'article.share' | t | escape }}" data-art-share-url="{{ share_url }}">
+    <button class="mt-art__share-btn" type="button" data-art-copy data-art-share-to="Copy link" aria-label="{{ 'article.share_copy' | t | escape }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8.5 11.5a3.03 3.03 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-1 1" stroke="currentColor" stroke-width="1.25"/><path d="M11.5 8.5a3.03 3.03 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l1-1" stroke="currentColor" stroke-width="1.25"/></svg>
+    </button>
+    <button class="mt-art__share-btn" type="button" data-art-copy data-art-share-to="Instagram" aria-label="{{ 'article.share_instagram' | t | escape }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3h6a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Z" stroke="currentColor" stroke-width="1.25"/><circle cx="10" cy="10" r="3.2" stroke="currentColor" stroke-width="1.25"/><circle cx="14.2" cy="5.8" r=".6" fill="currentColor"/></svg>
+    </button>
+    <a class="mt-art__share-btn" href="https://www.pinterest.com/pin/create/button/?url={{ share_url | url_encode }}{% if share_media != blank %}&amp;media={{ share_media | url_encode }}{% endif %}&amp;description={{ article.title | url_encode }}" target="_blank" rel="noopener" data-art-share-to="Pinterest" aria-label="{{ 'article.share_pinterest' | t | escape }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.25"/><path d="M9.6 11.2h1.5a2 2 0 0 0 0-4H9.2L7.6 15" stroke="currentColor" stroke-width="1.25"/></svg>
+    </a>
+    <a class="mt-art__share-btn" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener" data-art-share-to="Facebook" aria-label="{{ 'article.share_facebook' | t | escape }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.25"/><path d="M11.8 6.8h-1a1.4 1.4 0 0 0-1.4 1.4V17M8 10.4h3.6" stroke="currentColor" stroke-width="1.25"/></svg>
+    </a>
+    <a class="mt-art__share-btn" href="https://wa.me/?text={{ whatsapp_text | url_encode }}" target="_blank" rel="noopener" data-art-share-to="WhatsApp" aria-label="{{ 'article.share_whatsapp' | t | escape }}">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4.2 15.8.9-3.1a6.6 6.6 0 1 1 2.5 2.3l-3.4.8Z" stroke="currentColor" stroke-width="1.25"/><path d="M8 7.6c.2 1.9 2.1 3.9 4.2 4.3l.8-1-1.3-.7-.6.6c-.8-.3-1.6-1.1-1.9-1.9l.6-.6L9.1 7 8 7.6Z" stroke="currentColor" stroke-width="1.25"/></svg>
+    </a>
+    <button class="mt-art__share-btn mt-art__share-native" type="button" data-art-native data-art-share-to="Share" aria-label="{{ 'article.share_native' | t | escape }}" hidden>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7H2v8h12V7h-2M8 1v9m3-6L8 1 5 4" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+    <span class="mt-art__copied" role="status" aria-live="polite" data-art-copied></span>
+  </div>
+{%- endcapture -%}
+
 <article class="mt-art" data-art>
-  <header class="mt-art__hero">
-    <div class="mt-art__hero-media" data-mt-parallax>
-      {%- assign hero_video = article.metafields.custom.hero_video.value | default: section.settings.video -%}
-      {%- if hero_video != blank -%}
-        {{ hero_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
-      {%- elsif article.image -%}
-        {%- assign image_alt = article.image.alt | default: article.title | escape -%}
-        {{ article.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
-      {%- elsif section.settings.image != blank -%}
-        {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
-        {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
-      {%- else -%}
-        {{ 'lifestyle-1' | placeholder_svg_tag }}
-      {%- endif -%}
-    </div>
-    <div class="mt-art__hero-body">
-      <h1 class="mt-art__title mt-rise" data-reveal>{{ article.title }}</h1>
-      <div class="mt-art__hero-bar" data-reveal style="--mt-reveal-i: 2">
-        <span>{{ article.published_at | date: '%B %-d, %Y.' }}</span>
-        <button class="mt-art__share" type="button" data-art-share>{{ 'article.share' | t }}</button>
+  <header class="mt-art__head">
+    <div class="mt-art__hero">
+      <div class="mt-art__hero-media" data-mt-parallax>
+        {%- assign hero_video = article.metafields.custom.hero_video.value | default: section.settings.video -%}
+        {%- if hero_video != blank -%}
+          {{ hero_video | video_tag: autoplay: true, muted: true, loop: true, controls: false, playsinline: true, preload: 'metadata' }}
+        {%- elsif article.image -%}
+          {%- assign image_alt = article.image.alt | default: article.title | escape -%}
+          {{ article.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+        {%- elsif section.settings.image != blank -%}
+          {%- assign image_alt = section.settings.image.alt | default: '' | escape -%}
+          {{ section.settings.image | image_url: width: 2880 | image_tag: decoding: 'async', loading: 'eager', fetchpriority: 'high', sizes: '100vw', alt: image_alt }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag }}
+        {%- endif -%}
       </div>
+      <nav class="mt-art__crumbs" aria-label="{{ 'article.breadcrumb' | t | escape }}">
+        <ol>
+          <li><a href="{{ routes.root_url }}">{{ 'article.home' | t }}</a></li>
+          <li><a href="{{ blog.url }}">{{ blog.title }}</a></li>
+          {%- if category != blank -%}
+            <li><a class="mt-art__crumbs-tag" href="{{ blog.url }}/tagged/{{ category | handle }}">{{ category }}</a></li>
+          {%- endif -%}
+          <li aria-current="page"><span>{{ article.title }}</span></li>
+        </ol>
+      </nav>
+      <div class="mt-art__hero-body">
+        <h1 class="mt-art__title mt-rise" data-reveal>{{ article.title }}</h1>
+      </div>
+    </div>
+    <div class="mt-art__meta" data-reveal style="--mt-reveal-i: 2">
+      <time class="mt-art__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %-d, %Y' }}</time>
+      <span class="mt-art__rule" aria-hidden="true"></span>
+      {{ share_icons }}
     </div>
   </header>
 
   <div class="mt-art__layout">
-    <div
-      class="mt-art__rte"
-      data-art-rte
-      data-art-arrow="{{ 'arrow.svg' | asset_url }}"
-      data-art-prev="{{ 'general.previous' | t }}"
-      data-art-next="{{ 'general.next' | t }}"
-      {% if article.metafields.custom.quote != blank %}data-art-quote="{{ article.metafields.custom.quote | escape }}"{% endif %}
-      {% if article.metafields.custom.quote_author != blank %}data-art-quote-author="{{ article.metafields.custom.quote_author | escape }}"{% endif %}
-    >
-      {% render 'article-shop', part: 'content', article: article %}
-    </div>
-    {% render 'article-shop', part: 'tail', article: article %}
+    <nav class="mt-art__toc" data-art-toc aria-labelledby="ArtToc-{{ section.id }}" hidden>
+      <div class="mt-art__toc-head">
+        <p class="mt-art__toc-title" id="ArtToc-{{ section.id }}">{{ 'article.chapters' | t }}</p>
+        <button
+          class="mt-art__toc-toggle"
+          type="button"
+          data-art-toc-toggle
+          aria-expanded="true"
+          data-show="{{ 'article.chapters_show' | t | escape }}"
+          data-hide="{{ 'article.chapters_hide' | t | escape }}"
+        >
+          {{- 'article.chapters_hide' | t -}}
+        </button>
+      </div>
+      <ol class="mt-art__toc-list" data-art-toc-list></ol>
+    </nav>
 
-    <div class="mt-art__tags">
-      <button class="mt-art__tag" type="button" data-art-share data-reveal>{%- assign share_fallback = 'article.share_post' | t -%}{{ section.settings.share_label | default: share_fallback }}</button>
-      {%- if section.settings.shop_label != blank -%}
-        <a class="mt-art__tag" href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" data-reveal style="--mt-reveal-i: 1">{{ section.settings.shop_label }}</a>
+    <div class="mt-art__main">
+      {%- if lead != blank -%}
+        <p class="mt-art__lead" data-reveal>{{ lead }}</p>
       {%- endif -%}
-      {%- if section.settings.story_label != blank -%}
-        <a class="mt-art__tag" href="{{ section.settings.story_url | default: '/pages/about-us' }}" data-reveal style="--mt-reveal-i: 2">{{ section.settings.story_label }}</a>
-      {%- endif -%}
+      <div
+        class="mt-art__rte"
+        data-art-rte
+        data-art-summary="{{ 'article.quick_summary' | t | escape }}"
+        data-art-faq="{{ 'article.faq_short' | t | escape }}"
+        {% if article.metafields.custom.quote != blank %}data-art-quote="{{ article.metafields.custom.quote | escape }}"{% endif %}
+        {% if article.metafields.custom.quote_author != blank %}data-art-quote-author="{{ article.metafields.custom.quote_author | escape }}"{% endif %}
+      >
+        {% render 'article-shop', part: 'content', article: article %}
+      </div>
+      {% render 'article-shop', part: 'tail', article: article %}
+
+      <div class="mt-art__tags">
+        {{ share_icons }}
+        {%- if section.settings.shop_label != blank -%}
+          <a class="mt-art__tag" href="{{ section.settings.shop_url | default: routes.all_products_collection_url }}" data-reveal style="--mt-reveal-i: 1">{{ section.settings.shop_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.story_label != blank -%}
+          <a class="mt-art__tag" href="{{ section.settings.story_url | default: '/pages/about-us' }}" data-reveal style="--mt-reveal-i: 2">{{ section.settings.story_label }}</a>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 
@@ -82,12 +156,6 @@
       "id": "image",
       "label": "Hero image fallback",
       "info": "Used when the article has no featured image"
-    },
-    {
-      "type": "text",
-      "id": "share_label",
-      "label": "Share tag label",
-      "default": "Share post"
     },
     {
       "type": "text",

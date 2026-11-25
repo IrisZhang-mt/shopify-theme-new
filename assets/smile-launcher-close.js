@@ -121,6 +121,11 @@
 
   window.addEventListener('resize', place, { passive: true });
 
+  // Quick Shop / 购物车打开时 <html> 加 mt-qs-lock / mt-cart-lock，按钮框被 CSS 隐藏；关闭后要重新定位，
+  // 否则期间被判定为不可见的 × 不会再出现
+  const rootObserver = new MutationObserver(schedule);
+  rootObserver.observe(root, { attributes: true, attributeFilter: ['class'] });
+
   btn.addEventListener('click', () => {
     try {
       sessionStorage.setItem(KEY, '1');
@@ -129,6 +134,7 @@
     btn.hidden = true;
     clearTimeout(settleTimer);
     bodyObserver.disconnect();
+    rootObserver.disconnect();
     containerObserver?.disconnect();
     container?.removeEventListener('animationend', onSettle);
     container?.removeEventListener('transitionend', onSettle);
