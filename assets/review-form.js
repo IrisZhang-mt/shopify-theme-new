@@ -4,11 +4,14 @@ if (!window.mtReviewFormInit) {
   const CREATE_URL = 'https://judge.me/api/v1/reviews';
   const PRESIGN_URL = 'https://api.judge.me/api/v1/pictures/presigned_data';
   const MAX_BYTES = 10485760;
+  const MAX_PHOTOS = 5;
+  const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
   const CLOSE_DELAY = 450;
   const FOCUSABLE = 'button:not(:disabled), input:not(:disabled), textarea:not(:disabled), a[href]';
 
   const reducedMq = window.mtReducedMq;
   const state = { trigger: null, sending: false, closeTimer: 0 };
+  const photosOf = new WeakMap();
 
   const field = (form, name) => form.querySelector(`[name="${name}"]`);
 
@@ -44,12 +47,13 @@ if (!window.mtReviewFormInit) {
       reader.readAsDataURL(file);
     });
 
-  const uploadPicture = async (root, file) => {
+  // Index prefix keeps same-named files (e.g. several iOS "image.jpg") from sharing an upload key.
+  const uploadPicture = async (root, file, index) => {
     const presign = await fetch(`${PRESIGN_URL}?${new URLSearchParams(shopParams(root))}`);
     if (!presign.ok) throw new Error(presign.status);
     const data = await presign.json();
     const body = new FormData();
-    body.append('key', `${data.key_prefix}${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`);
+    body.append('key', `${data.key_prefix}${index}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`);
     Object.entries(data.fields || {}).forEach(([key, value]) => body.append(key, value));
     body.append('file', file);
     const upload = await fetch(data.url, { method: 'POST', body });
@@ -58,6 +62,65 @@ if (!window.mtReviewFormInit) {
     const location = parsed.querySelector('Location')?.textContent;
     if (!location) throw new Error(upload.status);
     return location;
+  };
+
+  const photos = (root) => {
+    if (!photosOf.has(root)) photosOf.set(root, []);
+    return photosOf.get(root);
+  };
+
+  const paintPhotos = (root) => {
+    const list = root.querySelector('[data-rf-thumbs]');
+    if (!list) return;
+    const picked = photos(root);
+    list.replaceChildren(
+      ...picked.map((photo, index) => {
+        const item = document.createElement('li');
+        item.className = 'mt-rf__thumb';
+        const image = new Image(64, 64);
+        image.src = photo.url;
+        image.alt = '';
+        const remove = document.createElement('button');
+        remove.className = 'mt-rf__thumb-remove';
+        remove.type = 'button';
+        remove.dataset.rfRemove = index;
+        remove.setAttribute('aria-label', `${root.dataset.rfPhotoRemove} ${index + 1}`);
+        remove.innerHTML =
+          '<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9"/></svg>';
+        item.append(image, remove);
+        return item;
+      })
+    );
+    list.hidden = !picked.length;
+  };
+
+  const addPhotos = (root, files) => {
+    const picked = photos(root);
+    let message = '';
+    files.forEach((file) => {
+      if (!PHOTO_TYPES.includes(file.type)) {
+        message = root.dataset.rfPhotoType;
+        return;
+      }
+      if (file.size > MAX_BYTES) {
+        message = root.dataset.rfPhotoLarge;
+        return;
+      }
+      if (picked.length >= MAX_PHOTOS) {
+        message = root.dataset.rfPhotoMany;
+        return;
+      }
+      if (picked.some((photo) => photo.file.name === file.name && photo.file.size === file.size)) return;
+      picked.push({ file, url: URL.createObjectURL(file) });
+    });
+    note(root, message, Boolean(message));
+    paintPhotos(root);
+  };
+
+  const clearPhotos = (root) => {
+    photos(root).forEach((photo) => URL.revokeObjectURL(photo.url));
+    photosOf.set(root, []);
+    paintPhotos(root);
   };
 
   const validate = (form) => {
@@ -86,12 +149,7 @@ if (!window.mtReviewFormInit) {
       return;
     }
 
-    const picker = form.querySelector('[data-rf-file]');
-    const file = picker?.files[0];
-    if (file && file.size > MAX_BYTES) {
-      note(root, root.dataset.rfPhotoLarge, true);
-      return;
-    }
+    const files = photos(root).map((photo) => photo.file);
 
     const label = button.textContent;
     state.sending = true;
@@ -107,6 +165,7 @@ if (!window.mtReviewFormInit) {
       title: field(form, 'title').value.trim(),
       body: field(form, 'body').value.trim(),
       picture: '',
+      pictures: [],
     };
 
     const body = new FormData();
@@ -120,10 +179,15 @@ if (!window.mtReviewFormInit) {
     if (root.dataset.rfCustomer) body.append('shopify_customer_id', root.dataset.rfCustomer);
 
     try {
-      if (file) {
-        const [location, preview] = await Promise.all([uploadPicture(root, file), readPreview(file)]);
-        body.append('picture_urls[]', location);
-        review.picture = preview;
+      // Any failed upload rejects the whole submit, so a review never posts with missing photos.
+      if (files.length) {
+        const [locations, previews] = await Promise.all([
+          Promise.all(files.map((file, index) => uploadPicture(root, file, index))),
+          Promise.all(files.map(readPreview)),
+        ]);
+        locations.forEach((location) => body.append('picture_urls[]', location));
+        review.pictures = previews.filter(Boolean);
+        review.picture = review.pictures[0] || '';
       }
       const response = await fetch(CREATE_URL, { method: 'POST', body });
       if (!response.ok) throw new Error(response.status);
@@ -153,8 +217,7 @@ if (!window.mtReviewFormInit) {
     form.reset();
     paintStars(root);
     form.querySelectorAll('[aria-invalid]').forEach((input) => input.removeAttribute('aria-invalid'));
-    const fileName = root.querySelector('[data-rf-file-name]');
-    if (fileName) fileName.textContent = '';
+    clearPhotos(root);
     note(root, root.dataset.rfThanks);
     button.disabled = false;
     button.type = 'button';
@@ -216,6 +279,15 @@ if (!window.mtReviewFormInit) {
       open(trigger);
       return;
     }
+    const remove = event.target.closest?.('[data-rf-remove]');
+    if (remove) {
+      const root = remove.closest('[data-rf]');
+      const [photo] = photos(root).splice(Number(remove.dataset.rfRemove), 1);
+      if (photo) URL.revokeObjectURL(photo.url);
+      note(root, '');
+      paintPhotos(root);
+      return;
+    }
     if (event.target.closest?.('[data-rf-close]')) close(openRoot());
   });
 
@@ -227,8 +299,8 @@ if (!window.mtReviewFormInit) {
       return;
     }
     if (event.target.matches('[data-rf-file]')) {
-      const name = root.querySelector('[data-rf-file-name]');
-      if (name) name.textContent = event.target.files[0]?.name || '';
+      addPhotos(root, [...event.target.files]);
+      event.target.value = '';
     }
   });
 

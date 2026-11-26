@@ -18,6 +18,9 @@
   data-rf-error="{{ 'reviews.form_error' | t | escape }}"
   data-rf-invalid="{{ 'reviews.form_invalid' | t | escape }}"
   data-rf-photo-large="{{ 'reviews.form_photo_large' | t | escape }}"
+  data-rf-photo-many="{{ 'reviews.form_photo_many' | t | escape }}"
+  data-rf-photo-type="{{ 'reviews.form_photo_type' | t | escape }}"
+  data-rf-photo-remove="{{ 'reviews.form_photo_remove' | t | escape }}"
   data-rf-close-label="{{ 'general.close' | t | escape }}"
 >
   <div class="mt-rf__backdrop" data-rf-close></div>
@@ -65,10 +68,11 @@
       <div class="mt-rf__field">
         <span class="mt-rf__label">{{ 'reviews.form_photo' | t }}</span>
         <label class="mt-rf__file">
-          <input class="visually-hidden" type="file" name="picture" accept="image/jpeg, image/png, image/webp" data-rf-file>
+          <input class="visually-hidden" type="file" name="pictures" accept="image/jpeg, image/png, image/webp" multiple data-rf-file>
           <span class="mt-rf__file-button">{{ 'reviews.form_photo_choose' | t }}</span>
-          <span class="mt-rf__file-name" data-rf-file-name></span>
+          <span class="mt-rf__file-name">{{ 'reviews.form_photo_hint' | t }}</span>
         </label>
+        <ul class="mt-rf__thumbs" data-rf-thumbs hidden></ul>
       </div>
 
       <p class="mt-rf__note" data-rf-note role="status" hidden></p>

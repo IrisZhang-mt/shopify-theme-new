@@ -38,6 +38,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -46,8 +47,68 @@
       "type": "countdown",
       "name": "Countdown",
       "settings": {
-        "label": "Black Friday in",
-        "end_time": "2026-11-02 00:00"
+        "label": "PRE-BLACK FRIDAY SALE IN",
+        "end_time": "2026-11-20 00:00"
+      }
+    },
+    "perks_tabs_bf": {
+      "type": "perks-tabs",
+      "name": "Perks tabs",
+      "blocks": {
+        "tab_member": {
+          "type": "tab",
+          "settings": {
+            "title": "Member\nPerks",
+            "open_spin": false,
+            "perk_1_title": "2× 10% off",
+            "perk_1_text": "Welcome codes, stackable",
+            "perk_2_title": "200 points",
+            "perk_2_text": "Free at sign-up",
+            "perk_3_title": "Give 15%, Get 15%",
+            "perk_3_text": "Refer a friend",
+            "perk_4_title": "Tier discount",
+            "perk_4_text": "Gold 5% · Platinum 10%"
+          }
+        },
+        "tab_spin": {
+          "type": "tab",
+          "settings": {
+            "title": "Spin & Win",
+            "open_spin": true,
+            "perk_1_title": "1 Spin Per $150",
+            "perk_1_text": "$300 = 2 spins  •  $450 = 3",
+            "perk_2_title": "10%/ 15% Off",
+            "perk_2_text": "Every spin wins  •  1 month",
+            "perk_3_title": "Free Outfit",
+            "perk_3_text": "Pick 2 of 18, ships with order",
+            "perk_4_title": "Gift Card/ Jacket",
+            "perk_4_text": "$25 / $50 cards  • Sherpa Jacket"
+          }
+        },
+        "tab_gift": {
+          "type": "tab",
+          "settings": {
+            "title": "Gift Card\nBonus",
+            "open_spin": false,
+            "perk_1_title": "Buy $300, get $30",
+            "perk_1_text": "Bonus gift card",
+            "perk_2_title": "Buy $500, get $60",
+            "perk_2_text": "Bonus gift card",
+            "perk_3_title": "Buy $1000, get $150",
+            "perk_3_text": "Bonus gift card",
+            "perk_4_title": "Bonus cards",
+            "perk_4_text": "Emailed from Dec 2"
+          }
+        }
+      },
+      "block_order": [
+        "tab_member",
+        "tab_spin",
+        "tab_gift"
+      ],
+      "settings": {
+        "heading": "Black Friday Perks",
+        "default_tab": "2"
       }
     },
     "benefits_signup_FErPeg": {
@@ -60,7 +121,7 @@
         "placeholder": "Enter your email",
         "button_label": "Join free",
         "consent_text": "I agree to receiving marketing emails and special deals",
-        "tags": "newsletter",
+        "tags": "BF2026",
         "success_text": "You're on the list. Sign in to unlock member perks.",
         "preview_success": false,
         "ga4_module_name": "Early Access"
@@ -125,19 +186,63 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": "Best_Sellers"
       }
     },
     "product_grid_T7KaXf": {
       "type": "product-grid",
+      "blocks": {
+        "tab_CE3Uxq": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Tops_cdf31503-953d-40e2-9c7b-6ce8f56c1e41.png",
+            "label": "Tops",
+            "tag_name": "top"
+          }
+        },
+        "tab_9zMgbT": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Bottoms.png",
+            "label": "Bottoms",
+            "tag_name": "Bottom"
+          }
+        },
+        "tab_NCD93w": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Outerwear.png",
+            "label": "Outerwear",
+            "tag_name": "Outerwear"
+          }
+        },
+        "tab_Mp7aMh": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Shoes.png",
+            "label": "Shoes",
+            "tag_name": "Shoes"
+          }
+        }
+      },
+      "block_order": [
+        "tab_CE3Uxq",
+        "tab_9zMgbT",
+        "tab_NCD93w",
+        "tab_Mp7aMh"
+      ],
+      "custom_css": [
+        "@media screen and (max-width: 750px) {.mt-pgrid__tag {font-size: 8px; }}"
+      ],
       "name": "Product grid",
       "settings": {
         "collection": "best-sellers",
-        "count": 4,
+        "per_page": "12",
+        "tab_filter": "tag",
         "heading": "Best Sellers",
-        "subheading": "Buy 4+: 20% off  | Buy 6+: 30% off  |  Buy 8+: 40% off",
-        "cta_label": "Shop more",
+        "subheading": "Buy 2+: 10% off  | Buy 4+: 20% off  | Buy 6+: 30% off  |  Buy 8+: 40% off",
         "anchor_id": "Best_Sellers"
       }
     },
@@ -163,19 +268,60 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "shopify://collections/new-arrival",
         "anchor_id": "New_Arrivals"
       }
     },
     "product_grid_439aRD": {
       "type": "product-grid",
+      "blocks": {
+        "tab_3enL9g": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Fall.png",
+            "label": "Fall",
+            "tag_name": "秋"
+          }
+        },
+        "tab_NzCKkt": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Winter.png",
+            "label": "Winter",
+            "tag_name": "Winter"
+          }
+        },
+        "tab_tmYAiY": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Summer.png",
+            "label": "Summer",
+            "tag_name": "Summer"
+          }
+        },
+        "tab_Ea8R6j": {
+          "type": "tab",
+          "settings": {
+            "image": "shopify://shop_images/Spring_a3d489cb-a41e-4837-b506-61d9b31eef7c.png",
+            "label": "Spring",
+            "tag_name": "Spring"
+          }
+        }
+      },
+      "block_order": [
+        "tab_3enL9g",
+        "tab_NzCKkt",
+        "tab_tmYAiY",
+        "tab_Ea8R6j"
+      ],
       "name": "Product grid",
       "settings": {
         "collection": "new-arrival",
-        "count": 4,
+        "per_page": "12",
+        "tab_filter": "tag",
         "heading": "New Arrivals",
         "subheading": "Up to 15% OFF",
-        "cta_label": "Shop more",
         "anchor_id": ""
       }
     },
@@ -201,80 +347,372 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "shopify://collections/flash-sale",
         "anchor_id": "Sale"
       }
     },
     "product_grid_j9hWQD": {
       "type": "product-grid",
-      "name": "Product grid",
-      "settings": {
-        "collection": "flash-sale",
-        "count": 4,
-        "heading": "Final Sale",
-        "subheading": "Up to 50% OFF",
-        "cta_label": "Shop more",
-        "anchor_id": ""
-      }
-    },
-    "kol_video_eAFxaE": {
-      "type": "kol-video",
       "blocks": {
-        "card_8C8dwg": {
-          "type": "card",
+        "tab_yxymrJ": {
+          "type": "tab",
           "settings": {
-            "heading": "Snow Mode",
-            "text": "Layered up, head to toe. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【53211404】.mp4",
-            "image_pc": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "image_mb": "shopify://shop_images/1_cfa38126-83eb-46c4-98e5-fada48070cba.png",
-            "products": [
-              "kids-down-vest",
-              "kids-printed-leggings-bootcut",
-              "kids-sports-shoes-swingy-e"
-            ]
+            "label": "50%+ OFF",
+            "tag_name": "",
+            "discount_min": 50
           }
         },
-        "card_Ritb3d": {
-          "type": "card",
+        "tab_hBHAnd": {
+          "type": "tab",
           "settings": {
-            "heading": "Warm at Play",
-            "text": "Fleece on fleece, all afternoon. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【54510411】.mp4",
-            "image_pc": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "image_mb": "shopify://shop_images/2_688c9fa4-1462-4943-9d42-5a1d4eac1b67.png",
-            "products": [
-              "kids-sherpa-jacket-fleece",
-              "girls-bootcut-pants",
-              "kids-winter-boots-canyon-m"
-            ]
+            "label": "",
+            "tag_name": ""
           }
         },
-        "card_TdMqJ7": {
-          "type": "card",
+        "tab_NTHbdQ": {
+          "type": "tab",
           "settings": {
-            "heading": "Off They Go",
-            "text": "Soft as it looks. Tap to shop.",
-            "video_pc": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "video_mb": "shopify://files/videos/Harrison1019视频_黑五落地页【63210406】.mp4",
-            "image_pc": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "image_mb": "shopify://shop_images/3_130e4195-9977-4d1a-98dd-23496d348908.png",
-            "products": [
-              "girls-knit-jacket",
-              "girls-fleece-lined-leggings-solar",
-              "v6-e-sneakers"
-            ]
+            "label": "40-49% OFF",
+            "tag_name": "",
+            "discount_min": 40,
+            "discount_max": 49
+          }
+        },
+        "tab_9BVPDA": {
+          "type": "tab",
+          "settings": {
+            "label": "30-39% OFF",
+            "tag_name": "",
+            "discount_min": 30,
+            "discount_max": 39
+          }
+        },
+        "tab_6YDRka": {
+          "type": "tab",
+          "settings": {
+            "label": "Under 30% OFF",
+            "tag_name": "",
+            "discount_min": 1,
+            "discount_max": 29
           }
         }
       },
       "block_order": [
-        "card_8C8dwg",
-        "card_Ritb3d",
-        "card_TdMqJ7"
+        "tab_yxymrJ",
+        "tab_hBHAnd",
+        "tab_NTHbdQ",
+        "tab_9BVPDA",
+        "tab_6YDRka"
       ],
-      "name": "KOL video",
+      "name": "Product grid",
+      "settings": {
+        "collection": "flash-sale",
+        "per_page": "12",
+        "tab_filter": "discount",
+        "heading": "Final Sale",
+        "subheading": "Up to 50% OFF",
+        "anchor_id": ""
+      }
+    },
+    "product_carousel_RKCxga": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_ihcj3b": {
+          "type": "tab",
+          "settings": {
+            "label": "Shoes",
+            "tag_name": "Shoes"
+          }
+        },
+        "tab_UP9nWU": {
+          "type": "tab",
+          "settings": {
+            "label": "Top",
+            "tag_name": "Top"
+          }
+        }
+      },
+      "block_order": [
+        "tab_ihcj3b",
+        "tab_UP9nWU"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "best-sellers",
+        "tab_filter": "tag",
+        "heading": "Best Sellers",
+        "more_label": "SHOP MORE",
+        "anchor_id": "Best_Sellers",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "BEST SELLERS",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": "Limited stock and sizes."
+      }
+    },
+    "product_carousel_bTXLFE": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_XWwF7g": {
+          "type": "tab",
+          "settings": {
+            "label": "Spring",
+            "tag_name": "Spring"
+          }
+        },
+        "tab_66VCUD": {
+          "type": "tab",
+          "settings": {
+            "label": "Summer",
+            "tag_name": "Summer"
+          }
+        }
+      },
+      "block_order": [
+        "tab_XWwF7g",
+        "tab_66VCUD"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "new-arrival",
+        "tab_filter": "tag",
+        "heading": "New",
+        "more_label": "SHOP MORE",
+        "anchor_id": "New_Arrivals",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "NEW ARR",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": " Limited stock and sizes."
+      }
+    },
+    "product_carousel_zRppcD": {
+      "type": "product-carousel",
+      "blocks": {
+        "tab_jpQ4De": {
+          "type": "tab",
+          "settings": {
+            "label": "50%+ OFF",
+            "tag_name": "Spring",
+            "discount_min": 50
+          }
+        },
+        "tab_ffA3qV": {
+          "type": "tab",
+          "settings": {
+            "label": "40-49% OFF",
+            "tag_name": "Summer",
+            "discount_min": 40,
+            "discount_max": 49
+          }
+        },
+        "tab_RmpXfC": {
+          "type": "tab",
+          "settings": {
+            "label": "30-39% OFF",
+            "tag_name": "",
+            "discount_min": 30,
+            "discount_max": 39
+          }
+        },
+        "tab_yDxxxF": {
+          "type": "tab",
+          "settings": {
+            "label": "Under 30% OFF",
+            "tag_name": "",
+            "discount_min": 1,
+            "discount_max": 29
+          }
+        }
+      },
+      "block_order": [
+        "tab_jpQ4De",
+        "tab_ffA3qV",
+        "tab_RmpXfC",
+        "tab_yDxxxF"
+      ],
+      "name": "Product carousel",
+      "settings": {
+        "collection": "flash-sale",
+        "tab_filter": "discount",
+        "heading": "SALE",
+        "more_label": "SHOP MORE",
+        "anchor_id": "Sale",
+        "promo_image_pc": "shopify://shop_images/pc_8f9ad74a-2c1a-41e9-b9ad-2aff4e9f6193.jpg",
+        "promo_image_mb": "shopify://shop_images/mob_a9ccd935-ca79-41e8-b64b-0395b38bd322.jpg",
+        "promo_color": "#FFFFFF",
+        "promo_eyebrow": "NEW ARR",
+        "promo_kicker": "UP TO",
+        "promo_headline": "50%",
+        "promo_suffix": "OFF",
+        "promo_text": " Limited stock and sizes."
+      }
+    },
+    "featured_blog_pKgTJt": {
+      "type": "featured-blog",
+      "blocks": {
+        "article_A3P6c4": {
+          "type": "article",
+          "settings": {
+            "article": "journal/moody-miles-club-guide"
+          }
+        },
+        "article_zTFcxx": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-kids-sizing-guide"
+          }
+        },
+        "article_rp978w": {
+          "type": "article",
+          "settings": {
+            "article": "journal/kids-winter-shoes"
+          }
+        },
+        "article_nk3JT4": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-shipping-returns-faq"
+          }
+        },
+        "article_Bw4bwC": {
+          "type": "article",
+          "settings": {
+            "article": "journal/black-friday-kids-stock-up-list"
+          }
+        },
+        "article_UCcx7j": {
+          "type": "article",
+          "settings": {
+            "article": "journal/kids-winter-activewear-checklist"
+          }
+        }
+      },
+      "block_order": [
+        "article_A3P6c4",
+        "article_zTFcxx",
+        "article_rp978w",
+        "article_nk3JT4",
+        "article_Bw4bwC",
+        "article_UCcx7j"
+      ],
+      "name": "Featured blog",
+      "settings": {
+        "heading": "From the Journal",
+        "cta_label": "Read all stories",
+        "cta_url": "shopify://blogs/journal"
+      }
+    },
+    "featured_kol_gfnCem": {
+      "type": "featured-kol",
+      "blocks": {
+        "card_hhMUaQ": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_2e9e023e-be9c-4794-ac0d-3437ad335f45.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_gdgwGN": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_j3xKLT": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_EEJhn6": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_xQwMxf": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_ycCyyM": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_6RqW8U": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_CqpBJz": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        },
+        "card_wk7gcJ": {
+          "type": "card",
+          "settings": {
+            "image_pc": "shopify://shop_images/pc_0a5bf32b-c43e-464e-a007-a6938f833fb7.jpg",
+            "image_mb": "shopify://shop_images/mob.jpg",
+            "creator": "@crystal",
+            "product": "boys-hoodie-2-in-1-tee"
+          }
+        }
+      },
+      "block_order": [
+        "card_hhMUaQ",
+        "card_gdgwGN",
+        "card_j3xKLT",
+        "card_EEJhn6",
+        "card_xQwMxf",
+        "card_ycCyyM",
+        "card_6RqW8U",
+        "card_CqpBJz",
+        "card_wk7gcJ"
+      ],
+      "name": "Featured KOL",
+      "settings": {
+        "heading": "Ready, set, play."
+      }
+    },
+    "spin_wheel": {
+      "type": "spin-wheel",
       "settings": {}
     }
   },
@@ -282,14 +720,20 @@
     "main",
     "full_image_bX7dfb",
     "countdown_NGaQX3",
+    "perks_tabs_bf",
     "benefits_signup_FErPeg",
     "anchor_tabs_QNN9H8",
     "full_image_3dbDiA",
+    "product_carousel_RKCxga",
+    "product_carousel_bTXLFE",
+    "product_carousel_zRppcD",
     "product_grid_T7KaXf",
     "full_image_eCCE9k",
     "product_grid_439aRD",
     "full_image_PDgb8g",
     "product_grid_j9hWQD",
-    "kol_video_eAFxaE"
+    "featured_blog_pKgTJt",
+    "featured_kol_gfnCem",
+    "spin_wheel"
   ]
 }

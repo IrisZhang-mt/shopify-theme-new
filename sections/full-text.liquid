@@ -1,4 +1,5 @@
 {{ 'full-text.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'full-text.js' | asset_url }}" type="module"></script>
 
 {%- if section.settings.text != blank -%}
   <section

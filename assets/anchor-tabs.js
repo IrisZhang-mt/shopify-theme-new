@@ -104,6 +104,18 @@ if (!window.mtAnchorTabsInit) {
     event.preventDefault();
     if (!nav || !target) return;
 
+    // GA4 — a tab click (not scroll-spy), reported like the Blog page's tabs (blog.js).
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: 'select_content_category',
+      event_parameters: {
+        module_name: 'Anchor Tabs',
+        button_name: tab.querySelector('.mt-atabs__title')?.textContent.trim(),
+      },
+    });
+
     setActive(nav, tabsOf(nav).indexOf(tab));
     const top = scrollToTarget(nav, target, reducedMq.matches ? 'auto' : 'smooth');
     locked.set(nav, top);

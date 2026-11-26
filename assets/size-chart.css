@@ -41,14 +41,77 @@ html.mt-chart-lock body {
   transform: none;
 }
 
+/* Logo and close sit at the edges; name and "Size Chart" stay centred between them. */
 .mt-chart__head {
-  padding: 1.25rem 4.5rem 0.75rem 1.25rem;
+  position: relative;
+  padding: 1.25rem 4.5rem 0.75rem;
+  text-align: center;
+}
+
+.mt-chart__logo {
+  position: absolute;
+  top: 1.25rem;
+  inset-inline-start: 1.25rem;
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
 .mt-chart__name {
   font-size: var(--mt-h-xs-size);
   font-weight: 500;
   line-height: var(--mt-h-xs-leading);
+}
+
+.mt-chart__sub {
+  margin-top: 0.125rem;
+  font-family: var(--mt-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+  color: rgba(var(--mt-ink-rgb), 0.6);
+}
+
+.mt-chart__units {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0 1.25rem 1rem;
+  font-family: var(--mt-font-mono);
+  font-size: 1rem;
+  letter-spacing: var(--mt-tracking-tag);
+  text-transform: uppercase;
+  color: rgba(var(--mt-ink-rgb), 0.35);
+}
+.mt-chart__units[hidden] {
+  display: none;
+}
+.mt-chart__units button {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: rgba(var(--mt-ink-rgb), 0.5);
+  cursor: pointer;
+  transition: color var(--mt-dur) var(--mt-ease);
+}
+.mt-chart__units button[aria-pressed='true'] {
+  color: var(--mt-accent);
+}
+@media (hover: hover) {
+  .mt-chart__units button:hover {
+    color: var(--mt-ink);
+  }
+  .mt-chart__units button[aria-pressed='true']:hover {
+    color: var(--mt-accent);
+  }
+}
+.mt-chart__units button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
 }
 
 .mt-chart__close {
@@ -120,6 +183,16 @@ html.mt-chart-lock body {
   outline-offset: 2px;
 }
 
+/* Wide charts scroll sideways inside the panel (size-chart.js wraps each table). */
+.mt-chart__scroll {
+  margin: 0 0 1.5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.mt-chart__scroll[hidden] {
+  display: none;
+}
+
 .mt-chart__body table {
   width: 100%;
   margin: 0 0 1.5rem;
@@ -127,24 +200,29 @@ html.mt-chart-lock body {
   font-size: 0.875rem;
   line-height: 1.4;
 }
+.mt-chart__scroll table {
+  margin: 0;
+}
 
 .mt-chart__body th,
 .mt-chart__body td {
   padding: 0.625rem 0.5rem;
   border: 1px solid rgba(var(--mt-ink-rgb), 0.12);
-  text-align: start;
+  text-align: center;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
-.mt-chart__body th {
+.mt-chart__body th,
+.mt-chart__body td:first-child {
   font-weight: 500;
 }
 
-.mt-chart__body tr:first-child th {
-  font-family: var(--mt-font-mono);
-  font-size: 0.625rem;
+/* Header row: thead from the page editor, or the table's first row when there is no thead. */
+.mt-chart__body thead th,
+.mt-chart__body thead td,
+.mt-chart__body table > tbody:first-child > tr:first-child > * {
   font-weight: 500;
-  letter-spacing: var(--mt-tracking-tag);
   text-transform: uppercase;
 }
 
@@ -191,12 +269,21 @@ html.mt-chart-lock body {
   }
 
   .mt-chart__head {
-    padding: 1.5rem 5rem 1rem 1.5rem;
+    padding: 1.5rem 5rem 1rem;
+  }
+
+  .mt-chart__logo {
+    top: 1.5rem;
+    inset-inline-start: 1.5rem;
   }
 
   .mt-chart__close {
     top: 1.5rem;
     inset-inline-end: 1.5rem;
+  }
+
+  .mt-chart__units {
+    padding: 0 1.5rem 1rem;
   }
 
   .mt-chart__body {

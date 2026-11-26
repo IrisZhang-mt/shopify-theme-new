@@ -3,76 +3,150 @@
 <script src="{{ 'product-reviews.js' | asset_url }}" type="module"></script>
 <script src="{{ 'review-form.js' | asset_url }}" type="module"></script>
 
-{%- assign jm = product.metafields.judgeme.review_widget_data.value -%}
-{%- assign jm_total = jm.number_of_reviews | default: 0 -%}
-{%- assign jm_per_page = jm.pagination.per_page | default: 5 -%}
+{%- capture star_svg -%}
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
+{%- endcapture -%}
 
 <section
   class="mt-rev"
   data-rev
+  data-rev-view="loading"
   data-rev-shop="{{ shop.permanent_domain }}"
   data-rev-product="{{ product.id }}"
-  data-rev-per-page="{{ jm_per_page }}"
+  data-rev-locale="{{ request.locale.iso_code }}"
   data-rev-rating-label="{{ 'reviews.out_of_five' | t: rating: '[rating]' | escape }}"
+  data-rev-based-one="{{ 'reviews.based_on' | t: count: 1 | escape }}"
+  data-rev-based-many="{{ 'reviews.based_on' | t: count: '[count]' | escape }}"
+  data-rev-count-one="{{ 'reviews.count_short' | t: count: 1 | escape }}"
+  data-rev-count-many="{{ 'reviews.count_short' | t: count: '[count]' | escape }}"
+  data-rev-photos-title="{{ 'reviews.photos_title' | t: count: '[count]' | escape }}"
+  data-rev-photo-label="{{ 'reviews.photo_label' | t: index: '[index]', count: '[count]' | escape }}"
+  data-rev-photos-word="{{ 'reviews.photos_word' | t | escape }}"
+  data-rev-showing-star="{{ 'reviews.showing_star' | t: star: '[star]', count: '[count]' | escape }}"
+  data-rev-showing-photos="{{ 'reviews.showing_photos' | t: count: '[count]' | escape }}"
+  data-rev-showing-both="{{ 'reviews.showing_both' | t: star: '[star]', count: '[count]' | escape }}"
+  data-rev-short-star="{{ 'reviews.short_star' | t: star: '[star]', count: '[count]' | escape }}"
+  data-rev-short-photos="{{ 'reviews.short_photos' | t: count: '[count]' | escape }}"
+  data-rev-short-both="{{ 'reviews.short_both' | t: star: '[star]', count: '[count]' | escape }}"
+  data-rev-none-star="{{ 'reviews.none_star' | t: star: '[star]' | escape }}"
+  data-rev-none-photos="{{ 'reviews.none_photos' | t | escape }}"
+  data-rev-none-both="{{ 'reviews.none_both' | t: star: '[star]' | escape }}"
+  data-rev-load-more="{{ 'reviews.load_more' | t: count: '[count]' | escape }}"
+  data-rev-read-more="{{ 'reviews.read_more' | t | escape }}"
+  data-rev-show-less="{{ 'reviews.show_less' | t | escape }}"
+  data-rev-reply="{{ 'reviews.reply_label' | t | escape }}"
+  data-rev-lb-counter="{{ 'reviews.lb_count' | t: index: '[index]', count: '[count]' | escape }}"
 >
-  <div class="mt-rev__intro">
-    <h2 class="mt-rev__title" data-reveal>{{ section.settings.heading }}</h2>
-    <div class="mt-rev__tags" data-rev-tags data-reveal style="--mt-reveal-i: 1"{% if jm_total == 0 %} hidden{% endif %}>
-      <button class="mt-rev__tag" type="button" data-rev-sort="all" aria-pressed="true">{{ 'reviews.sort_all' | t }}</button>
-      <button class="mt-rev__tag" type="button" data-rev-sort="images" aria-pressed="false">{{ 'reviews.sort_images' | t }}</button>
-      <button class="mt-rev__tag" type="button" data-rev-sort="high" aria-pressed="false">{{ 'reviews.sort_high' | t }}</button>
-      <button class="mt-rev__tag" type="button" data-rev-sort="low" aria-pressed="false">{{ 'reviews.sort_low' | t }}</button>
+  <h2 class="mt-rev__title" data-reveal>{{ section.settings.heading }}</h2>
+
+  <div class="mt-rev__summary" data-rev-summary hidden>
+    <div class="mt-rev__score">
+      <p class="mt-rev__avg" data-rev-avg></p>
+      <span class="mt-rev__stars mt-rev__stars--score" role="img" data-rev-avg-stars>
+        {%- for s in (1..5) -%}{{ star_svg }}{%- endfor -%}
+      </span>
+      <p class="mt-rev__based">
+        <span class="mt-rev__pc" data-rev-based></span>
+        <span class="mt-rev__mb" data-rev-count></span>
+      </p>
     </div>
+    <div class="mt-rev__dist" role="group" aria-label="{{ 'reviews.filter_rating' | t | escape }}">
+      {%- for i in (1..5) -%}
+        {%- assign star = 6 | minus: i -%}
+        <button class="mt-rev__dist-row" type="button" data-rev-star="{{ star }}" aria-pressed="false">
+          <span class="mt-rev__dist-label mt-rev__pc">{{ 'reviews.star_label' | t: count: star }}</span>
+          <span class="mt-rev__dist-label mt-rev__mb" aria-hidden="true">{{ star }}{{ star_svg }}</span>
+          <span class="mt-rev__dist-bar"><span class="mt-rev__dist-fill" data-rev-dist-fill></span></span>
+          <span class="mt-rev__dist-count" data-rev-dist-count>0</span>
+        </button>
+      {%- endfor -%}
+    </div>
+    <button class="mt-rev__write" type="button" data-rf-open="product">{{ 'reviews.write' | t }}</button>
   </div>
 
-  <div class="mt-rev__list" data-rev-list>
-    {%- for review in jm.reviews -%}
-      {%- assign picture = review.pictures_urls[0] -%}
-      <article
-        class="mt-rev__item"
-        data-rev-item
-        data-reveal
-        data-rating="{{ review.rating }}"
-        {% if picture %}data-has-image{% endif %}
-      >
-        <div class="mt-rev__who">
-          <p class="mt-rev__name">{{ review.reviewer_name }}</p>
-          <span class="mt-rev__stars" role="img" aria-label="{{ 'reviews.out_of_five' | t: rating: review.rating }}">
-            {%- for s in (1..5) -%}
-              <svg class="{% if s <= review.rating %}mt-rev__star--on{% endif %}" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .8l1.55 3.36 3.67.42-2.72 2.5.73 3.62L6 8.87l-3.23 1.83.73-3.62-2.72-2.5 3.67-.42z"/></svg>
-            {%- endfor -%}
-          </span>
+  <div class="mt-rev__photos" data-rev-photos hidden>
+    <div class="mt-rev__photos-head">
+      <p class="mt-rev__photos-title" data-rev-photos-count></p>
+      <button class="mt-rev__view-all" type="button" data-rev-view-all>{{ 'reviews.view_all' | t }}</button>
+    </div>
+    <div class="mt-rev__wall" data-rev-wall></div>
+  </div>
+
+  <div class="mt-rev__controls">
+    <div class="mt-rev__tags" role="group" aria-label="{{ 'reviews.sort_label' | t | escape }}">
+      <button class="mt-rev__tag" type="button" data-rev-sort="all" aria-pressed="false">{{ 'reviews.sort_all' | t }}</button>
+      <button class="mt-rev__tag" type="button" data-rev-sort="images" aria-pressed="true">{{ 'reviews.sort_images' | t }}</button>
+      <button class="mt-rev__tag" type="button" data-rev-sort="high" aria-pressed="false">{{ 'reviews.sort_high' | t }}</button>
+      <span class="mt-rev__tags-divider" aria-hidden="true"></span>
+      <button class="mt-rev__tag" type="button" data-rev-sort="photos" aria-pressed="false">{{ 'reviews.sort_photos' | t }}</button>
+    </div>
+    <p class="mt-rev__status" data-rev-status hidden>
+      <span class="mt-rev__pc" data-rev-status-long></span>
+      <span class="mt-rev__mb" data-rev-status-short></span>
+      <span aria-hidden="true">·</span>
+      <button class="mt-rev__link" type="button" data-rev-clear>{{ 'reviews.clear_filters' | t }}</button>
+    </p>
+  </div>
+
+  <div class="mt-rev__list" data-rev-list aria-live="polite"></div>
+
+  <div class="mt-rev__skeleton" data-rev-skeleton aria-hidden="true">
+    {%- for i in (1..2) -%}
+      <div class="mt-rev__sk-card">
+        <div class="mt-rev__sk-who"><i></i><i></i><i></i></div>
+        <div class="mt-rev__sk-comment">
+          <i class="mt-rev__sk-title"></i><i></i><i></i><i></i>
+          <div class="mt-rev__sk-photos"><i></i><i></i><i></i></div>
         </div>
-        <div class="mt-rev__comment">
-          {%- if review.title != blank -%}
-            <p class="mt-rev__heading">{{ review.title }}</p>
-          {%- endif -%}
-          {%- assign body = review.body_html | strip_html | strip -%}
-          {%- if body != blank -%}
-            <p class="mt-rev__text">{{ body }}</p>
-          {%- endif -%}
-        </div>
-        {%- if picture -%}
-          <div class="mt-rev__media">
-            <img
-              src="{{ picture.compact }}"
-              alt="{{ review.reviewer_name | escape }}"
-              width="99"
-              height="130"
-              loading="lazy"
-              decoding="async"
-            >
-          </div>
-        {%- endif -%}
-      </article>
+      </div>
     {%- endfor -%}
   </div>
 
-  <p class="mt-rev__empty" data-rev-empty{% if jm_total > 0 %} hidden{% endif %}>{{ 'reviews.empty' | t }}</p>
+  <div class="mt-rev__none" data-rev-none hidden>
+    <p class="mt-rev__none-title" data-rev-none-title></p>
+    <p class="mt-rev__none-text">{{ 'reviews.none_hint' | t }}</p>
+  </div>
 
-  <div class="mt-rev__ctas" data-reveal>
+  <div class="mt-rev__state" data-rev-error hidden>
+    <svg class="mt-rev__alert" width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><circle cx="14" cy="14" r="13.35"/><path d="M14 8v8.5M14 20.2v.1"/></svg>
+    <p class="mt-rev__state-text">{{ 'reviews.load_error' | t }}</p>
+    <button class="mt-rev__retry" type="button" data-rev-retry>{{ 'reviews.retry' | t }}</button>
+  </div>
+
+  <div class="mt-rev__state mt-rev__state--empty" data-rev-empty hidden>
+    <p class="mt-rev__state-title">{{ 'reviews.empty_title' | t }}</p>
+    <p class="mt-rev__state-text">{{ 'reviews.empty_text' | t }}</p>
     <button class="mt-rev__write" type="button" data-rf-open="product">{{ 'reviews.write' | t }}</button>
-    <button class="mt-rev__more" type="button" data-rev-more{% if jm_total <= jm_per_page %} hidden{% endif %}>{{ 'general.load_more' | t }}</button>
+  </div>
+
+  <div class="mt-rev__foot" data-rev-foot hidden>
+    <button class="mt-rev__link mt-rev__more" type="button" data-rev-more></button>
+  </div>
+
+  <div class="mt-rev-lb" data-rev-lb="{{ section.id }}" hidden>
+    <div class="mt-rev-lb__backdrop" data-rev-lb-close></div>
+    <div class="mt-rev-lb__box" role="dialog" aria-modal="true" aria-label="{{ 'reviews.lb_label' | t | escape }}" tabindex="-1" data-rev-lb-box>
+      <div class="mt-rev-lb__photo" data-rev-lb-photo>
+        <img alt="" width="1024" height="1024" decoding="async" data-rev-lb-img>
+      </div>
+      <div class="mt-rev-lb__review">
+        <div class="mt-rev-lb__nav">
+          <p class="mt-rev-lb__count" data-rev-lb-count></p>
+          <div class="mt-rev-lb__arrows" data-rev-lb-arrows>
+            <button class="mt-rev-lb__arrow" type="button" data-rev-lb-step="-1" aria-label="{{ 'reviews.lb_prev' | t | escape }}">
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M15.5 6H1M6 .5L.9 6 6 11.5"/></svg>
+            </button>
+            <button class="mt-rev-lb__arrow" type="button" data-rev-lb-step="1" aria-label="{{ 'reviews.lb_next' | t | escape }}">
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M.5 6H15M10 .5l5.1 5.5L10 11.5"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="mt-rev-lb__meta" data-rev-lb-meta></div>
+      </div>
+      <button class="mt-rev-lb__close" type="button" data-rev-lb-close aria-label="{{ 'general.close' | t | escape }}">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true"><path d="M1 1l14 14M15 1L1 15"/></svg>
+      </button>
+    </div>
   </div>
 </section>
 

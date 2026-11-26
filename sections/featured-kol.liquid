@@ -1,0 +1,168 @@
+{{ 'featured-kol.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'featured-kol.js' | asset_url }}" type="module"></script>
+
+{%- if section.blocks.size > 0 -%}
+{%- liquid
+  # GA4: no collection behind this list, so the id comes from the heading (same as the tabbed modules).
+  assign fk_list_name = section.settings.heading | strip | default: 'Featured KOL'
+  assign fk_list_id = fk_list_name | handleize | replace: '-', '_'
+  assign fk_index = 0
+-%}
+<section class="mt-fk" data-currency="{{ cart.currency.iso_code }}">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="mt-fk__title" data-reveal>{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  {%- comment -%}
+    data-autoplay="0" keeps the row in motion.js for arrow tweens without auto-scrolling.
+    data-at-start is server-rendered so the prev arrow is hidden from first paint; featured-kol.js keeps both edge flags in sync
+    (a row that fits carries both, so neither arrow shows).
+  {%- endcomment -%}
+  <div class="mt-fk__stage" data-row-stage data-at-start>
+    <div class="mt-fk__row" data-fk-row data-autoplay="0" data-wheel-lock data-progress-row>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign item = block.settings.product
+          assign image_pc = block.settings.image_pc | default: block.settings.image_mb
+          assign image_mb = block.settings.image_mb | default: block.settings.image_pc
+          assign card_alt = block.settings.creator | default: item.title | default: shop.name | escape
+          assign reveal_i = forloop.index0 | at_most: 4
+          if item != blank
+            assign fk_index = fk_index | plus: 1
+            assign ga4_pick = item.variants | where: 'available', true | first
+            assign ga4_pick = ga4_pick | default: item.variants.first
+          endif
+        -%}
+        {%- if item != blank -%}
+          {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: ga4_pick %}{%- endcapture -%}
+          {%- assign ga4_variant = ga4_variant | strip -%}
+        {%- endif -%}
+        {%- comment -%} GA4: the data-item-* set matches product-card, so quick-shop.js reports select_item / view_item / add_to_cart from this card too. {%- endcomment -%}
+        <div
+          class="mt-fk__card"
+          data-reveal
+          style="--mt-reveal-i: {{ reveal_i }}"
+          {%- if item != blank %}
+            data-quick-url="{{ item.url }}"
+            data-item-list-id="{{ fk_list_id }}"
+            data-item-list-name="{{ fk_list_name | escape }}"
+            data-item-id="{{ ga4_pick.sku }}"
+            data-item-name="{{ item.title | escape }}"
+            data-item-brand="{{ item.vendor | escape }}"
+            {% if item.type != blank %}data-item-category="{{ item.type | escape }}"{% endif %}
+            {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
+            data-item-price="{{ item.price_min | divided_by: 100.0 }}"
+            data-item-discount="{% if item.compare_at_price_min > item.price_min %}{{ item.compare_at_price_min | minus: item.price_min | divided_by: 100.0 }}{% else %}0{% endif %}"
+            data-item-index="{{ fk_index }}"
+          {%- endif %}
+          {{ block.shopify_attributes }}
+        >
+          <div class="mt-fk__media">
+            {%- if image_mb != blank -%}
+              <picture>
+                <source
+                  media="(min-width: 750px)"
+                  srcset="{% render 'image-srcset', image: image_pc, widths: '296,444,592,740,888' %}"
+                  sizes="296px"
+                >
+                {%- capture mb_widths %}{% render 'image-srcset', image: image_mb, widths: '222,333,444,555,666,888', output: 'widths' %}{% endcapture -%}
+                {{ image_mb | image_url: width: 444 | image_tag: class: 'mt-fk__image', loading: 'lazy', decoding: 'async', widths: mb_widths, sizes: '60vw', alt: card_alt }}
+              </picture>
+            {%- else -%}
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'mt-fk__image' }}
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.creator != blank -%}
+            <p class="mt-fk__creator">{{ block.settings.creator }}</p>
+          {%- endif -%}
+
+          {%- if item != blank -%}
+            <div class="mt-fk__product">
+              <span class="mt-fk__thumb">
+                {%- if item.featured_image -%}
+                  {%- assign item_alt = item.featured_image.alt | default: item.title | escape -%}
+                  {{ item.featured_image | image_url: width: 168 | image_tag: loading: 'lazy', decoding: 'async', widths: '72, 112, 168', sizes: '(min-width: 750px) 56px, 36px', alt: item_alt }}
+                {%- endif -%}
+              </span>
+              <span class="mt-fk__text">
+                <span class="mt-fk__name">{{ item.title }}</span>
+                <span class="mt-fk__price">
+                  {%- if item.compare_at_price_min > item.price_min -%}
+                    <s class="mt-fk__compare">{{ item.compare_at_price_min | money_without_trailing_zeros }}</s>
+                  {%- endif -%}
+                  <span class="mt-fk__now">{{ item.price_min | money_without_trailing_zeros }}</span>
+                </span>
+              </span>
+              <span class="mt-fk__plus" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.5"/></svg>
+              </span>
+            </div>
+            {%- comment -%} One stretched button per card: a click anywhere on the card opens quick shop (quick-shop.js reads data-quick-url off the card). {%- endcomment -%}
+            <button class="mt-fk__hit" type="button" data-qs-open aria-label="{{ 'products.quick_shop' | t }}: {{ item.title | escape }}"></button>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <button class="mt-row-nav mt-row-nav--prev" type="button" data-row-arrow="prev" aria-label="{{ 'general.previous' | t }}">
+      <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+    </button>
+    <button class="mt-row-nav mt-row-nav--next" type="button" data-row-arrow="next" aria-label="{{ 'general.next' | t }}">
+      <img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt="">
+    </button>
+    {% render 'row-progress' %}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Featured KOL",
+  "class": "section-featured-kol",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ready, set, play."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_pc",
+          "label": "Desktop image",
+          "info": "296 × 400 (portrait). Falls back to the mobile image."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mb",
+          "label": "Mobile image",
+          "info": "222 × 300 (portrait). Falls back to the desktop image."
+        },
+        {
+          "type": "text",
+          "id": "creator",
+          "label": "Creator",
+          "default": "@creator"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured KOL"
+    }
+  ]
+}
+{% endschema %}

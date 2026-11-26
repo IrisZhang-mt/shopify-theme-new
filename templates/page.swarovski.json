@@ -38,6 +38,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -67,6 +68,7 @@
         "subtitle_color": "#ffffff",
         "title_size_desktop": 75,
         "title_size_mobile": 50,
+        "title_line_height": 87,
         "subtitle_size_desktop": 33,
         "link": "",
         "anchor_id": ""
@@ -94,6 +96,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -101,11 +104,12 @@
     "full_text_YzCYVF": {
       "type": "full-text",
       "disabled": true,
+      "custom_css": [],
       "name": "Full text",
       "settings": {
         "text": "<p>moodytiger dancing collection embellished with Swarovski® Crystals.</p>",
-        "text_color": "",
-        "text_size_desktop": 59.9,
+        "text_color": "#000000",
+        "text_size_desktop": 66,
         "text_size_mobile": 30,
         "padding_top": 50,
         "padding_bottom": 50,
@@ -136,6 +140,7 @@
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
         "title_size_mobile": 64.5,
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -197,6 +202,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -210,7 +216,7 @@
         "eager_load": false,
         "pc_image": "shopify://shop_images/SW_-04-PremiumGlideSet-01.jpg",
         "mob_image": "shopify://shop_images/1_e4a9af87-03c4-48a5-8147-87f166b2bdd1.jpg",
-        "title": "The Premium Glide Set",
+        "title": "The Premium \nGlide Set",
         "subtitle": "Our most considered piece-an ice-gradient knit where CrystaIs by Swarovski® trace the line of every lift-off and landing, with mesh-panel sleeves that openlike wings.",
         "title_x_desktop": 0,
         "title_y_desktop": 80,
@@ -226,6 +232,7 @@
         "subtitle_color": "#ffffff",
         "title_size_desktop": 90,
         "title_size_mobile": 16,
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -252,6 +259,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -323,6 +331,7 @@
     },
     "full_image_Yax9Tg": {
       "type": "full-image",
+      "disabled": true,
       "name": "Full image",
       "settings": {
         "heading": "",
@@ -343,13 +352,13 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "https://cdn.shopify.com/s/files/1/0475/6920/7457/files/IB_Certificate_EN_2025_69eb1a9e-e196-467d-969e-61c282540118.pdf?v=1790155155",
         "anchor_id": ""
       }
     },
     "full_image_fV3jYG": {
       "type": "full-image",
-      "disabled": true,
       "name": "Full image",
       "settings": {
         "heading": "",
@@ -370,17 +379,17 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "https://cdn.shopify.com/s/files/1/0475/6920/7457/files/IB_Certificate_EN_2025_69eb1a9e-e196-467d-969e-61c282540118.pdf?v=1790155155",
         "anchor_id": ""
       }
     },
     "rich_text_fgUKKm": {
       "type": "rich-text",
-      "disabled": true,
       "name": "Rich text",
       "settings": {
-        "heading": "Light stays - on every kid who loves this, truly.",
-        "text": "",
+        "heading": "Join Our Skating Community",
+        "text": "<ul><li>Stay up to date&nbsp;</li><li>Receive an exclusive branded gift when you join.<br/><br/></li></ul>",
         "align": "left",
         "cta_label": "Join Now     →",
         "cta_url": "https://cdn.shopify.com/s/files/1/0475/6920/7457/files/IB_Certificate_EN_2025_69eb1a9e-e196-467d-969e-61c282540118.pdf?v=1790155155",
@@ -422,6 +431,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }
@@ -449,6 +459,7 @@
         "subtitle_align": "left",
         "title_color": "#ffffff",
         "subtitle_color": "#ffffff",
+        "title_line_height": 87,
         "link": "",
         "anchor_id": ""
       }

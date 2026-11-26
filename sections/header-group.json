@@ -1,1 +1,66 @@
-{"type":"header","name":"Header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"message_ydTEHw":{"type":"message","settings":{"text":"Cooler days. Same wild play:Up to 30%Off","link":"https:\/\/moodytiger.com\/collections\/best-sellers"}},"message_azyUqx":{"type":"message","settings":{"text":"Free shipping on orders over $79","link":""}}},"block_order":["message_ydTEHw","message_azyUqx"],"settings":{"scheme":"ink","rotate":5}},"header":{"type":"header","settings":{"menu":"main-menu-0620-new","signup_text":"Sign up for 10% Off","signup_url":"\/account","popular_searches":"Leggings, T-shirts, Outerwear, Dresses"}},"cart-drawer":{"type":"cart-drawer","settings":{"miles_text":"Earn moody miles points on this order. Gift cards and promotional codes applied at checkout.","recs_heading":"Picked for you"}}},"order":["announcement-bar","header","cart-drawer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message_ydTEHw": {
+          "type": "message",
+          "settings": {
+            "text": "Pre-Black Friday Sale: Up to 40%Off",
+            "link": "shopify://pages/black-friday2026"
+          }
+        },
+        "message_azyUqx": {
+          "type": "message",
+          "settings": {
+            "text": "Free shipping on orders over $79",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "message_ydTEHw",
+        "message_azyUqx"
+      ],
+      "settings": {
+        "scheme": "ink",
+        "rotate": 5
+      }
+    },
+    "header": {
+      "type": "header",
+      "custom_css": [
+        "/* 顶部导航第一项加粗（有下拉的是 summary，没有下拉的是 a） */.mt-header__nav > a.mt-header__link:first-child,.mt-header__nav > details:first-child > summary.mt-header__link {font-weight: 700;}"
+      ],
+      "settings": {
+        "menu": "main-menu-0620-new",
+        "signup_text": "Sign up for 10% Off",
+        "signup_url": "/account",
+        "popular_searches": "Leggings, T-shirts, Outerwear, Dresses"
+      }
+    },
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "miles_text": "Earn moody miles points on this order. Gift cards and promotional codes applied at checkout.",
+        "recs_heading": "Picked for you"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "header",
+    "cart-drawer"
+  ]
+}

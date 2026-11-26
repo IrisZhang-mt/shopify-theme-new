@@ -14,6 +14,9 @@
       {% render 'cart-shipping-bar' %}
       {% render 'checkout-loading' %}
       <div class="mt-cart__body">
+        {%- if section.settings.notice_text != blank -%}
+          <p class="mt-cart__notice">{{ section.settings.notice_text | escape | newline_to_br }}</p>
+        {%- endif -%}
         {%- if cart.item_count == 0 -%}
           <div class="mt-cart__empty">
             <p>{{ 'cart.empty' | t }}</p>
@@ -107,6 +110,12 @@
       "id": "recs_heading",
       "label": "Recommendations heading",
       "default": "We think you'll love"
+    },
+    {
+      "type": "textarea",
+      "id": "notice_text",
+      "label": "Notice text",
+      "info": "Shown above the cart items, centered in the brand color. Press Enter for a new line. Leave blank to hide."
     }
   ]
 }

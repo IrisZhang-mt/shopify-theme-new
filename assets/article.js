@@ -8,7 +8,7 @@ if (!window.mtArticleInit) {
   const isMediaBlock = (el) =>
     el.tagName === 'P' && el.querySelector('img') && el.textContent.trim() === '';
 
-  const isMediaWrap = (el) => /mt-art__(full|pair|gallery|stage)/.test(el.className);
+  const isMediaWrap = (el) => el.tagName === 'FIGURE' || el.classList.contains('mt-art__media');
 
   const rebuildLine = (line, out) => {
     const img = line.querySelector('img');
@@ -94,68 +94,217 @@ if (!window.mtArticleInit) {
     }
   };
 
-  const wrapRun = (run) => {
-    const wrap = document.createElement('div');
-    if (run.length === 1) {
-      wrap.className = 'mt-art__full';
-      run[0].setAttribute('data-mt-parallax', '');
-    } else if (run.length === 2) {
-      wrap.className = 'mt-art__pair';
-    } else {
-      wrap.className = 'mt-art__gallery';
-      wrap.dataset.autoplay = '25';
-      wrap.setAttribute('data-wheel-lock', '');
-      wrap.tabIndex = 0;
-      wrap.setAttribute('role', 'region');
-      wrap.setAttribute('aria-label', 'Image gallery');
-      run.forEach((el, i) => {
-        el.setAttribute('data-reveal', '');
-        el.style.setProperty('--mt-reveal-i', i % 3);
-      });
-    }
-    run[0].before(wrap);
-    run.forEach((el) => wrap.append(el));
-    if (wrap.classList.contains('mt-art__gallery')) stageGallery(wrap);
-  };
-
-  const stageGallery = (gallery) => {
-    const rte = gallery.closest('[data-art-rte]');
-    if (!rte?.dataset.artArrow) return;
-    const stage = document.createElement('div');
-    stage.className = 'mt-art__stage';
-    stage.setAttribute('data-row-stage', '');
-    gallery.before(stage);
-    stage.append(gallery);
-    [
-      ['prev', rte.dataset.artPrev],
-      ['next', rte.dataset.artNext],
-    ].forEach(([dir, label]) => {
-      const nav = document.createElement('button');
-      nav.type = 'button';
-      nav.className = `mt-row-nav mt-row-nav--${dir}`;
-      nav.dataset.rowArrow = dir;
-      nav.setAttribute('aria-label', label || dir);
-      const icon = document.createElement('img');
-      icon.src = rte.dataset.artArrow;
-      icon.width = 18;
-      icon.height = 12;
-      icon.alt = '';
-      nav.append(icon);
-      stage.append(nav);
-    });
-  };
-
-  const groupMedia = (rte) => {
-    let run = [];
+  // Image-only paragraphs: one image per row at the column width (Figma 1479:6788).
+  const markMedia = (rte) => {
     Array.from(rte.children).forEach((el) => {
-      if (isMediaBlock(el)) {
-        run.push(el);
-        return;
-      }
-      if (run.length) wrapRun(run);
-      run = [];
+      if (isMediaBlock(el)) el.classList.add('mt-art__media');
     });
-    if (run.length) wrapRun(run);
+  };
+
+  // Tables scroll sideways on small screens; a header-less two-column table is a list (1479:6846).
+  const markTables = (rte) => {
+    rte.querySelectorAll('table').forEach((table) => {
+      if (!table.parentElement.classList.contains('mt-art__table')) {
+        const wrap = document.createElement('div');
+        wrap.className = 'mt-art__table';
+        table.before(wrap);
+        wrap.append(table);
+      }
+      const rows = Array.from(table.rows);
+      if (rows.length && !table.querySelector('th') && rows.every((row) => row.cells.length === 2)) {
+        table.classList.add('mt-art__list');
+      }
+    });
+  };
+
+  let uid = 0;
+  const icon = () =>
+    '<svg class="mt-art__icon" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h12" stroke="currentColor" stroke-width="1.25"/><path class="mt-art__icon-v" d="M7 1v12" stroke="currentColor" stroke-width="1.25"/></svg>';
+
+  // Wraps nodes in a collapsible panel controlled by `button`.
+  const fold = (button, nodes, open) => {
+    const panel = document.createElement('div');
+    panel.className = 'mt-art__fold';
+    panel.id = `mt-art-fold-${(uid += 1)}`;
+    const inner = document.createElement('div');
+    inner.className = 'mt-art__fold-inner';
+    nodes.forEach((node) => inner.append(node));
+    panel.append(inner);
+    button.setAttribute('aria-controls', panel.id);
+    button.setAttribute('aria-expanded', String(open));
+    panel.inert = !open;
+    return panel;
+  };
+
+  const setOpen = (item, open) => {
+    const button = item.querySelector('[aria-controls]');
+    const panel = document.getElementById(button.getAttribute('aria-controls'));
+    item.classList.toggle('is-open', open);
+    button.setAttribute('aria-expanded', String(open));
+    panel.inert = !open;
+  };
+
+  // Quick summary: the editor writes a list with class="quick-summary" (1479:6771).
+  const buildSummary = (rte) => {
+    rte.querySelectorAll('ul.quick-summary, ol.quick-summary').forEach((list) => {
+      const box = document.createElement('section');
+      box.className = 'mt-art__summary is-open';
+      if (!rte.querySelector('#quick-summary')) box.id = 'quick-summary';
+      const head = document.createElement('button');
+      head.type = 'button';
+      head.className = 'mt-art__summary-head';
+      head.setAttribute('data-art-fold', '');
+      head.innerHTML = `<span></span>${icon()}`;
+      head.firstChild.textContent = rte.dataset.artSummary || 'Quick summary';
+      list.before(box);
+      box.append(head, fold(head, [list], true));
+    });
+  };
+
+  // FAQ: H3 questions after an H2 "FAQ" / "Frequently asked questions"; one answer open at a time
+  // (1479:6864). Schema.org microdata written in the body keeps working: only the DOM around it changes.
+  const FAQ_TITLE = /^(faqs?|frequently asked questions)\b/i;
+  const buildFaq = (rte) => {
+    // FAQPage microdata block (its H2 inside or right before it, any name), else an H2 named
+    // FAQ / Frequently asked questions and the H3s up to the next H2.
+    let title = null;
+    const questions = [];
+    const page = rte.querySelector('[itemtype*="FAQPage"]');
+    if (page) {
+      title = page.querySelector('h2') || (page.previousElementSibling?.tagName === 'H2' ? page.previousElementSibling : null);
+      questions.push(...page.querySelectorAll('h3'));
+    } else {
+      title = Array.from(rte.children).find((el) => el.tagName === 'H2' && FAQ_TITLE.test(el.textContent.trim()));
+      for (let el = title?.nextElementSibling; el && el.tagName !== 'H2'; el = el.nextElementSibling) {
+        if (el.tagName === 'H3') questions.push(el);
+        else questions.push(...el.querySelectorAll('h3'));
+      }
+    }
+    if (!questions.length) return;
+    if (title) {
+      title.setAttribute('data-art-faq-title', '');
+      if (FAQ_TITLE.test(title.textContent.trim())) title.setAttribute('data-art-faq-short', '');
+    }
+    const items = questions.map((question, index) => {
+      const answer = [];
+      for (
+        let el = question.nextElementSibling;
+        el && !/^H[23]$/.test(el.tagName) && !el.querySelector('h3');
+        el = el.nextElementSibling
+      ) {
+        answer.push(el);
+      }
+      const item = document.createElement('div');
+      item.className = 'mt-art__faq-item';
+      question.before(item);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mt-art__faq-q';
+      button.setAttribute('data-art-faq-q', '');
+      const label = document.createElement('span');
+      label.append(...question.childNodes);
+      button.append(label);
+      button.insertAdjacentHTML('beforeend', icon());
+      question.append(button);
+      item.append(question, fold(button, answer, index === 0));
+      if (index === 0) item.classList.add('is-open');
+      return item;
+    });
+    items[items.length - 1]?.classList.add('is-last');
+  };
+
+  // Chapters: the body H2s (plus Quick summary), current one marked while scrolling (1479:6883).
+  const slug = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 60) || 'section';
+
+  const headerOffset = () => {
+    const header = document.querySelector('.section-header');
+    return header ? Math.max(header.getBoundingClientRect().bottom, 0) : 0;
+  };
+
+  const tocs = [];
+
+  const buildToc = (root, rte) => {
+    const toc = root.querySelector('[data-art-toc]');
+    const list = toc?.querySelector('[data-art-toc-list]');
+    if (!list) return;
+    const targets = Array.from(rte.querySelectorAll(':scope > h2, #quick-summary, [data-art-faq-title]'));
+    if (targets.length < 3) return;
+    const used = new Set();
+    const entries = targets.map((target) => {
+      let label = target.textContent.trim();
+      if (target.classList.contains('mt-art__summary')) label = rte.dataset.artSummary || label;
+      else if (target.hasAttribute('data-art-faq-short')) label = rte.dataset.artFaq || label;
+      else if (label.includes(':')) label = label.split(':')[0].trim();
+      if (!target.id) {
+        let id = slug(label);
+        while (used.has(id) || document.getElementById(id)) id = `${id}-${used.size + 1}`;
+        target.id = id;
+      }
+      used.add(target.id);
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${target.id}`;
+      link.textContent = label;
+      item.append(link);
+      list.append(item);
+      return { target, item };
+    });
+    toc.hidden = false;
+    const state = { toc, entries, current: -1 };
+    tocs.push(state);
+    // Desktop keeps the list open; narrower screens start folded to the current chapter.
+    if (!window.matchMedia('(min-width: 1200px)').matches) setTocCollapsed(toc, true);
+    spy();
+  };
+
+  const setTocCollapsed = (toc, collapsed) => {
+    const toggle = toc.querySelector('[data-art-toc-toggle]');
+    toc.classList.toggle('is-collapsed', collapsed);
+    toggle.setAttribute('aria-expanded', String(!collapsed));
+    toggle.textContent = collapsed ? toggle.dataset.show : toggle.dataset.hide;
+  };
+
+  let spyQueued = false;
+  const spy = () => {
+    if (spyQueued || !tocs.length) return;
+    spyQueued = true;
+    requestAnimationFrame(() => {
+      spyQueued = false;
+      const line = headerOffset() + 80;
+      tocs.forEach((state) => {
+        let current = 0;
+        state.entries.forEach(({ target }, i) => {
+          if (target.getBoundingClientRect().top <= line) current = i;
+        });
+        if (current === state.current) return;
+        state.current = current;
+        state.entries.forEach(({ item }, i) => {
+          item.classList.toggle('is-current', i === current);
+          const link = item.firstChild;
+          if (i === current) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      });
+    });
+  };
+
+  // With motion.js smooth scrolling (html.mt-smooth) the page is drawn from .mt-scroll, whose scrollTop
+  // eases behind window.scrollY; mtScrollTo drives that directly (same as anchor-tabs.js).
+  const visualScrollY = () =>
+    document.documentElement.classList.contains('mt-smooth')
+      ? document.querySelector('.mt-scroll')?.scrollTop ?? window.scrollY
+      : window.scrollY;
+
+  const scrollToTarget = (target) => {
+    const header = document.querySelector('.section-header');
+    const top = Math.max(0, target.getBoundingClientRect().top + visualScrollY() - (header?.offsetHeight || 0) - 24);
+    if (!reducedMq.matches && window.mtScrollTo) window.mtScrollTo(top);
+    else window.scrollTo({ top, behavior: reducedMq.matches ? 'auto' : 'smooth' });
   };
 
   const markCites = (rte) => {
@@ -229,31 +378,36 @@ if (!window.mtArticleInit) {
 
   const addReveals = (rte) => {
     Array.from(rte.children).forEach((el) => {
-      if (el.classList.contains('mt-art__gallery') || el.classList.contains('mt-art__stage')) return;
       el.setAttribute('data-reveal', '');
     });
   };
 
-  const share = async (button) => {
-    const payload = { title: document.title, url: window.location.href };
-    if (navigator.share) {
-      try {
-        await navigator.share(payload);
-      } catch {}
-      return;
-    }
+  const shareUrl = (button) =>
+    button.closest('[data-art-share-url]')?.dataset.artShareUrl || window.location.href;
+
+  // Copy link (also the Instagram icon: Instagram has no web share link) → "Link copied" for 1.5s.
+  const copyLink = async (button) => {
     try {
-      await navigator.clipboard.writeText(payload.url);
+      await navigator.clipboard.writeText(shareUrl(button));
     } catch {
       return;
     }
-    if (button.dataset.mtLabel) return;
-    button.dataset.mtLabel = button.textContent;
-    button.textContent = strings.linkCopied;
-    setTimeout(() => {
-      button.textContent = button.dataset.mtLabel;
-      delete button.dataset.mtLabel;
-    }, 2000);
+    const group = button.closest('.mt-art__share');
+    const note = group?.querySelector('[data-art-copied]');
+    if (!note) return;
+    const box = group.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
+    note.style.setProperty('--art-copied-x', `${rect.left - box.left + rect.width / 2}px`);
+    note.textContent = strings.linkCopied || 'Link copied';
+    note.classList.add('is-shown');
+    clearTimeout(note.mtTimer);
+    note.mtTimer = setTimeout(() => note.classList.remove('is-shown'), 1500);
+  };
+
+  const nativeShare = async (button) => {
+    try {
+      await navigator.share({ title: document.title, url: shareUrl(button) });
+    } catch {}
   };
 
   const init = (scope) => {
@@ -263,12 +417,21 @@ if (!window.mtArticleInit) {
       const rte = root.querySelector('[data-art-rte]');
       if (rte) {
         normalize(rte);
-        groupMedia(rte);
+        markMedia(rte);
         moveLeadMedia(rte);
         insertQuote(rte);
         markCites(rte);
+        markTables(rte);
+        buildSummary(rte);
+        buildFaq(rte);
         splitScrub(rte);
         addReveals(rte);
+        buildToc(root, rte);
+      }
+      if (navigator.share) {
+        root.querySelectorAll('[data-art-native]').forEach((button) => {
+          button.hidden = false;
+        });
       }
     });
     document.dispatchEvent(new CustomEvent('mt:reveal-scan'));
@@ -276,12 +439,51 @@ if (!window.mtArticleInit) {
   };
 
   document.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-art-share]');
-    if (button) share(button);
+    if (event.target.closest('[data-art-copy]')) copyLink(event.target.closest('[data-art-copy]'));
+    if (event.target.closest('[data-art-native]')) nativeShare(event.target.closest('[data-art-native]'));
 
-    // Share / shop / story tags render as a button + two links but read as
-    // one row of CTA "buttons" — tracked together as Blog post button clicks.
-    const tag = event.target.closest('.mt-art__tag, [data-art-share]');
+    const tocToggle = event.target.closest('[data-art-toc-toggle]');
+    if (tocToggle) {
+      const toc = tocToggle.closest('[data-art-toc]');
+      setTocCollapsed(toc, !toc.classList.contains('is-collapsed'));
+      return;
+    }
+
+    const tocLink = event.target.closest('[data-art-toc-list] a');
+    if (tocLink) {
+      const target = document.getElementById(decodeURIComponent(tocLink.hash.slice(1)));
+      if (target) {
+        event.preventDefault();
+        scrollToTarget(target);
+        history.replaceState(null, '', tocLink.hash);
+      }
+      return;
+    }
+
+    const summary = event.target.closest('[data-art-fold]');
+    if (summary) {
+      const box = summary.parentElement;
+      setOpen(box, !box.classList.contains('is-open'));
+      return;
+    }
+
+    const question = event.target.closest('[data-art-faq-q]');
+    if (question) {
+      const item = question.closest('.mt-art__faq-item');
+      const open = !item.classList.contains('is-open');
+      if (open) {
+        item
+          .closest('[data-art-rte]')
+          .querySelectorAll('.mt-art__faq-item.is-open')
+          .forEach((other) => setOpen(other, false));
+      }
+      setOpen(item, open);
+      return;
+    }
+
+    // Share icons and the shop / story tags read as one row of CTA "buttons" —
+    // tracked together as Blog post button clicks.
+    const tag = event.target.closest('.mt-art__tag, [data-art-share-to]');
     if (tag) {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event_parameters: null });
@@ -290,7 +492,7 @@ if (!window.mtArticleInit) {
         event_name: 'select_content',
         event_parameters: {
           module_name: 'Blog Post',
-          button_name: tag.textContent.trim(),
+          button_name: tag.dataset.artShareTo ? `Share - ${tag.dataset.artShareTo}` : tag.textContent.trim(),
         },
       });
       return;
@@ -326,7 +528,9 @@ if (!window.mtArticleInit) {
   });
 
   document.addEventListener('scroll', queue, { capture: true, passive: true });
+  document.addEventListener('scroll', spy, { capture: true, passive: true });
   window.addEventListener('resize', queue);
+  window.addEventListener('resize', spy);
   reducedMq.addEventListener('change', () => {
     if (reducedMq.matches) {
       document.querySelectorAll('[data-art-rte] .mt-art__w.mt-on').forEach((word) => {

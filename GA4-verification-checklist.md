@@ -940,3 +940,264 @@ DOM 本来就是"移除前"的状态，天然是对的。
 - 没有在真实浏览器里实际点击 Quick Shop/PDP/Pairs 的 Add to Cart 按钮
   看 dataLayer 的实际结果（点击事件没法用 curl 模拟），麻烦你照着上面
   的清单实测
+
+---
+
+## 验证清单：Featured KOL / Featured blog / Full text / Product grid tab（文档无对应行，2026-11-04）
+
+**先说一个判断**：v1.3 文档 sheet3 里没有这几个新组件的行，下面的
+事件名/字段都是按最接近的已有模块类比出来的，**建议先确认口径，再
+按这个验收**：
+- Featured KOL（`sections/featured-kol.liquid`）= 商品列表模块：
+  `view_item_list`；卡片点击打开 Quick Shop，`select_item`
+  （`button_name: "QUICK SHOP"`）/ `view_item` / `add_to_cart` 由
+  `quick-shop.js` 现有逻辑发出。`item_list_id` = 标题
+  `handleize` + `-`→`_`（"Ready, set, play." → `ready_set_play`），
+  `item_list_name` = 标题，标题为空时退回 `Featured KOL`
+- Featured blog（`sections/featured-blog.liquid`）= 类比 Blog 页
+  No.64：`select_content`，`module_name: "Featured Blog"`（固定字面量）
+- Full text（`sections/full-text.liquid`）= 类比 Blog 正文 No.67：
+  富文本里的链接发 `links_entry`
+- Product grid（`sections/product-grid.liquid`）原本已有
+  `view_item_list` / `select_item`，只补了 tab 点击 = 类比 PLP No.35
+  `select_filter`
+- Full image 原本已有 `community_entry`（No.42），未改
+
+- [ ] Featured KOL：滑到模块，控制台出现一条 `view_item_list`，
+      items 只含有商品的卡片，`index` 从 1 连续编号（没配商品的卡片
+      不占位）；横向滑动露出新卡片后再报一批，滑回来不重复报
+- [ ] Featured KOL：点卡片打开 Quick Shop，依次出现 `select_item`
+      （`button_name: "QUICK SHOP"`）和 `view_item`，`item_list_id`/
+      `item_list_name` 同上；弹窗里加购出现 `add_to_cart`
+- [ ] Featured blog：点文章卡片，跳转前出现 `select_content`：
+      `module_name: "Featured Blog"`，`content_name`：文章标题
+- [ ] Featured blog：点 "Read all stories"，出现 `select_content`：
+      `module_name: "Featured Blog"`，`button_name: "Read all stories"`
+- [ ] Full text：在富文本里插一个链接，点击后出现 `links_entry`：
+      `button_name`：链接文案；没有链接的 Full text 不会有任何事件
+- [ ] Product grid：点一个 tab（选中），出现 `select_filter`：
+      `filter_type`：`"Product tag"` 或 `"Discount range"`（随该组件
+      的 Tabs filter by 设置），`filter_content`：tab 文案；再点同一个
+      tab 取消选中**不**触发（跟 PLP 取消勾选不触发一致）
+
+代码改动：
+- `sections/featured-kol.liquid`：section 加 `data-currency`；有商品的
+  卡片加一组跟 `product-card.liquid` 相同的 `data-item-*`（变体走
+  `item-variant-ga4` snippet，折扣用 `compare_at_price_min - price_min`）
+- `assets/featured-kol.js`：加 `view_item_list` 视口分批上报（跟
+  `featured-collection.js` 同一套写法）
+- `assets/featured-blog.js`：加 `select_content` 点击监听，推送后
+  延迟 250ms 跳转（同 `full-image.js`）
+- 新建 `assets/full-text.js`（跟 `full-text.css` 命名对称），
+  `sections/full-text.liquid` 引入；`links_entry` + 延迟跳转（新标签页
+  / `target="_blank"` / 页内锚点不拦截）
+- `assets/product-grid.js`：`toggleTab()` 里选中 tab 时推 `select_filter`
+
+验证：
+- `node --check` 4 个 JS 文件通过；`shopify theme check` 无新增问题
+  （2 条警告都是历史遗留：`product-card-list.liquid` OrphanedSnippet、
+  `mkq_script.liquid` DeprecatedFilter）
+- 临时模板 `page.ga4check.json`（KOL 3 张卡其中 1 张不配商品 / Featured
+  blog 2 篇 / Full text 带链接）在本地 dev 渲染，确认 KOL 卡片的
+  `data-item-*` 和 index（1、2）正确、空卡片不带属性、三个 JS 都加载；
+  验证后已删除临时模板
+- 点击触发的事件没法用 curl 模拟，需要按上面清单在浏览器实测
+
+---
+
+## 验证清单：Benefits signup / Anchor tabs / KOL video（在线表 No.76-80，2026-11-04）
+
+在线规范表（飞书 sheet3）第 84-88 行已补录。口径均为类比，待确认：
+- Benefits signup（No.76）：代码此前已实现 `subscribe`（`module_name` 取
+  组件设置 GA4 module name，默认 Early Access，订阅成功跳回时触发），
+  符合 No.8/9 规则，本次只补录到在线表，代码未改
+- Anchor tabs（No.77）：`select_content_category`，`module_name:
+  "Anchor Tabs"`，`button_name`：tab 标题——参照 Blog Tab（No.63）
+- KOL video（No.78-80）：播放按钮 `select_content`（`module_name:
+  "KOL Video"`，`content_name`：卡片标题，`button_name: "Play"`）；
+  卡片下商品 `view_item_list` / `select_item`（`item_list_id:
+  kol_video`，`item_list_name: KOL Video`，index 跨卡片连续编号）
+
+- [ ] Benefits signup：提交邮箱成功、页面跳回后出现 `subscribe`，
+      `module_name` = 组件里配置的值；提交失败（如邮箱格式错误）不触发
+- [ ] Anchor tabs：点击 tab 出现 `select_content_category`；页面滚动时
+      tab 自动高亮**不**触发
+- [ ] KOL video：点播放按钮出现 `select_content`（Play）
+- [ ] KOL video：滑到商品区出现一条 `view_item_list`，index 1、2、3…
+      跨卡片连续；横向滑出新卡片后再报一批
+- [ ] KOL video：点商品跳转前出现 `select_item`，`button_name:
+      "Product Card"`
+
+代码改动：
+- `sections/kol-video.liquid`：section 加 `data-currency`，商品 `<li>`
+  加一组跟 `product-card.liquid` 相同的 `data-item-*`
+- `assets/kol-video.js`：播放按钮推 `select_content`；商品
+  `view_item_list` 视口分批上报 + 点击 `select_item`
+- `assets/anchor-tabs.js`：tab 点击处理里推 `select_content_category`
+- 未新建文件
+
+验证：
+- `node --check` 两个 JS 通过；`shopify theme check` 无新增问题
+- 临时模板渲染 kol-video（2 张卡 3 个商品），确认 `data-item-*` 和
+  index 1/2/3 正确；验证后已删除临时模板
+- 点击触发的事件需要在浏览器实测
+
+---
+
+## 验证清单：Product carousel（新组件，在线表 No.81-83，2026-11-05）
+
+新组件 `sections/product-carousel.liquid`（product-grid 的横滑版）。口径
+与 Product grid 完全一致（用户 2026-11-04 确认）：
+- 商品卡 `view_item_list`（视口分批）/ `select_item`（`button_name:
+  "Product Card"`）；`item_list_id` = 系列 handle，`item_list_name` =
+  组件标题（为空时用系列标题）
+- 选中 tab 后：`item_list_name` = `<标题> - <tab 文案>`，index 按筛选
+  后列表从 1 重新编号
+- tab 选中 = `select_filter`（同 Product grid，类比 PLP No.35），取消
+  选中不触发
+- 左侧活动卡是纯图片、不可点击，**不埋点**
+- QUICK SHOP 黑条：卡片带 `data-quick-url`，`select_item`（QUICK SHOP）
+  / `view_item` / `add_to_cart` 由 `quick-shop.js` 现有逻辑发出
+
+- [ ] 滑到组件，出现一条 `view_item_list`，只含露出 ≥50% 的卡片，index
+      1、2、3…；横向滑动 / 点箭头露出新卡片后再报一批，滑回来不重复报
+- [ ] 点商品卡（非 QUICK SHOP）跳转前出现 `select_item`，`button_name:
+      "Product Card"`
+- [ ] 点 QUICK SHOP：出现 `select_item`（QUICK SHOP）+ `view_item`，
+      **不**出现 `button_name: "Product Card"` 的那条
+- [ ] 点一个 tab：出现 `select_filter`（`filter_type`："Product tag" 或
+      "Discount range"，`filter_content`：tab 文案）；随后露出的卡片报
+      `view_item_list`，`item_list_name` = "标题 - tab 文案"，index 从 1 起
+- [ ] 再点同一个 tab 取消：不触发 `select_filter`，已报过的原列表卡片
+      不重复报
+- [ ] 点活动卡：没有任何事件
+
+代码改动：
+- 新建 `sections/product-carousel.liquid` + `assets/product-carousel.css`
+  / `.js`（命名对称）；卡片复用 `product-card.liquid`（参数同
+  product-grid），tab 取数复用 `templates/collection.pgrid.liquid`
+- `assets/product-carousel.js`：`view_item_list` / `select_item` /
+  `select_filter`，写法同 `product-grid.js`
+
+验证：
+- `node --check` 通过；`shopify theme check` 无新增问题
+- 临时模板 `collection.pcarcheck.json`（tag tab + 空 tab + 折扣 tab 两
+  个实例）在本地 dev 用 Edge（CDP）实测：首屏报 `Best Sellers#1.2.3`，
+  点箭头后报 `#4`；选 Tops → `select_filter:Tops` + `Best Sellers -
+  Tops#1.2.3`；空 tab 只报 `select_filter`；折扣 tab 同理。验证后已删除
+  临时模板
+- 商品卡 / QUICK SHOP 点击（`select_item`）未在 CDP 里实测，需按上面清单
+  在浏览器确认
+
+## 验证清单：Perks tabs（新组件，在线表 No.84-85，2026-11-10）
+
+- 三个 tab 任意点击 = `select_content_category`（`module_name`：组件标题，
+  黑五页为 "Black Friday Perks"；`button_name`：tab 标题，手机端换行合并
+  为一个空格），点当前已选中的 tab 也触发；页面加载时的默认选中、键盘
+  左右键切换不触发
+- 勾选了 "Opens Spin & Win" 的 tab（黑五页为 Spin & Win）额外发
+  `spin_entry`（`module_name` 同上，`login_status`：`logged_in` / `guest`），
+  与上一条同时发出；落地页自动弹出转盘不触发
+
+- [ ] 点 Member Perks：一条 `select_content_category`，`button_name:
+      "Member Perks"`；四宫格切换，无弹窗
+- [ ] 再点一次 Member Perks：再出现一条同样的事件
+- [ ] 未登录点 Spin & Win：`select_content_category`（"Spin & Win"）+
+      `spin_entry`（`login_status: "guest"`），弹出 01 登录态
+- [ ] 已登录点 Spin & Win：`spin_entry` 的 `login_status: "logged_in"`，
+      弹出 02 转盘（或 0 次态）
+- [ ] 点 Gift Card Bonus：只有 `select_content_category`
+
+代码改动：
+- 新建 `sections/perks-tabs.liquid` + `assets/perks-tabs.css` / `.js`
+  （命名对称）；弹窗由 `spin-wheel.js` 现有的 `[data-spin-open]` 监听打开
+- `assets/perks-tabs.js`：两条事件的推送，写法同 `anchor-tabs.js`
+
+验证：
+- `node --check` 通过；`shopify theme check` 无新增问题
+- 本地 dev（Chrome CDP，未登录）在黑五页依次点 Member ×2、Spin & Win：
+  得到 3 条 `select_content_category` + 1 条 `spin_entry`（`guest`），
+  每条前都有 `{ event_parameters: null }`；转盘弹窗打开且为 guest 态
+- 已登录（`logged_in`）未实测：127.0.0.1 无法登录新客户账户，需在真实
+  域名 + preview_theme_id 下按上面清单确认
+
+### 追加：Perk 跳转商品（在线表 No.97，第 105 行，2026-11-17）
+
+- 每个 perk 可选一个商品（`perk_N_product`），选了才渲染成链接；点击 =
+  `select_content`（`module_name`：组件标题，黑五页 "Black Friday Perks"；
+  `content_name`：perk 标题），先上报，250ms 后跳转（同 featured-blog.js），
+  Ctrl/Cmd/中键新标签打开不拦截
+- 未配置商品的 perk 不可点击、不触发
+
+- [ ] 点一个配置了商品的 perk：一条 `select_content`，`content_name` 为该
+      perk 标题，随后跳到商品详情页
+- [ ] 点未配置商品的 perk：无事件、不跳转
+
+代码改动：`sections/perks-tabs.liquid`（4 个 product 设置 + `<a data-perks-link>`）、
+`assets/perks-tabs.js`（事件 + 跳转等待）、`assets/perks-tabs.css`（链接去下划线）
+
+验证：本地 dev（Edge CDP）点 linked perk，dataLayer 原样为
+`{event_parameters:null}` + `{event:'ga4Event', event_name:'select_content',
+event_parameters:{module_name:'Black Friday Perks', content_name:'Free Outfit'}}`，
+之后跳到 `/products/kids-2-in-1-leggings-fairy`；点未配置的 perk 无事件
+
+
+## 验证清单：Spin & Win 转盘弹窗（新组件，在线表 No.86-96，2026-11-11）
+
+在线表 sheet3 第 94-104 行（D 列 "Spin & Win 弹窗"，C 列并入"通用组件"）。规范里没有对应行，事件名统一 `spin_` 前缀（与 No.85 `spin_entry` 一致），O 列已注明"新增；…待确认"。**券码、礼品卡号、邮箱、姓名一律不上报。**
+
+| No. | 事件 | 触发 | 参数 |
+|---|---|---|---|
+| 86 | `spin_popup_view` | 弹窗打开，或弹窗内切到 01 / 02 / 06 | `popup_name` sign_in / spin / my_prizes；`trigger` auto / click / in_popup；`login_status`；`spins_left`（取不到不传） |
+| 87 | `spin_sign_in` | 01 点 SIGN IN | `button_name`（先推再 250ms 跳转，修饰键点击不拦截） |
+| 88 | `spin_click` | 点 SPIN NOW / TRY AGAIN | `button_name`、`spins_left`（点击前） |
+| 89 | `spin_result` | /draw 返回成功（不等动画） | `prize_type`、`prize_name`（展示名）、`spins_left`（抽后） |
+| 90 | `spin_error` | 抽奖 / 选款提交失败 | `action` draw / gift_confirm；`error_code`（string，网络错误 network） |
+| 91 | `spin_copy_code` | 04 / 05 / 06 点 COPY | `prize_type`、`module_name` result / my_prizes |
+| 92 | `spin_shop_now` | 04 / 05 点 SHOP NOW | `prize_type` |
+| 93 | `spin_again` | 点 SPIN AGAIN | `module_name` result / gift / my_prizes |
+| 94 | `spin_gift_choose` | 06 点 CHOOSE | `prize_type` |
+| 95 | `spin_gift_confirm` | 选款提交成功 | `prize_type`、`items[]` { item_id: SKU, item_name: 款名, item_variant: 颜色_尺码 } |
+| 96 | `spin_prizes_tab` | 点 Unused / Used | `button_name`（不含数量） |
+
+验证（dev 店，控制台先运行 `dataLayer.filter(e => e.event === 'ga4Event' && /^spin_/.test(e.event_name))` 查看）：
+- [ ] 有次数账号进黑五页：`spin_popup_view`（popup_name spin, trigger auto, spins_left = 次数）
+- [ ] 0 次有奖品账号：`spin_popup_view`（my_prizes, auto）
+- [ ] 未登录点 Spin & Win tab：No.85 `spin_entry` + `spin_popup_view`（sign_in, click）；点 SIGN IN：`spin_sign_in` 后才跳转
+- [ ] 点 SPIN NOW：`spin_click` → `spin_result`（prize_type / prize_name 与结果页一致，spins_left 减 1）
+- [ ] 04 / 05 点 COPY CODE、SHOP NOW：`spin_copy_code`（module_name result）、`spin_shop_now`；参数里没有券码 / 卡号
+- [ ] 点 SPIN AGAIN（结果页 / 选款页 / 06）：`spin_again` 的 module_name 分别为 result / gift / my_prizes，随后 `spin_popup_view`（spin, in_popup）
+- [ ] 06 点 Unused / Used：`spin_prizes_tab`；点 COPY：`spin_copy_code`（my_prizes）；点 CHOOSE：`spin_gift_choose`
+- [ ] 选款提交成功：`spin_gift_confirm` 的 items 与所选款 / 色 / 码一致，随后 `spin_popup_view`（my_prizes, in_popup）
+- [ ] 抽奖 / 选款失败：`spin_error`（action、error_code 与接口返回一致）
+- [ ] 每条事件前都有一条 `{ event_parameters: null }`
+
+代码改动：
+- `assets/spin-wheel.js`：`track()` 统一推送；`showView(name, trigger)` 发 popup_view（`open(view, trigger)`，自动弹出传 auto）；抽奖 / 选款 / 06 各点击点各发一条；抽奖按钮只在转盘视图且未禁用时响应
+- `sections/spin-wheel.liquid`：SIGN IN 加 `data-spin-sign-in`，SHOP NOW 加 `data-spin-shop`
+
+本地验证（mock + 无头 Chrome 读 dataLayer）：抽中折扣 → COPY → SHOP NOW、抽奖 50300、抽中赠品 → 提交、06 切 tab → COPY → CHOOSE → SPIN AGAIN 四个流程，事件与参数如上表，每条前有重置推送。已登录真实接口未实测，按上面清单在 dev 店确认。
+
+
+## 验证清单：Smile 会员悬浮按钮关闭 ×（新组件，在线表 No.98，2026-11-19）
+
+在线表 sheet3 第 106 行（C 列并入"通用组件"，D 列 "Smile 会员悬浮按钮"）。规范里没有对应行，复用 No.7 `click_function`，O 列已注明"新增；参照 No.7…待确认"。
+
+| No. | 事件 | 触发 | 参数 |
+|---|---|---|---|
+| 98 | `click_function` | 点 Smile 悬浮按钮右上角 × | `module_name: 'Rewards Launcher'`、`button_name: 'Close'`（均为固定值） |
+
+验证（预览主题，PC 和移动端各一遍；控制台运行 `dataLayer.filter(e => e.event_name === 'click_function')` 查看）：
+- [ ] 进任意页面，Smile 按钮右上角出现 ×；积分面板打开时 × 隐藏，关闭面板后 × 回到原位
+- [ ] 点 ×：Smile 按钮消失，dataLayer 出现一条 `click_function`（Rewards Launcher / Close），前面有一条 `{ event_parameters: null }`
+- [ ] 同一标签页跳到其他页面 / 刷新：Smile 按钮不出现、不闪现，不再触发事件；`sessionStorage.mt_smile_launcher_closed === '1'`
+- [ ] 新开标签页：按钮和 × 恢复
+- [ ] 点橙色按钮本体仍能正常打开积分面板（× 没有挡住按钮的主要点击区域）
+
+代码改动：
+- `snippets/smile-launcher-close.liquid`（新增）：内联 style + script 在 Smile app embed 之前执行，已关闭时给 `<html>` 加 `mt-smile-closed`，直接隐藏 `.smile-launcher-frame-container`；输出 × 按钮，引入同名 CSS/JS
+- `assets/smile-launcher-close.js`（新增）：同时兼容 Smile 两套前端——lite（`#smile-ui-lite-container` / `#smile-ui-lite-launcher-frame-container`，首屏渲染、opacity 淡入）和完整版（`#smile-ui-container .smile-launcher-frame-container`，首次点击后插入并删除 lite）；完整版首次渲染的按钮框 computed `visibility:hidden` 但内部 iframe 自身 visible，所以可见性以 iframe 为准；`smile-launcher-open` 或面板 `.smile-panel-frame-container` 存在时隐藏 ×；按按钮框实际位置定位；全程事件驱动（body / Smile 外壳的 MutationObserver + 外壳内动画结束事件），无定时轮询；点击写 sessionStorage 并推送 GA4
+- `assets/smile-launcher-close.css`（新增）：× 样式（可见 20px 深色圆点，点击区域 32px）
+- `layout/theme.liquid`：`</body>` 前 `{% render 'smile-launcher-close' %}`
+
+本地验证（无头 Chrome，PC 1440 / 移动 390；Smile 在自动化浏览器里不渲染按钮，按线上 DOM 模拟了按钮框）：定位、面板打开时隐藏、按钮宽度变化后重新定位、点击后隐藏 + sessionStorage + 事件、跨页保持隐藏、新标签页恢复均通过。真实 Smile 下需要按上面清单在预览主题上确认。

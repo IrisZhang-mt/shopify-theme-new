@@ -91,6 +91,7 @@
 @media (hover: hover) {
   .mt-header__link:hover,
   .mt-header__search:hover,
+  .mt-header__signup--icon:hover,
   .mt-header__cart:hover,
   .mt-header__featured a:hover,
   .mt-header__group-title:hover,
@@ -232,13 +233,28 @@
   }
 }
 
+/* 已登录：PC 端也只显示图标（与移动端一致），DOM 顺序不变 */
+.mt-header__signup--icon {
+  display: flex;
+  align-items: center;
+  font-size: 0;
+  line-height: 0;
+}
+.mt-header__signup--icon .mt-header__signup-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--mt-ink);
+}
+.mt-header__signup--icon .mt-header__signup-glint,
+.mt-header__signup--icon::after {
+  display: none;
+}
+
 .mt-header__search {
   display: flex;
   align-items: center;
   color: var(--mt-ink);
-}
-.mt-header__search-text {
-  display: none;
 }
 .mt-header__search-icon {
   display: block;
@@ -562,13 +578,6 @@ details[open]:not(.mt-closing) > summary .mt-icon__x {
     font-size: var(--mt-menu-size);
     justify-self: end;
     margin-inline-start: 0;
-  }
-
-  .mt-header__search-text {
-    display: block;
-  }
-  .mt-header__search-icon {
-    display: none;
   }
 
   .mt-header__burger,

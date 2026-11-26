@@ -135,10 +135,6 @@ kebab-case 资源文件对。不要把不相关的样式/脚本塞进同一个�
   Console】+ Hotjar，从 `old/snippets/header-tracking.liquid` 迁移
   而来，2026-09-20；改动前确认不会与 `old` 线上环境重复上报，ID/域名
   不因"顺手清理"改动）
-- `snippets/kiwi-sizing.liquid`（`layout/theme.liquid` 引入，向
-  KiwiSizing 尺码推荐 App 注入 `window.KiwiSizing` 商品数据，从
-  `old/snippets/kiwiSizing.liquid` 迁移而来，2026-09-20；`window.
-  KiwiSizing` 全局变量名是第三方 App 的固定接口约定，不能重命名）
 
 ## 七、模板与 Section 规则
 

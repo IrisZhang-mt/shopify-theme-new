@@ -9,6 +9,34 @@
     {%- assign color_index = forloop.index0 -%}
   {%- endif -%}
 {%- endfor -%}
+{%- comment -%}
+  No Color option (e.g. gift card "Amount"): group the gallery by whichever option
+  has values named in image alt **markers**, so the option name itself doesn't matter.
+{%- endcomment -%}
+{%- if color_index < 0 -%}
+  {%- assign alt_markers = '|' -%}
+  {%- for media in product.media -%}
+    {%- if media.alt contains '**' -%}
+      {%- assign alt_marker_parts = media.alt | split: '**' -%}
+      {%- if alt_marker_parts.size >= 2 -%}
+        {%- assign alt_marker = alt_marker_parts[1] | strip | downcase -%}
+        {%- assign alt_markers = alt_markers | append: alt_marker | append: '|' -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if alt_markers != '|' -%}
+    {%- for option in product.options_with_values -%}
+      {%- for value in option.values -%}
+        {%- assign value_key = value | strip | downcase | prepend: '|' | append: '|' -%}
+        {%- if alt_markers contains value_key -%}
+          {%- assign color_index = forloop.parentloop.index0 -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if color_index >= 0 -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
 
 {%- comment -%}
   The default-color metafield applies only without ?variant=. Resolving it here (not in JS)
@@ -272,18 +300,8 @@
                     <p class="mt-pdp__hint" data-pdp-hint="{{ forloop.index0 }}" role="alert" hidden>{{ 'products.select_size' | t }}</p>
                     <div class="mt-pdp__option-head">
                       <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span></span></p>
-                      {%- assign chart_meta = product.metafields.custom.size_chart -%}
-                      {%- assign chart_page = chart_meta.value -%}
-                      {%- assign chart_url = chart_page.url | default: chart_meta.value -%}
-                      {%- comment -%} Size data lives in Kiwi; without the product's own metafield the button waits for Kiwi's chart (pdp.css). {%- endcomment -%}
                       {%- if option.name == 'Size' -%}
-                        <a class="mt-pdp__chart" href="{{ chart_url | default: '#' | escape }}" data-chart-kiwi{% if chart_url == blank %} data-chart-wait{% endif %}{% if chart_page.content != blank %} data-chart-open="{{ product.id }}"{% endif %}>
-                          <img src="{{ 'ruler.svg' | asset_url }}" width="19" height="9" alt="">
-                          {{ 'products.size_chart' | t }}
-                        </a>
-                        {%- if chart_page.content != blank -%}
-                          {% render 'size-chart-modal', chart_page: chart_page, chart_id: product.id, chart_name: product.title %}
-                        {%- endif -%}
+                        {% render 'size-chart', product: product, button_class: 'mt-pdp__chart' %}
                       {%- endif -%}
                     </div>
                     <div class="mt-pdp__pills">
@@ -453,11 +471,11 @@
       <div class="mt-pdp__zoom-list" data-pdp-zoom-list>{{ zoom_items }}</div>
       <div class="mt-pdp__zoom-nav">
         {%- if image_count > 1 -%}
-          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--prev" type="button" data-pdp-zoom-prev aria-label="{{ 'products.previous_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--prev" type="button" data-pdp-zoom-prev aria-label="{{ 'products.previous_image' | t | escape }}"><img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt=""></button>
         {%- endif -%}
         <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--close" type="button" data-pdp-zoom-close aria-label="{{ 'general.close' | t | escape }}">{% render 'icon-close' %}</button>
         {%- if image_count > 1 -%}
-          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--next" type="button" data-pdp-zoom-next aria-label="{{ 'products.next_image' | t | escape }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="mt-pdp__zoom-btn mt-pdp__zoom-btn--next" type="button" data-pdp-zoom-next aria-label="{{ 'products.next_image' | t | escape }}"><img src="{{ 'arrow.svg' | asset_url }}" width="18" height="12" alt=""></button>
         {%- endif -%}
       </div>
     </div>
