@@ -385,7 +385,7 @@ if (!window.mtArticleInit) {
   const shareUrl = (button) =>
     button.closest('[data-art-share-url]')?.dataset.artShareUrl || window.location.href;
 
-  // Copy link (also the Instagram icon: Instagram has no web share link) → "Link copied" for 1.5s.
+  // Copy link → "Link copied" for 1.5s.
   const copyLink = async (button) => {
     try {
       await navigator.clipboard.writeText(shareUrl(button));

@@ -57,46 +57,38 @@ html.mt-motion .mt-art__hero-media video {
   }
 }
 
+/* Breadcrumb: Home › Journal › full title (no category). Phone (1879:10338): below the banner, moss,
+   two lines max. PC: over the top of the hero, white, the whole title. */
 .mt-art__crumbs {
-  position: absolute;
-  top: calc(18 * var(--art-u));
-  left: var(--art-gutter);
-  right: var(--art-gutter);
-  z-index: 1;
+  padding: calc(20 * var(--art-u)) var(--art-gutter) 0;
   font-size: calc(12 * var(--art-u));
   font-weight: 400;
-  line-height: 1.28;
+  line-height: calc(15.36 / 12);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--mt-paper);
+  color: var(--mt-moss);
 }
 .mt-art__crumbs ol {
-  display: flex;
+  display: -webkit-box;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   list-style: none;
-  white-space: nowrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 .mt-art__crumbs li {
-  flex: none;
-}
-.mt-art__crumbs li:last-child {
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: inline;
 }
 .mt-art__crumbs li + li::before {
   content: "›";
-  margin: 0 0.5em;
+  margin: 0 0.6em;
   font-weight: 400;
 }
 .mt-art__crumbs a {
+  color: inherit;
   text-decoration: none;
-}
-.mt-art__crumbs .mt-art__crumbs-tag {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
 }
 .mt-art__crumbs a:focus-visible {
   outline: 2px solid currentColor;
@@ -121,7 +113,7 @@ html.mt-motion .mt-art__hero-media video {
   display: flex;
   align-items: center;
   gap: calc(9 * var(--art-u));
-  padding: calc(20 * var(--art-u)) var(--art-gutter) 0;
+  padding: calc(16 * var(--art-u)) var(--art-gutter) 0;
   color: var(--mt-ink);
 }
 .mt-art__date {
@@ -625,19 +617,13 @@ html.mt-motion .mt-art__w.mt-on {
   color: var(--mt-moss);
 }
 
-/* ---- End of article: share icons + shop / story tags ---- */
+/* ---- End of article: shop / story tags (the share row lives in the hero only) ---- */
 .mt-art__tags {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.625rem;
   margin: 3.125rem 0 0;
-}
-.mt-art__tags .mt-art__share {
-  margin-right: 0.875rem;
-}
-.mt-art__tags .mt-art__share-native {
-  display: none;
 }
 .mt-art__tag {
   display: inline-flex;
@@ -754,13 +740,21 @@ html.mt-motion .mt-art__w.mt-on {
   }
 
   .mt-art__crumbs {
+    position: absolute;
     top: 2rem;
+    left: var(--art-gutter);
+    right: var(--art-gutter);
+    z-index: 1;
+    padding: 0;
     font-size: 0.8125rem;
     font-weight: 500;
     line-height: calc(16.6 / 13);
+    color: var(--mt-paper);
   }
   .mt-art__crumbs ol {
-    max-width: 42.625rem;
+    display: block;
+    -webkit-line-clamp: none;
+    line-clamp: none;
   }
   .mt-art__crumbs li + li::before {
     margin: 0 0.75rem;

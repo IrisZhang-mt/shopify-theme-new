@@ -433,9 +433,13 @@ html .mt-art__rte p.mt-asp-host--still img {
   z-index: 3;
   pointer-events: none;
 }
+/* Dot (1879:10289 / 10290; phone 10466 / 10467): a 24px halo (white 8%, 1px white 40% ring) around a
+   16px white ring 5.2px thick, hollow centre; the phone draws it at 21 / 14 / 4.55. The halo breathes
+   until the dot is open. */
 .mt-asp-dot {
-  --asp-dot: 1rem;
-  --asp-core: 0.25rem;
+  --asp-halo: 1.3125rem;
+  --asp-ring: 0.875rem;
+  --asp-ring-w: 0.284rem;
   position: absolute;
   z-index: 1;
   width: 1.75rem;
@@ -453,32 +457,46 @@ html .mt-art__rte p.mt-asp-host--still img {
   position: absolute;
   top: 50%;
   left: 50%;
+  box-sizing: border-box;
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition:
-    width 200ms var(--mt-ease),
-    height 200ms var(--mt-ease),
-    background-color 200ms var(--mt-ease);
 }
 .mt-asp-dot::before {
-  width: var(--asp-dot);
-  height: var(--asp-dot);
-  background: rgba(255, 255, 255, 0.55);
+  width: var(--asp-halo);
+  height: var(--asp-halo);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  animation: mt-asp-breathe 2400ms var(--mt-ease) infinite;
 }
+/* The soft shadow is not in the design: it keeps the white ring readable on pale photos. */
 .mt-asp-dot::after {
-  width: var(--asp-core);
-  height: var(--asp-core);
-  background: rgba(29, 29, 29, 0.7);
+  width: var(--asp-ring);
+  height: var(--asp-ring);
+  border: var(--asp-ring-w) solid var(--mt-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  transition: transform 200ms var(--mt-ease);
 }
-.mt-asp-dot.is-on {
-  --asp-dot: 1.375rem;
-  --asp-core: 0.375rem;
+@keyframes mt-asp-breathe {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.45);
+    opacity: 0.35;
+  }
+}
+@media (hover: hover) {
+  .mt-asp-dot:hover::after {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
 }
 .mt-asp-dot.is-on::before {
-  background: var(--mt-white);
+  animation: none;
 }
 .mt-asp-dot.is-on::after {
-  background: var(--mt-ink);
+  transform: translate(-50%, -50%) scale(1.15);
 }
 .mt-asp-dot[hidden] {
   display: none;
@@ -560,12 +578,9 @@ html .mt-art__rte p.mt-asp-host--still img {
 
 @media screen and (min-width: 750px) {
   .mt-asp-dot {
-    --asp-dot: 1.25rem;
-    --asp-core: 0.3125rem;
-  }
-  .mt-asp-dot.is-on {
-    --asp-dot: 1.75rem;
-    --asp-core: 0.5rem;
+    --asp-halo: 1.5rem;
+    --asp-ring: 1rem;
+    --asp-ring-w: 0.325rem;
   }
 }
 
@@ -575,5 +590,6 @@ html .mt-art__rte p.mt-asp-host--still img {
   .mt-asp-dot::after,
   .mt-asp__arrow {
     transition: none !important;
+    animation: none !important;
   }
 }
