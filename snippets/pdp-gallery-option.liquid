@@ -1,0 +1,30 @@
+{%- comment -%}
+  Outputs the index of the option that groups the gallery when a product has no Color option
+  (e.g. gift card "Amount"), or -1. It's whichever option has values named in image alt
+  **markers**, so the option name itself doesn't matter.
+  Param: product.
+{%- endcomment -%}
+{%- assign gallery_index = -1 -%}
+{%- assign alt_markers = '|' -%}
+{%- for media in product.media -%}
+  {%- if media.alt contains '**' -%}
+    {%- assign alt_marker_parts = media.alt | split: '**' -%}
+    {%- if alt_marker_parts.size >= 2 -%}
+      {%- assign alt_marker = alt_marker_parts[1] | strip | downcase -%}
+      {%- assign alt_markers = alt_markers | append: alt_marker | append: '|' -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if alt_markers != '|' -%}
+  {%- for option in product.options_with_values -%}
+    {%- for value in option.values -%}
+      {%- assign value_key = value | strip | downcase | prepend: '|' | append: '|' -%}
+      {%- if alt_markers contains value_key -%}
+        {%- assign gallery_index = forloop.parentloop.index0 -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if gallery_index >= 0 -%}{%- break -%}{%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{{- gallery_index -}}

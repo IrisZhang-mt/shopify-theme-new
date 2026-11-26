@@ -9,33 +9,10 @@
     {%- assign color_index = forloop.index0 -%}
   {%- endif -%}
 {%- endfor -%}
-{%- comment -%}
-  No Color option (e.g. gift card "Amount"): group the gallery by whichever option
-  has values named in image alt **markers**, so the option name itself doesn't matter.
-{%- endcomment -%}
+{%- comment -%} No Color option (e.g. gift card "Amount"): group the gallery by the option named in image alt markers. {%- endcomment -%}
 {%- if color_index < 0 -%}
-  {%- assign alt_markers = '|' -%}
-  {%- for media in product.media -%}
-    {%- if media.alt contains '**' -%}
-      {%- assign alt_marker_parts = media.alt | split: '**' -%}
-      {%- if alt_marker_parts.size >= 2 -%}
-        {%- assign alt_marker = alt_marker_parts[1] | strip | downcase -%}
-        {%- assign alt_markers = alt_markers | append: alt_marker | append: '|' -%}
-      {%- endif -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- if alt_markers != '|' -%}
-    {%- for option in product.options_with_values -%}
-      {%- for value in option.values -%}
-        {%- assign value_key = value | strip | downcase | prepend: '|' | append: '|' -%}
-        {%- if alt_markers contains value_key -%}
-          {%- assign color_index = forloop.parentloop.index0 -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-      {%- if color_index >= 0 -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-  {%- endif -%}
+  {%- capture gallery_index -%}{% render 'pdp-gallery-option', product: product %}{%- endcapture -%}
+  {%- assign color_index = gallery_index | strip | plus: 0 -%}
 {%- endif -%}
 
 {%- comment -%}
@@ -293,20 +270,28 @@
                   </div>
                 {%- else -%}
                   {%- comment -%}
-                    Non-color options are never preselected here; pdp.js restores the shopper's pick
-                    only for links carrying size=selected (cart lines, this page's own URL write-back).
+                    Sizes are never preselected here; pdp.js restores the shopper's pick only for
+                    links carrying size=selected (cart lines, this page's own URL write-back).
+                    The option grouping the gallery (gift card amount, see color_index) is
+                    preselected like a color instead.
                   {%- endcomment -%}
+                  {%- assign gallery_opt = false -%}
+                  {%- if forloop.index0 == color_index -%}
+                    {%- assign gallery_opt = true -%}
+                  {%- endif -%}
                   <div class="mt-pdp__option">
-                    <p class="mt-pdp__hint" data-pdp-hint="{{ forloop.index0 }}" role="alert" hidden>{{ 'products.select_size' | t }}</p>
+                    {%- unless gallery_opt -%}
+                      <p class="mt-pdp__hint" data-pdp-hint="{{ forloop.index0 }}" role="alert" hidden>{{ 'products.select_size' | t }}</p>
+                    {%- endunless -%}
                     <div class="mt-pdp__option-head">
-                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span></span></p>
+                      <p class="mt-pdp__label" aria-live="polite">{{ option.name }}: <span>{% if gallery_opt %}{{ current_color }}{% endif %}</span></p>
                       {%- if option.name == 'Size' -%}
                         {% render 'size-chart', product: product, button_class: 'mt-pdp__chart' %}
                       {%- endif -%}
                     </div>
                     <div class="mt-pdp__pills">
                       {%- for value in option.values -%}
-                        <button class="mt-pdp__pill" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-pressed="false">{{ value }}</button>
+                        <button class="mt-pdp__pill" type="button" data-pdp-value="{{ value | escape }}" data-pdp-opt="{{ forloop.parentloop.index0 }}" aria-pressed="{% if gallery_opt and value == current_color %}true{% else %}false{% endif %}">{{ value }}</button>
                       {%- endfor -%}
                     </div>
                   </div>
