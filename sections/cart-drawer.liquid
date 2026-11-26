@@ -13,10 +13,10 @@
       </div>
       {% render 'cart-shipping-bar' %}
       {% render 'checkout-loading' %}
-      {%- if section.settings.notice_text != blank -%}
-        <p class="mt-cart__notice">{{ section.settings.notice_text }}</p>
-      {%- endif -%}
       <div class="mt-cart__body">
+        {%- if section.settings.notice_text != blank -%}
+          <p class="mt-cart__notice">{{ section.settings.notice_text | escape | newline_to_br }}</p>
+        {%- endif -%}
         {%- if cart.item_count == 0 -%}
           <div class="mt-cart__empty">
             <p>{{ 'cart.empty' | t }}</p>
@@ -112,10 +112,10 @@
       "default": "We think you'll love"
     },
     {
-      "type": "inline_richtext",
+      "type": "textarea",
       "id": "notice_text",
       "label": "Notice text",
-      "info": "Shown above the cart items, centered in the brand color. Leave blank to hide."
+      "info": "Shown above the cart items, centered in the brand color. Press Enter for a new line. Leave blank to hide."
     }
   ]
 }

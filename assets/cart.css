@@ -116,14 +116,12 @@
   line-height: 1.2;
   text-align: center;
 }
-/* operator-set notice above the body — type matches .mt-cart__shipping-text, brand color */
+/* operator-set notice at the top of the scrolling body — scrolls with the lines, brand color */
 .mt-cart__notice {
-  padding: 7px 1rem;
+  margin: 0 0 1.25rem;
   color: var(--mt-accent);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.2;
-  text-align: center;
-  margin: 0;
 }
 .mt-cart__notice a {
   color: inherit;
@@ -716,7 +714,8 @@
   }
 
   .mt-cart__group-text,
-  .mt-cart__group-help {
+  .mt-cart__group-help,
+  .mt-cart__notice {
     font-size: 18px;
   }
 
