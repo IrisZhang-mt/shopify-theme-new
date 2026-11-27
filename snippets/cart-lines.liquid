@@ -1,65 +1,186 @@
 {%- comment -%}
-  Cart line list, grouped by the tiered discount (shop.metafields.custom.tiered_discount):
-  eligible lines sit under the tier bar, the rest under a "not part of the offer" head.
-  Falls back to one flat list when the tier offer is off or no eligible item is in the cart.
+  Cart line list, grouped by the active cart offer:
+  - Free gift offer (first enabled `cart_gift_offer` metaobject) — takes priority. Eligible
+    lines + every line of a gift product sit under cart-gift-bar; gift products never count
+    toward the threshold. Also emits the [data-cart-gift] JSON cart.js uses to auto add /
+    remove the gift (emitted even with no offer, so a stale auto gift still gets removed).
+  - Tiered discount (shop.metafields.custom.tiered_discount + settings.show_tier_bar).
+  Eligible lines sit under the offer bar, the rest under a "not part of the offer" head.
+  Falls back to one flat list when no offer is on or no eligible item is in the cart.
   Each line keeps its original cart position as `line`, so change.js / GA4 index stay correct.
 {%- endcomment -%}
-{%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
-{%- assign tier_qty = 0 -%}
-{%- assign tier_lines = ',' -%}
-{%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
-  {%- assign eligible_collection_raw = tier_config.eligible_collection -%}
-  {%- assign eligible_collections = blank -%}
-  {%- if eligible_collection_raw != blank -%}
-    {%- assign eligible_collections = '' -%}
-    {%- assign eligible_collection_handles = eligible_collection_raw | split: '|' -%}
-    {%- for handle in eligible_collection_handles -%}
-      {%- assign stripped_handle = handle | strip -%}
-      {%- assign eligible_collections = eligible_collections | append: stripped_handle | append: '|' -%}
-    {%- endfor -%}
-    {%- assign eligible_collections = eligible_collections | split: '|' -%}
+{%- assign offer_mode = blank -%}
+{%- assign offer_qty = 0 -%}
+{%- assign group_qty = 0 -%}
+{%- assign offer_lines = ',' -%}
+
+{%- assign gift_offer = blank -%}
+{%- for offer in shop.metaobjects.cart_gift_offer.values -%}
+  {%- if offer.enabled.value -%}
+    {%- assign gift_offer = offer -%}
+    {%- break -%}
   {%- endif -%}
+{%- endfor -%}
+{%- assign gift_tiers = gift_offer.tiers.value -%}
+
+{%- comment -%} Gift product ids across all tiers (sold-out ones too — they still never count). {%- endcomment -%}
+{%- assign gift_product_ids = ',' -%}
+{%- for tier in gift_tiers -%}
+  {%- assign tier_gift = tier.gift.value -%}
+  {%- if tier_gift -%}{%- assign gift_product_ids = gift_product_ids | append: tier_gift.id | append: ',' -%}{%- endif -%}
+{%- endfor -%}
+
+{%- if gift_offer != blank and gift_product_ids != ',' -%}
+  {%- assign offer_mode = 'gift' -%}
+  {%- assign eligible_handles = gift_offer.eligible_collections.value | map: 'handle' | join: ',' -%}
   {%- for item in cart.items -%}
+    {%- assign product_needle = item.product_id | prepend: ',' | append: ',' -%}
+    {%- if gift_product_ids contains product_needle -%}
+      {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
+      {%- assign group_qty = group_qty | plus: item.quantity -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- assign item_eligible = false -%}
-    {%- if eligible_collections == blank -%}
+    {%- if eligible_handles == blank -%}
       {%- assign item_eligible = true -%}
     {%- else -%}
+      {%- assign eligible_needle = eligible_handles | prepend: ',' | append: ',' -%}
       {%- for collection in item.product.collections -%}
-        {%- if eligible_collections contains collection.handle -%}
+        {%- assign collection_needle = collection.handle | prepend: ',' | append: ',' -%}
+        {%- if eligible_needle contains collection_needle -%}
           {%- assign item_eligible = true -%}
           {%- break -%}
         {%- endif -%}
       {%- endfor -%}
     {%- endif -%}
     {%- if item_eligible -%}
-      {%- assign tier_qty = tier_qty | plus: item.quantity -%}
-      {%- assign tier_lines = tier_lines | append: forloop.index | append: ',' -%}
+      {%- assign offer_qty = offer_qty | plus: item.quantity -%}
+      {%- assign group_qty = group_qty | plus: item.quantity -%}
+      {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
     {%- endif -%}
   {%- endfor -%}
+{%- else -%}
+  {%- assign tier_config = shop.metafields.custom.tiered_discount.value -%}
+  {%- if settings.show_tier_bar and tier_config != blank and tier_config.enabled and tier_config.tiers.size > 0 -%}
+    {%- assign offer_mode = 'tier' -%}
+    {%- assign eligible_collection_raw = tier_config.eligible_collection -%}
+    {%- assign eligible_collections = blank -%}
+    {%- if eligible_collection_raw != blank -%}
+      {%- assign eligible_collections = '' -%}
+      {%- assign eligible_collection_handles = eligible_collection_raw | split: '|' -%}
+      {%- for handle in eligible_collection_handles -%}
+        {%- assign stripped_handle = handle | strip -%}
+        {%- assign eligible_collections = eligible_collections | append: stripped_handle | append: '|' -%}
+      {%- endfor -%}
+      {%- assign eligible_collections = eligible_collections | split: '|' -%}
+    {%- endif -%}
+    {%- for item in cart.items -%}
+      {%- assign item_eligible = false -%}
+      {%- if eligible_collections == blank -%}
+        {%- assign item_eligible = true -%}
+      {%- else -%}
+        {%- for collection in item.product.collections -%}
+          {%- if eligible_collections contains collection.handle -%}
+            {%- assign item_eligible = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {%- if item_eligible -%}
+        {%- assign offer_qty = offer_qty | plus: item.quantity -%}
+        {%- assign group_qty = group_qty | plus: item.quantity -%}
+        {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
 {%- endif -%}
 
-{%- if tier_qty > 0 -%}
+{%- comment -%}
+  Auto gift state for cart.js. tiers = gift tiers whose gift has a sellable variant (first
+  available in variant order), ascending by qty as entered in the metaobject.
+{%- endcomment -%}
+<script type="application/json" data-cart-gift>
+  {
+    "qty": {{ offer_qty }},
+    "tiers": [
+      {%- assign tier_sep = '' -%}
+      {%- if offer_mode == 'gift' -%}
+        {%- for tier in gift_tiers -%}
+          {%- assign tier_gift = tier.gift.value -%}
+          {%- assign tier_qty_value = tier.qty.value | default: 0 -%}
+          {%- unless tier_gift and tier_qty_value > 0 -%}{%- continue -%}{%- endunless -%}
+          {%- assign tier_variant = tier_gift.variants | where: 'available', true | first -%}
+          {%- unless tier_variant -%}{%- continue -%}{%- endunless -%}
+          {{- tier_sep -}}{"qty": {{ tier_qty_value }}, "product_id": {{ tier_gift.id }}, "variant_id": {{ tier_variant.id }}}
+          {%- assign tier_sep = ',' -%}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+    "gift_tiers": [
+      {%- assign tier_sep = '' -%}
+      {%- for tier in gift_tiers -%}
+        {%- assign tier_gift = tier.gift.value -%}
+        {%- unless tier_gift -%}{%- continue -%}{%- endunless -%}
+        {{- tier_sep -}}{"qty": {{ tier.qty.value | default: 0 }}, "product_id": {{ tier_gift.id }}}
+        {%- assign tier_sep = ',' -%}
+      {%- endfor -%}
+    ],
+    "auto": [
+      {%- assign line_sep = '' -%}
+      {%- for item in cart.items -%}
+        {%- if item.properties['_auto_gift'] != blank -%}
+          {{- line_sep -}}{"key": {{ item.key | json }}, "product_id": {{ item.product_id }}, "quantity": {{ item.quantity }}}
+          {%- assign line_sep = ',' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    ],
+    "manual": [
+      {%- assign line_sep = '' -%}
+      {%- for item in cart.items -%}
+        {%- if item.properties['_auto_gift'] != blank -%}{%- continue -%}{%- endif -%}
+        {%- assign product_needle = item.product_id | prepend: ',' | append: ',' -%}
+        {%- if gift_product_ids contains product_needle -%}
+          {{- line_sep -}}{{ item.product_id }}
+          {%- assign line_sep = ',' -%}
+        {%- endif -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{%- if offer_qty > 0 -%}
+  {%- if offer_mode == 'gift' -%}
+    {%- assign other_labels_raw = gift_offer.other_group_labels.value -%}
+    {%- assign other_text = gift_offer.other_group_text.value -%}
+  {%- else -%}
+    {%- assign other_labels_raw = settings.other_group_labels -%}
+    {%- assign other_text = settings.other_group_text -%}
+  {%- endif -%}
   <div class="mt-cart__group">
-    {% render 'cart-tier-bar', tier_config: tier_config, tier_qty: tier_qty %}
+    {%- if offer_mode == 'gift' -%}
+      {% render 'cart-gift-bar', gift_offer: gift_offer, gift_tiers: gift_tiers, offer_qty: offer_qty %}
+    {%- else -%}
+      {% render 'cart-tier-bar', tier_config: tier_config, tier_qty: offer_qty %}
+    {%- endif -%}
     <div class="mt-cart__lines">
       {%- for item in cart.items -%}
         {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
-        {%- unless tier_lines contains needle -%}{%- continue -%}{%- endunless -%}
+        {%- unless offer_lines contains needle -%}{%- continue -%}{%- endunless -%}
         {% render 'cart-line', item: item, line: forloop.index, group: 'tier', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
       {%- endfor -%}
     </div>
   </div>
-  {%- if cart.item_count > tier_qty -%}
+  {%- if cart.item_count > group_qty -%}
     <div class="mt-cart__group mt-cart__group--other">
-      {%- assign other_labels = settings.other_group_labels | split: '|' -%}
-      {%- if other_labels.size > 0 or settings.other_group_text != blank -%}
+      {%- assign other_labels = other_labels_raw | split: '|' -%}
+      {%- if other_labels.size > 0 or other_text != blank -%}
         <div class="mt-cart__group-head">
           {%- for label in other_labels -%}
             {%- assign label = label | strip -%}
             {%- if label != blank -%}<span class="mt-cart__group-tag mt-cart__group-tag--fill">{{ label }}</span>{%- endif -%}
           {%- endfor -%}
-          {%- if settings.other_group_text != blank -%}
-            <p class="mt-cart__group-text">{{ settings.other_group_text }}</p>
+          {%- if other_text != blank -%}
+            <p class="mt-cart__group-text">{{ other_text }}</p>
           {%- endif -%}
           <button class="mt-offers-open mt-cart__group-help" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
         </div>
@@ -67,7 +188,7 @@
       <div class="mt-cart__lines">
         {%- for item in cart.items -%}
           {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
-          {%- if tier_lines contains needle -%}{%- continue -%}{%- endif -%}
+          {%- if offer_lines contains needle -%}{%- continue -%}{%- endif -%}
           {% render 'cart-line', item: item, line: forloop.index, group: 'other', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
         {%- endfor -%}
       </div>

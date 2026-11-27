@@ -1,0 +1,88 @@
+{%- comment -%}
+  Free gift ("buy X get Y") progress bar. Rendered by cart-lines, which works out offer_qty
+  (eligible quantity, gift products excluded) once.
+  Params: gift_offer — the enabled cart_gift_offer metaobject; gift_tiers — its tiers list
+  (cart_gift_tier: qty, gift, gift_label), ascending by qty; offer_qty.
+  Tiers whose gift is missing or sold out are skipped — cart.js won't add those either.
+  show_progress_bar = false hides the sentence + track only (unset counts as shown); the
+  group head (group_labels / group_text) stays, and gifts are still added by cart.js.
+{%- endcomment -%}
+{%- assign show_progress = true -%}
+{%- if gift_offer.show_progress_bar.value == false -%}{%- assign show_progress = false -%}{%- endif -%}
+{%- assign valid_total = 0 -%}
+{%- assign current_name = blank -%}
+{%- assign next_name = blank -%}
+{%- assign next_qty = 0 -%}
+{%- assign current_qty = 0 -%}
+{%- for tier in gift_tiers -%}
+  {%- assign tier_gift = tier.gift.value -%}
+  {%- assign tier_qty = tier.qty.value | default: 0 -%}
+  {%- unless tier_gift and tier_gift.available and tier_qty > 0 -%}{%- continue -%}{%- endunless -%}
+  {%- assign valid_total = valid_total | plus: 1 -%}
+  {%- assign tier_name = tier.gift_label.value | default: tier_gift.title -%}
+  {%- if offer_qty >= tier_qty -%}
+    {%- assign current_name = tier_name -%}
+    {%- assign current_qty = tier_qty -%}
+  {%- elsif next_name == blank -%}
+    {%- assign next_name = tier_name -%}
+    {%- assign next_qty = tier_qty -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign remaining_qty = next_qty | minus: offer_qty -%}
+
+{%- assign group_labels = gift_offer.group_labels.value | split: '|' -%}
+{%- assign group_text = gift_offer.group_text.value -%}
+{%- assign show_head = false -%}
+{%- if group_labels.size > 0 or group_text != blank -%}{%- assign show_head = true -%}{%- endif -%}
+{%- unless show_progress -%}{%- assign valid_total = 0 -%}{%- endunless -%}
+
+{%- if valid_total > 0 or show_head -%}
+  <div class="mt-cart-gift">
+    {%- if show_head -%}
+      <div class="mt-cart__group-head">
+        {%- for label in group_labels -%}
+          {%- assign label = label | strip -%}
+          {%- if label != blank -%}<span class="mt-cart__group-tag">{{ label }}</span>{%- endif -%}
+        {%- endfor -%}
+        {%- if group_text != blank -%}
+          <p class="mt-cart__group-text">{{ group_text }}</p>
+        {%- endif -%}
+        <button class="mt-offers-open mt-cart__group-help" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
+      </div>
+    {%- endif -%}
+    {%- if valid_total > 0 -%}
+    <p class="mt-cart-gift__text">
+      {%- if next_name == blank -%}
+        {{ 'cart.gift_progress_complete' | t: gift: current_name }}
+      {%- elsif current_name == blank -%}
+        {{ 'cart.gift_progress_remaining' | t: count: remaining_qty, gift: next_name }}
+      {%- else -%}
+        {{ 'cart.gift_progress_next' | t: count: remaining_qty, current: current_name, next: next_name }}
+      {%- endif -%}
+    </p>
+    <div class="mt-cart-gift__track">
+      {%- assign segment_floor = 0 -%}
+      {%- for tier in gift_tiers -%}
+        {%- assign tier_gift = tier.gift.value -%}
+        {%- assign tier_qty = tier.qty.value | default: 0 -%}
+        {%- unless tier_gift and tier_gift.available and tier_qty > 0 -%}{%- continue -%}{%- endunless -%}
+        {%- assign tier_name = tier.gift_label.value | default: tier_gift.title -%}
+        {%- assign segment_span = tier_qty | minus: segment_floor | at_least: 1 -%}
+        {%- assign segment_pct = offer_qty | minus: segment_floor | times: 100.0 | divided_by: segment_span | at_most: 100 | at_least: 0 -%}
+        <span class="mt-cart-gift__segment"><span class="mt-cart-gift__fill" style="width: {{ segment_pct }}%"></span></span>
+        <div class="mt-cart-gift__node{% if offer_qty >= tier_qty %} mt-cart-gift__node--unlocked{% endif %}{% if tier_qty == current_qty %} mt-cart-gift__node--active{% endif %}">
+          <span class="mt-cart-gift__thumb">
+            {%- if tier_gift.featured_image -%}
+              {{ tier_gift.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', decoding: 'async', sizes: '(min-width: 750px) 56px, 40px', alt: tier_name }}
+            {%- endif -%}
+          </span>
+          <span class="mt-cart-gift__qty">{{ 'cart.gift_tier_items' | t: count: tier_qty }}</span>
+        </div>
+        {%- assign segment_floor = tier_qty -%}
+      {%- endfor -%}
+      <span class="mt-cart-gift__segment"><span class="mt-cart-gift__fill" style="width: {% if next_name == blank %}100{% else %}0{% endif %}%"></span></span>
+    </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

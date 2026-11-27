@@ -48,6 +48,17 @@
     "free_shipping_unlocked": "FREE shipping unlocked !",
     "tier_progress_remaining": "Add {{ count }} more, save {{ reward }}!",
     "tier_progress_complete": "You've unlocked the best reward!",
+    "free_gift": "Free gift",
+    "gift_progress_remaining": {
+      "one": "You're {{ count }} item away from a free {{ gift }}.",
+      "other": "You're {{ count }} items away from a free {{ gift }}."
+    },
+    "gift_progress_next": "Your free {{ current }} is in the bag. Add {{ count }} more to swap it for a free {{ next }}.",
+    "gift_progress_complete": "Your free {{ gift }} is in the bag.",
+    "gift_tier_items": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
     "savings": "Savings",
     "offers_open": "View current offers",
     "offers_got_it": "Got it",

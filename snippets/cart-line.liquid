@@ -1,7 +1,10 @@
 {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: item %}{%- endcapture -%}
 {%- assign ga4_variant = ga4_variant | strip -%}
+{%- comment -%} Gift added by cart.js (free gift offer): tagged, quantity locked at 1, still removable. {%- endcomment -%}
+{%- assign is_auto_gift = false -%}
+{%- if item.properties['_auto_gift'] != blank -%}{%- assign is_auto_gift = true -%}{%- endif -%}
 <div
-  class="mt-cart__line{% if group == 'other' %} mt-cart__line--other{% endif %}"
+  class="mt-cart__line{% if group == 'other' %} mt-cart__line--other{% endif %}{% if is_auto_gift %} mt-cart__line--gift{% endif %}"
   data-item-list-id="{{ item_list_id }}"
   data-item-list-name="{{ item_list_name | escape }}"
   data-module-name="{{ module_name | escape }}"
@@ -14,6 +17,8 @@
   data-item-quantity="{{ item.quantity }}"
   {% if ga4_variant != blank %}data-item-variant="{{ ga4_variant | escape }}"{% endif %}
   data-item-index="{{ line }}"
+  data-product-id="{{ item.product_id }}"
+  {% if is_auto_gift %}data-auto-gift data-gift-key="{{ item.key }}"{% endif %}
 >
   <a class="mt-cart__media" href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
     {%- if item.image -%}
@@ -22,6 +27,7 @@
   </a>
   <div class="mt-cart__text">
     <div class="mt-cart__info">
+      {%- if is_auto_gift -%}<span class="mt-cart-gift__tag">{{ 'cart.free_gift' | t }}</span>{%- endif -%}
       <a class="mt-cart__name" href="{{ item.url }}">{{ item.product.title }}</a>
       {%- unless item.product.has_only_default_variant -%}
         {%- for option in item.options_with_values -%}
@@ -57,9 +63,9 @@
       {%- endif -%}
     </div>
     <div class="mt-cart__qty">
-      <button class="mt-cart__qty-btn" type="button" data-cart-minus data-line="{{ line }}" aria-label="{{ 'products.decrease_quantity' | t }}"{% if item.quantity == 1 %} disabled{% endif %}>&minus;</button>
+      <button class="mt-cart__qty-btn" type="button" data-cart-minus data-line="{{ line }}" aria-label="{{ 'products.decrease_quantity' | t }}"{% if item.quantity == 1 or is_auto_gift %} disabled{% endif %}>&minus;</button>
       <span data-cart-qty aria-live="polite">{{ item.quantity }}</span>
-      <button class="mt-cart__qty-btn" type="button" data-cart-plus data-line="{{ line }}" aria-label="{{ 'products.increase_quantity' | t }}">+</button>
+      <button class="mt-cart__qty-btn" type="button" data-cart-plus data-line="{{ line }}" aria-label="{{ 'products.increase_quantity' | t }}"{% if is_auto_gift %} disabled{% endif %}>+</button>
     </div>
   </div>
   <div class="mt-cart__side">

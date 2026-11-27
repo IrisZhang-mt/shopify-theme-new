@@ -160,6 +160,156 @@ if (!window.mtCartInit) {
     } catch {}
   };
 
+  // Free gift offer: cart-lines.liquid renders [data-cart-gift] (eligible qty, gift tiers,
+  // auto/manual gift lines). Auto-added gifts carry the hidden `_auto_gift` property, which
+  // keeps them on their own line apart from a gift the customer added. The 0 price comes
+  // from the store's Buy X Get Y discount — this only keeps the right gift in the cart.
+  const GIFT_DECLINED_KEY = 'mt-gift-declined';
+  let giftSyncing = false;
+
+  const readDeclinedGifts = () => {
+    try {
+      return JSON.parse(sessionStorage.getItem(GIFT_DECLINED_KEY)) || [];
+    } catch {
+      return [];
+    }
+  };
+
+  const declineGift = (productId) => {
+    try {
+      const list = readDeclinedGifts();
+      if (list.includes(productId)) return;
+      list.push(productId);
+      sessionStorage.setItem(GIFT_DECLINED_KEY, JSON.stringify(list));
+    } catch {}
+  };
+
+  const giftRoot = () => {
+    const cartEl = drawer();
+    if (cartEl && !cartEl.hidden) return cartEl;
+    return document.querySelector('.mt-cart-page[data-cart-root]') || cartEl;
+  };
+
+  const pushGiftEvent = (eventName, lineEl, params) => {
+    if (!lineEl) return;
+    const item = { ...buildItem(lineEl, 1), discount: +lineEl.dataset.itemLineDiscount || 0 };
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event_parameters: null });
+    window.dataLayer.push({
+      event: 'ga4Event',
+      event_name: eventName,
+      event_parameters: {
+        module_name: lineEl.dataset.moduleName,
+        ...params,
+        currency: lineEl.closest('[data-cart-root]')?.dataset.currency,
+        value: item.price,
+        item_list_id: lineEl.dataset.itemListId,
+        item_list_name: lineEl.dataset.itemListName,
+        items: [item],
+      },
+    });
+  };
+
+  // Brings the cart in line with the gift offer: highest tier reached wins (tiers don't
+  // stack), auto gifts of any other tier / below threshold / duplicating a gift the customer
+  // added are removed, and the target gift is added unless the customer already has it or
+  // removed it this session. Returns null when nothing changed, else { added } (tier or null).
+  const syncGift = async () => {
+    if (giftSyncing) return null;
+    const dataEl = document.querySelector('[data-cart-gift]');
+    if (!dataEl) return null;
+    let state;
+    try {
+      state = JSON.parse(dataEl.textContent);
+    } catch {
+      return null;
+    }
+    const tiers = state.tiers || [];
+    const giftTiers = state.gift_tiers || [];
+    const manual = state.manual || [];
+    let target = null;
+    tiers.forEach((tier) => {
+      if (state.qty >= tier.qty) target = tier;
+    });
+    let kept = null;
+    const removals = [];
+    (state.auto || []).forEach((line) => {
+      let reason = null;
+      if (manual.includes(line.product_id)) {
+        reason = 'duplicate';
+      } else if (!target || line.product_id !== target.product_id) {
+        const lineTier = giftTiers.find((tier) => tier.product_id === line.product_id);
+        reason = target && lineTier && lineTier.qty <= state.qty ? 'tier_swap' : 'below_threshold';
+      } else if (kept) {
+        reason = 'duplicate';
+      } else {
+        kept = line;
+      }
+      if (reason) removals.push({ ...line, reason });
+    });
+    const updates = {};
+    removals.forEach((line) => {
+      updates[line.key] = 0;
+    });
+    if (kept && kept.quantity > 1) updates[kept.key] = 1;
+    const toAdd =
+      target && !kept && !manual.includes(target.product_id) && !readDeclinedGifts().includes(target.product_id)
+        ? target
+        : null;
+    if (!Object.keys(updates).length && !toAdd) return null;
+
+    giftSyncing = true;
+    let added = null;
+    try {
+      if (Object.keys(updates).length) {
+        // Read the lines before they leave the DOM; report only once the removal landed.
+        const root = giftRoot();
+        const removed = removals.map((line) => {
+          const tier = giftTiers.find((t) => t.product_id === line.product_id);
+          return {
+            el: root?.querySelector(`.mt-cart__line[data-gift-key="${CSS.escape(line.key)}"]`),
+            params: { ...(tier ? { gift_tier: `buy_${tier.qty}` } : {}), reason: line.reason },
+          };
+        });
+        const res = await fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ updates }),
+        });
+        if (res.ok) removed.forEach(({ el, params }) => pushGiftEvent('auto_remove_gift', el, params));
+      }
+      if (toAdd) {
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: [{ id: toAdd.variant_id, quantity: 1, properties: { _auto_gift: '1' } }] }),
+        });
+        if (res.ok) added = toAdd;
+      }
+    } catch {
+    } finally {
+      giftSyncing = false;
+    }
+    return { added };
+  };
+
+  const settleGift = async () => {
+    const result = await syncGift();
+    if (!result) return;
+    await refresh();
+    if (!result.added) return;
+    // Price/discount from the refreshed line, i.e. after the Buy X Get Y discount applied.
+    const lineEl = giftRoot()?.querySelector(
+      `.mt-cart__line[data-auto-gift][data-product-id="${result.added.product_id}"]`
+    );
+    pushGiftEvent('auto_add_gift', lineEl, { gift_tier: `buy_${result.added.qty}` });
+  };
+
+  const refreshWithGift = async () => {
+    await refresh();
+    await settleGift();
+  };
+
   const pushViewCart = (cartEl) => {
     const viewCartData = cartEl.querySelector('[data-cart-view-cart]');
     if (!viewCartData) return;
@@ -293,7 +443,7 @@ if (!window.mtCartInit) {
     try {
       await request();
     } catch {}
-    await refresh();
+    await refreshWithGift();
     document.querySelectorAll('[data-cart-content]').forEach((el) => el.classList.remove('mt-cart--busy'));
     busy = false;
     const cartEl = drawer();
@@ -409,6 +559,8 @@ if (!window.mtCartInit) {
     if (remove) {
       const removeLine = remove.closest('.mt-cart__line');
       const qty = Number(removeLine?.querySelector('[data-cart-qty]')?.textContent) || 0;
+      // Customer removed an auto-added gift: don't add it back this session.
+      if (removeLine?.hasAttribute('data-auto-gift')) declineGift(Number(removeLine.dataset.productId));
       pushCartLineEvent('remove_from_cart', 'remove', removeLine, qty);
       change(Number(remove.dataset.line), 0);
       return;
@@ -491,7 +643,7 @@ if (!window.mtCartInit) {
     open(null, { trackView: false, loadRecs: false });
     const busyEls = [...document.querySelectorAll('[data-cart-content]')];
     busyEls.forEach((el) => el.classList.add('mt-cart--busy'));
-    refresh().finally(() => {
+    refreshWithGift().finally(() => {
       busyEls.forEach((el) => el.isConnected && el.classList.remove('mt-cart--busy'));
       const cartEl = drawer();
       if (cartEl && !cartEl.hidden) pushViewCart(cartEl);
@@ -510,7 +662,7 @@ if (!window.mtCartInit) {
     cartEl.hidden = true;
     document.documentElement.classList.remove('mt-cart-lock');
     trigger = null;
-    refresh();
+    refreshWithGift();
   });
 
   document.addEventListener('shopify:section:unload', () => {
@@ -518,4 +670,7 @@ if (!window.mtCartInit) {
       document.documentElement.classList.remove('mt-cart-lock');
     }
   });
+
+  // The cart may already qualify (or no longer qualify) on page load, e.g. changed in another tab.
+  settleGift();
 }
