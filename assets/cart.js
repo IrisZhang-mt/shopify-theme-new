@@ -161,9 +161,11 @@ if (!window.mtCartInit) {
   };
 
   // Free gift offer: cart-lines.liquid renders [data-cart-gift] (eligible qty, gift tiers,
-  // auto/manual gift lines). Auto-added gifts carry the hidden `_auto_gift` property, which
-  // keeps them on their own line apart from a gift the customer added. The 0 price comes
-  // from the store's Buy X Get Y discount — this only keeps the right gift in the cart.
+  // auto gift lines). Auto-added gifts carry the hidden `_auto_gift` property, which keeps
+  // them on their own line apart from the same style the customer bought — that one counts
+  // toward the threshold like any eligible item, so it never stops the gift being added.
+  // The 0 price comes from the store's Buy X Get Y discount — this only keeps the right
+  // gift in the cart.
   const GIFT_DECLINED_KEY = 'mt-gift-declined';
   let giftSyncing = false;
 
@@ -211,9 +213,9 @@ if (!window.mtCartInit) {
   };
 
   // Brings the cart in line with the gift offer: highest tier reached wins (tiers don't
-  // stack), auto gifts of any other tier / below threshold / duplicating a gift the customer
-  // added are removed, and the target gift is added unless the customer already has it or
-  // removed it this session. Returns null when nothing changed, else { added } (tier or null).
+  // stack), auto gifts of any other tier / below threshold / a second auto line of the
+  // target are removed, and the target gift is added unless the customer removed it this
+  // session. Returns null when nothing changed, else { added } (tier or null).
   const syncGift = async () => {
     if (giftSyncing) return null;
     const dataEl = document.querySelector('[data-cart-gift]');
@@ -226,7 +228,6 @@ if (!window.mtCartInit) {
     }
     const tiers = state.tiers || [];
     const giftTiers = state.gift_tiers || [];
-    const manual = state.manual || [];
     let target = null;
     tiers.forEach((tier) => {
       if (state.qty >= tier.qty) target = tier;
@@ -235,9 +236,7 @@ if (!window.mtCartInit) {
     const removals = [];
     (state.auto || []).forEach((line) => {
       let reason = null;
-      if (manual.includes(line.product_id)) {
-        reason = 'duplicate';
-      } else if (!target || line.product_id !== target.product_id) {
+      if (!target || line.product_id !== target.product_id) {
         const lineTier = giftTiers.find((tier) => tier.product_id === line.product_id);
         reason = target && lineTier && lineTier.qty <= state.qty ? 'tier_swap' : 'below_threshold';
       } else if (kept) {
@@ -252,10 +251,7 @@ if (!window.mtCartInit) {
       updates[line.key] = 0;
     });
     if (kept && kept.quantity > 1) updates[kept.key] = 1;
-    const toAdd =
-      target && !kept && !manual.includes(target.product_id) && !readDeclinedGifts().includes(target.product_id)
-        ? target
-        : null;
+    const toAdd = target && !kept && !readDeclinedGifts().includes(target.product_id) ? target : null;
     if (!Object.keys(updates).length && !toAdd) return null;
 
     giftSyncing = true;
@@ -437,11 +433,13 @@ if (!window.mtCartInit) {
   };
 
   const mutate = async (request) => {
-    if (busy) return;
+    if (busy) return null;
     busy = true;
     document.querySelectorAll('[data-cart-content]').forEach((el) => el.classList.add('mt-cart--busy'));
+    // Resolves to the request's HTTP status (0 = network error, null = skipped while busy).
+    let status = 0;
     try {
-      await request();
+      status = (await request()).status;
     } catch {}
     await refreshWithGift();
     document.querySelectorAll('[data-cart-content]').forEach((el) => el.classList.remove('mt-cart--busy'));
@@ -450,24 +448,39 @@ if (!window.mtCartInit) {
     if (cartEl && !cartEl.hidden && !cartEl.contains(document.activeElement)) {
       cartEl.querySelector('.mt-cart__panel')?.focus({ preventScroll: true });
     }
+    return status;
   };
 
-  const change = (line, quantity) =>
-    mutate(() =>
-      fetch('/cart/change.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ line, quantity }),
-      })
+  const isOk = (status) => status >= 200 && status < 300;
+
+  // Failed adds/changes leave the cart as it was — tell the customer via the global toast
+  // (toast.js). 422 = not enough stock, e.g. "Only 6 items were added ... due to availability"
+  // (split discount lines share the variant's stock).
+  const toastIfFailed = (status) => {
+    if (status !== null && !isOk(status)) window.mtToastCartError?.(status);
+    return status;
+  };
+
+  const change = async (line, quantity) =>
+    toastIfFailed(
+      await mutate(() =>
+        fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ line, quantity }),
+        })
+      )
     );
 
-  const add = (id) =>
-    mutate(() =>
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, quantity: 1 }),
-      })
+  const add = async (id) =>
+    toastIfFailed(
+      await mutate(() =>
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, quantity: 1 }),
+        })
+      )
     );
 
   const pushCartLineEvent = (eventName, buttonName, lineEl, deltaQty) => {
@@ -549,7 +562,8 @@ if (!window.mtCartInit) {
       // the server to recompute the line and re-read the refreshed element
       // before reporting add_to_cart, instead of pushing the stale
       // pre-click price/discount.
-      change(line, qty + 1).then(() => {
+      change(line, qty + 1).then((status) => {
+        if (!isOk(status)) return;
         const freshLine = root?.querySelector(`.mt-cart__line[data-item-index="${line}"]`);
         pushCartLineEvent('add_to_cart', 'plus', freshLine, 1);
       });
@@ -578,7 +592,8 @@ if (!window.mtCartInit) {
         // tiered volume discounts mean the per-unit price can change once
         // this item is actually merged into the cart (e.g. the same SKU is
         // already in there), so the static recs card price isn't reliable.
-        add(Number(quickAdd.dataset.cartAdd)).then(() => {
+        add(Number(quickAdd.dataset.cartAdd)).then((status) => {
+          if (!isOk(status)) return;
           const freshLine = quickAddRoot?.querySelector(`.mt-cart__line[data-item-id="${itemId}"]`);
           if (!freshLine) return;
           const lineDiscount = +freshLine.dataset.itemLineDiscount || 0;

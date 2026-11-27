@@ -1,8 +1,19 @@
 {%- capture ga4_variant -%}{% render 'item-variant-ga4', item: item %}{%- endcapture -%}
 {%- assign ga4_variant = ga4_variant | strip -%}
-{%- comment -%} Gift added by cart.js (free gift offer): tagged, quantity locked at 1, still removable. {%- endcomment -%}
+{%- comment -%}
+  Gift added by cart.js (free gift offer): quantity locked at 1, still removable.
+  "Free gift" tag follows the price, not the property: only a gift-style line the discount
+  actually took to 0 gets it — auto-added or bought. With a bought + an auto gift of the same
+  style, Shopify may zero either one; a tag on a line still charged would be wrong, so a line
+  that isn't 0 never shows it.
+{%- endcomment -%}
 {%- assign is_auto_gift = false -%}
 {%- if item.properties['_auto_gift'] != blank -%}{%- assign is_auto_gift = true -%}{%- endif -%}
+{%- assign show_gift_tag = false -%}
+{%- assign gift_needle = item.product_id | prepend: ',' | append: ',' -%}
+{%- if gift_product_ids contains gift_needle and item.final_line_price == 0 and item.original_line_price > 0 and item.discounts != blank -%}
+  {%- assign show_gift_tag = true -%}
+{%- endif -%}
 <div
   class="mt-cart__line{% if group == 'other' %} mt-cart__line--other{% endif %}{% if is_auto_gift %} mt-cart__line--gift{% endif %}"
   data-item-list-id="{{ item_list_id }}"
@@ -27,7 +38,7 @@
   </a>
   <div class="mt-cart__text">
     <div class="mt-cart__info">
-      {%- if is_auto_gift -%}<span class="mt-cart-gift__tag">{{ 'cart.free_gift' | t }}</span>{%- endif -%}
+      {%- if show_gift_tag -%}<span class="mt-cart-gift__tag">{{ 'cart.free_gift' | t }}</span>{%- endif -%}
       <a class="mt-cart__name" href="{{ item.url }}">{{ item.product.title }}</a>
       {%- unless item.product.has_only_default_variant -%}
         {%- for option in item.options_with_values -%}
@@ -55,7 +66,8 @@
           {%- endif -%}
           {%- for discount in item.discounts -%}
             <li class="mt-cart__discount">
-              <span>{{ discount.title }} (-{{ discount.amount | money_without_trailing_zeros }})</span>
+              {%- comment -%} Buy X Get Y also tags the qualifying "buy" lines with a 0 allocation — title only there. {%- endcomment -%}
+              <span>{{ discount.title }}{% if discount.amount > 0 %} (-{{ discount.amount | money_without_trailing_zeros }}){% endif %}</span>
               <button class="mt-offers-open" type="button" data-offers-open aria-label="{{ 'cart.offers_open' | t }}"></button>
             </li>
           {%- endfor -%}

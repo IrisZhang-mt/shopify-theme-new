@@ -197,6 +197,8 @@
         added: {{ 'products.added' | t | json }},
         soldOut: {{ 'products.sold_out' | t | json }},
         unavailable: {{ 'products.unavailable' | t | json }},
+        cartErrorStock: {{ 'cart.error_stock' | t | json }},
+        cartErrorGeneric: {{ 'cart.error_generic' | t | json }},
         linkCopied: {{ 'article.link_copied' | t | json }},
         showFilters: {{ 'collection.show_filters' | t | json }},
         hideFilters: {{ 'collection.hide_filters' | t | json }},
@@ -217,7 +219,9 @@
     {%- endif %}
     <link rel="stylesheet" href="{{ 'quick-shop.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'size-chart.css' | asset_url }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ 'toast.css' | asset_url }}" media="print" onload="this.media='all'">
     <script src="{{ 'motion.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'toast.js' | asset_url }}" type="module"></script>
     <script src="{{ 'product-card.js' | asset_url }}" type="module"></script>
     <script src="{{ 'quick-shop.js' | asset_url }}" type="module"></script>
     <script src="{{ 'size-chart.js' | asset_url }}" type="module"></script>

@@ -43,6 +43,8 @@
     "checkout": "Checkout",
     "checkout_loading": "Heading to checkout…",
     "remove": "Remove",
+    "error_stock": "That’s all we have of this one for now.",
+    "error_generic": "Something went wrong. Please try again.",
     "add_product": "Add {{ title }} to cart",
     "free_shipping_remaining_html": "Spend <span data-cart-shipping-amount>{{ amount }}</span> more for free shipping",
     "free_shipping_unlocked": "FREE shipping unlocked !",

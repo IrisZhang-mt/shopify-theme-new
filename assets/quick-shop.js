@@ -283,20 +283,28 @@ if (!window.mtQuickShopInit) {
     button.disabled = true;
     button.textContent = strings.adding;
     let added = null;
+    let status = 0;
     try {
       const res = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, quantity }),
       });
+      status = res.status;
       if (!res.ok) throw new Error(res.status);
       added = await res.json();
-      button.textContent = strings.added;
-      if (beforeNotify) beforeNotify();
-      document.dispatchEvent(new CustomEvent('mt:cart-added'));
-    } catch {
-      button.textContent = strings.unavailable;
+    } catch {}
+    if (!added) {
+      // Failed (422 = stock limit reached, or network): put the button straight back and
+      // explain in the global toast — the drawer stays closed so it doesn't read as added.
+      button.innerHTML = label;
+      button.disabled = false;
+      window.mtToastCartError?.(status);
+      return null;
     }
+    button.textContent = strings.added;
+    if (beforeNotify) beforeNotify();
+    document.dispatchEvent(new CustomEvent('mt:cart-added'));
     const settled = button.textContent;
     addTimers.set(
       button,

@@ -1,9 +1,11 @@
 {%- comment -%}
   Cart line list, grouped by the active cart offer:
   - Free gift offer (first enabled `cart_gift_offer` metaobject) — takes priority. Eligible
-    lines + every line of a gift product sit under cart-gift-bar; gift products never count
-    toward the threshold. Also emits the [data-cart-gift] JSON cart.js uses to auto add /
-    remove the gift (emitted even with no offer, so a stale auto gift still gets removed).
+    lines + every line of a gift product sit under cart-gift-bar. Everything eligible counts
+    toward the threshold, gift styles the customer bought included (Buy X Get Y counts them
+    too); only the gift cart.js added (`_auto_gift`) — the one given away — never counts.
+    Also emits the [data-cart-gift] JSON cart.js uses to auto add / remove the gift (emitted
+    even with no offer, so a stale auto gift still gets removed).
   - Tiered discount (shop.metafields.custom.tiered_discount + settings.show_tier_bar).
   Eligible lines sit under the offer bar, the rest under a "not part of the offer" head.
   Falls back to one flat list when no offer is on or no eligible item is in the cart.
@@ -23,7 +25,7 @@
 {%- endfor -%}
 {%- assign gift_tiers = gift_offer.tiers.value -%}
 
-{%- comment -%} Gift product ids across all tiers (sold-out ones too — they still never count). {%- endcomment -%}
+{%- comment -%} Gift product ids across all tiers (sold-out ones too) — groups their lines with the offer and gates the line's "Free gift" tag. {%- endcomment -%}
 {%- assign gift_product_ids = ',' -%}
 {%- for tier in gift_tiers -%}
   {%- assign tier_gift = tier.gift.value -%}
@@ -35,7 +37,7 @@
   {%- assign eligible_handles = gift_offer.eligible_collections.value | map: 'handle' | join: ',' -%}
   {%- for item in cart.items -%}
     {%- assign product_needle = item.product_id | prepend: ',' | append: ',' -%}
-    {%- if gift_product_ids contains product_needle -%}
+    {%- if item.properties['_auto_gift'] != blank -%}
       {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
       {%- assign group_qty = group_qty | plus: item.quantity -%}
       {%- continue -%}
@@ -55,6 +57,10 @@
     {%- endif -%}
     {%- if item_eligible -%}
       {%- assign offer_qty = offer_qty | plus: item.quantity -%}
+      {%- assign group_qty = group_qty | plus: item.quantity -%}
+      {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
+    {%- elsif gift_product_ids contains product_needle -%}
+      {%- comment -%} Gift style outside the eligible collections: shown with the offer (it may be the free one), not counted. {%- endcomment -%}
       {%- assign group_qty = group_qty | plus: item.quantity -%}
       {%- assign offer_lines = offer_lines | append: forloop.index | append: ',' -%}
     {%- endif -%}
@@ -133,17 +139,6 @@
           {%- assign line_sep = ',' -%}
         {%- endif -%}
       {%- endfor -%}
-    ],
-    "manual": [
-      {%- assign line_sep = '' -%}
-      {%- for item in cart.items -%}
-        {%- if item.properties['_auto_gift'] != blank -%}{%- continue -%}{%- endif -%}
-        {%- assign product_needle = item.product_id | prepend: ',' | append: ',' -%}
-        {%- if gift_product_ids contains product_needle -%}
-          {{- line_sep -}}{{ item.product_id }}
-          {%- assign line_sep = ',' -%}
-        {%- endif -%}
-      {%- endfor -%}
     ]
   }
 </script>
@@ -166,7 +161,7 @@
       {%- for item in cart.items -%}
         {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
         {%- unless offer_lines contains needle -%}{%- continue -%}{%- endunless -%}
-        {% render 'cart-line', item: item, line: forloop.index, group: 'tier', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+        {% render 'cart-line', item: item, line: forloop.index, group: 'tier', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name, gift_product_ids: gift_product_ids %}
       {%- endfor -%}
     </div>
   </div>
@@ -189,7 +184,7 @@
         {%- for item in cart.items -%}
           {%- assign needle = forloop.index | prepend: ',' | append: ',' -%}
           {%- if offer_lines contains needle -%}{%- continue -%}{%- endif -%}
-          {% render 'cart-line', item: item, line: forloop.index, group: 'other', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+          {% render 'cart-line', item: item, line: forloop.index, group: 'other', item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name, gift_product_ids: gift_product_ids %}
         {%- endfor -%}
       </div>
     </div>
@@ -197,7 +192,7 @@
 {%- else -%}
   <div class="mt-cart__lines">
     {%- for item in cart.items -%}
-      {% render 'cart-line', item: item, line: forloop.index, item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name %}
+      {% render 'cart-line', item: item, line: forloop.index, item_list_id: item_list_id, item_list_name: item_list_name, module_name: module_name, gift_product_ids: gift_product_ids %}
     {%- endfor -%}
   </div>
 {%- endif -%}
